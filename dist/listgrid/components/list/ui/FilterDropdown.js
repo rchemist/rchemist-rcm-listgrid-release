@@ -34,13 +34,13 @@ export const FilterDropdown = ({ isOpen, onClose, children, onApply, onClear, si
     const getSizeClass = () => {
         switch (size) {
             case 'sm':
-                return 'w-[260px]';
+                return 'rcm-filter-dropdown-sm';
             case 'md':
-                return 'w-[360px]';
+                return 'rcm-filter-dropdown-md';
             case 'lg':
-                return 'w-[420px]';
+                return 'rcm-filter-dropdown-lg';
             default:
-                return 'w-[260px]';
+                return 'rcm-filter-dropdown-sm';
         }
     };
     // Portal + fixed positioning based on anchor element
@@ -100,7 +100,7 @@ export const FilterDropdown = ({ isOpen, onClose, children, onApply, onClear, si
         };
     }, [isOpen, onClose]);
     const usePortal = !!anchorRef?.current;
-    const dropdownContent = (_jsx(Transition, { show: isOpen, as: Fragment, enter: "transition ease-out duration-100", enterFrom: "transform opacity-0 scale-95", enterTo: "transform opacity-100 scale-100", leave: "transition ease-in duration-75", leaveFrom: "transform opacity-100 scale-100", leaveTo: "transform opacity-0 scale-95", children: _jsx("div", { ref: dropdownRef, className: `${usePortal ? '' : 'absolute'} mt-2 ${getSizeClass()} rounded-md bg-white dark:bg-[#0e1726] shadow-lg border border-gray-200 dark:border-[#17263c]`, style: usePortal ? { ...positionStyle, zIndex } : { ...getPlacementStyle(), zIndex }, children: _jsxs("div", { className: "p-4 space-y-3", children: [_jsxs("div", { className: "flex items-center justify-between pb-2 border-b border-gray-200 dark:border-[#17263c]", children: [_jsx("span", { className: "text-sm font-semibold", children: "\uD544\uD130" }), _jsx("button", { type: "button", onClick: onClose, className: "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300", "aria-label": "\uB2EB\uAE30", children: _jsx(IconX, { className: "w-4 h-4" }) })] }), _jsx("div", { className: "max-h-[400px] overflow-y-auto", children: children }), _jsxs("div", { className: "flex items-center justify-end space-x-2 pt-3 border-t border-gray-200 dark:border-[#17263c]", children: [onClear && (_jsx("button", { type: "button", className: "btn btn-outline-danger btn-sm", onClick: onClear, children: "\uCD08\uAE30\uD654" })), onApply && (_jsx("button", { type: "button", className: "btn btn-primary btn-sm", onClick: onApply, children: "\uC801\uC6A9" }))] })] }) }) }));
+    const dropdownContent = (_jsx(Transition, { show: isOpen, as: Fragment, enter: "transition ease-out duration-100", enterFrom: "transform opacity-0 scale-95", enterTo: "transform opacity-100 scale-100", leave: "transition ease-in duration-75", leaveFrom: "transform opacity-100 scale-100", leaveTo: "transform opacity-0 scale-95", children: _jsx("div", { ref: dropdownRef, className: `rcm-filter-dropdown ${usePortal ? '' : 'rcm-filter-dropdown-floating'} ${getSizeClass()}`, style: usePortal ? { ...positionStyle, zIndex } : { ...getPlacementStyle(), zIndex }, children: _jsxs("div", { className: "rcm-filter-dropdown-inner", children: [_jsxs("div", { className: "rcm-filter-dropdown-header", children: [_jsx("span", { className: "rcm-filter-dropdown-title", children: "\uD544\uD130" }), _jsx("button", { type: "button", onClick: onClose, className: "rcm-filter-dropdown-close", "aria-label": "\uB2EB\uAE30", children: _jsx(IconX, { className: "rcm-m2o-action-icon" }) })] }), _jsx("div", { className: "rcm-filter-dropdown-body", children: children }), _jsxs("div", { className: "rcm-filter-dropdown-footer", children: [onClear && (_jsx("button", { type: "button", className: "rcm-button rcm-button-outline-danger rcm-button-sm", onClick: onClear, children: "\uCD08\uAE30\uD654" })), onApply && (_jsx("button", { type: "button", className: "rcm-button rcm-button-primary rcm-button-sm", onClick: onApply, children: "\uC801\uC6A9" }))] })] }) }) }));
     if (usePortal) {
         return ReactDOM.createPortal(dropdownContent, document.body);
     }

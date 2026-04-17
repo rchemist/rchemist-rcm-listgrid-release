@@ -81,7 +81,7 @@ export class StringField extends CheckButtonValidationField {
         if (this.cardIcon) {
             const IconComponent = this.cardIcon;
             return {
-                result: (_jsxs("span", { className: "inline-flex items-center gap-2 text-gray-700 dark:text-gray-300", children: [_jsx("span", { className: "flex items-center justify-center w-6 h-6 rounded-md bg-gray-100 dark:bg-gray-800", children: _jsx(IconComponent, { className: "h-3.5 w-3.5 text-gray-500 dark:text-gray-400 shrink-0", stroke: 1.75 }) }), _jsx("span", { className: "font-medium", children: textValue })] }))
+                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-bool-icon-frame rcm-bool-icon-frame-neutral", children: _jsx(IconComponent, { className: "rcm-bool-icon rcm-bool-icon-neutral", stroke: 1.75 }) }), _jsx("span", { className: "font-medium", children: textValue })] }))
             };
         }
         return { result: textValue };

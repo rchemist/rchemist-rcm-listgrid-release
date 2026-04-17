@@ -518,6 +518,24 @@
     .rcm-bool-icon-frame-neutral { background: var(--rcm-color-surface-muted); }
     .rcm-bool-icon-frame-true    { background: var(--rcm-color-success-surface); }
 
+    /* NumberField / DateField 색상 변형 (currency / number / date) */
+    .rcm-num-icon-frame-currency { background: var(--rcm-color-success-surface); }
+    .rcm-num-icon-currency       { color: var(--rcm-color-success); }
+    .rcm-num-icon-frame-number   { background: var(--rcm-color-info-surface); }
+    .rcm-num-icon-number         { color: var(--rcm-color-info); }
+    .rcm-date-icon-frame         { background: var(--rcm-color-info-surface); }
+    .rcm-date-icon               { color: var(--rcm-color-info); }
+
+    .rcm-num-value {
+        font-variant-numeric: tabular-nums;
+        font-weight: var(--rcm-font-weight-medium);
+    }
+
+    .rcm-num-value-emphasis {
+        font-variant-numeric: tabular-nums;
+        font-weight: var(--rcm-font-weight-semibold);
+    }
+
     .rcm-bool-icon {
         width: 0.875rem;
         height: 0.875rem;
@@ -534,6 +552,587 @@
 
     .rcm-bool-label-true  { color: var(--rcm-color-success); }
     .rcm-bool-label-false { color: var(--rcm-color-text-muted); }
+
+    /* ------------------------------------------------------------------ *
+     * ManyToOne Multi-select (filter chips + add button)
+     * ------------------------------------------------------------------ */
+    .rcm-m2o-multi-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: var(--rcm-space-sm);
+        width: 100%;
+    }
+
+    .rcm-m2o-multi-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+        min-height: 2rem;
+    }
+
+    .rcm-m2o-multi-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--rcm-space-xs);
+        padding: 0.25rem 0.625rem;
+        background: color-mix(in srgb, var(--rcm-color-primary) 10%, transparent);
+        color: var(--rcm-color-primary);
+        border: var(--rcm-border-width) solid color-mix(in srgb, var(--rcm-color-primary) 20%, transparent);
+        border-radius: 9999px;
+        font-size: var(--rcm-font-size-sm);
+    }
+
+    .rcm-m2o-multi-chip-label {
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .rcm-m2o-multi-chip-remove {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1rem;
+        height: 1rem;
+        padding: 0;
+        background: transparent;
+        border: 0;
+        border-radius: 9999px;
+        color: inherit;
+        cursor: pointer;
+        transition: background var(--rcm-transition-fast);
+    }
+
+    .rcm-m2o-multi-chip-remove:hover {
+        background: color-mix(in srgb, var(--rcm-color-primary) 20%, transparent);
+    }
+
+    .rcm-m2o-multi-chip-remove-icon {
+        width: 0.75rem;
+        height: 0.75rem;
+    }
+
+    .rcm-m2o-multi-add {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--rcm-space-xs);
+        padding: 0.25rem 0.625rem;
+        background: transparent;
+        border: var(--rcm-border-width) dashed var(--rcm-color-border-hover);
+        border-radius: 9999px;
+        font-size: var(--rcm-font-size-sm);
+        color: var(--rcm-color-text-muted);
+        cursor: pointer;
+        transition: color var(--rcm-transition-fast), border-color var(--rcm-transition-fast);
+    }
+
+    .rcm-m2o-multi-add:hover {
+        color: var(--rcm-color-primary);
+        border-color: var(--rcm-color-primary);
+    }
+
+    .rcm-m2o-multi-add-icon {
+        width: 0.875rem;
+        height: 0.875rem;
+    }
+
+    .rcm-m2o-multi-helper {
+        font-size: var(--rcm-font-size-xs);
+        color: var(--rcm-color-text-disabled);
+    }
+
+    /* ------------------------------------------------------------------ *
+     * Modal (generic form modal — used by SmsModal, etc.)
+     * ------------------------------------------------------------------ */
+    .rcm-modal-body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--rcm-space-lg);
+        padding: var(--rcm-space-lg);
+    }
+
+    .rcm-modal-field-group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--rcm-space-sm);
+    }
+
+    .rcm-modal-label {
+        font-size: var(--rcm-font-size-sm);
+        font-weight: var(--rcm-font-weight-medium);
+        color: var(--rcm-color-text);
+    }
+
+    .rcm-modal-warning {
+        margin-top: var(--rcm-space-xs);
+        font-size: var(--rcm-font-size-xs);
+        color: var(--rcm-color-error);
+    }
+
+    .rcm-modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--rcm-space-sm);
+        margin-top: var(--rcm-space-lg);
+    }
+
+    /* ------------------------------------------------------------------ *
+     * SMS modal specific
+     * ------------------------------------------------------------------ */
+    .rcm-sms-textarea {
+        min-height: 150px;
+    }
+
+    .rcm-sms-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: var(--rcm-font-size-xs);
+        color: var(--rcm-color-text-muted);
+    }
+
+    .rcm-sms-lms-notice {
+        color: var(--rcm-color-warning);
+    }
+
+    /* 공통 필드 입력/텍스트/셀렉트 (hardcoded form-input/form-select/form-textarea 대체) */
+    .rcm-field-input,
+    .rcm-field-select,
+    .rcm-field-textarea {
+        width: 100%;
+        padding: 0 var(--rcm-space-md);
+        font-size: var(--rcm-font-size-sm);
+        color: var(--rcm-color-text);
+        background: var(--rcm-color-surface);
+        border: var(--rcm-border-width) solid var(--rcm-color-border);
+        border-radius: var(--rcm-radius-md);
+    }
+
+    .rcm-field-input,
+    .rcm-field-select {
+        height: var(--rcm-size-input-height);
+    }
+
+    .rcm-field-textarea {
+        padding: var(--rcm-space-sm) var(--rcm-space-md);
+    }
+
+    .rcm-field-input:focus,
+    .rcm-field-select:focus,
+    .rcm-field-textarea:focus {
+        outline: none;
+        border-color: var(--rcm-color-primary);
+    }
+
+    .rcm-field-input-disabled {
+        background: var(--rcm-color-surface-disabled);
+        cursor: not-allowed;
+    }
+
+    /* ------------------------------------------------------------------ *
+     * Filter dropdown (column header filter popover)
+     * ------------------------------------------------------------------ */
+    .rcm-filter-dropdown {
+        margin-top: var(--rcm-space-sm);
+        background: var(--rcm-color-surface);
+        border: var(--rcm-border-width) solid var(--rcm-color-border);
+        border-radius: var(--rcm-radius-md);
+        box-shadow: var(--rcm-shadow-lg);
+    }
+
+    .rcm-filter-dropdown-floating {
+        position: absolute;
+    }
+
+    .rcm-filter-dropdown-sm { width: 260px; }
+    .rcm-filter-dropdown-md { width: 360px; }
+    .rcm-filter-dropdown-lg { width: 420px; }
+
+    .rcm-filter-dropdown-inner {
+        display: flex;
+        flex-direction: column;
+        gap: var(--rcm-space-md);
+        padding: var(--rcm-space-lg);
+    }
+
+    .rcm-filter-dropdown-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: var(--rcm-space-sm);
+        border-bottom: var(--rcm-border-width) solid var(--rcm-color-border);
+    }
+
+    .rcm-filter-dropdown-title {
+        font-size: var(--rcm-font-size-sm);
+        font-weight: var(--rcm-font-weight-semibold);
+    }
+
+    .rcm-filter-dropdown-close {
+        padding: 0;
+        background: transparent;
+        border: 0;
+        color: var(--rcm-color-text-muted);
+        cursor: pointer;
+        transition: color var(--rcm-transition-fast);
+    }
+
+    .rcm-filter-dropdown-close:hover {
+        color: var(--rcm-color-text);
+    }
+
+    .rcm-filter-dropdown-body {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .rcm-filter-dropdown-footer {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: var(--rcm-space-sm);
+        padding-top: var(--rcm-space-md);
+        border-top: var(--rcm-border-width) solid var(--rcm-color-border);
+    }
+
+    /* ------------------------------------------------------------------ *
+     * Field selector (Advanced Search 에서 검색 필드 선택)
+     * ------------------------------------------------------------------ */
+    .rcm-field-selector {
+        background: var(--rcm-color-surface);
+        border: var(--rcm-border-width) solid var(--rcm-color-border);
+        border-radius: var(--rcm-radius-lg);
+    }
+
+    .rcm-field-selector-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--rcm-space-sm) var(--rcm-space-md);
+        cursor: pointer;
+        transition: background var(--rcm-transition-fast);
+    }
+
+    .rcm-field-selector-header:hover {
+        background: var(--rcm-color-surface-muted);
+    }
+
+    .rcm-field-selector-header-left,
+    .rcm-field-selector-header-right {
+        display: flex;
+        align-items: center;
+        gap: var(--rcm-space-sm);
+    }
+
+    .rcm-field-selector-title {
+        font-size: var(--rcm-font-size-sm);
+        font-weight: var(--rcm-font-weight-medium);
+        color: var(--rcm-color-text);
+    }
+
+    .rcm-field-selector-count {
+        font-size: var(--rcm-font-size-xs);
+        background: color-mix(in srgb, var(--rcm-color-primary) 10%, transparent);
+        color: var(--rcm-color-primary);
+        padding: 0.125rem var(--rcm-space-sm);
+        border-radius: 9999px;
+    }
+
+    .rcm-field-selector-hint {
+        font-size: var(--rcm-font-size-xs);
+        color: var(--rcm-color-text-muted);
+    }
+
+    .rcm-field-selector-toggle {
+        padding: var(--rcm-space-xs);
+        background: transparent;
+        border: 0;
+        border-radius: var(--rcm-radius-md);
+        cursor: pointer;
+        transition: background var(--rcm-transition-fast);
+    }
+
+    .rcm-field-selector-toggle:hover {
+        background: var(--rcm-color-surface-muted);
+    }
+
+    .rcm-field-selector-chevron {
+        width: 1rem;
+        height: 1rem;
+        color: var(--rcm-color-text-muted);
+        transition: transform var(--rcm-transition-fast);
+    }
+
+    .rcm-field-selector-body {
+        border-top: var(--rcm-border-width) solid var(--rcm-color-border);
+    }
+
+    .rcm-field-selector-search-row {
+        display: flex;
+        align-items: center;
+        gap: var(--rcm-space-sm);
+        padding: var(--rcm-space-sm) var(--rcm-space-md);
+        border-bottom: var(--rcm-border-width) solid var(--rcm-color-border);
+    }
+
+    .rcm-field-selector-search-input-wrap {
+        position: relative;
+        flex: 1;
+    }
+
+    .rcm-field-selector-search-icon {
+        position: absolute;
+        left: var(--rcm-space-sm);
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1rem;
+        height: 1rem;
+        color: var(--rcm-color-text-muted);
+    }
+
+    .rcm-field-selector-search-input {
+        width: 100%;
+        padding: 0.375rem 0.75rem 0.375rem 2rem;
+        font-size: var(--rcm-font-size-sm);
+        color: var(--rcm-color-text);
+        background: var(--rcm-color-surface);
+        border: var(--rcm-border-width) solid var(--rcm-color-border);
+        border-radius: var(--rcm-radius-md);
+    }
+
+    .rcm-field-selector-search-input:focus {
+        outline: none;
+        border-color: var(--rcm-color-primary);
+    }
+
+    .rcm-field-selector-action {
+        padding: var(--rcm-space-xs) var(--rcm-space-sm);
+        font-size: var(--rcm-font-size-xs);
+        background: transparent;
+        border: 0;
+        border-radius: var(--rcm-radius-md);
+        cursor: pointer;
+        transition: background var(--rcm-transition-fast), color var(--rcm-transition-fast);
+    }
+
+    .rcm-field-selector-action-primary {
+        color: var(--rcm-color-primary);
+    }
+
+    .rcm-field-selector-action-primary:hover {
+        background: color-mix(in srgb, var(--rcm-color-primary) 5%, transparent);
+    }
+
+    .rcm-field-selector-action-muted {
+        color: var(--rcm-color-text-muted);
+    }
+
+    .rcm-field-selector-action-muted:hover {
+        background: var(--rcm-color-surface-muted);
+        color: var(--rcm-color-text);
+    }
+
+    .rcm-field-selector-list {
+        max-height: 12rem;
+        overflow-y: auto;
+    }
+
+    .rcm-field-selector-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--rcm-space-xs);
+        padding: var(--rcm-space-sm);
+    }
+
+    @media (min-width: 640px) {
+        .rcm-field-selector-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    @media (min-width: 768px) {
+        .rcm-field-selector-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+
+    .rcm-field-selector-chip {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.375rem var(--rcm-space-sm);
+        font-size: var(--rcm-font-size-xs);
+        background: var(--rcm-color-surface-muted);
+        color: var(--rcm-color-text-muted);
+        border: var(--rcm-border-width) solid transparent;
+        border-radius: var(--rcm-radius-md);
+        text-align: left;
+        cursor: pointer;
+        transition: background var(--rcm-transition-fast);
+    }
+
+    .rcm-field-selector-chip:hover {
+        background: var(--rcm-color-surface-hover);
+    }
+
+    .rcm-field-selector-chip-selected {
+        background: color-mix(in srgb, var(--rcm-color-primary) 10%, transparent);
+        color: var(--rcm-color-primary);
+        border-color: color-mix(in srgb, var(--rcm-color-primary) 30%, transparent);
+    }
+
+    .rcm-field-selector-chip-check {
+        flex-shrink: 0;
+        width: 1rem;
+        height: 1rem;
+        border: var(--rcm-border-width) solid var(--rcm-color-border-hover);
+        border-radius: var(--rcm-radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .rcm-field-selector-chip-check-selected {
+        background: var(--rcm-color-primary);
+        border-color: var(--rcm-color-primary);
+    }
+
+    .rcm-field-selector-chip-check-icon {
+        width: 0.75rem;
+        height: 0.75rem;
+        color: var(--rcm-color-primary-text);
+    }
+
+    .rcm-field-selector-empty {
+        text-align: center;
+        padding: var(--rcm-space-lg);
+        font-size: var(--rcm-font-size-sm);
+        color: var(--rcm-color-text-muted);
+    }
+
+    /* ------------------------------------------------------------------ *
+     * Card view — section 카드 (FieldGroup 카드 렌더링) + field row
+     * ------------------------------------------------------------------ */
+    .rcm-card-section {
+        background: color-mix(in srgb, var(--rcm-color-surface-muted) 50%, var(--rcm-color-surface));
+        border: var(--rcm-border-width) solid var(--rcm-color-border);
+        border-radius: var(--rcm-radius-lg);
+        overflow: hidden;
+    }
+
+    .rcm-card-section-header {
+        padding: 0.625rem var(--rcm-space-lg);
+        background: var(--rcm-color-surface-muted);
+        border-bottom: var(--rcm-border-width) solid var(--rcm-color-border);
+        cursor: pointer;
+    }
+
+    .rcm-card-section-header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .rcm-card-section-title {
+        margin: 0;
+        font-size: var(--rcm-font-size-xs);
+        font-weight: var(--rcm-font-weight-semibold);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--rcm-color-text-muted);
+    }
+
+    .rcm-card-section-header-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--rcm-space-sm);
+    }
+
+    .rcm-card-section-help-icon {
+        width: 1rem;
+        height: 1rem;
+        color: var(--rcm-color-text-muted);
+        cursor: help;
+    }
+
+    .rcm-card-section-toggle {
+        padding: 2px;
+        background: transparent;
+        border: 0;
+        border-radius: var(--rcm-radius-sm);
+        cursor: pointer;
+        transition: background var(--rcm-transition-fast);
+    }
+
+    .rcm-card-section-toggle:hover {
+        background: var(--rcm-color-surface-hover);
+    }
+
+    .rcm-card-section-chevron {
+        width: 1rem;
+        height: 1rem;
+        color: var(--rcm-color-text-muted);
+        transition: transform 200ms;
+    }
+
+    .rcm-card-section-body {
+        margin: 0;
+        padding: var(--rcm-space-sm) var(--rcm-space-lg);
+    }
+
+    .rcm-card-field-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.75rem;
+        padding: 0.625rem 0;
+        border-bottom: var(--rcm-border-width) solid color-mix(in srgb, var(--rcm-color-border) 50%, transparent);
+    }
+
+    .rcm-card-field-row:last-child {
+        border-bottom: 0;
+    }
+
+    .rcm-card-field-label {
+        display: flex;
+        align-items: center;
+        gap: var(--rcm-space-xs);
+        font-size: var(--rcm-font-size-xs);
+        font-weight: var(--rcm-font-weight-medium);
+        color: var(--rcm-color-text-muted);
+    }
+
+    .rcm-card-field-value {
+        grid-column: span 2 / span 2;
+        font-size: var(--rcm-font-size-sm);
+        color: var(--rcm-color-text);
+    }
+
+    .rcm-card-field-help-icon {
+        width: 0.75rem;
+        height: 0.75rem;
+        color: var(--rcm-color-text-muted);
+        cursor: help;
+    }
+
+    .rcm-card-field-help-text {
+        font-size: var(--rcm-font-size-xs);
+        color: var(--rcm-color-text-disabled);
+    }
+
+    .rcm-card-field-value-inner {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .rcm-card-field-loading {
+        display: inline-block;
+        height: 1rem;
+        width: 5rem;
+        background: var(--rcm-color-surface-muted);
+        border-radius: var(--rcm-radius-sm);
+        animation: rcm-pulse 2s ease-in-out infinite;
+    }
 
     .rcm-button-secondary {
         color: var(--rcm-color-text-muted);

@@ -117,11 +117,10 @@ export class NumberField extends ListableFormField {
             }
             // 일반 모드: 아이콘 + 텍스트
             const IconComponent = this.cardIcon || IconCoin;
-            const iconColorClass = this.cardIcon
-                ? 'text-gray-400 dark:text-gray-500'
-                : 'text-emerald-500 dark:text-emerald-400';
+            const frameClass = this.cardIcon ? 'rcm-bool-icon-frame-neutral' : 'rcm-num-icon-frame-currency';
+            const iconClass = this.cardIcon ? 'rcm-bool-icon-neutral' : 'rcm-num-icon-currency';
             return {
-                result: (_jsxs("span", { className: "inline-flex items-center gap-2 text-gray-700 dark:text-gray-300", children: [_jsx("span", { className: "flex items-center justify-center w-6 h-6 rounded-md bg-emerald-50 dark:bg-emerald-950/50", children: _jsx(IconComponent, { className: `h-3.5 w-3.5 ${iconColorClass} shrink-0`, stroke: 1.75 }) }), _jsx("span", { className: "font-semibold tabular-nums", children: displayText })] }))
+                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: `rcm-bool-icon-frame ${frameClass}`, children: _jsx(IconComponent, { className: `rcm-bool-icon ${iconClass}`, stroke: 1.75 }) }), _jsx("span", { className: "rcm-num-value rcm-num-value-emphasis", children: displayText })] }))
             };
         }
         // compact 모드: 텍스트만 반환
@@ -130,11 +129,10 @@ export class NumberField extends ListableFormField {
         }
         // 일반 모드: 아이콘 + 텍스트
         const IconComponent = this.cardIcon || IconHash;
-        const iconColorClass = this.cardIcon
-            ? 'text-gray-400 dark:text-gray-500'
-            : 'text-violet-500 dark:text-violet-400';
+        const frameClass = this.cardIcon ? 'rcm-bool-icon-frame-neutral' : 'rcm-num-icon-frame-number';
+        const iconClass = this.cardIcon ? 'rcm-bool-icon-neutral' : 'rcm-num-icon-number';
         return {
-            result: (_jsxs("span", { className: "inline-flex items-center gap-2 text-gray-700 dark:text-gray-300", children: [_jsx("span", { className: "flex items-center justify-center w-6 h-6 rounded-md bg-violet-50 dark:bg-violet-950/50", children: _jsx(IconComponent, { className: `h-3.5 w-3.5 ${iconColorClass} shrink-0`, stroke: 1.75 }) }), _jsx("span", { className: "font-medium tabular-nums", children: formattedValue })] }))
+            result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: `rcm-bool-icon-frame ${frameClass}`, children: _jsx(IconComponent, { className: `rcm-bool-icon ${iconClass}`, stroke: 1.75 }) }), _jsx("span", { className: "rcm-num-value", children: formattedValue })] }))
         };
     }
     /**
