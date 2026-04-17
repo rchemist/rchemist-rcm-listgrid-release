@@ -5,6 +5,7 @@ export { ViewEntityFormWrapper } from './view/ViewEntityFormWrapper';
 export { AuthProvider, useSession, useAuth, hasAnyRole, registerSignOut, signOut } from './auth';
 // UI — host applications inject concrete UI primitives via <UIProvider>.
 export { UIProvider, useUI } from './ui';
+export { GlobalModalManager } from './ui';
 // Messaging — host applications configure toast/alert implementations.
 export { configureMessages, showAlert, showConfirm, showError, showSuccess, showToast, openToast, clearAllToasts } from './message';
 // Loading — optional global loading overlay hook.

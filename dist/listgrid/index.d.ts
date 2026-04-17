@@ -4,6 +4,7 @@ export { AuthProvider, useSession, useAuth, hasAnyRole, registerSignOut, signOut
 export type { Session, SessionUser, AuthContextValue, AuthProviderProps } from './auth';
 export { UIProvider, useUI } from './ui';
 export type { UIComponents, UIProviderProps } from './ui';
+export { GlobalModalManager } from './ui';
 export { configureMessages, showAlert, showConfirm, showError, showSuccess, showToast, openToast, clearAllToasts } from './message';
 export type { MessageServices } from './message';
 export { configureLoading, useLoadingStore } from './loading';

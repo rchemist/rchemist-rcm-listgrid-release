@@ -10,16 +10,20 @@ import { isBlank } from '../../utils/StringUtil';
 import { ViewHelpIcon } from './ui/ViewHelpIcon';
 import { useEntityFormTheme } from "./context/EntityFormThemeContext";
 /**
- * Determine grid col-span class based on field layout type
+ * Determine grid col-span class based on field layout type.
+ * Uses library-owned `rcm-col-span-full` (defined in base.css) instead of
+ * Tailwind's `col-span-full` — the host's Tailwind content scanner does not
+ * include @rcm/listgrid sources in node_modules, so Tailwind utilities
+ * placed inside library JSX never get generated.
  */
 function getFieldColSpanClass(field) {
     if (field.layout === 'full')
-        return 'col-span-full';
+        return 'rcm-col-span-full';
     if (field.layout === 'half')
         return '';
     // auto: FULL_WIDTH_FIELD_TYPES get full width
     if (FULL_WIDTH_FIELD_TYPES.includes(field.type))
-        return 'col-span-full';
+        return 'rcm-col-span-full';
     return '';
 }
 export const ViewFieldGroup = ({ entityForm, setEntityForm, readonly, subCollectionEntity, session, createStepFields, hideMappedByFields, ...props }) => {
@@ -128,7 +132,7 @@ export const ViewFieldGroup = ({ entityForm, setEntityForm, readonly, subCollect
         : cn('panel mb-3 md:mb-4 border-0 md:border shadow-none md:shadow-md bg-transparent md:bg-white dark:md:bg-dark px-1 md:px-4', classNames.fieldGroup?.container);
     return _jsx(_Fragment, { children: _jsxs("div", { className: containerClass, children: [_jsx("div", { className: cn(open ? (subCollectionEntity ? 'mb-1' : 'mb-2.5 md:mb-3') : '', subCollectionEntity ? undefined : classNames.fieldGroup?.header), children: _jsx("div", { className: "flex items-center justify-between", children: _jsxs("h5", { className: cn(subCollectionEntity ? 'text-sm font-semibold dark:text-white-light flex flex-1 items-center justify-between' : 'text-sm md:text-base font-semibold dark:text-white-light flex flex-1 items-center justify-between', subCollectionEntity ? undefined : classNames.fieldGroup?.title), children: [fieldGroup.label, _jsxs("div", { className: cn('flex items-center gap-2 justify-end', subCollectionEntity ? undefined : classNames.fieldGroup?.actions), children: [!isBlank(helpText) && _jsx(ViewHelpIcon, { helpText: helpText }), collapsable && _jsx("span", { className: cn('text-sm color-secondary cursor-pointer', subCollectionEntity ? undefined : classNames.fieldGroup?.collapseToggle), onClick: () => {
                                                 setOpen(!open);
-                                            }, children: _jsx("div", { className: open ? '' : '-rotate-180', children: _jsx("svg", { xmlns: "http://www.w3.org/2000/svg", width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", children: _jsx("path", { stroke: "#5B6B79", strokeLinecap: "round", strokeLinejoin: "round", strokeMiterlimit: "10", strokeWidth: "1.5", d: "M19.92 15.05L13.4 8.53c-.77-.77-2.03-.77-2.8 0l-6.52 6.52" }) }) }) })] })] }) }) }), open && _jsxs("div", { className: cn(subCollectionEntity ? 'space-y-2' : 'grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-x-4 gap-y-3.5 md:gap-y-4', subCollectionEntity ? undefined : classNames.fieldGroup?.content), children: [filteredFields?.map((field, index) => {
+                                            }, children: _jsx("div", { className: open ? '' : '-rotate-180', children: _jsx("svg", { xmlns: "http://www.w3.org/2000/svg", width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", children: _jsx("path", { stroke: "#5B6B79", strokeLinecap: "round", strokeLinejoin: "round", strokeMiterlimit: "10", strokeWidth: "1.5", d: "M19.92 15.05L13.4 8.53c-.77-.77-2.03-.77-2.8 0l-6.52 6.52" }) }) }) })] })] }) }) }), open && _jsxs("div", { className: cn(subCollectionEntity ? 'rcm-stack' : 'rcm-field-grid', subCollectionEntity ? undefined : classNames.fieldGroup?.content), children: [filteredFields?.map((field, index) => {
                             if (field instanceof FormField) {
                                 if (readonly) {
                                     field.withReadOnly(true);
@@ -137,7 +141,7 @@ export const ViewFieldGroup = ({ entityForm, setEntityForm, readonly, subCollect
                                 const prevField = index > 0 ? filteredFields?.[index - 1] : null;
                                 const forceNewRow = prevField instanceof FormField && prevField.lineBreak;
                                 const colSpanClass = getFieldColSpanClass(field);
-                                const className = forceNewRow ? `${colSpanClass} lg:col-start-1` : colSpanClass;
+                                const className = forceNewRow ? `${colSpanClass} rcm-col-start-1-lg` : colSpanClass;
                                 return _jsx("div", { className: className, children: _jsx(FieldRenderer, { field: field, entityForm: entityForm, setEntityForm: setEntityForm, subCollectionEntity: subCollectionEntity, session: session, resetEntityForm: props.resetEntityForm }) }, field.getName());
                             }
                             else {
