@@ -25,7 +25,7 @@ export const ListButton = ({ entityForm, router, pathname, buttonLinks, subColle
             router.push(listUrl);
         }
     };
-    return (_jsx("button", { className: cn("btn btn-outline-primary gap-2", buttonClassNames?.list), onClick: (e) => {
+    return (_jsx("button", { className: cn("rcm-button rcm-button-outline", buttonClassNames?.list), onClick: (e) => {
             (async () => {
                 e.stopPropagation();
                 const dirty = isTrue(readonly) ? false : entityForm.isDirty();

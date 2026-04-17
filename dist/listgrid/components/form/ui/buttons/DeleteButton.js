@@ -15,13 +15,13 @@ export const DeleteButton = ({ entityForm, router, pathname, buttonLinks, setErr
     if (neverDelete) {
         const active = entityForm.getField("active")?.value?.current ?? true;
         if (!active) {
-            return (_jsx(Tooltip, { color: "red", label: `사용 중지 되었습니다. 상태정보 > 사용 여부를 변경해 다시 사용할 수 있습니다.`, children: _jsx("button", { type: "button", disabled: true, className: cn("btn btn-outline-danger gap-2", buttonClassNames?.delete), children: "\uC0AC\uC6A9 \uC548 \uD568" }, "button_delete") }));
+            return (_jsx(Tooltip, { color: "red", label: `사용 중지 되었습니다. 상태정보 > 사용 여부를 변경해 다시 사용할 수 있습니다.`, children: _jsx("button", { type: "button", disabled: true, className: cn("rcm-button rcm-button-danger", buttonClassNames?.delete), children: "\uC0AC\uC6A9 \uC548 \uD568" }, "button_delete") }));
         }
     }
     const message = neverDelete ? "사용 중지" : "삭제";
     const text = neverDelete ? "이 데이터는 삭제할 수 없으며, 사용 중지 처리만 가능합니다." : "삭제된 데이터는 복구할 수 없습니다.";
     const confirmButtonText = neverDelete ? "사용 중지" : "삭제";
-    return (_jsx("button", { type: "button", className: cn("btn btn-outline-danger gap-2", buttonClassNames?.delete), onClick: () => {
+    return (_jsx("button", { type: "button", className: cn("rcm-button rcm-button-danger", buttonClassNames?.delete), onClick: () => {
             (async () => {
                 showConfirm({
                     title: text,
