@@ -113,7 +113,7 @@ export const ManyToOneMultiFilterView = ({ name, label, config, parentEntityForm
             modalId,
             title: `${label ?? name} 선택`,
             size: '5xl',
-            content: (_jsx("div", { className: "modal-content flex max-h-[90vh] flex-col overflow-hidden", children: config.tree ? (_jsx(TreeSelectView, { entityForm: entityForm, tree: config.tree, onSelect: (item) => {
+            content: (_jsx("div", { className: "rcm-modal-content-scroll", children: config.tree ? (_jsx(TreeSelectView, { entityForm: entityForm, tree: config.tree, onSelect: (item) => {
                         handleAddItem(item);
                         closeModal(modalId);
                     } })) : (_jsx(ViewListGrid, { listGrid: new ListGrid(entityForm).withSearchForm(modalSearchForm), options: {

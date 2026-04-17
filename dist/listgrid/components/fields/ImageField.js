@@ -112,16 +112,16 @@ export class ImageField extends ListableFormField {
                 if (!isEmpty(file.existFiles)) {
                     const imgUrl = getAccessableAssetUrl(file.existFiles[0].url);
                     return {
-                        result: _jsx("div", { className: 'flex w-full items-center justify-center', children: _jsxs("div", { className: "relative text-center group", children: [_jsx("img", { className: "h-9 w-9 rounded-md object-cover saturate-50 transition-transform duration-300 group-hover:scale-110", src: `${imgUrl}`, onError: (event) => {
+                        result: _jsx("div", { className: "rcm-image-field-cell", children: _jsxs("div", { className: "rcm-image-field-hover-group", children: [_jsx("img", { className: "rcm-image-field-thumb", src: `${imgUrl}`, onError: (event) => {
                                             event.currentTarget.src = '/assets/images/no-image.png';
-                                        }, alt: "primary image" }), _jsx("div", { className: "absolute min-w-48 top-0 left-1/2 bg-white transform -translate-x-1/2 -translate-y-12 mt-2 z-50 hidden group-hover:flex justify-center items-center", children: _jsx("img", { className: "h-48 w-48 rounded-md object-cover shadow-lg max-w-48", src: `${imgUrl}`, onError: (event) => {
+                                        }, alt: "primary image" }), _jsx("div", { className: "rcm-image-field-preview-wrap", children: _jsx("img", { className: "rcm-image-field-preview", src: `${imgUrl}`, onError: (event) => {
                                                 event.currentTarget.src = '/assets/images/no-image.png';
                                             }, alt: "enlarged image" }) })] }) })
                     };
                 }
             }
             return {
-                result: _jsx("div", { className: 'flex w-full items-center justify-center', children: _jsx("img", { className: "h-9 w-9 rounded-md object-cover saturate-50 group-hover:saturate-100", src: `/assets/images/no-image.png`, alt: "no image" }) })
+                result: _jsx("div", { className: "rcm-image-field-cell", children: _jsx("img", { className: "rcm-image-field-thumb rcm-image-field-thumb-placeholder", src: `/assets/images/no-image.png`, alt: "no image" }) })
             };
         })();
     }

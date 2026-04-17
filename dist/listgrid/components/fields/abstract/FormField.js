@@ -92,7 +92,7 @@ export class FormField {
         if (this.cardIcon) {
             const IconComponent = this.cardIcon;
             return {
-                result: (_jsxs("span", { className: "inline-flex items-center gap-1.5 text-gray-700 dark:text-gray-300", children: [_jsx(IconComponent, { className: "h-3.5 w-3.5 text-gray-400 dark:text-gray-500 shrink-0", stroke: 1.75 }), _jsx("span", { children: text })] }))
+                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx(IconComponent, { className: "rcm-bool-icon rcm-bool-icon-neutral", stroke: 1.75 }), _jsx("span", { children: text })] }))
             };
         }
         return { result: text };

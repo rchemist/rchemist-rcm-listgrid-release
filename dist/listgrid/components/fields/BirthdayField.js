@@ -149,7 +149,7 @@ const BirthdayInput = ({ name, value, onChange, readonly = false, hasError = fal
         // blur 시 commit 처리
         onChange(getReturnValue(displayValue), true);
     };
-    return (_jsxs("div", { className: "space-y-1", children: [_jsx("input", { id: name, name: name, type: "text", inputMode: "numeric", placeholder: placeholder, value: displayValue, onChange: handleChange, onKeyDown: handleKeyDown, onBlur: handleBlur, disabled: readonly, className: readonlyClass(readonly, `form-input ${hasError || validationError ? 'border-red-500' : ''}`), maxLength: 10 }), validationError && (_jsx("p", { className: "text-sm text-red-500", children: validationError }))] }));
+    return (_jsxs("div", { className: "space-y-1", children: [_jsx("input", { id: name, name: name, type: "text", inputMode: "numeric", placeholder: placeholder, value: displayValue, onChange: handleChange, onKeyDown: handleKeyDown, onBlur: handleBlur, disabled: readonly, className: readonlyClass(readonly, `form-input ${hasError || validationError ? 'border-red-500' : ''}`), maxLength: 10 }), validationError && (_jsx("p", { className: "rcm-field-error", children: validationError }))] }));
 };
 /**
  * 생년월일 입력 필드

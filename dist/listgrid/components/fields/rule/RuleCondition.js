@@ -76,7 +76,7 @@ export const RuleCondition = (props) => {
             value: field.name
         });
     }
-    return _jsx("div", { className: "flex flex-wrap w-full justify-center mb-5", children: _jsxs("div", { className: "w-full border border-gray-500/20 rounded-md p-6 pt-2 relative", children: [_jsxs("div", { className: 'form-input w-fit flex relative mt-[-20px] space-x-2 items-center', children: [_jsx("div", { children: props.condition }), _jsx("div", { children: "\uC870\uAC74" }), _jsx("div", { children: _jsx("button", { className: 'mt-1', onClick: () => {
+    return _jsx("div", { className: "rcm-rule-wrap", children: _jsxs("div", { className: "rcm-rule-condition-box", children: [_jsxs("div", { className: 'form-input w-fit flex relative mt-[-20px] space-x-2 items-center', children: [_jsx("div", { children: props.condition }), _jsx("div", { children: "\uC870\uAC74" }), _jsx("div", { children: _jsx("button", { className: 'mt-1', onClick: () => {
                                     clearCondition();
                                 }, children: _jsx(IconCircleX, { className: "max-w-4" }) }) })] }), _jsxs("div", { className: 'flex gap-3 items-center mt-3', children: [_jsx("div", { className: 'min-w-[200px]', children: _jsx(SelectBox, { options: fieldOptions, required: true, onChange: (fieldName) => {
                                     const field = fields.find(f => f.name === fieldName);

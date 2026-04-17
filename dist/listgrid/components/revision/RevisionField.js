@@ -51,14 +51,14 @@ const RevisionDiffWrapper = ({ changedFields, fieldLabelMap, hasPreviousRevision
     const changedFieldLabels = Array.from(changedFields)
         .map(name => fieldLabelMap.get(name))
         .filter((label) => !!label);
-    return (_jsxs("div", { id: containerId, className: "h-full min-h-full", children: [changedFields.size > 0 && (_jsxs(_Fragment, { children: [_jsx("style", { children: `
+    return (_jsxs("div", { id: containerId, className: "rcm-revision-diff-container", children: [changedFields.size > 0 && (_jsxs(_Fragment, { children: [_jsx("style", { children: `
             ${selectors} {
               background-color: rgba(251, 191, 36, 0.12);
               border-left: 3px solid rgb(245, 158, 11);
               padding-left: 8px;
               border-radius: 4px;
             }
-          ` }), _jsxs("div", { className: "bg-amber-50 border border-amber-200 rounded-md px-3 py-2 mx-4 mt-2 text-sm text-amber-800", children: [_jsxs("div", { className: "flex items-center gap-2", children: [_jsx("span", { className: "inline-block w-3 h-3 rounded-sm bg-amber-400/30 border-l-2 border-amber-500 flex-shrink-0" }), _jsxs("span", { children: ["\uC774\uC804 \uBC84\uC804 \uB300\uBE44 ", _jsxs("strong", { children: [changedFields.size, "\uAC1C"] }), " \uD544\uB4DC\uAC00 \uBCC0\uACBD\uB418\uC5C8\uC2B5\uB2C8\uB2E4"] })] }), changedFieldLabels.length > 0 && (_jsx("div", { className: "mt-1.5 ml-5 flex flex-wrap gap-1", children: changedFieldLabels.map((label, i) => (_jsx("span", { className: "inline-block bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded text-xs", children: label }, i))) }))] })] })), hasPreviousRevision && changedFields.size === 0 && (_jsx("div", { className: "bg-green-50 border border-green-200 rounded-md px-3 py-2 mx-4 mt-2 text-sm text-green-800", children: "\uC774\uC804 \uBC84\uC804\uACFC \uB3D9\uC77C\uD569\uB2C8\uB2E4" })), children] }));
+          ` }), _jsxs("div", { className: "rcm-revision-diff-banner rcm-revision-diff-banner-changed", children: [_jsxs("div", { className: "rcm-revision-diff-banner-row", children: [_jsx("span", { className: "rcm-revision-diff-indicator" }), _jsxs("span", { children: ["\uC774\uC804 \uBC84\uC804 \uB300\uBE44 ", _jsxs("strong", { children: [changedFields.size, "\uAC1C"] }), " \uD544\uB4DC\uAC00 \uBCC0\uACBD\uB418\uC5C8\uC2B5\uB2C8\uB2E4"] })] }), changedFieldLabels.length > 0 && (_jsx("div", { className: "rcm-revision-diff-labels", children: changedFieldLabels.map((label, i) => (_jsx("span", { className: "rcm-revision-diff-label-chip", children: label }, i))) }))] })] })), hasPreviousRevision && changedFields.size === 0 && (_jsx("div", { className: "rcm-revision-diff-banner rcm-revision-diff-banner-same", children: "\uC774\uC804 \uBC84\uC804\uACFC \uB3D9\uC77C\uD569\uB2C8\uB2E4" })), children] }));
 };
 export class RevisionField extends FormField {
     constructor(name, order) {
@@ -176,21 +176,22 @@ const RevisionFieldRenderer = ({ entityForm }) => {
         });
     };
     if (loading) {
-        return (_jsxs("div", { className: "flex items-center gap-2 p-4", children: [_jsx(IconHistory, { className: "h-5 w-5 animate-spin text-gray-400" }), _jsx("span", { className: "text-sm text-gray-500", children: "\uBCC0\uACBD \uB0B4\uC5ED\uC744 \uBD88\uB7EC\uC624\uB294 \uC911..." })] }));
+        return (_jsxs("div", { className: "rcm-revision-state", children: [_jsx(IconHistory, { className: "rcm-revision-state-icon rcm-revision-state-icon-spin" }), _jsx("span", { className: "rcm-revision-state-text", children: "\uBCC0\uACBD \uB0B4\uC5ED\uC744 \uBD88\uB7EC\uC624\uB294 \uC911..." })] }));
     }
     if (revisions.length === 0) {
-        return (_jsxs("div", { className: "flex items-center gap-2 p-4 text-gray-500", children: [_jsx(IconHistory, { className: "h-5 w-5" }), _jsx("span", { className: "text-sm", children: "\uBCC0\uACBD \uB0B4\uC5ED\uC774 \uC5C6\uC2B5\uB2C8\uB2E4." })] }));
+        return (_jsxs("div", { className: "rcm-revision-state rcm-revision-state-empty", children: [_jsx(IconHistory, { className: "rcm-revision-state-icon" }), _jsx("span", { className: "rcm-revision-state-text", children: "\uBCC0\uACBD \uB0B4\uC5ED\uC774 \uC5C6\uC2B5\uB2C8\uB2E4." })] }));
     }
-    return (_jsx("div", { className: "space-y-2", children: _jsxs("div", { className: "space-y-1 rounded-lg border border-gray-200 bg-gray-50 p-3", children: [_jsx("div", { className: "space-y-1", children: revisions.map((revision, index) => {
-                        const isLatest = currentPage === 0 && index === 0; // 첫 페이지의 첫 번째 항목만 최신 버전
+    return (_jsx("div", { className: "rcm-revision-wrap", children: _jsxs("div", { className: "rcm-revision-panel", children: [_jsx("div", { className: "rcm-revision-list", children: revisions.map((revision, index) => {
+                        const isLatest = currentPage === 0 && index === 0;
                         const isDelete = revision.type === 'DELETE';
                         const isCreate = revision.type === 'CREATE';
                         const isClickable = !isDelete && !isCreate;
-                        return (_jsx("div", { className: `flex items-center justify-between rounded-md p-2 text-sm ${isLatest
-                                ? 'bg-blue-50 text-blue-700 hover:bg-blue-100 cursor-pointer transition-colors'
-                                : isDelete || isCreate
-                                    ? 'bg-gray-50 text-gray-600'
-                                    : 'bg-white hover:bg-gray-100 cursor-pointer transition-colors'}`, onClick: isClickable ? () => handleRevisionClick(revision, index) : undefined, children: _jsxs("div", { className: "flex items-center gap-3", children: [_jsx("span", { className: "font-medium", children: revision.name }), _jsx("span", { className: "text-xs text-gray-500", children: fDateTime(revision.createdAt, 'yyyy-MM-dd HH:mm:ss') }), isLatest && (_jsx("span", { className: "rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700", children: "\uD604\uC7AC \uBC84\uC804" })), isCreate && (_jsx("span", { className: "rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700", children: "\uC2E0\uADDC" })), isDelete && (_jsx("span", { className: "rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700", children: entityForm.neverDelete ? '사용안함' : '삭제' }))] }) }, revision.id));
-                    }) }), totalPage > 1 && (_jsx("div", { className: "pt-3 border-t border-gray-200 mt-3 flex justify-center", children: _jsx(Pagination, { total: totalPage, value: currentPage + 1, onChange: handlePageChange }) }))] }) }));
+                        const itemClass = isLatest
+                            ? 'rcm-revision-item rcm-revision-item-latest'
+                            : isDelete || isCreate
+                                ? 'rcm-revision-item rcm-revision-item-muted'
+                                : 'rcm-revision-item rcm-revision-item-default';
+                        return (_jsx("div", { className: itemClass, onClick: isClickable ? () => handleRevisionClick(revision, index) : undefined, children: _jsxs("div", { className: "rcm-revision-item-row", children: [_jsx("span", { className: "rcm-revision-item-name", children: revision.name }), _jsx("span", { className: "rcm-revision-item-date", children: fDateTime(revision.createdAt, 'yyyy-MM-dd HH:mm:ss') }), isLatest && (_jsx("span", { className: "rcm-revision-badge rcm-revision-badge-latest", children: "\uD604\uC7AC \uBC84\uC804" })), isCreate && (_jsx("span", { className: "rcm-revision-badge rcm-revision-badge-create", children: "\uC2E0\uADDC" })), isDelete && (_jsx("span", { className: "rcm-revision-badge rcm-revision-badge-delete", children: entityForm.neverDelete ? '사용안함' : '삭제' }))] }) }, revision.id));
+                    }) }), totalPage > 1 && (_jsx("div", { className: "rcm-revision-pagination", children: _jsx(Pagination, { total: totalPage, value: currentPage + 1, onChange: handlePageChange }) }))] }) }));
 };
 //# sourceMappingURL=RevisionField.js.map

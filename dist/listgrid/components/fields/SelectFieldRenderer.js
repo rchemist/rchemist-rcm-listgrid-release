@@ -337,7 +337,7 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
     }, [onChange]);
     // 값이 변경되었는지 여부 (원본 값과 비교)
     const hasChanged = selectedValue !== originalValue;
-    return (_jsxs("div", { className: "flex items-start gap-3", children: [_jsx(RadioChip, { name: name, value: selectedValue, options: availableOptions, onChange: handleSelectChange, readonly: isReadonly }), hasChanged && (_jsxs("button", { type: "button", className: `
+    return (_jsxs("div", { className: "rcm-select-renderer-wrap", children: [_jsx(RadioChip, { name: name, value: selectedValue, options: availableOptions, onChange: handleSelectChange, readonly: isReadonly }), hasChanged && (_jsxs("button", { type: "button", className: `
             inline-flex items-center justify-center space-x-1
             h-9 min-w-[80px] px-3
             rounded-md

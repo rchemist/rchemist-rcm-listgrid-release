@@ -46,7 +46,7 @@ const ColorPresetFieldView = ({ name, label, required = false, readonly = false,
             setSelectedColor(props.value ?? 'indigo');
         }
     }, [props.value]);
-    return (_jsx("div", { className: "flex flex-col gap-2", children: _jsxs(Popover, { position: 'bottom', shadow: 'md', opened: isOpen, onChange: setIsOpen, closeOnClickOutside: true, children: [_jsx(Popover.Target, { children: _jsx("button", { className: `btn ${getAdditionalColorClass(selectedColor)} ${getOppositeTextColorClass(selectedColor)}`, disabled: readonly, onClick: () => setIsOpen(true), children: "\uC0C9\uC0C1 \uC120\uD0DD" }) }), _jsx(Popover.Dropdown, { children: _jsx("div", { className: `w-full grid grid-cols-6 gap-2`, children: AllColorTypes.map((color, index) => (_jsx("button", { type: "button", className: `w-8 h-8 rounded-full ${getAdditionalColorClass(color)}`, onClick: () => {
+    return (_jsx("div", { className: "rcm-stack", children: _jsxs(Popover, { position: 'bottom', shadow: 'md', opened: isOpen, onChange: setIsOpen, closeOnClickOutside: true, children: [_jsx(Popover.Target, { children: _jsx("button", { className: `btn ${getAdditionalColorClass(selectedColor)} ${getOppositeTextColorClass(selectedColor)}`, disabled: readonly, onClick: () => setIsOpen(true), children: "\uC0C9\uC0C1 \uC120\uD0DD" }) }), _jsx(Popover.Dropdown, { children: _jsx("div", { className: `w-full grid grid-cols-6 gap-2`, children: AllColorTypes.map((color, index) => (_jsx("button", { type: "button", className: `w-8 h-8 rounded-full ${getAdditionalColorClass(color)}`, onClick: () => {
                                 setSelectedColor(color);
                                 setIsOpen(false);
                                 props.onChange(color);

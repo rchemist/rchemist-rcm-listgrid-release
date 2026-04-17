@@ -22,11 +22,11 @@ export const LinkFieldView = (props) => {
             setValidatedValue(props, value, setValue);
         } });
     if (props.tooltip !== undefined) {
-        return _jsx(Tooltip, { label: props.tooltip.label, color: props.tooltip.color, children: _jsx("div", { className: "flex w-full", children: _jsxs("div", { className: "flex w-full items-center", children: [_jsx("div", { className: "group relative flex w-full", children: _jsx("div", { className: "dropdown flex w-full", children: input }) }), !isBlank(value) && (_jsx("button", { type: "button", className: "rcm-link-button rcm-input-addon-btn", onClick: () => {
+        return _jsx(Tooltip, { label: props.tooltip.label, color: props.tooltip.color, children: _jsx("div", { className: "rcm-input-group-full", children: _jsxs("div", { className: "rcm-input-group-full-center", children: [_jsx("div", { className: "rcm-input-group-full-relative", children: _jsx("div", { className: "rcm-input-group-full", children: input }) }), !isBlank(value) && (_jsx("button", { type: "button", className: "rcm-link-button rcm-input-addon-btn", onClick: () => {
                                 window.open(normalizeUrl(value), "_blank");
                             }, children: _jsx(IconExternalLink, { className: "rcm-m2o-action-icon" }) }))] }) }) });
     }
-    return (_jsx("div", { className: "flex w-full", children: _jsxs("div", { className: "flex w-full items-center", children: [_jsx("div", { className: "group relative flex w-full", children: _jsx("div", { className: "dropdown flex w-full", children: input }) }), !isBlank(value) && (_jsx("button", { type: "button", className: "rcm-link-button rcm-input-addon-btn", onClick: () => {
+    return (_jsx("div", { className: "rcm-input-group-full", children: _jsxs("div", { className: "rcm-input-group-full-center", children: [_jsx("div", { className: "rcm-input-group-full-relative", children: _jsx("div", { className: "dropdown flex w-full", children: input }) }), !isBlank(value) && (_jsx("button", { type: "button", className: "rcm-link-button rcm-input-addon-btn", onClick: () => {
                         window.open(normalizeUrl(value), "_blank");
                     }, children: _jsx(IconExternalLink, { className: "rcm-m2o-action-icon" }) }))] }) }));
 };

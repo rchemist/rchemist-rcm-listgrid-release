@@ -32,7 +32,7 @@ export const DatetimeFilter = (props) => {
                         }
                         return;
                     }
-                }), limit: props.limit, range: true, value: value }), _jsx("div", { className: "block md:hidden", children: _jsx(SafePerfectScrollbar, { className: "perfect-scrollbar relative w-full -mr-3 pr-3", children: showButtons() }) }), _jsx("div", { className: "hidden md:block", children: showButtons() })] });
+                }), limit: props.limit, range: true, value: value }), _jsx("div", { className: "rcm-show-below-md", children: _jsx(SafePerfectScrollbar, { className: "perfect-scrollbar relative w-full -mr-3 pr-3", children: showButtons() }) }), _jsx("div", { className: "rcm-show-from-md", children: showButtons() })] });
     function showButtons() {
         return _jsxs("div", { className: 'flex gap-3 mt-2', children: [_jsx("button", { className: 'btn-sm border rounded-md flex items-center max-h-[24px] btn-outline-primary whitespace-nowrap', onClick: () => {
                         handleValueChange('TODAY');

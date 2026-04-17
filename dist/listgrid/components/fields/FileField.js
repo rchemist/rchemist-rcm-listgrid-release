@@ -92,7 +92,7 @@ export class FileField extends ListableFormField {
                 if (!isEmpty(file.existFiles) && !isBlankString(file.existFiles[0]?.url)) {
                     const fileDownloadUrl = getAccessableAssetUrl(file.existFiles[0].url);
                     return {
-                        result: _jsx("div", { className: 'flex w-full items-center justify-center', children: _jsx("div", { className: "relative text-center group", children: _jsxs("a", { href: fileDownloadUrl, target: "_blank", rel: "noreferrer", className: "flex flex-row items-center space-x-1", children: [_jsx(IconDeviceFloppy, { className: "h-5 w-5 rounded-md object-cover saturate-50 group-hover:saturate-100" }), _jsx("span", { className: "text-xs", children: file.existFiles[0].url })] }) }) }),
+                        result: _jsx("div", { className: "rcm-file-field-cell", children: _jsx("div", { className: "rcm-file-field-inner", children: _jsxs("a", { href: fileDownloadUrl, target: "_blank", rel: "noreferrer", className: "rcm-file-field-link", children: [_jsx(IconDeviceFloppy, { className: "rcm-file-field-icon" }), _jsx("span", { className: "rcm-file-field-name", children: file.existFiles[0].url })] }) }) }),
                         linkOnCell: false
                     };
                 }

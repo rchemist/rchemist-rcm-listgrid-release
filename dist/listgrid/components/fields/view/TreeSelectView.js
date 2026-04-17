@@ -40,17 +40,14 @@ export const TreeSelectView = ({ readonly = false, ...props }) => {
                     }, renderNode: selectable ? ({ level, node, tree, expanded, hasChildren, elementProps }) => {
                         // Only customize rendering when selection is needed
                         // 선택이 필요한 경우에만 렌더링 커스터마이징
-                        return (_createElement("div", { ...elementProps, key: `${node.value}-${level}`, className: "w-full flex items-center py-1", style: { paddingLeft: `${(level - 1) * 20}px` } },
-                            _jsx("div", { className: "flex items-center justify-center w-6 h-6 mr-2 flex-shrink-0", children: hasChildren ? (_jsx("button", { className: "flex items-center justify-center w-5 h-5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors rounded hover:bg-gray-200 dark:hover:bg-gray-700", onClick: (e) => {
+                        return (_createElement("div", { ...elementProps, key: `${node.value}-${level}`, className: "rcm-tree-node", style: { paddingLeft: `${(level - 1) * 20}px` } },
+                            _jsx("div", { className: "rcm-tree-node-icon-wrap", children: hasChildren ? (_jsx("button", { className: "rcm-tree-node-toggle", onClick: (e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
                                         tree.toggleExpanded(node.value);
-                                    }, "aria-label": expanded ? "Collapse" : "Expand", children: expanded ? (_jsx(IconChevronDown, { size: 14 })) : (_jsx(IconChevronRight, { size: 14 })) })) : (
-                                /* Empty space for leaf nodes to maintain alignment */
-                                /* 리프 노드를 위한 빈 공간으로 정렬 유지 */
-                                _jsx("div", { className: "w-5 h-5 flex items-center justify-center", children: _jsx("div", { className: "w-1 h-1 bg-gray-400 rounded-full" }) })) }),
+                                    }, "aria-label": expanded ? "Collapse" : "Expand", children: expanded ? (_jsx(IconChevronDown, { size: 14 })) : (_jsx(IconChevronRight, { size: 14 })) })) : (_jsx("div", { className: "rcm-tree-node-leaf", children: _jsx("div", { className: "rcm-tree-node-leaf-dot" }) })) }),
                             ((isTrue(config.rootSelectable, true) || level !== 1) &&
-                                (isTrue(config.leafSelectable, true) || hasChildren)) ? (_jsx(Tooltip, { label: `${node.label} 선택`, zIndex: 10000, children: _jsx("button", { className: `flex-1 text-left py-2 px-3 rounded-md transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 border border-transparent hover:border-blue-200 dark:hover:border-blue-800 font-medium text-gray-900 dark:text-gray-100`, onClick: (e) => {
+                                (isTrue(config.leafSelectable, true) || hasChildren)) ? (_jsx(Tooltip, { label: `${node.label} 선택`, zIndex: 10000, children: _jsx("button", { className: "rcm-tree-node-btn", onClick: (e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
                                         if (readonly)
@@ -67,7 +64,7 @@ export const TreeSelectView = ({ readonly = false, ...props }) => {
                                         }
                                         setError('');
                                         props.onSelect({ id: node.value, name: node.label });
-                                    }, children: node.label }) })) : (_jsx("span", { className: "flex-1 py-2 px-3 text-gray-400 dark:text-gray-500 text-sm", children: node.label }))));
+                                    }, children: node.label }) })) : (_jsx("span", { className: "rcm-tree-node-span", children: node.label }))));
                     } : undefined }) })] });
     function fetchTreeData() {
         if (config.treeData !== undefined) {

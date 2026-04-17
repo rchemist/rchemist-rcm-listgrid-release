@@ -112,7 +112,7 @@ const MultipleAssetFieldView = (props) => {
                                     return null;
                                 }
                                 const isPrimary = tag === 'Primary';
-                                return _jsx("div", { children: _jsxs("table", { className: 'border rounded-b w-full', children: [_jsx("thead", { children: _jsx("tr", { children: _jsx("th", { className: 'px-2 dark:border-[#17263c] sm:w-50 md:w-20 md:max-w-20', children: _jsxs("div", { className: "flex justify-between items-center w-full", children: [_jsx("div", { className: `flex-grow ${!isPrimary ? 'max-w-[70%]' : ''}`, children: _jsx(Tooltip, { label: `${asset.name}`, children: _jsx("div", { className: 'truncate', children: asset.name }) }) }), !isPrimary && _jsx("div", { className: "flex-shrink-0 justify-end ml-2", children: !readonly && _jsx("button", { type: 'button', className: 'flex', onClick: () => {
+                                return _jsx("div", { children: _jsxs("table", { className: 'border rounded-b w-full', children: [_jsx("thead", { children: _jsx("tr", { children: _jsx("th", { className: 'px-2 dark:border-[#17263c] sm:w-50 md:w-20 md:max-w-20', children: _jsxs("div", { className: "rcm-asset-th-row", children: [_jsx("div", { className: `flex-grow ${!isPrimary ? 'max-w-[70%]' : ''}`, children: _jsx(Tooltip, { label: `${asset.name}`, children: _jsx("div", { className: 'truncate', children: asset.name }) }) }), !isPrimary && _jsx("div", { className: "rcm-asset-th-remove", children: !readonly && _jsx("button", { type: 'button', className: 'flex', onClick: () => {
                                                                             const newValues = { assets: [] };
                                                                             value.assets?.forEach((asset, deleteIndex) => {
                                                                                 if (index !== deleteIndex) {
@@ -126,7 +126,7 @@ const MultipleAssetFieldView = (props) => {
                                                                             props.onChange(newValues, false);
                                                                         }, children: _jsx(IconTrash, { className: "text-danger" }) }) })] }) }, `th-${index}`) }) }), _jsx("tbody", { children: _jsx("tr", { children: _jsx("td", { className: 'p-2 flex justify-center items-center dark:border-[#17263c] min-w-[120px] min-h-[120px]', children: _jsx("div", { className: 'flex justify-center items-center overflow-hidden w-full h-full cursor-pointer', onClick: () => {
                                                                 openImageForm(index);
-                                                            }, children: _jsx("button", { className: "flex justify-center items-center overflow-hidden w-full h-full", children: function () {
+                                                            }, children: _jsx("button", { className: "rcm-asset-btn-fill", children: function () {
                                                                     if (isBlank(value?.assets?.[index].url)) {
                                                                         // 데이터 없음
                                                                         if (readonly) {
@@ -143,7 +143,7 @@ const MultipleAssetFieldView = (props) => {
                                                                             }, src: `${imgUrl}` });
                                                                     }
                                                                 }() }) }) }, `td-${index}`) }) })] }) }, `asset${index}`);
-                            }), !readonly && _jsx("div", { className: 'h-full', children: _jsx("table", { className: 'max-w-[210px] md:max-w-[130px] h-full', children: _jsx("tbody", { children: _jsx("tr", { children: _jsx("td", { className: 'p-2 flex min-w-[120px] h-full items-center justify-center', children: _jsx("button", { type: "button", className: "flex whitespace-nowrap min-w-[95px] space-x-1 cursor-pointer items-center justify-center border border-secondary hover:bg-secondary/85 dark:border-[#17263c] h-[40px] bg-secondary px-3 font-semibold text-white rounded-md", onClick: () => {
+                            }), !readonly && _jsx("div", { className: 'h-full', children: _jsx("table", { className: 'max-w-[210px] md:max-w-[130px] h-full', children: _jsx("tbody", { children: _jsx("tr", { children: _jsx("td", { className: 'p-2 flex min-w-[120px] h-full items-center justify-center', children: _jsx("button", { type: "button", className: "rcm-asset-add-btn", onClick: () => {
                                                         openImageForm();
                                                     }, children: "+ \uCD94\uAC00" }) }) }) }) }) })] }) }) }), openAdd && _jsx(Modal, { title: currentIndex === undefined ? '새 이미지 추가' : '이미지 수정', size: '5xl', position: 'center', opened: openAdd, onClose: () => {
                     closeUpload();

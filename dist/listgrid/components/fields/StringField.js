@@ -44,7 +44,7 @@ export class StringField extends CheckButtonValidationField {
                 const node = await renderNode({
                     className: 'rounded-r-none border-r-0'
                 });
-                return (_jsxs("div", { className: "flex w-full items-stretch", children: [_jsx("div", { className: "flex-grow", children: node }), _jsx(CopyButton, { value: String(value), className: "flex items-center justify-center border border-white-light bg-[#fafafa] font-semibold text-secondary dark:border-[#17263c] dark:bg-[#1b2e4b] rounded-r-md border-l-0" })] }));
+                return (_jsxs("div", { className: "rcm-input-group-stretch", children: [_jsx("div", { className: "rcm-input-group-grow", children: node }), _jsx(CopyButton, { value: String(value), className: "rcm-copy-addon-wrap" })] }));
             })();
         }
         return renderNode();
