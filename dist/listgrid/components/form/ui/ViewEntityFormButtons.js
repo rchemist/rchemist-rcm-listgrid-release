@@ -17,10 +17,10 @@ import { Tooltip } from "../../../ui";
 import { useEntityFormTheme } from "../context/EntityFormThemeContext";
 export const ViewEntityFormButtons = React.memo(function ViewEntityFormButtons({ buttons, }) {
     const { classNames } = useEntityFormTheme();
-    return (_jsx("div", { className: `w-full overflow-x-auto md:overflow-visible ${classNames.buttons?.container ?? ''}`, style: {
+    return (_jsx("div", { className: `rcm-form-buttons-scroll ${classNames.buttons?.container ?? ''}`, style: {
             WebkitOverflowScrolling: 'touch',
             direction: 'rtl'
-        }, children: _jsx("div", { className: `inline-flex items-center gap-2 whitespace-nowrap md:flex md:flex-wrap md:w-full md:justify-end ${classNames.buttons?.innerWrapper ?? ''}`, style: { direction: 'ltr' }, children: buttons }) }));
+        }, children: _jsx("div", { className: `rcm-form-buttons-row ${classNames.buttons?.innerWrapper ?? ''}`, style: { direction: 'ltr' }, children: buttons }) }));
 });
 export function getOverwriteButton(buttons, id) {
     return (buttons !== undefined &&
