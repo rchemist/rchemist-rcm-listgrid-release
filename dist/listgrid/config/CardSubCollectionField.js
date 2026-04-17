@@ -144,7 +144,7 @@ export class CardSubCollectionField extends SubCollectionField {
         if (this.fetchOptions?.useSearchForm) {
             initialSearchForm = await this.buildSearchForm(entityForm);
         }
-        return (_jsx(React.Suspense, { fallback: _jsx("div", { className: "flex items-center justify-center py-8", children: _jsx("div", { className: "h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" }) }), children: _jsx(CardSubCollectionView, { parentEntityForm: entityForm, parentId: entityForm.id, entityForm: this.entityForm, fetchUrl: fetchUrl, cardConfig: this.cardConfig, relation: this.relation, readonly: readonly, session: session, fetchOptions: this.fetchOptions, initialSearchForm: initialSearchForm, tooltip: tooltip }) }));
+        return (_jsx(React.Suspense, { fallback: _jsx("div", { className: "rcm-loading-overlay", children: _jsx("div", { className: "rcm-spinner" }) }), children: _jsx(CardSubCollectionView, { parentEntityForm: entityForm, parentId: entityForm.id, entityForm: this.entityForm, fetchUrl: fetchUrl, cardConfig: this.cardConfig, relation: this.relation, readonly: readonly, session: session, fetchOptions: this.fetchOptions, initialSearchForm: initialSearchForm, tooltip: tooltip }) }));
     }
 }
 //# sourceMappingURL=CardSubCollectionField.js.map

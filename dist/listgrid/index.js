@@ -225,4 +225,9 @@ export * from './config/EntityFormButton';
 export * from './config/InlineSubCollectionField';
 export * from './transfer/DynamicDataImporter';
 export * from './transfer/ExcelPasswordField';
+// Styling helpers — `cn` (tailwind-merge + clsx) and the per-slot
+// `classNames` / `mergeSlot` / `resolveSlots` primitives hosts use when
+// overriding scoped `rcm-*` classes on field components.
+export * from './utils/cn';
+export * from './utils/classNames';
 //# sourceMappingURL=index.js.map

@@ -191,4 +191,6 @@ export * from './config/EntityFormButton';
 export * from './config/InlineSubCollectionField';
 export * from './transfer/DynamicDataImporter';
 export * from './transfer/ExcelPasswordField';
+export * from './utils/cn';
+export * from './utils/classNames';
 //# sourceMappingURL=index.d.ts.map

@@ -1,274 +1,464 @@
-// Stage 3c — miscellaneous exports that the original `@gjcu/ui` root barrel
-// provided. Mix of regex patterns, simple formatters, storage helpers, API
-// stubs, and configurable constants.
+// Stage 3c — miscellaneous utilities that the original `@gjcu/ui` root barrel
+// provided. Ported to match the original semantics exactly so library-internal
+// callers (DatetimeField, FormField, PasswordValidation, etc.) behave the same
+// as before extraction.
 //
-// Pure, portable helpers are implemented here. Host-specific concerns (API
-// calls, full-featured date formatting with i18n) defer to their respective
-// Stage 5 / future stages.
+// Sources (in gjcu-academic-front/packages/ui/utils/):
+//   validation.ts, formatTime.ts, NumberUtil.ts, CompareUtil.ts, Server.ts,
+//   StringUtil.ts, RequestUtil.ts, jsonUtils.ts, BooleanUtil.ts,
+//   LocalStorageUtils.ts, SessionStorageUtil.ts
+import { format, formatDistanceToNow, getTime } from 'date-fns';
+import { ko } from 'date-fns/locale';
 // -- Regex patterns --------------------------------------------------------
-export const RegexAlias = /^[a-zA-Z0-9_-]{3,32}$/;
-export const RegexEmailAddress = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-export const RegexLowerEnglishNumber = /^[a-z0-9]+$/;
-export const RegexPasswordNormal = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
-export const RegexPhoneNumber = /^01[016789]-?\d{3,4}-?\d{4}$/;
-export const RegexTelephoneNumber = /^(0\d{1,2})-?\d{3,4}-?\d{4}$/;
-export const RegexUrlBody = /^https?:\/\/[^\s]+$/;
-// -- Date formatters (minimal) --------------------------------------------
-function pad(n) {
-    return n < 10 ? '0' + n : String(n);
+// From validation.ts. These are the exact originals — changing them breaks
+// validators (PasswordValidation, PhoneNumberValidation, etc.).
+export const RegexPhoneNumber = /^[0-9]{10,11}$/;
+export const RegexTelephoneNumber = /^[0-9]{9,11}$/;
+export const RegexPasswordNormal = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&+~()=_-])[A-Za-z\d@$!%*#?&+~()=_-]{8,25}$/;
+export const RegexEmailAddress = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+export const RegexKoreanName = /^[가-힣]{2,5}$/;
+export const RegexLoginName = /^[a-z][a-z0-9]{4,23}$/;
+export const RegexLoginNameForSignIn = /^[a-zA-Z][a-zA-Z0-9._-]{1,23}$/;
+export const RegexStudentLoginName = /^\d{10}$/;
+export const RegexAlias = /^[a-z0-9-_]{3,24}$/;
+export const RegexUrlBody = /^[a-zA-Z0-9-\/가-힣]{2,100}$/;
+export const RegexDomain = /^(https?:\/\/)[^\s\/$.?#].[^\s]*[^\/?]$/;
+export const RegexLowerEnglish = /^[a-z]{1,100}$/;
+export const RegexLowerEnglishNumber = /^[a-z0-9]{1,100}$/;
+export const RegexEnglishNumber = /^[a-zA-Z0-9]{1,100}$/;
+export const RegexNumber = /^[0-9]{1,100}$/;
+// -- Boolean helper (subset of BooleanUtil used by CompareUtil) ------------
+function isTrue(value, defaultValue) {
+    if (value === undefined || value === null || value === '') {
+        return defaultValue ?? false;
+    }
+    if (typeof value === 'boolean')
+        return value;
+    return value === 'true' || value === '1' || value === 'on' || value === 'yes' || value === '예';
 }
-function applyFormat(d, fmt) {
-    return fmt
-        .replace(/yyyy/g, String(d.getFullYear()))
-        .replace(/yy/g, String(d.getFullYear()).slice(-2))
-        .replace(/MM/g, pad(d.getMonth() + 1))
-        .replace(/dd/g, pad(d.getDate()))
-        .replace(/HH/g, pad(d.getHours()))
-        .replace(/mm/g, pad(d.getMinutes()))
-        .replace(/ss/g, pad(d.getSeconds()));
+// -- String helpers (subset of StringUtil used by library-internal callers) -
+function isBlank(data) {
+    return data === undefined || data === null || data === '';
 }
-export function fDate(value, format) {
-    if (!value)
-        return '';
+// -- Date formatters (from formatTime.ts) ----------------------------------
+export function fDate(date, dateFormat) {
+    const fm = dateFormat ?? 'yyyy-MM-dd';
     try {
-        const d = value instanceof Date ? value : new Date(value);
-        if (isNaN(d.getTime()))
-            return String(value);
-        return format
-            ? applyFormat(d, format)
-            : `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+        return date ? format(new Date(date), fm) : '';
     }
     catch {
-        return String(value);
+        return '';
     }
 }
-export function fDateTime(value, format) {
-    if (!value)
-        return '';
+export function fDateTime(date, newFormat) {
+    const fm = newFormat ?? 'yyyy-MM-dd p';
     try {
-        const d = value instanceof Date ? value : new Date(value);
-        if (isNaN(d.getTime()))
-            return String(value);
-        return format
-            ? applyFormat(d, format)
-            : `${fDate(d)} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+        return date ? format(new Date(date), fm) : '';
     }
     catch {
-        return String(value);
+        return '';
     }
 }
-export function fToNow(value) {
-    // Minimal "N days ago" style. Host apps with i18n/relative-time needs override.
-    if (!value)
-        return '';
+export function fTimestamp(date) {
     try {
-        const d = value instanceof Date ? value : new Date(value);
-        const diffMs = Date.now() - d.getTime();
-        const mins = Math.floor(diffMs / 60000);
-        if (mins < 1)
-            return '방금';
-        if (mins < 60)
-            return `${mins}분 전`;
-        const hours = Math.floor(mins / 60);
-        if (hours < 24)
-            return `${hours}시간 전`;
-        const days = Math.floor(hours / 24);
-        return `${days}일 전`;
+        return date ? getTime(new Date(date)) : '';
     }
     catch {
-        return String(value);
+        return '';
     }
 }
-export function getFormattedTime(value, offsetHours) {
-    const base = value ? (value instanceof Date ? value : new Date(value)) : new Date();
-    if (isNaN(base.getTime()))
-        return String(value ?? '');
-    const d = offsetHours ? new Date(base.getTime() + offsetHours * 3600 * 1000) : base;
-    return fDateTime(d);
+export function fToNow(date, options) {
+    try {
+        if (!date)
+            return '';
+        const d = typeof date === 'string' ? new Date(date) : date;
+        const opts = options ?? {};
+        if (!opts.relative) {
+            return fDate(d, opts.format);
+        }
+        const now = new Date();
+        const diff = now.getTime() - d.getTime();
+        const days = Math.ceil(diff / (1000 * 3600 * 24));
+        if (days > (opts.diffDays ?? 1)) {
+            return fDate(d, opts.format);
+        }
+        return formatDistanceToNow(d, { addSuffix: true, locale: ko });
+    }
+    catch {
+        return '';
+    }
 }
-// Matches the original semantics from packages/ui/utils/NumberUtil#formatPrice:
-// - No second argument -> plain number with thousands separators (e.g. "1,234").
-// - Valid BCP-47 locale code -> currency-formatted in KRW for that locale.
-// - Special token "원" -> "1,234 원".
-// - Any other string -> prefix + number (e.g. "$" => "$1,234").
+export function formatYearMonth(date) {
+    if (!date)
+        return '';
+    if (typeof date === 'number')
+        return formatYearMonth(date.toString());
+    if (date.length < 6)
+        return date;
+    if (date.includes('-'))
+        return date.split('-')[0] + '년 ' + date.split('-')[1] + '월';
+    if (date.includes('.'))
+        return date.split('.')[0] + '년 ' + date.split('.')[1] + '월';
+    const year = date.substring(0, 4);
+    const month = date.substring(4, 6);
+    return `${year}년 ${month}월`;
+}
+function paddingMonth(mon) {
+    return mon < 10 ? `0${mon}` : mon;
+}
+export function getCurrentYear() {
+    return new Date().getFullYear();
+}
+export function getCurrentMonth() {
+    return new Date().getMonth() + 1 + '';
+}
+export function getCurrentYearMonth() {
+    const d = new Date();
+    return `${d.getFullYear()}-${paddingMonth(d.getMonth() + 1)}`;
+}
+export function getCurrentHour() {
+    const h = new Date().getHours();
+    return h < 10 ? `0${h}` : `${h}`;
+}
+// Mutates the input date — matches original signature/behavior.
+export function getFormattedTime(date = new Date(), hourOffset = 0, minuteOffset = 0) {
+    date.setHours(date.getHours() + hourOffset);
+    date.setMinutes(date.getMinutes() + minuteOffset);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const hh = hours < 10 ? `0${hours}` : `${hours}`;
+    const mm = minutes < 10 ? `0${minutes}` : `${minutes}`;
+    return `${hh}:${mm}`;
+}
+// -- NumberUtil.formatPrice ------------------------------------------------
 export function formatPrice(value, localeCode) {
-    if (value === null || value === undefined || value === '')
-        return '';
-    const n = Number(value);
-    if (isNaN(n))
-        return String(value);
     if (localeCode) {
         try {
-            return new Intl.NumberFormat(localeCode, { style: 'currency', currency: 'KRW' }).format(n);
+            return new Intl.NumberFormat(localeCode, { style: 'currency', currency: 'KRW' }).format(value);
         }
         catch {
-            /* fall through to prefix handling */
+            /* fall through */
         }
     }
-    const formatted = n.toLocaleString('en-US');
+    const formattedNumber = value.toLocaleString('en-US');
     if (localeCode === '원')
-        return `${formatted} 원`;
+        return `${formattedNumber} 원`;
     if (localeCode)
-        return `${localeCode}${formatted}`;
-    return formatted;
+        return `${localeCode}${formattedNumber}`;
+    return formattedNumber;
 }
-// -- Comparison / validation helpers --------------------------------------
-export function isEmpty(value) {
-    if (value === null || value === undefined)
+// -- CompareUtil -----------------------------------------------------------
+export function isNulls(value, other) {
+    if (value === undefined && other === undefined)
         return true;
-    if (typeof value === 'string')
-        return value.length === 0;
-    if (Array.isArray(value))
-        return value.length === 0;
-    if (value instanceof Map || value instanceof Set)
-        return value.size === 0;
-    if (typeof value === 'object')
-        return Object.keys(value).length === 0;
+    if (value === undefined) {
+        if (other === null)
+            return true;
+        if (other === '')
+            return true;
+    }
+    else if (other === undefined) {
+        if (value === null)
+            return true;
+        if (value === '')
+            return true;
+    }
     return false;
 }
-export function isEquals(a, b) {
-    return a === b;
-}
-export function isEqualsIgnoreCase(a, b) {
-    if (typeof a !== 'string' || typeof b !== 'string')
-        return a === b;
-    return a.toLowerCase() === b.toLowerCase();
-}
-export function isEqualCollection(a, b, ignoreOrder) {
-    if (a === b)
+export function isEquals(value, other) {
+    if (isNulls(value, other))
         return true;
-    if (!a || !b)
-        return false;
-    if (a.length !== b.length)
-        return false;
-    if (ignoreOrder) {
-        const sortedA = [...a].map(String).sort();
-        const sortedB = [...b].map(String).sort();
-        return sortedA.every((v, i) => v === sortedB[i]);
-    }
-    for (let i = 0; i < a.length; i++)
-        if (a[i] !== b[i])
+    if (value === other)
+        return true;
+    // plain object deep comparison (matches original CompareUtil.isEquals)
+    if (typeof value === 'object' && typeof other === 'object' &&
+        value !== null && other !== null &&
+        !Array.isArray(value) && !Array.isArray(other)) {
+        const keysA = Object.keys(value);
+        const keysB = Object.keys(other);
+        if (keysA.length !== keysB.length)
             return false;
-    return true;
+        return keysA.every(key => keysB.includes(key) && isEquals(value[key], other[key]));
+    }
+    return false;
+}
+export function isEqualsIgnoreCase(value, other) {
+    if (isNulls(value, other))
+        return true;
+    if (value == null || other == null)
+        return false;
+    return value.toLowerCase() === other.toLowerCase();
+}
+export function isEqualCollection(value, other, ignoreOrder = false) {
+    if (value.length !== other.length)
+        return false;
+    if (isTrue(ignoreOrder)) {
+        return value.every(v => other.includes(v));
+    }
+    return value.every((v, i) => isEquals(v, other[i]));
+}
+export function isEmpty(collection) {
+    if (collection === undefined || collection === null)
+        return true;
+    if (collection instanceof Map)
+        return collection.size === 0;
+    return collection.length === 0;
 }
 export function isPositive(value) {
-    const n = Number(value);
-    return !isNaN(n) && n > 0;
+    if (value === undefined || value === null)
+        return false;
+    return value > 0;
 }
+export function isNegative(value) {
+    if (value === undefined || value === null)
+        return false;
+    return value < 0;
+}
+// -- URL helpers -----------------------------------------------------------
+// From RequestUtil.normalizeUrl — prefixes '/' for relative paths, preserves
+// absolute http(s) URLs. NOT the trailing-slash variant previously here.
 export function normalizeUrl(url) {
-    if (!url)
-        return '';
-    return url.replace(/\/+$/g, '').replace(/\\/g, '/');
+    if (isBlank(url))
+        return url;
+    const trimmed = url.trim();
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://'))
+        return trimmed;
+    if (!trimmed.startsWith('/'))
+        return `/${trimmed}`;
+    return trimmed;
 }
-export function removeTrailingSeparator(value, sep = '/') {
-    if (!value)
-        return '';
-    let s = value;
-    while (s.endsWith(sep))
-        s = s.slice(0, -sep.length);
-    return s;
+// From StringUtil.removeTrailingSeparator — separator is REQUIRED and the
+// logic strips the trailing segment up to (and including) the last separator.
+export function removeTrailingSeparator(input, separator) {
+    const parts = input.split(separator);
+    const lastPart = parts[parts.length - 1];
+    if (lastPart.trim() !== '') {
+        return input.slice(0, input.lastIndexOf(separator));
+    }
+    return input;
 }
-export function parse(value, fallback) {
-    if (!value)
-        return fallback;
+// -- JSON helpers (from jsonUtils.ts) --------------------------------------
+function reviver(_key, value) {
+    if (typeof value === 'object' && value !== null) {
+        if (value.dataType === 'Map') {
+            return new Map(value.value);
+        }
+    }
+    return value;
+}
+function mapReplacer(_key, value) {
+    if (value instanceof Map)
+        return Object.fromEntries(value);
+    if (value instanceof Set)
+        return [...value];
+    return value;
+}
+export function stringify(obj, beautify) {
+    const seen = new WeakSet();
+    const circularSafeReplacer = (key, value) => {
+        const mapped = mapReplacer(key, value);
+        if (typeof mapped !== 'object' || mapped === null)
+            return mapped;
+        if (seen.has(mapped))
+            return '[Circular Reference]';
+        seen.add(mapped);
+        return mapped;
+    };
     try {
-        return JSON.parse(value);
+        return beautify
+            ? JSON.stringify(obj, circularSafeReplacer, 2)
+            : JSON.stringify(obj, circularSafeReplacer);
     }
-    catch {
-        return fallback;
+    catch (e) {
+        console.error('stringify error:', e);
+        return '{}';
     }
 }
-// -- Storage helpers -------------------------------------------------------
-function safeLocalStorage() {
-    return typeof window !== 'undefined' && window.localStorage ? window.localStorage : null;
+export function parse(str) {
+    return JSON.parse(str, reviver);
 }
-function safeSessionStorage() {
-    return typeof window !== 'undefined' && window.sessionStorage ? window.sessionStorage : null;
+// -- Storage helpers (from LocalStorageUtils.ts / SessionStorageUtil.ts) ---
+// Matches the original CachedStorageItem wrapper exactly so data written by
+// host code (or by older versions of the library) remains readable.
+class CachedStorageItem {
+    constructor(value, expiry) {
+        this.value = value;
+        this.expiry = expiry;
+    }
+    static create(props) {
+        return new CachedStorageItem(props.value, props.expiry);
+    }
+    isAvailable() {
+        if (this.expiry)
+            return Date.now() <= this.expiry;
+        return true;
+    }
+    getData() {
+        if (!this.isAvailable())
+            return undefined;
+        return this.value;
+    }
+}
+function safeWindow() {
+    return typeof window !== 'undefined';
+}
+export function removeLocalStorageItem(key) {
+    if (!safeWindow())
+        return;
+    localStorage.removeItem(key);
+}
+export function setLocalStorageItem(key, value, expirySeconds) {
+    if (!safeWindow())
+        return;
+    const item = new CachedStorageItem(value, expirySeconds ? Date.now() + expirySeconds * 1000 : undefined);
+    localStorage.setItem(key, stringify(item));
 }
 export function getLocalStorageItem(key) {
-    return safeLocalStorage()?.getItem(key) ?? null;
-}
-export function setLocalStorageItem(key, value) {
-    safeLocalStorage()?.setItem(key, value);
-}
-export function getSessionStorageObject(key, reviver) {
-    const raw = safeSessionStorage()?.getItem(key);
-    if (!raw)
+    if (!safeWindow())
+        return undefined;
+    const itemJson = localStorage.getItem(key);
+    if (!itemJson)
         return undefined;
     try {
-        if (reviver)
-            return reviver(raw);
-        return JSON.parse(raw);
+        const item = CachedStorageItem.create({ ...parse(itemJson) });
+        if (item.isAvailable())
+            return item.getData();
+        localStorage.removeItem(key);
+    }
+    catch (e) {
+        console.error(e);
+    }
+    return undefined;
+}
+export function getLocalStorageObject(key, customParse) {
+    const value = getLocalStorageItem(key);
+    if (isBlank(value))
+        return undefined;
+    if (customParse !== undefined)
+        return customParse(value);
+    return parse(value);
+}
+export function removeSessionStorageItem(key) {
+    if (!safeWindow())
+        return;
+    sessionStorage.removeItem(key);
+}
+export function setSessionStorageItem(key, value, expirySeconds) {
+    if (!safeWindow())
+        return;
+    const item = new CachedStorageItem(value, expirySeconds ? Date.now() + expirySeconds * 1000 : undefined);
+    sessionStorage.setItem(key, stringify(item));
+}
+export function getSessionStorageItem(key) {
+    if (!safeWindow())
+        return undefined;
+    const itemJson = sessionStorage.getItem(key);
+    if (!itemJson)
+        return undefined;
+    try {
+        const obj = parse(itemJson);
+        const item = new CachedStorageItem(obj.value, obj.expiry);
+        if (item.isAvailable())
+            return item.getData();
+        sessionStorage.removeItem(key);
     }
     catch {
-        return undefined;
+        sessionStorage.removeItem(key);
     }
+    return undefined;
 }
-export function setSessionStorageItem(key, value) {
-    const s = safeSessionStorage();
-    if (!s)
-        return;
-    s.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+export function getSessionStorageObject(key, customParse) {
+    const value = getSessionStorageItem(key);
+    if (value === undefined)
+        return undefined;
+    if (customParse !== undefined)
+        return customParse(value);
+    return parse(value);
 }
-// -- Configurable constants ------------------------------------------------
-let _assetServerUrl = '';
+// -- Server / asset URL helpers (from Server.ts) ---------------------------
+// Originals are module-level constants pulled from env. Library-consumer
+// Next.js bundles substitute NEXT_PUBLIC_* at build time, so this reads the
+// same env var and matches the original shape (plain strings, not Proxies).
+export const ASSET_SERVER_URL = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_ASSET_SERVER) || 'http://127.0.0.1:8320';
+export const ASSET_PREFIX = '/static-resource/';
+// Host-configuration override — hosts that set the env var don't need this;
+// hosts that bootstrap at runtime (non-Next environments) can override here.
+let _assetServerUrlOverride;
+let _assetPrefixOverride;
 export function configureAssetServerUrl(url) {
-    _assetServerUrl = url.replace(/\/+$/, '');
+    _assetServerUrlOverride = url.replace(/\/+$/, '');
 }
-export const ASSET_SERVER_URL = {
-    toString() {
-        return _assetServerUrl;
-    },
-    valueOf() {
-        return _assetServerUrl;
-    },
-    get url() {
-        return _assetServerUrl;
-    },
-};
-export function getAccessableAssetUrl(path) {
-    if (!path)
+export function configureAssetPrefix(prefix) {
+    _assetPrefixOverride = prefix;
+}
+function effectiveAssetServerUrl() {
+    return _assetServerUrlOverride ?? ASSET_SERVER_URL;
+}
+function effectiveAssetPrefix() {
+    return _assetPrefixOverride ?? ASSET_PREFIX;
+}
+export function getAccessableAssetUrl(imgUrl) {
+    if (!imgUrl)
         return '';
-    if (path.startsWith('http://') || path.startsWith('https://'))
-        return path;
-    return _assetServerUrl ? `${_assetServerUrl}/${path.replace(/^\/+/, '')}` : path;
+    let u = removeAssetServerPrefix(imgUrl);
+    if (u.startsWith('http://') || u.startsWith('https://'))
+        return u;
+    if (u.startsWith('/'))
+        u = u.substring(1);
+    return effectiveAssetServerUrl() + effectiveAssetPrefix() + u;
 }
-export function removeAssetServerPrefix(value) {
-    if (!value || !_assetServerUrl)
-        return value ?? '';
-    return value.startsWith(_assetServerUrl) ? value.slice(_assetServerUrl.length).replace(/^\/+/, '') : value;
+export function removeAssetServerPrefix(url) {
+    if (!url)
+        return '';
+    let u = url;
+    const server = effectiveAssetServerUrl();
+    const prefix = effectiveAssetPrefix();
+    if (u.startsWith(server))
+        u = u.substring(server.length);
+    if (u.startsWith(prefix))
+        u = u.substring(prefix.length);
+    // URL-encode each path segment; keeps '/' untouched so callers can
+    // concatenate the result with a base URL as before.
+    return u.split('/').map(encodeURIComponent).join('/');
+}
+export function validatedAssetFileName(fileName) {
+    fileName = fileName.replace(/ /g, '_');
+    fileName = fileName.replace(/[ㄱ-ㅎㅏ-ㅣ가-힣]/g, '_');
+    return fileName;
 }
 export function getDefinedDates(type) {
-    const end = new Date();
+    const now = new Date();
     const start = new Date();
-    if (type === 'yesterday') {
-        start.setDate(start.getDate() - 1);
-        end.setDate(end.getDate() - 1);
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+    if (type === 'TODAY') {
+        start.setHours(0, 0, 0, 0);
     }
-    else if (type === 'this-week') {
-        start.setDate(start.getDate() - start.getDay());
+    else if (type === 'WEEK') {
+        start.setDate(now.getDate() - 7);
+        start.setHours(0, 0, 0, 0);
     }
-    else if (type === 'last-week') {
-        start.setDate(start.getDate() - start.getDay() - 7);
-        end.setDate(end.getDate() - end.getDay() - 1);
+    else if (type === 'MONTH') {
+        start.setMonth(now.getMonth() - 1);
+        start.setHours(0, 0, 0, 0);
     }
-    else if (type === 'this-month') {
-        start.setDate(1);
+    else if (type === 'MONTH3') {
+        start.setMonth(now.getMonth() - 3);
+        start.setHours(0, 0, 0, 0);
     }
-    else if (type === 'last-month') {
-        start.setMonth(start.getMonth() - 1);
-        start.setDate(1);
-        end.setDate(0);
+    else if (type === 'MONTH6') {
+        start.setMonth(now.getMonth() - 6);
+        start.setHours(0, 0, 0, 0);
     }
-    return { start, end };
+    else if (type === 'YEAR') {
+        start.setFullYear(now.getFullYear() - 1);
+        start.setHours(0, 0, 0, 0);
+    }
+    return [start, end];
 }
 // -- API re-exports (host-supplied ApiClient; see src/listgrid/api) --------
 export { callExternalHttpRequest, getExternalApiData, getExternalApiDataWithError, } from '../api';
 // -- Other -----------------------------------------------------------------
 export const RequestUtil = {};
 export const EntityError = undefined;
-// ResponseData re-exported from the api module (Stage 5).
 export { ResponseData } from '../api';
-// Re-export common utils for convenience so downstream code that used
-// `from "../misc"` barrel-style still gets isEmpty etc. via our unified barrel.
 //# sourceMappingURL=index.js.map

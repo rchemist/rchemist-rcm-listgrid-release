@@ -156,8 +156,11 @@ export const DEFAULT_EMAIL_DOMAINS = [
     'hanmail.net',
     'nate.com',
 ];
+// Previously returned the Tailwind string "bg-gray-100 opacity-60 cursor-not-allowed".
+// Now returns the library's scoped class so hosts without Tailwind still get
+// the readonly visual via @rcm/listgrid/styles.css.
 export function readonlyClass(readonly, extra = '') {
-    return readonly ? `bg-gray-100 opacity-60 cursor-not-allowed ${extra}`.trim() : extra;
+    return readonly ? `rcm-readonly ${extra}`.trim() : extra;
 }
 // NumberInput-adjacent value helpers. Kept as any wrappers.
 export const Currency = {};

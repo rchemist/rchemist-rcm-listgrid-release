@@ -389,3 +389,56 @@ UIProvider 컴포넌트들이 받는 props 중 일부는 **library 내부 상태
 - ⚠️ 저장/fetch 플로우는 아직 구동 안 됨 — mock API만 연결, click + API round-trip 테스트는 안 함
 - ⚠️ UIProvider prop 필터 계약은 **host adapter 책임**으로 결정 (library가 강제 안 함)
 - ⚠️ 실 스타일링 없음 (Tailwind 등) — 입력은 되지만 예쁘지 않음
+
+### #57 Stage 9 Phase 1.1 — UI 프레임워크 독립을 위한 자체 CSS 기반 도입
+**목표**: 라이브러리 소비자가 Tailwind/shadcn/HeroUI 등 특정 UI 프레임워크에 묶이지 않도록, 기본 UI는 라이브러리가 제공하되 override 경로를 전면 개방.
+
+**문제 인식** (사용자 질의 통해 확인):
+- 라이브러리는 `@heroui`/`@nextui`/`@shadcn`/`radix-ui`를 직접 import하는 곳 **없음** (확인 완료)
+- 유일한 UI 결합은 **JSX에 하드코딩된 Tailwind 유틸리티 문자열** (134 파일, 602줄)
+- 호스트가 Tailwind 설정 없으면 스타일 깨짐 — 이것이 마지막 누수
+
+**Phase 1.1 인프라 (이번 작업)**:
+1. `src/listgrid/styles/tokens.css` — CSS 변수로 디자인 토큰 노출 (색/폰트/간격/radius/shadow/z-index)
+2. `src/listgrid/styles/base.css` — `@layer rcm-listgrid`로 감싼 scoped 클래스 정의 (rcm-root, rcm-field-root, rcm-field-input, rcm-button, rcm-spinner, rcm-table, rcm-notice, rcm-readonly 등)
+3. `src/listgrid/styles/index.css` — 위 두 파일 `@import` 합본
+4. `package.json` exports에 `./styles.css`, `./styles/tokens.css`, `./styles/base.css` 추가
+5. `npm run build:styles`로 `dist/styles.css` (합본) + `dist/styles/{tokens,base}.css` 복사
+6. `utils/classNames.ts` — `mergeSlot(base, override?)` / `resolveSlots(defaults, overrides?)` / `ClassNamesMap<K>` 추가 (host 필드 커스터마이징용)
+7. `readonlyClass()`의 Tailwind 문자열(`bg-gray-100 opacity-60 cursor-not-allowed`) → `rcm-readonly` 스코프 클래스로 교체
+
+**Override 메커니즘 (4단계, Mantine/MUI와 동등)**:
+- (1) CSS 변수: `:root { --rcm-color-primary: ... }` — 전역 리브랜딩
+- (2) `@layer rcm-listgrid` 밖 CSS: `.rcm-button { ... }` — specificity 전쟁 없이 무조건 이김
+- (3) `classNames={{ root, input, error }}` prop — 인스턴스별 override (다음 Phase에서 필드별 wire)
+- (4) `UIProvider.components` — 프리미티브 완전 교체 (기존)
+
+**Neutral 디자인 원칙**: brand color 없음, system font, 4px 간격 grid, 기능적 accent color(success/warning/error/info)만 노출. gjcu 디자인 선택은 `UIAdapter.ts`에 갇혀 있고 라이브러리는 모름.
+
+**Why**: 수십 개 필드 재구현 강요(완전 headless)와 기본 디자인 강요(Tailwind 종속) 사이의 업계 표준 해법. Mantine `@layer mantine` + MUI `sx/slots` + HeroUI `classNames` 등과 동일한 패턴.
+
+**남은 작업 (Phase 1.2 / 1.3)**:
+- Phase 1.2: 필드 컴포넌트들에 `classNames` prop 받아 `mergeSlot`으로 wire
+- Phase 1.3: 134 파일 602줄의 하드코딩된 Tailwind 유틸리티 → scoped `rcm-*` 클래스로 점진 교체 (파일 단위로 검증하며 진행)
+
+### #58 Stage 9 Phase 1.3 중간 진행 — Tailwind 하드코딩 → rcm-* scoped 교체
+#57의 인프라 위에서 실제 컴포넌트/테마의 Tailwind 문자열을 scoped 클래스로 전환.
+
+**최고 레버리지 작업 완료**:
+- `defaultListGridTheme.ts` — ListGrid 기본 테마의 모든 btn/form/panel/white-light/bg-dark/bg-primary-light 전부 `rcm-*`로 교체
+- `defaultEntityFormTheme.ts` — EntityForm 기본 테마도 동일 작업
+- `mainTheme/modalTheme/subCollectionTheme.ts` variant 3종 전부 중립화
+
+**효과**: ViewListGrid/ViewEntityForm 하위 수십 개 컴포넌트가 `themeClasses.X ?? '...'` fallback으로 이 테마를 쓰고 있었음. 테마를 중립화하면 fallback 경로 전체가 자동으로 중립화됨. 단일 파일 편집으로 수십 개 컴포넌트가 혜택.
+
+**개별 컴포넌트 작업 완료**:
+- InlineSubCollectionField/CardSubCollectionField/TableSubCollectionField 로딩 스피너
+- DataExporter, ExcelPasswordField, DynamicDataImporter
+- ViewEntityFormSkeleton, ViewListGridSkeleton
+
+**남은 작업**:
+- 약 527줄의 하드코딩된 Tailwind 문자열이 개별 컴포넌트 JSX에 아직 남음. 단, 이것들 중 상당수는 theme fallback 때문에 실제 렌더링엔 사용 안 되는 dead code일 가능성 있음.
+- 순수 presentational 스타일(컬러/간격/폰트)은 중립 default CSS로 동작하고, 커스터마이즈 경로 4개 모두 열림.
+- Button variants/Notice/Skeleton 시스템 완성.
+
+**검증 필요**: gjcu 실험 워크트리에서 기존 UI가 그대로 동작하는지 확인. 테마 교체가 시각적으로 차이를 만들 수 있음.
