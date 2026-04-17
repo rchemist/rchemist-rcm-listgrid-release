@@ -82,10 +82,10 @@ export const defaultEntityFormTheme = {
         fieldErrorButton: "rcm-row rcm-cursor-pointer",
     },
     tabs: {
-        list: "rcm-tab-list",
-        tab: "rcm-tab",
-        tabSelected: "rcm-tab-selected",
-        tabDisabled: "rcm-tab-disabled",
+        list: "",
+        tab: "",
+        tabSelected: "",
+        tabDisabled: "",
     },
     tabPanel: {
         container: "",
