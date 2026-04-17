@@ -178,6 +178,7 @@ export * from './validations/TelephoneNumberValidation';
 export * from './validations/PhoneNumberValidation';
 export * from './validations/PasswordValidation';
 export * from './validations/StringValidation';
+export * from './validations/IpAddressValidation';
 // Extension Types
 export * from './extensions/EntityFormExtension.types';
 // Types

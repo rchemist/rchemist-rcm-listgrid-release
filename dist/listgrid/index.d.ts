@@ -152,6 +152,7 @@ export * from './validations/TelephoneNumberValidation';
 export * from './validations/PhoneNumberValidation';
 export * from './validations/PasswordValidation';
 export * from './validations/StringValidation';
+export * from './validations/IpAddressValidation';
 export * from './extensions/EntityFormExtension.types';
 export * from './components/form/types/ViewEntityForm.types';
 export * from './components/form/types/ViewEntityFormAlerts.types';
