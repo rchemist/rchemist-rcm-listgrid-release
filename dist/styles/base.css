@@ -247,6 +247,138 @@
         color: var(--rcm-color-text-muted);
     }
 
+    /* ------------------------------------------------------------------ *
+     * ManyToOne / Link addon buttons (input group 우측 관리 / 찾기 / 외부 링크)
+     * ------------------------------------------------------------------ */
+    .rcm-m2o-action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--rcm-space-xs);
+        height: 100%;
+        min-width: 80px;
+        padding: 0 var(--rcm-space-md);
+        font-weight: var(--rcm-font-weight-semibold);
+        white-space: nowrap;
+        color: var(--rcm-color-primary-text);
+        background: var(--rcm-color-text-muted);
+        border: var(--rcm-border-width) solid var(--rcm-color-text-muted);
+        border-left: 0;
+        border-top-right-radius: var(--rcm-radius-md);
+        border-bottom-right-radius: var(--rcm-radius-md);
+        cursor: pointer;
+        transition: background var(--rcm-transition-fast);
+    }
+
+    .rcm-m2o-action-btn:hover {
+        background: color-mix(in srgb, var(--rcm-color-text-muted) 85%, black);
+    }
+
+    .rcm-m2o-action-btn:disabled {
+        opacity: 0.2;
+        cursor: not-allowed;
+    }
+
+    .rcm-m2o-action-icon {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    .rcm-m2o-dropdown-list {
+        min-width: 120px;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .rcm-m2o-dropdown-item {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        gap: var(--rcm-space-sm);
+        padding: var(--rcm-space-sm) var(--rcm-space-lg);
+        font-size: var(--rcm-font-size-sm);
+        color: var(--rcm-color-text);
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        transition: background var(--rcm-transition-fast);
+    }
+
+    .rcm-m2o-dropdown-item:hover {
+        background: var(--rcm-color-surface-hover);
+    }
+
+    /* Link field 우측 외부 이동 버튼 (smaller than m2o action) */
+    .rcm-link-button {
+        min-width: 40px;
+        padding: 0 var(--rcm-space-sm);
+    }
+
+    /* input group 우측 addon 버튼 공통 shape */
+    .rcm-input-addon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--rcm-space-xs);
+        height: 100%;
+        white-space: nowrap;
+        color: var(--rcm-color-primary-text);
+        background: var(--rcm-color-text-muted);
+        border: var(--rcm-border-width) solid var(--rcm-color-text-muted);
+        border-left: 0;
+        border-top-right-radius: var(--rcm-radius-md);
+        border-bottom-right-radius: var(--rcm-radius-md);
+        cursor: pointer;
+        transition: background var(--rcm-transition-fast);
+    }
+
+    .rcm-input-addon-btn:hover {
+        background: color-mix(in srgb, var(--rcm-color-text-muted) 85%, black);
+    }
+
+    .rcm-input-addon-btn:disabled {
+        opacity: 0.2;
+        cursor: not-allowed;
+    }
+
+    /* ------------------------------------------------------------------ *
+     * Select / ManyToOne loading placeholder
+     * ------------------------------------------------------------------ */
+    .rcm-select-loading-wrapper {
+        white-space: nowrap;
+    }
+
+    .rcm-select-loading {
+        display: flex;
+        align-items: center;
+        gap: var(--rcm-space-sm);
+        height: var(--rcm-size-input-height);
+        padding: 0 var(--rcm-space-md);
+        background: var(--rcm-color-surface-muted);
+        border: var(--rcm-border-width) solid var(--rcm-color-border);
+        border-radius: var(--rcm-radius-md);
+    }
+
+    .rcm-select-loading-spinner {
+        width: 1rem;
+        height: 1rem;
+        color: var(--rcm-color-text-disabled);
+        animation: rcm-spin 1s linear infinite;
+    }
+
+    @keyframes rcm-spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .rcm-spinner-track { opacity: 0.25; }
+    .rcm-spinner-head  { opacity: 0.75; }
+
+    .rcm-select-loading-text {
+        font-size: var(--rcm-font-size-sm);
+        color: var(--rcm-color-text-disabled);
+    }
+
     .rcm-button-secondary {
         color: var(--rcm-color-text-muted);
         background: transparent;

@@ -102,7 +102,7 @@ export const DynamicSelectFieldView = ({ fieldName, entityForm, loadOptions, sta
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [effectiveCacheKey, fieldName]);
     if (loading || !mounted) {
-        return (_jsxs("div", { className: "h-9 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded flex items-center px-3 gap-2", children: [_jsxs("svg", { className: "animate-spin h-4 w-4 text-gray-400", xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", children: [_jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }), _jsx("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })] }), _jsx("span", { className: "text-sm text-gray-400", children: "\uBD88\uB7EC\uC624\uB294 \uC911..." })] }));
+        return (_jsxs("div", { className: "rcm-select-loading", children: [_jsxs("svg", { className: "rcm-select-loading-spinner", xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", children: [_jsx("circle", { className: "rcm-spinner-track", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }), _jsx("path", { className: "rcm-spinner-head", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })] }), _jsx("span", { className: "rcm-select-loading-text", children: "\uBD88\uB7EC\uC624\uB294 \uC911..." })] }));
     }
     const commonProps = {
         name: fieldName,
