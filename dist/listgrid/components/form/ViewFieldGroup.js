@@ -152,7 +152,7 @@ export const ViewFieldGroup = ({ entityForm, setEntityForm, readonly, subCollect
                                 if (readonly) {
                                     collection.withReadOnly(true);
                                 }
-                                return _jsx("div", { className: "col-span-full", children: _jsx(SubCollectionRenderer, { entityForm: entityForm, collection: collection, session: session }) }, `subCollection_${collection.getName()}_${entityForm.id}`);
+                                return _jsx("div", { className: "rcm-col-span-full", children: _jsx(SubCollectionRenderer, { entityForm: entityForm, collection: collection, session: session }) }, `subCollection_${collection.getName()}_${entityForm.id}`);
                             })] })] }) });
 };
 //# sourceMappingURL=ViewFieldGroup.js.map
