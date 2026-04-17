@@ -94,9 +94,9 @@ export const defaultEntityFormTheme = {
     },
     panel: {
         scrollContainer: "",
-        layoutWrapper: "rcm-stack",
-        container: "rcm-listgrid-panel",
-        inner: "",
+        layoutWrapper: "rcm-form-layout-wrapper",
+        container: "rcm-form-panel",
+        inner: "rcm-form-panel-inner",
     },
     fieldGroup: {
         container: "rcm-panel",

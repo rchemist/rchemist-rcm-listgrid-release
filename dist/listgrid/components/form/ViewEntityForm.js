@@ -76,12 +76,12 @@ export const ViewEntityForm = (props) => {
     const showButtonsInHeader = buttonPosition === 'header' && !isInlineMode;
     const showButtonsInTabRow = isInlineMode;
     return (_jsxs("div", { id: `view-entity-form-${entityForm.name}${isSubCollectionEntity ? '-sub' : ''}`, className: classNames.root, children: [_jsxs("div", { className: "sticky top-0 z-20 bg-white dark:bg-dark", children: [_jsxs("div", { className: cn("mt-1 w-full min-w-0", classNames.header?.container), children: [_jsx("div", { className: cn("mb-3", classNames.header?.titleWrapper), children: _jsx(ViewEntityFormTitle, { title: title, hideTitle: props.hideTitle }) }), showButtonsInHeader && (_jsx("div", { className: cn("w-full min-w-0 overflow-hidden", classNames.header?.buttonWrapper), children: _jsx(ViewEntityFormButtons, { buttons: buttons }) }))] }), headerAreaContent && (_jsx("div", { className: cn("mt-2 border-b border-white-light dark:border-[#191e3a]", classNames.headerArea?.container), children: headerAreaContent }))] }), useCreateStep && entityForm && (_jsx(CreateStepView, { currentStep: currentStep, setCurrentStep: setCurrentStep, maxStep: maxStep, entityForm: entityForm, setEntityForm: setEntityForm, onClickSaveButton: onClickSaveButton, showStepper: showStepper, setShowStepper: setShowStepper, session: session ?? undefined, buttonPosition: createStepButtonPosition ?? 'top' })), _jsx(SafePerfectScrollbar, { className: cn("relative h-full", classNames.panel?.scrollContainer), children: _jsx("div", { className: cn(isInlineMode
-                        ? "flex w-full max-w-full flex-col gap-1 pt-1 xl:flex-row"
-                        : "flex w-full max-w-full flex-col gap-1.5 pt-3 xl:flex-row", isInlineMode ? undefined : classNames.panel?.layoutWrapper), children: _jsx("div", { className: cn(isInlineMode
-                            ? "panel w-full max-w-full flex-1 rounded-lg px-3 py-2 bg-white dark:bg-dark"
-                            : "panel w-full max-w-full flex-1 rounded-xl px-0 pt-1", isInlineMode ? undefined : classNames.panel?.container), children: _jsxs("div", { className: cn(isInlineMode
-                                ? "w-full max-w-full"
-                                : "w-full max-w-full pl-1.5 pr-1.5 md:pl-3 md:pr-3", isInlineMode ? undefined : classNames.panel?.inner), children: [_jsx(ViewEntityFormAlerts, { alertMessages: entityForm.getAlertMessages(), onRemove: (key) => {
+                        ? "rcm-form-layout-wrapper"
+                        : "rcm-form-layout-wrapper", isInlineMode ? '' : classNames.panel?.layoutWrapper), children: _jsx("div", { className: cn(isInlineMode
+                            ? "rcm-form-panel rcm-form-panel-inline"
+                            : "rcm-form-panel", isInlineMode ? '' : classNames.panel?.container), children: _jsxs("div", { className: cn(isInlineMode
+                                ? "rcm-form-panel-inner"
+                                : "rcm-form-panel-inner", isInlineMode ? '' : classNames.panel?.inner), children: [_jsx(ViewEntityFormAlerts, { alertMessages: entityForm.getAlertMessages(), onRemove: (key) => {
                                         const updatedForm = entityForm.clone().removeAlertMessage(key);
                                         setEntityForm(updatedForm);
                                     }, onTabChange: (tabId) => {
