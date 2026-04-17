@@ -15,6 +15,8 @@ export { useModalManagerStore, configureOverlayZIndex, getOverlayZIndex, POPOVER
 export { registerSmsHistoryField, createSmsHistoryField } from './extensions/FieldExtensions';
 // Runtime configuration — replaces hard-coded process.env.NEXT_PUBLIC_* access.
 export { configureRuntime, getRuntimeConfig } from './config/RuntimeConfig';
+// i18n extension point — host injects a translator factory at bootstrap.
+export { configureTranslator, getTranslation } from './utils/i18n';
 // Menu permission checker — host apps register a real checker that decides
 // whether the current session may access a given URL / menu alias.
 export { registerMenuPermissionChecker, checkAdminMenuPermission, DEFAULT_MENU_ALIAS } from './menu';

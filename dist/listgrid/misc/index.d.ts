@@ -9,7 +9,7 @@ export declare function fDate(value: any, format?: string): string;
 export declare function fDateTime(value: any, format?: string): string;
 export declare function fToNow(value: any): string;
 export declare function getFormattedTime(value?: any, offsetHours?: number): string;
-export declare function formatPrice(value: any, currency?: string): string;
+export declare function formatPrice(value: any, localeCode?: string): string;
 export declare function isEmpty(value: any): boolean;
 export declare function isEquals(a: any, b: any): boolean;
 export declare function isEqualsIgnoreCase(a: any, b: any): boolean;

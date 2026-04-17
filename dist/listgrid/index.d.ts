@@ -13,6 +13,8 @@ export type { ModalOptions } from './store';
 export { registerSmsHistoryField, createSmsHistoryField } from './extensions/FieldExtensions';
 export { configureRuntime, getRuntimeConfig } from './config/RuntimeConfig';
 export type { RuntimeConfig } from './config/RuntimeConfig';
+export { configureTranslator, getTranslation } from './utils/i18n';
+export type { Translator, TranslatorI18n, TranslatorFactory } from './utils/i18n';
 export { registerMenuPermissionChecker, checkAdminMenuPermission, DEFAULT_MENU_ALIAS } from './menu';
 export type { MenuPermissionChecker, MenuPermissionCheckArgs } from './menu';
 export { RouterProvider, useRouter, usePathname, useParams, useSearchParams, Link } from './router';

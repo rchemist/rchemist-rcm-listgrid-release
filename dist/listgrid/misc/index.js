@@ -86,23 +86,31 @@ export function getFormattedTime(value, offsetHours) {
     const d = offsetHours ? new Date(base.getTime() + offsetHours * 3600 * 1000) : base;
     return fDateTime(d);
 }
-export function formatPrice(value, currency = 'KRW') {
+// Matches the original semantics from packages/ui/utils/NumberUtil#formatPrice:
+// - No second argument -> plain number with thousands separators (e.g. "1,234").
+// - Valid BCP-47 locale code -> currency-formatted in KRW for that locale.
+// - Special token "원" -> "1,234 원".
+// - Any other string -> prefix + number (e.g. "$" => "$1,234").
+export function formatPrice(value, localeCode) {
     if (value === null || value === undefined || value === '')
         return '';
     const n = Number(value);
     if (isNaN(n))
         return String(value);
-    const opts = {
-        style: 'currency',
-        currency,
-        maximumFractionDigits: currency === 'KRW' ? 0 : 2,
-    };
-    try {
-        return new Intl.NumberFormat('ko-KR', opts).format(n);
+    if (localeCode) {
+        try {
+            return new Intl.NumberFormat(localeCode, { style: 'currency', currency: 'KRW' }).format(n);
+        }
+        catch {
+            /* fall through to prefix handling */
+        }
     }
-    catch {
-        return String(n);
-    }
+    const formatted = n.toLocaleString('en-US');
+    if (localeCode === '원')
+        return `${formatted} 원`;
+    if (localeCode)
+        return `${localeCode}${formatted}`;
+    return formatted;
 }
 // -- Comparison / validation helpers --------------------------------------
 export function isEmpty(value) {

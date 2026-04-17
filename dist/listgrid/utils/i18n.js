@@ -1,13 +1,32 @@
-// Stage 3a stub — i18n integration deferred.
-// The original packages/ui/utils/i18n.ts loads ~15 locale JSON assets which are
-// overkill to inline here. Host apps that need translations will eventually pass
-// a translator via a provider; this stub is the identity translator.
+// i18n contract: library emits translation keys (e.g. "common.save",
+// "menu.academic.admission.notice"), host maps them to strings.
 //
-// Usage pattern from original codebase: `const { t } = getTranslation();`
-// then `t('some.key')`. Our stub returns the key unchanged.
-export function getTranslation(_locale) {
-    return {
-        t: (key, _fallback) => key,
-    };
+// Usage:
+//   import { configureTranslator } from '@rcm/listgrid';
+//   configureTranslator(() => ({ t: myI18n.t, i18n: myI18n, initLocale: ... }));
+//
+// Library code then calls `getTranslation().t('key')` and gets the host's
+// translation. When no host is configured, `t(key)` returns the key itself
+// (identity translator) so UI is still renderable.
+let _factory;
+export function configureTranslator(factory) {
+    _factory = factory;
+}
+const DEFAULT_TRANSLATOR = {
+    t: (key, fallback) => fallback ?? key,
+    i18n: {},
+    initLocale: () => { },
+};
+export function getTranslation() {
+    if (_factory) {
+        try {
+            return _factory();
+        }
+        catch (e) {
+            console.warn('[@rcm/listgrid] configured translator factory threw; falling back to identity.', e);
+            return DEFAULT_TRANSLATOR;
+        }
+    }
+    return DEFAULT_TRANSLATOR;
 }
 //# sourceMappingURL=i18n.js.map
