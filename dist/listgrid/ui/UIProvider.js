@@ -131,20 +131,131 @@ export const Tooltip = makeWrapper('Tooltip');
 export const TooltipCard = makeWrapper('TooltipCard');
 export const Tree = makeWrapper('Tree');
 export const UserView = makeWrapper('UserView');
-// FileFieldValue is used both as a type annotation AND with `instanceof` in the
-// original source (e.g., FileField.tsx). Ship a class so instanceof checks work;
-// the class itself is a minimal any-shape holder.
 export class FileFieldValue {
     constructor() {
         this.existFiles = [];
         this.newFiles = [];
+        this.deleteFiles = [];
     }
-    static create(...args) {
-        const v = new FileFieldValue();
-        // Minimal behavior: host can override via subclass if richer factory
-        // semantics are needed. Args ignored here.
-        void args;
-        return v;
+    static create(data) {
+        const value = new FileFieldValue();
+        if (!data)
+            return value;
+        if (data instanceof FileFieldValue) {
+            value.newFiles = [...(data.newFiles || [])];
+            value.existFiles = [...(data.existFiles || [])];
+            value.deleteFiles = [...(data.deleteFiles || [])];
+            return value;
+        }
+        value.newFiles = data.newFiles ?? [];
+        value.existFiles = data.existFiles ?? [];
+        value.deleteFiles = data.deleteFiles ?? [];
+        return value;
+    }
+    addNewValue(fileInfo) {
+        if (fileInfo.id === undefined || fileInfo.id === null || fileInfo.id === '')
+            return false;
+        const exist = this.newFiles.some(v => v.url === fileInfo.url);
+        if (!exist) {
+            this.newFiles.push(fileInfo);
+            return true;
+        }
+        return false;
+    }
+    addExistValue(fileInfo) {
+        if (fileInfo.id === undefined || fileInfo.id === null || fileInfo.id === '')
+            return false;
+        const inNew = this.newFiles.some(v => v.url === fileInfo.url);
+        if (inNew)
+            return false;
+        const inExist = this.existFiles.some(v => v.url === fileInfo.url);
+        if (inExist)
+            return false;
+        this.existFiles.push(fileInfo);
+        return true;
+    }
+    addDeleteValue(fileInfo) {
+        const already = this.deleteFiles.some(v => v.url === fileInfo.url);
+        if (already)
+            return undefined;
+        let exist = false;
+        let result = 'none';
+        for (let i = 0; i < this.existFiles.length; i++) {
+            if (this.existFiles[i].url === fileInfo.url) {
+                fileInfo.id = this.existFiles[i].id;
+                this.existFiles.splice(i, 1);
+                exist = true;
+                result = 'exist';
+                break;
+            }
+        }
+        for (let i = 0; i < this.newFiles.length; i++) {
+            if (this.newFiles[i].url === fileInfo.url) {
+                fileInfo.id = this.newFiles[i].id;
+                this.newFiles.splice(i, 1);
+                exist = true;
+                result = 'new';
+                break;
+            }
+        }
+        if (exist) {
+            this.deleteFiles.push({ ...fileInfo, deleteType: result });
+        }
+        return { ...fileInfo, deleteType: result };
+    }
+    getValue() {
+        try {
+            return JSON.stringify(this);
+        }
+        catch {
+            return '';
+        }
+    }
+    getCurrentFileList() {
+        const all = [...this.existFiles, ...this.newFiles];
+        return all.filter(file => !this.deleteFiles.some(d => d.url === file.url));
+    }
+    isDirty() {
+        return (this.newFiles.length > 0 ||
+            (this.deleteFiles.length > 0 && this.existFiles.length > 0));
+    }
+    hasValue() {
+        return (this.existFiles.length > 0 ||
+            this.newFiles.length > 0 ||
+            this.deleteFiles.length > 0);
+    }
+    rollbackDeleteFile(file) {
+        for (let i = 0; i < this.deleteFiles.length; i++) {
+            if (this.deleteFiles[i].url === file.url) {
+                this.deleteFiles.splice(i, 1);
+                if (file.deleteType === 'new') {
+                    this.newFiles.push({ ...file, deleteType: undefined });
+                }
+                else if (file.deleteType === 'exist') {
+                    this.existFiles.push({ ...file, deleteType: undefined });
+                }
+                break;
+            }
+        }
+    }
+    getRenderKey() {
+        let key = '';
+        this.existFiles.forEach(v => { key += 'exist_' + v.id; });
+        this.newFiles.forEach(v => { key += 'new_' + v.id; });
+        this.deleteFiles.forEach(v => { key += 'delete_' + v.id; });
+        let hash = 0;
+        for (let i = 0; i < key.length; i++) {
+            hash = ((hash << 5) - hash) + key.charCodeAt(i);
+            hash = hash & hash;
+        }
+        return String(hash);
+    }
+    clone() {
+        const c = new FileFieldValue();
+        c.deleteFiles = [...this.deleteFiles];
+        c.existFiles = [...this.existFiles];
+        c.newFiles = [...this.newFiles];
+        return c;
     }
 }
 // Constants whose concrete values host apps may override through other means.

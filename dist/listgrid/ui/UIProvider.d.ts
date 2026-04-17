@@ -116,11 +116,33 @@ export type Tree = any;
 export type Currency = any;
 export type Double = any;
 export type PasswordStrength = any;
-export declare class FileFieldValue {
-    existFiles: any[];
-    newFiles: any[];
-    [key: string]: any;
-    static create(...args: any[]): FileFieldValue;
+export interface FileInfo {
+    url: string;
+    id: string;
+    deleteType?: 'new' | 'exist' | 'none';
+    fileSize?: number;
+    fileName?: string;
+}
+export interface IFileField {
+    existFiles?: FileInfo[];
+    newFiles?: FileInfo[];
+    deleteFiles?: FileInfo[];
+}
+export declare class FileFieldValue implements IFileField {
+    existFiles: FileInfo[];
+    newFiles: FileInfo[];
+    deleteFiles: FileInfo[];
+    static create(data?: any): FileFieldValue;
+    addNewValue(fileInfo: FileInfo): boolean;
+    addExistValue(fileInfo: FileInfo): boolean;
+    addDeleteValue(fileInfo: FileInfo): FileInfo | undefined;
+    getValue(): string;
+    getCurrentFileList(): FileInfo[];
+    isDirty(): boolean;
+    hasValue(): boolean;
+    rollbackDeleteFile(file: FileInfo): void;
+    getRenderKey(): string;
+    clone(): FileFieldValue;
 }
 export declare const DEFAULT_EMAIL_DOMAINS: string[];
 export declare function readonlyClass(readonly: boolean | undefined, extra?: string): string;
