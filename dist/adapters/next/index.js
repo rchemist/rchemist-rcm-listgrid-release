@@ -9,4 +9,5 @@
 //   </RouterProvider>
 export { nextRouterServices } from './NextRouterAdapter';
 export { nextUrlStateServices } from './NextUrlStateAdapter';
+export { NextListGridProvider } from './NextListGridProvider';
 //# sourceMappingURL=index.js.map
