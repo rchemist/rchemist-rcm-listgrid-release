@@ -76,7 +76,7 @@ export class BooleanField extends OptionalField {
                 if (this.cardIcon) {
                     const IconComponent = this.cardIcon;
                     return {
-                        result: (_jsxs("span", { className: "inline-flex items-center gap-2 text-gray-700 dark:text-gray-300", children: [_jsx("span", { className: "flex items-center justify-center w-6 h-6 rounded-md bg-gray-100 dark:bg-gray-800", children: _jsx(IconComponent, { className: "h-3.5 w-3.5 text-gray-500 dark:text-gray-400 shrink-0", stroke: 1.75 }) }), _jsx("span", { className: "font-medium", children: option.label })] }))
+                        result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-bool-icon-frame rcm-bool-icon-frame-neutral", children: _jsx(IconComponent, { className: "rcm-bool-icon rcm-bool-icon-neutral", stroke: 1.75 }) }), _jsx("span", { className: "rcm-bool-label", children: option.label })] }))
                     };
                 }
                 return { result: option.label };
@@ -84,28 +84,17 @@ export class BooleanField extends OptionalField {
         }
         // boolean 값에 따른 아이콘 렌더링
         if (value === true) {
-            // cardIcon이 있으면 해당 아이콘 사용, 없으면 체크 아이콘
             const IconComponent = this.cardIcon || IconCheck;
-            const bgColorClass = this.cardIcon
-                ? 'bg-gray-100 dark:bg-gray-800'
-                : 'bg-emerald-50 dark:bg-emerald-950/50';
-            const iconColorClass = this.cardIcon
-                ? 'text-gray-500 dark:text-gray-400'
-                : 'text-emerald-500 dark:text-emerald-400';
+            const frameClass = this.cardIcon ? 'rcm-bool-icon-frame-neutral' : 'rcm-bool-icon-frame-true';
+            const iconClass = this.cardIcon ? 'rcm-bool-icon-neutral' : 'rcm-bool-icon-true';
             return {
-                result: (_jsxs("span", { className: "inline-flex items-center gap-2 text-gray-700 dark:text-gray-300", children: [_jsx("span", { className: `flex items-center justify-center w-6 h-6 rounded-md ${bgColorClass}`, children: _jsx(IconComponent, { className: `h-3.5 w-3.5 ${iconColorClass} shrink-0`, stroke: 2 }) }), _jsx("span", { className: "font-medium text-emerald-600 dark:text-emerald-400", children: "\uC608" })] }))
+                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: `rcm-bool-icon-frame ${frameClass}`, children: _jsx(IconComponent, { className: `rcm-bool-icon ${iconClass}`, stroke: 2 }) }), _jsx("span", { className: "rcm-bool-label rcm-bool-label-true", children: "\uC608" })] }))
             };
         }
         // false 값
         const IconComponent = this.cardIcon || IconX;
-        const bgColorClass = this.cardIcon
-            ? 'bg-gray-100 dark:bg-gray-800'
-            : 'bg-gray-100 dark:bg-gray-800';
-        const iconColorClass = this.cardIcon
-            ? 'text-gray-500 dark:text-gray-400'
-            : 'text-gray-400 dark:text-gray-500';
         return {
-            result: (_jsxs("span", { className: "inline-flex items-center gap-2 text-gray-700 dark:text-gray-300", children: [_jsx("span", { className: `flex items-center justify-center w-6 h-6 rounded-md ${bgColorClass}`, children: _jsx(IconComponent, { className: `h-3.5 w-3.5 ${iconColorClass} shrink-0`, stroke: 2 }) }), _jsx("span", { className: "font-medium text-gray-500 dark:text-gray-400", children: "\uC544\uB2C8\uC624" })] }))
+            result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-bool-icon-frame rcm-bool-icon-frame-neutral", children: _jsx(IconComponent, { className: "rcm-bool-icon rcm-bool-icon-false", stroke: 2 }) }), _jsx("span", { className: "rcm-bool-label rcm-bool-label-false", children: "\uC544\uB2C8\uC624" })] }))
         };
     }
     /**

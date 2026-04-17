@@ -489,6 +489,52 @@
         color: var(--rcm-color-text-disabled);
     }
 
+    /* Inline expanded row 의 확장 셀 (리스트에서 row 클릭시 펼쳐지는 패널) */
+    .rcm-row-expansion-cell {
+        padding: var(--rcm-space-sm);
+        background: var(--rcm-color-surface-muted);
+        overflow: hidden;
+    }
+
+    /* ------------------------------------------------------------------ *
+     * Boolean field value (예/아니오 + 아이콘 프레임)
+     * ------------------------------------------------------------------ */
+    .rcm-bool-wrap {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--rcm-space-sm);
+        color: var(--rcm-color-text);
+    }
+
+    .rcm-bool-icon-frame {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: var(--rcm-radius-md);
+    }
+
+    .rcm-bool-icon-frame-neutral { background: var(--rcm-color-surface-muted); }
+    .rcm-bool-icon-frame-true    { background: var(--rcm-color-success-surface); }
+
+    .rcm-bool-icon {
+        width: 0.875rem;
+        height: 0.875rem;
+        flex-shrink: 0;
+    }
+
+    .rcm-bool-icon-neutral { color: var(--rcm-color-text-muted); }
+    .rcm-bool-icon-true    { color: var(--rcm-color-success); }
+    .rcm-bool-icon-false   { color: var(--rcm-color-text-disabled); }
+
+    .rcm-bool-label {
+        font-weight: var(--rcm-font-weight-medium);
+    }
+
+    .rcm-bool-label-true  { color: var(--rcm-color-success); }
+    .rcm-bool-label-false { color: var(--rcm-color-text-muted); }
+
     .rcm-button-secondary {
         color: var(--rcm-color-text-muted);
         background: transparent;
