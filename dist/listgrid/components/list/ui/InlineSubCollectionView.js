@@ -54,10 +54,10 @@ class InlineRowActionField extends ListableFormField {
         if (visibleActions.length === 0) {
             return { result: null, linkOnCell: false };
         }
-        const buttons = (_jsx("div", { className: "flex items-center justify-center gap-1", children: visibleActions.map(action => {
+        const buttons = (_jsx("div", { className: "rcm-inline-action-row", children: visibleActions.map(action => {
                 const label = typeof action.label === 'function' ? action.label(item) : action.label;
                 const isDisabled = action.disabled?.(item) ?? false;
-                return (_jsx(Tooltip, { label: label, children: _jsxs("button", { type: "button", className: `btn btn-sm ${action.className ?? 'btn-outline-primary'} ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`, disabled: isDisabled, onClick: (e) => {
+                return (_jsx(Tooltip, { label: label, children: _jsxs("button", { type: "button", className: `rcm-button rcm-button-sm ${action.className ?? 'rcm-button-outline'} ${isDisabled ? 'rcm-is-disabled' : ''}`, disabled: isDisabled, onClick: (e) => {
                             e.stopPropagation();
                             e.preventDefault();
                             this.onActionHandler(action, item);
@@ -252,6 +252,6 @@ export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm
         };
         return baseOptions;
     }, [viewListOptions, hideTitle, readonly, relation, parentId, buildFilters, pagination]);
-    return (_jsxs("div", { className: "inline-subcollection-view", children: [tooltip && (_jsx("div", { className: "mb-2 text-sm text-gray-500 dark:text-gray-400", children: tooltip })), _jsx(ViewListGrid, { listGrid: listGrid, parentId: parentId, options: options, viewMode: "popup", session: session })] }, `inline-sub-${refreshKey}`));
+    return (_jsxs("div", { className: "inline-subcollection-view", children: [tooltip && (_jsx("div", { className: "rcm-inline-subcollection-tooltip", children: tooltip })), _jsx(ViewListGrid, { listGrid: listGrid, parentId: parentId, options: options, viewMode: "popup", session: session })] }, `inline-sub-${refreshKey}`));
 };
 //# sourceMappingURL=InlineSubCollectionView.js.map

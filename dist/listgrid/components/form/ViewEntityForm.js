@@ -19,26 +19,26 @@ import { clearAllToasts } from "../../message";
 import { useEntityFormTheme } from "./context/EntityFormThemeContext";
 // Lazy load heavy components
 const ViewEntityFormErrors = dynamic(() => import("./ui/ViewEntityFormErrors").then(mod => ({ default: mod.ViewEntityFormErrors })), {
-    loading: () => _jsx("div", { className: "h-4" })
+    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-xs" })
 });
 const ViewEntityFormAlerts = dynamic(() => import("./ui/ViewEntityFormAlerts").then(mod => ({ default: mod.ViewEntityFormAlerts })), {
-    loading: () => _jsx("div", { className: "h-4" })
+    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-xs" })
 });
 const ViewTab = dynamic(() => import("./ViewTab").then(mod => ({ default: mod.ViewTab })), {
-    loading: () => _jsx("div", { className: "h-8 bg-gray-100 rounded animate-pulse" })
+    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-tab" })
 });
 const ViewTabPanel = dynamic(() => import("./ViewTabPanel").then(mod => ({ default: mod.ViewTabPanel })), {
-    loading: () => _jsx("div", { className: "h-96 bg-gray-50 rounded animate-pulse" })
+    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-panel" })
 });
 const SafePerfectScrollbar = dynamic(() => import('../../ui').then(mod => ({ default: mod.SafePerfectScrollbar })), {
     ssr: false,
-    loading: () => _jsx("div", { className: "w-full h-full" })
+    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-fill" })
 });
 const CreateStepView = dynamic(() => import("./ui/CreateStepView").then(mod => ({ default: mod.CreateStepView })), {
-    loading: () => _jsx("div", { className: "h-32 bg-gray-100 rounded animate-pulse" })
+    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-md" })
 });
 const CreateStepButtons = dynamic(() => import("./ui/CreateStepButtons").then(mod => ({ default: mod.CreateStepButtons })), {
-    loading: () => _jsx("div", { className: "h-12" })
+    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-lg" })
 });
 /**
  * ViewEntityForm component (render-only structure)
@@ -119,7 +119,7 @@ export const ViewEntityForm = (props) => {
                                     }, tabs: tabs, entityForm: entityForm }), _jsxs(Tab.Group, { selectedIndex: selectedTabIndex, onChange: (index) => {
                                         clearAllToasts();
                                         setSelectedTabIndex(index);
-                                    }, children: [showButtonsInTabRow && (_jsxs("div", { className: `flex items-center justify-between mb-2 ${tabs.length > 1 ? 'border-b border-white-light dark:border-[#191e3a]' : ''}`, children: [_jsx("div", { className: "flex-1", children: tabs.length > 1 && (_jsx(Tab.List, { className: cn("flex flex-row whitespace-nowrap", useCreateStep ? "hidden" : undefined), children: tabs.map((tab, index) => (_jsx(ViewTab, { id: tab.id, label: tab.label, tabIndex: tabIndex, description: tab.description, entityForm: entityForm, createStepFields: createStepFields, setTabIndex: setTabIndex }, `${index}_${cacheKey}_tab`))) })) }), _jsx("div", { className: "flex-shrink-0 ml-2 [&_button]:!py-1 [&_button]:!px-3 [&_button]:!text-sm [&_button]:!min-h-0 [&_button]:!h-auto [&_button]:!pb-0.5", children: _jsx(ViewEntityFormButtons, { buttons: buttons }) })] })), !showButtonsInTabRow && tabs.length > 1 && (_jsx(SafePerfectScrollbar, { className: cn("relative w-full whitespace-nowrap", useCreateStep ? "hidden" : undefined), children: _jsx(Tab.List, { className: cn("mt-3 flex flex-row border-b border-white-light dark:border-[#191e3a] whitespace-nowrap", classNames.tabs?.list), children: function () {
+                                    }, children: [showButtonsInTabRow && (_jsxs("div", { className: `rcm-form-tab-row ${tabs.length > 1 ? 'rcm-form-tab-row-border' : ''}`, children: [_jsx("div", { className: "rcm-form-tab-row-tabs", children: tabs.length > 1 && (_jsx(Tab.List, { className: cn("rcm-tab-list-inline", useCreateStep ? "rcm-hide" : undefined), children: tabs.map((tab, index) => (_jsx(ViewTab, { id: tab.id, label: tab.label, tabIndex: tabIndex, description: tab.description, entityForm: entityForm, createStepFields: createStepFields, setTabIndex: setTabIndex }, `${index}_${cacheKey}_tab`))) })) }), _jsx("div", { className: "rcm-form-tab-buttons", children: _jsx(ViewEntityFormButtons, { buttons: buttons }) })] })), !showButtonsInTabRow && tabs.length > 1 && (_jsx(SafePerfectScrollbar, { className: cn(useCreateStep ? "rcm-hide" : "rcm-tab-scroll"), children: _jsx(Tab.List, { className: cn("rcm-tab-list", classNames.tabs?.list), children: function () {
                                                     const tabsView = [];
                                                     tabs.forEach((tab, index) => {
                                                         tabsView.push(_jsx(ViewTab, { id: tab.id, label: tab.label, tabIndex: tabIndex, description: tab.description, entityForm: entityForm, createStepFields: createStepFields, setTabIndex: setTabIndex }, `${index}_${cacheKey}_tab`));
