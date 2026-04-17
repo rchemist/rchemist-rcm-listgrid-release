@@ -12,6 +12,6 @@ export const ViewHelpText = (props) => {
     const { t } = getTranslation();
     const { classNames, cn } = useEntityFormTheme();
     const helpText = typeof props.helpText === "string" ? t(props.helpText) : props.helpText;
-    return isBlank(props.helpText) ? null : _jsx("div", { className: cn("text-white-dark text-[11px] inline-block mt-1", classNames.helpText?.text), children: helpText });
+    return isBlank(props.helpText) ? null : _jsx("div", { className: cn('rcm-field-help', classNames.helpText?.text), children: helpText });
 };
 //# sourceMappingURL=ViewHelpText.js.map

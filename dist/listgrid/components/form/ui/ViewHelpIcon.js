@@ -15,6 +15,6 @@ export const ViewHelpIcon = (props) => {
         return null;
     const { t } = getTranslation();
     const value = t(helpText ?? '');
-    return _jsxs(TooltipCard, { width: 280, shadow: "md", children: [_jsx(TooltipCard.Target, { children: _jsx("div", { className: "text-white-dark", children: _jsx(IconInfoCircle, { width: 18, color: '#808080' }) }) }), _jsx(TooltipCard.Dropdown, { children: _jsx("div", { className: "text-white-dark text-[11px] inline-block mt-1", dangerouslySetInnerHTML: { __html: value } }) })] });
+    return _jsxs(TooltipCard, { width: 280, shadow: "md", children: [_jsx(TooltipCard.Target, { children: _jsx("div", { className: "rcm-text-muted", children: _jsx(IconInfoCircle, { width: 18, color: '#808080' }) }) }), _jsx(TooltipCard.Dropdown, { children: _jsx("div", { className: "rcm-field-help", dangerouslySetInnerHTML: { __html: value } }) })] });
 };
 //# sourceMappingURL=ViewHelpIcon.js.map

@@ -6,7 +6,7 @@ export const ViewFieldError = (props) => {
         return null;
     const errors = [];
     props.errors?.forEach((error, index) => {
-        errors.push(_jsx("div", { className: "text-danger text-[11px] mt-1", children: t(error ?? '') }, index));
+        errors.push(_jsx("div", { className: "rcm-field-error", children: t(error ?? '') }, index));
     });
     return _jsx(_Fragment, { children: errors });
 };
