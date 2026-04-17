@@ -1,0 +1,1 @@
+{"version":3,"file":"DataImporter.d.ts","sourceRoot":"","sources":["../../../src/listgrid/transfer/DataImporter.tsx"],"names":[],"mappings":"AASA,OAAO,EAOL,oBAAoB,EACrB,MAAM,kBAAkB,CAAC;AAa1B,UAAU,aAAa;IACrB,MAAM,CAAC,EAAE,oBAAoB,CAAC;IAC9B,cAAc,EAAE,MAAM,CAAC;IACvB,OAAO,EAAE,CAAC,MAAM,EAAE,OAAO,KAAK,IAAI,CAAC;CACpC;AAED,eAAO,MAAM,YAAY,GAAI,OAAO,aAAa,4CA0ahD,CAAA"}

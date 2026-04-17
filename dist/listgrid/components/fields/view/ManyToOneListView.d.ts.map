@@ -1,0 +1,1 @@
+{"version":3,"file":"ManyToOneListView.d.ts","sourceRoot":"","sources":["../../../../../src/listgrid/components/fields/view/ManyToOneListView.tsx"],"names":[],"mappings":"AAOA,OAAO,EAAC,UAAU,EAAC,MAAM,4BAA4B,CAAC;AAMtD,UAAU,sBAAsB;IAC9B,EAAE,CAAC,EAAE,MAAM,CAAC;IACZ,KAAK,EAAE,MAAM,CAAC;IACd,UAAU,EAAE,UAAU,CAAC;CACxB;AAED,eAAO,MAAM,iBAAiB,GAAI,2BAAyB,sBAAsB,4CAsChF,CAAA"}

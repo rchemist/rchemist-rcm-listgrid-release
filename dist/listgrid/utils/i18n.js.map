@@ -1,0 +1,1 @@
+{"version":3,"file":"i18n.js","sourceRoot":"","sources":["../../../src/listgrid/utils/i18n.ts"],"names":[],"mappings":"AAAA,6CAA6C;AAC7C,gFAAgF;AAChF,iFAAiF;AACjF,qEAAqE;AACrE,EAAE;AACF,0EAA0E;AAC1E,4DAA4D;AAM5D,MAAM,UAAU,cAAc,CAAC,OAAgB;IAC3C,OAAO;QACH,CAAC,EAAE,CAAC,GAAW,EAAE,SAAkB,EAAE,EAAE,CAAC,GAAG;KAC9C,CAAC;AACN,CAAC"}

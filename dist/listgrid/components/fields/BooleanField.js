@@ -1,0 +1,155 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { OptionalField, renderListOptionalField } from './abstract';
+import { BooleanRadio } from "../../ui";
+import { RadioChip } from "../../ui";
+import { getInputRendererParameters } from '../helper/FieldRendererHelper';
+import { IconCheck, IconX } from "@tabler/icons-react";
+export class BooleanField extends OptionalField {
+    constructor(name, order, emptyLabel) {
+        super(name, order, 'boolean');
+        this.emptyLabel = emptyLabel;
+    }
+    /**
+     * BooleanField 핵심 렌더링 로직
+     */
+    renderInstance(params) {
+        return (async () => {
+            return _jsx(BooleanRadio, { options: this.options, combo: this.combo, ...await getInputRendererParameters(this, params), emptyLabel: this.emptyLabel });
+        })();
+    }
+    /**
+     * BooleanField 리스트 필터 렌더링 로직
+     * Chip 스타일의 Radio 버튼으로 "예/아니오/전체" 세 가지 옵션 제공
+     */
+    renderListFilterInstance(params) {
+        // 필터용 옵션 설정 (예/아니오/전체)
+        const filterOptions = [
+            { label: '예', value: 'true' },
+            { label: '아니오', value: 'false' },
+            { label: '전체', value: '' }
+        ];
+        return (async () => {
+            const inputParams = await getInputRendererParameters(this, {
+                ...params,
+                required: false,
+                onChange: (value) => {
+                    // string 'true'/'false' 를 boolean으로 변환, 빈 값은 undefined
+                    if (value === 'true')
+                        params.onChange(true);
+                    else if (value === 'false')
+                        params.onChange(false);
+                    else
+                        params.onChange(undefined);
+                }
+            });
+            // 현재 값을 string으로 변환
+            // URL에서 오는 필터 값은 문자열 "true"/"false"이므로 문자열 비교도 처리
+            let currentValue = '';
+            if (inputParams.value === true || inputParams.value === 'true')
+                currentValue = 'true';
+            else if (inputParams.value === false || inputParams.value === 'false')
+                currentValue = 'false';
+            return _jsx(RadioChip, { ...inputParams, value: currentValue, options: filterOptions, combo: { direction: 'row' } });
+        })();
+    }
+    /**
+     * BooleanField 핵심 리스트 아이템 렌더링 로직
+     */
+    renderListItemInstance(props) {
+        return renderListOptionalField(this, props);
+    }
+    /**
+     * BooleanField View 모드 렌더링 - 아이콘으로 true/false 표시
+     * cardIcon이 설정된 경우 해당 아이콘을 우선 사용
+     */
+    async renderViewInstance(props) {
+        const value = props.item[this.name];
+        // null, undefined 처리
+        if (value === null || value === undefined) {
+            return { result: null };
+        }
+        // options가 있으면 해당 label 찾기
+        if (this.options && this.options.length > 0) {
+            const option = this.options.find(opt => opt.value === value);
+            if (option) {
+                // cardIcon이 있으면 아이콘과 함께 표시
+                if (this.cardIcon) {
+                    const IconComponent = this.cardIcon;
+                    return {
+                        result: (_jsxs("span", { className: "inline-flex items-center gap-2 text-gray-700 dark:text-gray-300", children: [_jsx("span", { className: "flex items-center justify-center w-6 h-6 rounded-md bg-gray-100 dark:bg-gray-800", children: _jsx(IconComponent, { className: "h-3.5 w-3.5 text-gray-500 dark:text-gray-400 shrink-0", stroke: 1.75 }) }), _jsx("span", { className: "font-medium", children: option.label })] }))
+                    };
+                }
+                return { result: option.label };
+            }
+        }
+        // boolean 값에 따른 아이콘 렌더링
+        if (value === true) {
+            // cardIcon이 있으면 해당 아이콘 사용, 없으면 체크 아이콘
+            const IconComponent = this.cardIcon || IconCheck;
+            const bgColorClass = this.cardIcon
+                ? 'bg-gray-100 dark:bg-gray-800'
+                : 'bg-emerald-50 dark:bg-emerald-950/50';
+            const iconColorClass = this.cardIcon
+                ? 'text-gray-500 dark:text-gray-400'
+                : 'text-emerald-500 dark:text-emerald-400';
+            return {
+                result: (_jsxs("span", { className: "inline-flex items-center gap-2 text-gray-700 dark:text-gray-300", children: [_jsx("span", { className: `flex items-center justify-center w-6 h-6 rounded-md ${bgColorClass}`, children: _jsx(IconComponent, { className: `h-3.5 w-3.5 ${iconColorClass} shrink-0`, stroke: 2 }) }), _jsx("span", { className: "font-medium text-emerald-600 dark:text-emerald-400", children: "\uC608" })] }))
+            };
+        }
+        // false 값
+        const IconComponent = this.cardIcon || IconX;
+        const bgColorClass = this.cardIcon
+            ? 'bg-gray-100 dark:bg-gray-800'
+            : 'bg-gray-100 dark:bg-gray-800';
+        const iconColorClass = this.cardIcon
+            ? 'text-gray-500 dark:text-gray-400'
+            : 'text-gray-400 dark:text-gray-500';
+        return {
+            result: (_jsxs("span", { className: "inline-flex items-center gap-2 text-gray-700 dark:text-gray-300", children: [_jsx("span", { className: `flex items-center justify-center w-6 h-6 rounded-md ${bgColorClass}`, children: _jsx(IconComponent, { className: `h-3.5 w-3.5 ${iconColorClass} shrink-0`, stroke: 2 }) }), _jsx("span", { className: "font-medium text-gray-500 dark:text-gray-400", children: "\uC544\uB2C8\uC624" })] }))
+        };
+    }
+    /**
+     * BooleanField 인스턴스 생성
+     */
+    createInstance(name, order) {
+        return new BooleanField(name, order, this.emptyLabel);
+    }
+    static create(props) {
+        return new BooleanField(props.name, props.order, props.emptyLabel)
+            .copyFields(props, true);
+    }
+    async getCurrentValue(renderType) {
+        const value = await super.getCurrentValue(renderType);
+        if (await this.isRequired({ renderType })) {
+            if (value === undefined) {
+                const value = this.options?.[0].value ?? false;
+                this.withValue(value);
+                return value;
+            }
+        }
+        return value;
+    }
+    async isRequired(props) {
+        const renderTypeValue = props.renderType ?? props.entityForm?.getRenderType() ?? 'create';
+        if (renderTypeValue === 'update') {
+            if (this.required !== undefined && typeof this.required === 'function') {
+                return await this.required(props);
+            }
+            // required 가 명시적으로 false 로 설정된 경우 우선 적용
+            if (this.required === false) {
+                return false;
+            }
+            // boolean field 의 경우 save 된 값이 undefined 가 아니라면 이 필드는 required 가 된다.
+            const value = await super.getCurrentValue(props.renderType);
+            if (value !== undefined) {
+                return true;
+            }
+        }
+        return super.isRequired(props);
+    }
+    withEmptyLabel(emptyLabel) {
+        this.emptyLabel = emptyLabel;
+        return this;
+    }
+}
+//# sourceMappingURL=BooleanField.js.map

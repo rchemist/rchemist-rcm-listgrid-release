@@ -1,0 +1,24 @@
+/*
+ * Copyright (c) "2024". rchemist.io by Rchemist
+ * Licensed under the Rchemist Common License, Version 1.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License under controlled by Rchemist
+ */
+import { ValidationItem } from '../validations/Validation';
+import { isBlank } from '../utils/StringUtil';
+export class RegexValidation extends ValidationItem {
+    constructor(id, regex, message) {
+        super(id, message);
+        this.regex = regex;
+    }
+    validate(entityForm, value, message) {
+        const currentValue = this.getValueAsString(entityForm, value);
+        // required 에 대한 검증은 field 의 required 설정을 통해 해야 한다.
+        if (isBlank(currentValue)) {
+            return Promise.resolve(this.returnValidateResult(false, message));
+        }
+        const error = (!this.regex.test(currentValue));
+        return Promise.resolve(this.returnValidateResult(error, message));
+    }
+}
+//# sourceMappingURL=RegexValidation.js.map

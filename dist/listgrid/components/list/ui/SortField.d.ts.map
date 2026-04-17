@@ -1,0 +1,1 @@
+{"version":3,"file":"SortField.d.ts","sourceRoot":"","sources":["../../../../../src/listgrid/components/list/ui/SortField.tsx"],"names":[],"mappings":"AAQA,OAAO,EAAY,UAAU,EAAC,MAAM,0BAA0B,CAAC;AAQ/D,UAAU,cAAc;IACtB,IAAI,EAAE,MAAM,CAAC;IACb,UAAU,EAAE,UAAU,CAAC;IACvB,kBAAkB,EAAE,CAAC,UAAU,EAAE,UAAU,KAAK,IAAI,CAAC;CACtD;AACD,eAAO,MAAM,SAAS,GAAI,0CAAwC,cAAc,4CAwC/E,CAAA"}

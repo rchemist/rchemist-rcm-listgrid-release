@@ -1,0 +1,1 @@
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../src/listgrid/api/index.ts"],"names":[],"mappings":"AAAA,YAAY,EAAE,YAAY,EAAE,gBAAgB,EAAE,MAAM,SAAS,CAAC;AAC9D,OAAO,EAAE,YAAY,EAAE,kBAAkB,EAAE,MAAM,SAAS,CAAC;AAC3D,YAAY,EAAE,SAAS,EAAE,iBAAiB,EAAE,SAAS,EAAE,MAAM,aAAa,CAAC;AAC3E,OAAO,EACH,kBAAkB,EAClB,uBAAuB,EACvB,kBAAkB,EAClB,2BAA2B,GAC9B,MAAM,aAAa,CAAC"}

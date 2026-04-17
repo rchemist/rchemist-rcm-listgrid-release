@@ -1,0 +1,36 @@
+import { jsx as _jsx } from "react/jsx-runtime";
+import { showConfirm } from "../../../../message";
+import { isTrue } from '../../../../utils/BooleanUtil';
+import { getExternalApiData } from "../../../../misc";
+import { getRuntimeConfig } from '../../../../config/RuntimeConfig';
+const cacheControl = isTrue(getRuntimeConfig().cacheControl, false);
+export const CacheClearButton = ({ entityForm, setNotifications, setErrors, onRefresh, }) => {
+    if (!cacheControl) {
+        return null;
+    }
+    const handleCacheDelete = () => {
+        showConfirm({
+            title: "서버의 데이터 캐시를 제거하시겠습니까?",
+            message: "캐시 정보를 제거하고 최신의 데이터를 DB에서 새로 FETCH 할 수 있습니다.",
+            confirmButtonText: "캐시 삭제하기",
+            cancelButtonText: "취소",
+            onConfirm: async () => {
+                const response = await getExternalApiData({
+                    url: `${entityForm.getUrl()}/clear-cache`,
+                    method: "POST",
+                });
+                if (response) {
+                    setNotifications(["캐시가 정상적으로 삭제 되었습니다."]);
+                    setErrors([]);
+                    onRefresh();
+                }
+                else {
+                    setNotifications([]);
+                    setErrors(["캐시 삭제 중 오류가 발생했습니다."]);
+                }
+            }
+        });
+    };
+    return (_jsx("button", { type: "button", className: "btn btn-outline-primary", onClick: handleCacheDelete, children: "\uCE90\uC2DC \uC0AD\uC81C" }));
+};
+//# sourceMappingURL=CacheClearButton.js.map

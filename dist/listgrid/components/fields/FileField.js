@@ -1,0 +1,167 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+/*
+ * Copyright (c) "2024". rchemist.io by Rchemist
+ * Licensed under the Rchemist Common License, Version 1.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License under controlled by Rchemist
+ */
+import { ListableFormField } from './abstract';
+import { FileFieldValue } from "../../ui";
+import { LazyFileUploadInput as FileUploadInput } from "../../ui";
+import { getInputRendererParameters } from '../helper/FieldRendererHelper';
+import { isEmpty } from "../../utils";
+import { getAccessableAssetUrl } from "../../misc";
+import { IconDeviceFloppy } from "@tabler/icons-react";
+import { TextInput } from "../../ui";
+import { isBlank as isBlankString } from '../../utils/StringUtil';
+export class FileField extends ListableFormField {
+    constructor(name, order, config) {
+        super(name, order, 'file');
+        this.config = config;
+    }
+    withConfig(config) {
+        this.config = config;
+        return this;
+    }
+    withMaxSize(maxSize) {
+        this.config = {
+            maxSize: maxSize,
+            maxCount: this.config?.maxCount,
+            extensions: this.config?.extensions,
+            fileTypes: this.config?.fileTypes,
+        };
+        return this;
+    }
+    withMaxCount(maxCount) {
+        this.config = {
+            maxSize: this.config?.maxSize,
+            maxCount: maxCount,
+            extensions: this.config?.extensions,
+            fileTypes: this.config?.fileTypes,
+        };
+        return this;
+    }
+    withExtensions(...extension) {
+        this.config = {
+            maxSize: this.config?.maxSize,
+            maxCount: this.config?.maxCount,
+            extensions: extension,
+            fileTypes: this.config?.fileTypes,
+        };
+        return this;
+    }
+    withFileTypes(...fileTypes) {
+        this.config = {
+            maxSize: this.config?.maxSize,
+            maxCount: this.config?.maxCount,
+            extensions: this.config?.extensions,
+            fileTypes: fileTypes,
+        };
+        return this;
+    }
+    /**
+     * FileField 핵심 렌더링 로직 (원본 render 로직 보존)
+     */
+    renderInstance(params) {
+        return (async () => {
+            return _jsx(FileUploadInput, { config: this.config, ...await getInputRendererParameters(this, params) });
+        })();
+    }
+    /**
+     * FileField 인스턴스 생성
+     */
+    createInstance(name, order) {
+        return new FileField(name, order, this.config);
+    }
+    /**
+     * FileField 리스트 필터 렌더링 (기본 텍스트 입력)
+     */
+    renderListFilterInstance(params) {
+        return (async () => {
+            return _jsx(TextInput, { name: `${this.name}_${params.entityForm.id}`, onChange: (value) => params.onChange(value, 'LIKE'), value: params.value });
+        })();
+    }
+    /**
+     * FileField 리스트 아이템 렌더링 (원본 renderListItem 로직 보존)
+     */
+    renderListItemInstance(props) {
+        return (async () => {
+            const value = await props.item;
+            if (value[this.name]) {
+                const file = value[this.name];
+                if (!isEmpty(file.existFiles) && !isBlankString(file.existFiles[0]?.url)) {
+                    const fileDownloadUrl = getAccessableAssetUrl(file.existFiles[0].url);
+                    return {
+                        result: _jsx("div", { className: 'flex w-full items-center justify-center', children: _jsx("div", { className: "relative text-center group", children: _jsxs("a", { href: fileDownloadUrl, target: "_blank", rel: "noreferrer", className: "flex flex-row items-center space-x-1", children: [_jsx(IconDeviceFloppy, { className: "h-5 w-5 rounded-md object-cover saturate-50 group-hover:saturate-100" }), _jsx("span", { className: "text-xs", children: file.existFiles[0].url })] }) }) }),
+                        linkOnCell: false
+                    };
+                }
+            }
+            return {
+                result: null
+            };
+        })();
+    }
+    static create(props) {
+        return new FileField(props.name, props.order, props.config)
+            .copyFields(props, true);
+    }
+    async isBlank(renderType = 'create') {
+        const value = await this.getCurrentValue(renderType);
+        if (value !== undefined && value !== null && value instanceof FileFieldValue) {
+            let blank = true;
+            for (const file of value.existFiles) {
+                if (!isBlankString(file.url)) {
+                    console.log('exist file', file);
+                    blank = false;
+                    break;
+                }
+            }
+            if (blank) {
+                for (const file of value.newFiles) {
+                    if (!isBlankString(file.url)) {
+                        console.log('new file', file);
+                        blank = false;
+                        break;
+                    }
+                }
+            }
+            return blank;
+        }
+        return true;
+    }
+    isDirty() {
+        if (this.value) {
+            if (this.value.fetched !== undefined) {
+                // fetch 된 값이 존재할 때는 fetched 된 값과 비교한다.
+                let dirty = this.value.current === undefined || this.value.current === null;
+                if (!dirty) {
+                    const fileValue = FileFieldValue.create(this.value.current);
+                    return fileValue.isDirty();
+                }
+                return dirty;
+            }
+            else {
+                // fetch 된 값이 없을 때는 default 값과 비교한다.
+                let dirty = this.value.default === undefined || this.value.default === null;
+                if (!dirty) {
+                    const fileValue = FileFieldValue.create(this.value.default);
+                    return fileValue.isDirty();
+                }
+                else {
+                    const value = this.value.current;
+                    // 현재 값에 아무 파일이 없을 때
+                    if (this.value.current === undefined || this.value.current === null) {
+                        return false;
+                    }
+                    if (value !== undefined && value !== null && value instanceof FileFieldValue) {
+                        return value.isDirty();
+                    }
+                }
+                return dirty;
+            }
+        }
+        return false;
+    }
+}
+//# sourceMappingURL=FileField.js.map
