@@ -26,9 +26,9 @@ export const subCollectionListGridTheme = {
     subCollectionButtons: {
         container: "rcm-action-bar-end",
         buttonGroup: "rcm-row rcm-gap-sm",
-        addButton: "rcm-button rcm-button-primary rcm-button-sm",
-        deleteButton: "rcm-button rcm-button-danger rcm-button-sm",
-        actionButton: "rcm-button rcm-button-outline rcm-button-sm",
+        addButton: "rcm-button",
+        deleteButton: "rcm-button",
+        actionButton: "rcm-button",
     },
     searchBar: {
         container: "rcm-listgrid-searchbar",
@@ -39,15 +39,15 @@ export const subCollectionListGridTheme = {
         container: "rcm-row",
         input: "rcm-field-input",
         icon: "rcm-listgrid-search-icon",
-        button: "rcm-button rcm-button-primary rcm-button-sm",
+        button: "rcm-button",
         clearButton: "rcm-listgrid-search-clear",
     },
     searchBarActions: {
         container: "rcm-row rcm-gap-sm",
         pageSizeSelect: "rcm-field-input",
-        filterButton: "rcm-button rcm-button-outline rcm-button-sm",
-        fieldSelectorButton: "rcm-button rcm-button-outline rcm-button-sm",
-        advancedSearchButton: "rcm-button rcm-button-outline rcm-button-sm",
+        filterButton: "rcm-button",
+        fieldSelectorButton: "rcm-button",
+        advancedSearchButton: "rcm-button",
     },
     table: {
         responsiveWrapper: "rcm-skeleton-table-wrapper",

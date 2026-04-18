@@ -58,7 +58,7 @@ const RevisionDiffWrapper = ({ changedFields, fieldLabelMap, hasPreviousRevision
               padding-left: 8px;
               border-radius: 4px;
             }
-          ` }), _jsxs("div", { className: "rcm-revision-diff-banner rcm-revision-diff-banner-changed", children: [_jsxs("div", { className: "rcm-revision-diff-banner-row", children: [_jsx("span", { className: "rcm-revision-diff-indicator" }), _jsxs("span", { children: ["\uC774\uC804 \uBC84\uC804 \uB300\uBE44 ", _jsxs("strong", { children: [changedFields.size, "\uAC1C"] }), " \uD544\uB4DC\uAC00 \uBCC0\uACBD\uB418\uC5C8\uC2B5\uB2C8\uB2E4"] })] }), changedFieldLabels.length > 0 && (_jsx("div", { className: "rcm-revision-diff-labels", children: changedFieldLabels.map((label, i) => (_jsx("span", { className: "rcm-tag", "data-color": "warning", children: label }, i))) }))] })] })), hasPreviousRevision && changedFields.size === 0 && (_jsx("div", { className: "rcm-revision-diff-banner rcm-revision-diff-banner-same", children: "\uC774\uC804 \uBC84\uC804\uACFC \uB3D9\uC77C\uD569\uB2C8\uB2E4" })), children] }));
+          ` }), _jsxs("div", { className: "rcm-revision-diff-banner rcm-revision-diff-banner-changed", children: [_jsxs("div", { className: "rcm-revision-diff-banner-row", children: [_jsx("span", { className: "rcm-icon-frame", "data-shape": "circle", "data-size": "xs", "data-color": "warning" }), _jsxs("span", { children: ["\uC774\uC804 \uBC84\uC804 \uB300\uBE44 ", _jsxs("strong", { children: [changedFields.size, "\uAC1C"] }), " \uD544\uB4DC\uAC00 \uBCC0\uACBD\uB418\uC5C8\uC2B5\uB2C8\uB2E4"] })] }), changedFieldLabels.length > 0 && (_jsx("div", { className: "rcm-revision-diff-labels", children: changedFieldLabels.map((label, i) => (_jsx("span", { className: "rcm-tag", "data-color": "warning", children: label }, i))) }))] })] })), hasPreviousRevision && changedFields.size === 0 && (_jsx("div", { className: "rcm-revision-diff-banner rcm-revision-diff-banner-same", children: "\uC774\uC804 \uBC84\uC804\uACFC \uB3D9\uC77C\uD569\uB2C8\uB2E4" })), children] }));
 };
 export class RevisionField extends FormField {
     constructor(name, order) {
@@ -176,10 +176,10 @@ const RevisionFieldRenderer = ({ entityForm }) => {
         });
     };
     if (loading) {
-        return (_jsxs("div", { className: "rcm-revision-state", children: [_jsx(IconHistory, { className: "rcm-revision-state-icon rcm-revision-state-icon-spin" }), _jsx("span", { className: "rcm-revision-state-text", children: "\uBCC0\uACBD \uB0B4\uC5ED\uC744 \uBD88\uB7EC\uC624\uB294 \uC911..." })] }));
+        return (_jsxs("div", { className: "rcm-revision-state", children: [_jsx(IconHistory, { className: "rcm-icon rcm-revision-state-icon-spin", "data-size": "lg", "data-tone": "disabled" }), _jsx("span", { className: "rcm-text", "data-size": "sm", "data-tone": "muted", children: "\uBCC0\uACBD \uB0B4\uC5ED\uC744 \uBD88\uB7EC\uC624\uB294 \uC911..." })] }));
     }
     if (revisions.length === 0) {
-        return (_jsxs("div", { className: "rcm-revision-state rcm-revision-state-empty", children: [_jsx(IconHistory, { className: "rcm-revision-state-icon" }), _jsx("span", { className: "rcm-revision-state-text", children: "\uBCC0\uACBD \uB0B4\uC5ED\uC774 \uC5C6\uC2B5\uB2C8\uB2E4." })] }));
+        return (_jsxs("div", { className: "rcm-revision-state rcm-revision-state-empty", children: [_jsx(IconHistory, { className: "rcm-icon", "data-size": "lg", "data-tone": "disabled" }), _jsx("span", { className: "rcm-text", "data-size": "sm", "data-tone": "muted", children: "\uBCC0\uACBD \uB0B4\uC5ED\uC774 \uC5C6\uC2B5\uB2C8\uB2E4." })] }));
     }
     return (_jsx("div", { className: "rcm-revision-wrap", children: _jsxs("div", { className: "rcm-revision-panel", children: [_jsx("div", { className: "rcm-revision-list", children: revisions.map((revision, index) => {
                         const isLatest = currentPage === 0 && index === 0;
@@ -191,7 +191,7 @@ const RevisionFieldRenderer = ({ entityForm }) => {
                             : isDelete || isCreate
                                 ? 'rcm-revision-item rcm-revision-item-muted'
                                 : 'rcm-revision-item rcm-revision-item-default';
-                        return (_jsx("div", { className: itemClass, onClick: isClickable ? () => handleRevisionClick(revision, index) : undefined, children: _jsxs("div", { className: "rcm-revision-item-row", children: [_jsx("span", { className: "rcm-revision-item-name", children: revision.name }), _jsx("span", { className: "rcm-revision-item-date", children: fDateTime(revision.createdAt, 'yyyy-MM-dd HH:mm:ss') }), isLatest && (_jsx("span", { className: "rcm-badge", "data-color": "info", children: "\uD604\uC7AC \uBC84\uC804" })), isCreate && (_jsx("span", { className: "rcm-badge", "data-color": "success", children: "\uC2E0\uADDC" })), isDelete && (_jsx("span", { className: "rcm-badge", "data-color": "error", children: entityForm.neverDelete ? '사용안함' : '삭제' }))] }) }, revision.id));
+                        return (_jsx("div", { className: itemClass, onClick: isClickable ? () => handleRevisionClick(revision, index) : undefined, children: _jsxs("div", { className: "rcm-revision-item-row", children: [_jsx("span", { className: "rcm-text", "data-weight": "medium", children: revision.name }), _jsx("span", { className: "rcm-text", "data-size": "xs", "data-tone": "muted", children: fDateTime(revision.createdAt, 'yyyy-MM-dd HH:mm:ss') }), isLatest && (_jsx("span", { className: "rcm-badge", "data-color": "info", children: "\uD604\uC7AC \uBC84\uC804" })), isCreate && (_jsx("span", { className: "rcm-badge", "data-color": "success", children: "\uC2E0\uADDC" })), isDelete && (_jsx("span", { className: "rcm-badge", "data-color": "error", children: entityForm.neverDelete ? '사용안함' : '삭제' }))] }) }, revision.id));
                     }) }), totalPage > 1 && (_jsx("div", { className: "rcm-revision-pagination", children: _jsx(Pagination, { total: totalPage, value: currentPage + 1, onChange: handlePageChange }) }))] }) }));
 };
 //# sourceMappingURL=RevisionField.js.map

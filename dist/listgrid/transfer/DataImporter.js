@@ -339,7 +339,7 @@ export const DataImporter = (props) => {
     }
     return (_jsx(_Fragment, { children: _jsxs(Modal, { opened: true, size: '5xl', title: t('form.list.dataTransfer.tab.import.title'), onClose: () => {
                 props.onClose(false);
-            }, children: [_jsxs("div", { className: "rcm-importer-body", children: [_jsx(DataImportSample, { fields: fields, sampleData: sampleData, sampleFileName: props.sampleFileName, allowUpdate: allowUpdate }), _jsxs("div", { className: "rcm-importer-section", children: [_jsx("h3", { className: "rcm-importer-section-title", children: t('form.list.dataTransfer.tab.import.file.label') || '업로드할 파일 선택' }), _jsx(FileUploadInput, { name: 'file', value: undefined, onChange: onFileUpload, config: {
+            }, children: [_jsxs("div", { className: "rcm-importer-body", children: [_jsx(DataImportSample, { fields: fields, sampleData: sampleData, sampleFileName: props.sampleFileName, allowUpdate: allowUpdate }), _jsxs("div", { className: "rcm-importer-section", children: [_jsx("h3", { className: "rcm-text", "data-weight": "semibold", children: t('form.list.dataTransfer.tab.import.file.label') || '업로드할 파일 선택' }), _jsx(FileUploadInput, { name: 'file', value: undefined, onChange: onFileUpload, config: {
                                         maxCount: 1,
                                         fileTypes: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'],
                                         extensions: ['xlsx', 'xls']

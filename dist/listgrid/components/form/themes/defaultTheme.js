@@ -33,11 +33,11 @@ export const defaultEntityFormTheme = {
     buttons: {
         container: "",
         innerWrapper: "",
-        save: "rcm-button rcm-button-primary",
-        list: "rcm-button rcm-button-outline",
-        delete: "rcm-button rcm-button-danger",
-        close: "rcm-button rcm-button-outline",
-        custom: "rcm-button rcm-button-primary",
+        save: "rcm-button",
+        list: "rcm-button",
+        delete: "rcm-button",
+        close: "rcm-button",
+        custom: "rcm-button",
     },
     alerts: {
         singleContainer: "rcm-skeleton-row",
@@ -128,9 +128,9 @@ export const defaultEntityFormTheme = {
         stepLabel: "rcm-heading-sm",
         buttonGroup: "rcm-row",
         prevButton: "rcm-button",
-        nextButton: "rcm-button rcm-button-primary",
-        saveButton: "rcm-button rcm-button-primary",
-        toggleButton: "rcm-button rcm-button-icon rcm-button-secondary",
+        nextButton: "rcm-button",
+        saveButton: "rcm-button",
+        toggleButton: "rcm-button",
     },
 };
 //# sourceMappingURL=defaultTheme.js.map
