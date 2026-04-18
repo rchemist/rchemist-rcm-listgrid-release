@@ -27,10 +27,10 @@ export const CopyButton = ({ value, className }) => {
             });
         }
     };
-    return (_jsx("div", { className: className ?? "rcm-copy-addon-wrap", children: _jsx(Tooltip, { label: "\uBCF5\uC0AC", children: _jsx("button", { type: "button", className: "rcm-copy-addon-btn", onClick: handleCopy, children: _jsx(IconCopy, { className: "rcm-m2o-action-icon" }) }) }) }));
+    return (_jsx("div", { className: className ?? "rcm-copy-addon-wrap", children: _jsx(Tooltip, { label: "\uBCF5\uC0AC", children: _jsx("button", { type: "button", className: "rcm-icon-btn", "data-size": "sm", onClick: handleCopy, children: _jsx(IconCopy, { className: "rcm-icon", "data-size": "sm" }) }) }) }));
 };
 export const CopyableTextView = ({ value, displayValue, }) => {
-    return (_jsxs("div", { className: "rcm-copy-text-wrap", children: [_jsx("span", { children: displayValue ?? value }), _jsx(Tooltip, { label: "\uBCF5\uC0AC", children: _jsx("button", { className: "rcm-copy-text-btn", onClick: async (e) => {
+    return (_jsxs("div", { className: "rcm-copy-text-wrap", children: [_jsx("span", { children: displayValue ?? value }), _jsx(Tooltip, { label: "\uBCF5\uC0AC", children: _jsx("button", { className: "rcm-icon-btn", "data-size": "xs", onClick: async (e) => {
                         e.stopPropagation();
                         try {
                             await navigator.clipboard.writeText(value);
@@ -46,6 +46,6 @@ export const CopyableTextView = ({ value, displayValue, }) => {
                                 color: 'danger'
                             });
                         }
-                    }, children: _jsx(IconCopy, { className: "h-3.5 w-3.5" }) }) })] }));
+                    }, children: _jsx(IconCopy, { className: "rcm-icon", "data-size": "xs" }) }) })] }));
 };
 //# sourceMappingURL=CopyableTextView.js.map
