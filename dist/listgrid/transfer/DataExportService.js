@@ -39,20 +39,20 @@ export class DataExportService {
         this.fields = fields;
         this.restrictCount = restrictCount ?? 5000;
         this.pagePerCount = pagePerCount ?? 20;
-        this.setExportable = setExportable ?? function (exportable) {
-            console.debug('setExportable', exportable);
+        this.setExportable = setExportable ?? function (_exportable) {
+            // no-op default
         };
-        this.setFailedCount = setFailedCount ?? function (count) {
-            console.debug('setFailedCount', count);
+        this.setFailedCount = setFailedCount ?? function (_count) {
+            // no-op default
         };
-        this.setProgress = setProgress ?? function (progress) {
-            console.debug('setProgress', progress);
+        this.setProgress = setProgress ?? function (_progress) {
+            // no-op default
         };
-        this.setData = setData ?? function (data) {
-            console.debug('setData', data);
+        this.setData = setData ?? function (_data) {
+            // no-op default
         };
-        this.setError = setError ?? function (errorMessage) {
-            console.debug('setError', errorMessage);
+        this.setError = setError ?? function (_errorMessage) {
+            // no-op default
         };
         this.data = data ?? [];
         if (data) {

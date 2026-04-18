@@ -64,12 +64,6 @@ export const ViewEntityForm = (props) => {
     if (loading) {
         return (_jsx(ViewEntityFormSkeleton, { entityForm: entityForm, inlineMode: isInlineMode, subCollectionEntity: isSubCollectionEntity }));
     }
-    /*
-      if (entityForm.getRenderType() === 'update') {
-          (async () => {
-            console.log('ViewEntityForm', entityForm.getRenderType(), await entityForm.getValues());
-          })();
-      } */
     // 버튼 위치 결정 (기본값: header)
     // 인라인 모드에서는 탭 영역 옆에 버튼 배치
     const buttonPosition = props.buttonPosition ?? 'header';

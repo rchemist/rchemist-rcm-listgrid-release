@@ -1,8 +1,21 @@
 {
     "name": "@rcm/listgrid",
-    "version": "0.1.0-alpha.43",
-    "description": "Generic ListGrid engine — reusable CRUD UI engine for the RCM-framework backend",
-    "license": "UNLICENSED",
+    "version": "0.1.0-alpha.44",
+    "description": "Framework-free React CRUD UI engine — primitive-based design system, data-attr theming, and a full list/form renderer for RCM-framework-style entity backends.",
+    "keywords": [
+        "react",
+        "listgrid",
+        "crud",
+        "entity",
+        "form",
+        "table",
+        "design-system",
+        "css-primitives",
+        "data-attr",
+        "framework-free"
+    ],
+    "author": "rchemist.io",
+    "license": "Apache-2.0",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
@@ -24,7 +37,9 @@
     "files": [
         "dist",
         "README.md",
-        "DECISIONS.md"
+        "LICENSE",
+        "DECISIONS.md",
+        "docs/PRIMITIVES.md"
     ],
     "publishConfig": {
         "access": "public"

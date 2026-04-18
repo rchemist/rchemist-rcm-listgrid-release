@@ -157,7 +157,6 @@ export class SubCollectionField {
                         const filters = this.relation.subCollectionEntityForm.manyToOneFilter[key];
                         if (!isEmpty(filters)) {
                             field.config.filter = [...(field.config.filter ?? []), ...filters];
-                            console.log('field.config.filter', field);
                         }
                     }
                 }

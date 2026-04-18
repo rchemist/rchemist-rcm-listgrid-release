@@ -72,9 +72,8 @@ export const ContentAssetItem = (props) => {
         handleUpdateAsset(index, 'content', value);
     }, [handleUpdateAsset]);
     // 파일 업로드 진행률 핸들러
-    const handleUploadProgress = useCallback((index) => (progress) => {
+    const handleUploadProgress = useCallback((_index) => (_progress) => {
         // TODO: 진행률 UI 업데이트
-        console.log(`Upload progress for item ${index}: ${progress}%`);
     }, []);
     return (_jsx(ContentAssetItemUI, { items: assets, loading: loading, errors: errors, titleErrors: titleErrors, readonly: readonly || false, canAddMore: canAddMore, isEmpty: isEmpty, acceptedFileTypes: props.acceptedFileTypes, maxFileSize: props.maxFileSize, onUpdateAsset: handleUpdateAsset, onTitleBlur: handleTitleBlur, onTitleChange: handleTitleChange, onContentChange: handleContentChange, onRemoveItem: handleRemoveAsset, onAddItem: handleAddItem, onFileUpload: handleFileUpload, onUploadProgress: handleUploadProgress, fieldErrors: props.errors }));
 };

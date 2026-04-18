@@ -14,7 +14,6 @@ function isOptionalReactNode(condition) {
     return condition && (typeof condition.onCreate !== 'undefined' || typeof condition.onUpdate !== 'undefined');
 }
 export async function getConditionalBoolean(props, condition) {
-    // console.log('getConditionalBoolean', props, condition);
     if (!condition) {
         return false;
     }

@@ -67,7 +67,6 @@ export const AddressFieldView = ({ entityForm, onChange, ...props }) => {
         }, true);
     }
     return _jsxs("div", { children: [_jsx(PostCodeSelector, { required: isTrue(props.required), address: address, onSubmit: (address) => {
-                    console.log('onSubmit', onChange, address);
                     onChange({
                         state: defaultString(address.state),
                         city: defaultString(address.city),

@@ -112,7 +112,6 @@ export class FileField extends ListableFormField {
             let blank = true;
             for (const file of value.existFiles) {
                 if (!isBlankString(file.url)) {
-                    console.log('exist file', file);
                     blank = false;
                     break;
                 }
@@ -120,7 +119,6 @@ export class FileField extends ListableFormField {
             if (blank) {
                 for (const file of value.newFiles) {
                     if (!isBlankString(file.url)) {
-                        console.log('new file', file);
                         blank = false;
                         break;
                     }

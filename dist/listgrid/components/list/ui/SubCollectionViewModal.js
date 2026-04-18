@@ -13,7 +13,6 @@ export const SubCollectionViewModal = ({ entityForm, managedId, props, setManage
         excludeButtons.push('delete');
     }
     return (_jsx(React.Fragment, { children: _jsx(Modal, { opened: true, view: { title: false }, size: "5xl", animation: 'none', position: 'center', closeOnClickOutside: false, closeOnEscape: false, onClose: () => {
-                console.log('onClose');
                 setManagedId(undefined);
             }, children: _jsx(ViewEntityForm, { entityForm: collectionEntityForm, subCollection: true, readonly: readonly, excludeButtons: excludeButtons, hideMappedByFields: mappedBy, buttonLinks: {
                     onClickList: async () => {

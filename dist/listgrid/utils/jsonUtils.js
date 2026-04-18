@@ -6,8 +6,7 @@
  */
 // // type script 4.9 버그로 인해 TSON 을 사용할 수 없다.
 // import TSON from "typescript-json";
-// @ts-ignore
-export function replacer(key, value) {
+export function replacer(_key, value) {
     if (value instanceof Map) {
         return {
             dataType: 'Map',
@@ -18,11 +17,11 @@ export function replacer(key, value) {
         return value;
     }
 }
-// @ts-ignore
-export function reviver(key, value) {
+export function reviver(_key, value) {
     if (typeof value === 'object' && value !== null) {
-        if (value.dataType === 'Map') {
-            return new Map(value.value);
+        const record = value;
+        if (record.dataType === 'Map' && record.value) {
+            return new Map(record.value);
         }
     }
     return value;

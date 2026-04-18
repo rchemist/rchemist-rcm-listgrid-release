@@ -90,8 +90,8 @@ export const DataImportSample = ({ sampleFileName: exportFileName, sampleData: i
 };
 export default DataImportSample;
 const SampleDataButton = (props) => {
-    const setProcessing = props.setProcessing ?? function (processing) {
-        console.debug('do nothing with processing value: ', processing);
+    const setProcessing = props.setProcessing ?? function (_processing) {
+        // no-op default
     };
     if (props.data === undefined) {
         return _jsx(_Fragment, {});
@@ -99,7 +99,6 @@ const SampleDataButton = (props) => {
     const sampleData = props.data.map((row) => {
         return row.filter((item) => props.fields.find((field) => field.getName() === item.name));
     });
-    console.log('sampleData: ', sampleData);
     return (_jsxs(_Fragment, { children: [props.processing && (_jsx(Modal, { size: "lg", opened: props.processing, closeOnClickOutside: false, zIndex: 10000, onClose: () => {
                     setProcessing(false);
                 }, children: _jsx(DataExportProcessor, { fields: props.fields, exportFileName: props.fileName, process: props.processing, data: sampleData, onProcessed: () => {
