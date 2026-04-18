@@ -1,6 +1,6 @@
 {
     "name": "@rcm/listgrid",
-    "version": "0.1.0-alpha.27",
+    "version": "0.1.0-alpha.28",
     "description": "Generic ListGrid engine — reusable CRUD UI engine for the RCM-framework backend",
     "license": "UNLICENSED",
     "main": "./dist/index.js",
@@ -16,6 +16,7 @@
         },
         "./styles.css": "./dist/styles.css",
         "./styles/tokens.css": "./dist/styles/tokens.css",
+        "./styles/primitives.css": "./dist/styles/primitives.css",
         "./styles/base.css": "./dist/styles/base.css"
     },
     "files": [
