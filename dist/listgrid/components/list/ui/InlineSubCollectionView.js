@@ -57,7 +57,7 @@ class InlineRowActionField extends ListableFormField {
         const buttons = (_jsx("div", { className: "rcm-inline-action-row", children: visibleActions.map(action => {
                 const label = typeof action.label === 'function' ? action.label(item) : action.label;
                 const isDisabled = action.disabled?.(item) ?? false;
-                return (_jsx(Tooltip, { label: label, children: _jsxs("button", { type: "button", className: `rcm-button rcm-button-sm ${action.className ?? 'rcm-button-outline'} ${isDisabled ? 'rcm-is-disabled' : ''}`, disabled: isDisabled, onClick: (e) => {
+                return (_jsx(Tooltip, { label: label, children: _jsxs("button", { type: "button", className: `rcm-button ${action.className ?? ''} ${isDisabled ? 'rcm-is-disabled' : ''}`, "data-variant": action.className ? undefined : 'outline', "data-size": "sm", disabled: isDisabled, onClick: (e) => {
                             e.stopPropagation();
                             e.preventDefault();
                             this.onActionHandler(action, item);

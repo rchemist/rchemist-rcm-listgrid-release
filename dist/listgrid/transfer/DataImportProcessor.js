@@ -34,14 +34,14 @@ export const DataImportProcessor = ({ resultView, data, importResult, onSubmit, 
     if (isEmpty(fields)) {
         return _jsx(_Fragment, {});
     }
-    return (_jsx(_Fragment, { children: _jsxs(Box, { children: [resultView && _jsxs(Box, { children: [_jsx(Box, { style: { padding: `2rem` }, children: _jsx(DataImportResultView, { result: importResult, fields: fields }) }), _jsx(Flex, { align: 'center', style: { width: '100%', paddingTop: 2 }, justify: 'center', children: _jsx("button", { type: "button", className: "rcm-button rcm-button-outline", onClick: () => {
+    return (_jsx(_Fragment, { children: _jsxs(Box, { children: [resultView && _jsxs(Box, { children: [_jsx(Box, { style: { padding: `2rem` }, children: _jsx(DataImportResultView, { result: importResult, fields: fields }) }), _jsx(Flex, { align: 'center', style: { width: '100%', paddingTop: 2 }, justify: 'center', children: _jsx("button", { type: "button", className: "rcm-button", "data-variant": "outline", onClick: () => {
                                     cancelImport();
                                     onImportSuccess?.call(this);
-                                }, children: "\uD655\uC778" }) })] }), !resultView && _jsxs(Box, { children: [viewError && _jsxs(Box, { style: { padding: `2rem` }, children: [_jsx(ImportErrorView, { importError: importError, importErrorView: importErrorView, errorMessage: errorMessage }), _jsx(Flex, { align: 'center', style: { width: '100%', marginTop: `2rem` }, justify: 'center', children: _jsx("button", { type: "button", className: "rcm-button rcm-button-secondary", onClick: () => {
+                                }, children: "\uD655\uC778" }) })] }), !resultView && _jsxs(Box, { children: [viewError && _jsxs(Box, { style: { padding: `2rem` }, children: [_jsx(ImportErrorView, { importError: importError, importErrorView: importErrorView, errorMessage: errorMessage }), _jsx(Flex, { align: 'center', style: { width: '100%', marginTop: `2rem` }, justify: 'center', children: _jsx("button", { type: "button", className: "rcm-button", "data-variant": "ghost", onClick: () => {
                                             cancelImport();
-                                        }, children: "\uB2EB\uAE30" }) })] }), preview && _jsxs(Box, { style: { padding: `2rem` }, children: [_jsx(DataImportPreview, { data: data, fields: fields }), _jsxs(Flex, { gap: 10, align: 'center', style: { width: '100%', marginTop: `2rem` }, justify: 'center', children: [_jsx("button", { type: "button", className: "rcm-button rcm-button-primary", onClick: () => {
+                                        }, children: "\uB2EB\uAE30" }) })] }), preview && _jsxs(Box, { style: { padding: `2rem` }, children: [_jsx(DataImportPreview, { data: data, fields: fields }), _jsxs(Flex, { gap: 10, align: 'center', style: { width: '100%', marginTop: `2rem` }, justify: 'center', children: [_jsx("button", { type: "button", className: "rcm-button", "data-variant": "primary", onClick: () => {
                                                 onSubmit();
-                                            }, children: "\uC5C5\uB85C\uB4DC" }), _jsx("button", { type: "button", className: "rcm-button rcm-button-outline", onClick: () => {
+                                            }, children: "\uC5C5\uB85C\uB4DC" }), _jsx("button", { type: "button", className: "rcm-button", "data-variant": "outline", onClick: () => {
                                                 cancelImport();
                                             }, children: "\uCDE8\uC18C" })] })] })] })] }) }));
 };

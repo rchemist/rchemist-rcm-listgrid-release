@@ -105,6 +105,6 @@ const SampleDataButton = (props) => {
                 }, children: _jsx(DataExportProcessor, { fields: props.fields, exportFileName: props.fileName, process: props.processing, data: sampleData, onProcessed: () => {
                         props.setExportKey(Date.now());
                         setProcessing(false);
-                    } }, 'data_export_import_data' + props.exportKey) })), !props.processing && (_jsxs("button", { type: "button", className: "rcm-button rcm-button-primary rcm-import-sample-download-btn", onClick: () => { setProcessing(true); }, children: [_jsx(IconFile, { className: "rcm-m2o-action-icon" }), "\uC0D8\uD50C \uD30C\uC77C \uB2E4\uC6B4\uB85C\uB4DC"] }))] }));
+                    } }, 'data_export_import_data' + props.exportKey) })), !props.processing && (_jsxs("button", { type: "button", className: "rcm-button rcm-import-sample-download-btn", "data-variant": "primary", onClick: () => { setProcessing(true); }, children: [_jsx(IconFile, { className: "rcm-m2o-action-icon" }), "\uC0D8\uD50C \uD30C\uC77C \uB2E4\uC6B4\uB85C\uB4DC"] }))] }));
 };
 //# sourceMappingURL=DataImportSample.js.map

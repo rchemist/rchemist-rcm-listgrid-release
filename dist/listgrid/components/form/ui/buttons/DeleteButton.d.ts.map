@@ -1,1 +1,1 @@
-{"version":3,"file":"DeleteButton.d.ts","sourceRoot":"","sources":["../../../../../../src/listgrid/components/form/ui/buttons/DeleteButton.tsx"],"names":[],"mappings":"AAWA,OAAO,EAAC,WAAW,EAAC,MAAM,yCAAyC,CAAC;AAGpE,eAAO,MAAM,YAAY,GAAI,mHAU1B,WAAW,4CAuHb,CAAC"}
+{"version":3,"file":"DeleteButton.d.ts","sourceRoot":"","sources":["../../../../../../src/listgrid/components/form/ui/buttons/DeleteButton.tsx"],"names":[],"mappings":"AAWA,OAAO,EAAC,WAAW,EAAC,MAAM,yCAAyC,CAAC;AAGpE,eAAO,MAAM,YAAY,GAAI,mHAU1B,WAAW,4CA2Hb,CAAC"}

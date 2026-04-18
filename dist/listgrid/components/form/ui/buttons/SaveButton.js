@@ -12,7 +12,7 @@ import { useEntityFormTheme } from "../../context/EntityFormThemeContext";
 export const SaveButton = ({ entityForm, postSave, router, pathname, setEntityForm, buttonLinks, openBaseLoading, session, buttonClassNames, ...props }) => {
     const { classNames, cn, buttonLabels } = useEntityFormTheme();
     const [isSaving, setIsSaving] = useState(false);
-    return (_jsx("button", { type: "button", disabled: isSaving, className: cn("rcm-button rcm-button-primary", buttonClassNames?.save ?? classNames.buttons?.save), onClick: (e) => {
+    return (_jsx("button", { type: "button", disabled: isSaving, className: cn("rcm-button", buttonClassNames?.save ?? classNames.buttons?.save), "data-variant": "primary", onClick: (e) => {
             e.stopPropagation();
             if (isSaving)
                 return;

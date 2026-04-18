@@ -15,7 +15,7 @@ import { cn } from "../../../../utils/cn";
  * - 확인 시 window.close() 호출
  */
 export const ClosePopupButton = ({ entityForm, readonly, buttonClassNames, }) => {
-    return (_jsx("button", { className: cn("rcm-button rcm-button-outline", buttonClassNames?.close), onClick: (e) => {
+    return (_jsx("button", { className: cn("rcm-button", buttonClassNames?.close), "data-variant": "outline", onClick: (e) => {
             (async () => {
                 e.stopPropagation();
                 const dirty = isTrue(readonly) ? false : entityForm.isDirty();
