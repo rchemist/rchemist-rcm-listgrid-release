@@ -28,6 +28,8 @@ export function getQueryConditionValueType(type) {
         return 'SINGLE';
     }
 }
+// FormField is generic over the underlying value type — keep the <any> argument
+// for backwards compat with call sites that don't thread the value type through
 export function getQueryConditionTypes(field) {
     const types = [];
     if (field.type === 'text') {
@@ -45,6 +47,7 @@ export function getQueryConditionTypes(field) {
     }
     return types;
 }
+// intentional: name is a heterogeneous LabelType (string | number | null | undefined | ReactNode) rendered into help text
 export function getQueryConditionHelpText(name, type) {
     switch (type) {
         case 'EQUAL':
@@ -133,6 +136,7 @@ export class SearchForm {
      * @param item 역직렬화된 FilterItem 객체
      * @returns Map 구조가 복원된 FilterItem
      */
+    // deserialize input — JSON.parsed shape from backend (arbitrary fields)
     static reconstructFilterItem(item) {
         const reconstructed = {
             name: item.name,
@@ -154,6 +158,7 @@ export class SearchForm {
         }
         return reconstructed;
     }
+    // deserialize input — JSON.parsed shape from backend (arbitrary fields)
     static createByObject(data) {
         const searchForm = Object.assign(new SearchForm(), data);
         // object 가 assign 되면서 sorts 와 filters 가 {} 로 덮어써져 있는 상태다. Map 데이터이기 때문에 제대로 맞춰 줘야 한다.
@@ -203,6 +208,7 @@ export class SearchForm {
      * 검색 결과에서 반환된 JSON 을 SearchForm 객체로 만든다.
      * @param data
      */
+    // intentional: deserialization entry point — accepts arbitrary parsed input
     static deserialize(data) {
         try {
             if (data) {
@@ -258,6 +264,7 @@ export class SearchForm {
         }
         return this;
     }
+    // value can be a primitive string/number/boolean or an array of them
     handleAndFilter(fieldName, value, op, not) {
         if (value === undefined || value === null) {
             if (op === 'NULL') {
@@ -270,7 +277,7 @@ export class SearchForm {
         }
         else {
             let duplicated = false;
-            const filterValue = Array.isArray(value) ? undefined : value;
+            const filterValue = Array.isArray(value) ? undefined : String(value);
             const filterValues = Array.isArray(value) ? value : undefined;
             this.filters.forEach((filterItems) => {
                 filterItems.forEach((filterItem) => {
@@ -371,8 +378,7 @@ export class SearchForm {
                     filterValues.set(filterItem.name, filterItem.values);
                 }
                 else {
-                    const filterValue = filterItem.value ?? '';
-                    filterValues.set(filterItem.name, filterValue);
+                    filterValues.set(filterItem.name, filterItem.value ?? '');
                 }
             });
         });
@@ -389,8 +395,7 @@ export class SearchForm {
                     });
                 }
                 else {
-                    const filterValue = filterItem.value || '';
-                    filterItems.set(filterItem.name, { value: filterValue, operator: filterItem.queryConditionType ?? 'EQUAL' });
+                    filterItems.set(filterItem.name, { value: filterItem.value || '', operator: filterItem.queryConditionType ?? 'EQUAL' });
                 }
             });
         });

@@ -15,7 +15,7 @@ export declare class RuleConditionValue {
     targetEntityPrefix: string;
     values: RuleFieldValue[];
     constructor(id: number, condition: "AND" | "OR", targetEntityPrefix: string);
-    static create(data: any): RuleConditionValue;
+    static create(data: unknown): RuleConditionValue;
     addValues(...values: RuleFieldValue[]): void;
     withValues(values: RuleFieldValue[]): this;
     isEmpty(): boolean;

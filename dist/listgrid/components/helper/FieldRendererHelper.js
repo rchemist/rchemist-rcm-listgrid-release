@@ -5,14 +5,13 @@ import { isBlank } from '../../utils/StringUtil';
 import { Tooltip } from "../../ui";
 import { Link } from "../../router";
 import { IconExternalLink } from "@tabler/icons-react";
-export async function getInputRendererParameters(field, params, ...args) {
+export async function getInputRendererParameters(field, params) {
     return {
         ...params,
         value: await field.getDisplayValue(params.entityForm, params.entityForm.getRenderType()),
         name: field.getName(),
         label: field.getLabel(),
         attributes: field.attributes,
-        ...args
     };
 }
 export async function getManyToOneLink(renderType, field) {

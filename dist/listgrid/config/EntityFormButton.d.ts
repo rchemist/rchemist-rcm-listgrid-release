@@ -2,6 +2,7 @@ import { EntityForm } from '../config/EntityForm';
 import { ReactNode } from "react";
 import { LabelType } from '../config/Config';
 import { ModalOptions } from '../store';
+import type { RouterApi } from '../router/types';
 export interface EntityFormButtonStepInfo {
     useCreateStep: boolean;
     currentStep: number;
@@ -10,16 +11,16 @@ export interface EntityFormButtonStepInfo {
 }
 export interface EntityFormButtonProps {
     entityForm: EntityForm;
-    router: any;
-    pathname: any;
+    router: RouterApi;
+    pathname: string | null;
     setErrors: (errors: string[]) => void;
     setNotifications: (notifications: string[]) => void;
     step?: EntityFormButtonStepInfo;
     showModal?: (options: ModalOptions) => string;
     closeModal?: (id: string) => Promise<void>;
     closeTopModal?: () => Promise<void>;
-    getModalData?: (id: string) => any;
-    updateModalData?: (id: string, data: any) => void;
+    getModalData?: (id: string) => unknown;
+    updateModalData?: (id: string, data: Partial<ModalOptions>) => void;
 }
 /**
  * ReactNode 버튼을 위한 래퍼 타입

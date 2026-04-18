@@ -103,6 +103,7 @@ parentId: _parentId, cardConfig, relation, readonly = false, session, onClick, o
             return null;
         const statusField = itemEntityForm.fields.get('status');
         if (statusField && item.status) {
+            // options is a SelectField-specific property not exposed on the base FormField type
             const options = statusField.options;
             if (options && Array.isArray(options)) {
                 const option = options.find((opt) => opt.value === item.status);

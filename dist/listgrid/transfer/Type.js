@@ -479,7 +479,7 @@ export function getExportFileName(exportFileName, translation) {
 }
 // 타입 가드 함수들
 export function isDataColumn(value) {
-    return value && typeof value.name === 'string' && 'value' in value;
+    return !!value && typeof value === 'object' && typeof value.name === 'string' && 'value' in value;
 }
 export function isDataRow(value) {
     return Array.isArray(value) && value.every(isDataColumn);
@@ -488,7 +488,7 @@ export function isDataRowSet(value) {
     return Array.isArray(value) && value.every(isDataRow);
 }
 export function isSampleDataItem(value) {
-    return value && typeof value.name === 'string' && 'value' in value;
+    return !!value && typeof value === 'object' && typeof value.name === 'string' && 'value' in value;
 }
 export async function getRangeDateValue(value) {
     // value 가 배열이면 배열의 첫번째 요소를 반환

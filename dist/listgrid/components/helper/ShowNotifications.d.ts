@@ -2,7 +2,7 @@ import React from "react";
 import { ColorType } from "../../common/type";
 interface ListGridNotificationsProps {
     messages?: string[] | Map<string, string>;
-    error?: any;
+    error?: unknown;
     color?: ColorType;
     timeout?: number;
     showClose?: boolean;

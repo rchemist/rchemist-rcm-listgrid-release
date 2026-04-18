@@ -55,6 +55,7 @@ export function processApiError(response, form) {
     let jsonError = false;
     if (response.error) {
         try {
+            // intentional: errorObject has heterogeneous shape depending on backend error variant
             let errorObject;
             // entityError가 있으면 구조화된 정보 사용
             if (response.entityError) {
@@ -128,7 +129,7 @@ export function processApiError(response, form) {
     }
     else {
         // 필드 에러가 없을 때만 일반 에러 메시지 표시
-        errorMessage = (!jsonError ? response.error : globalError ? globalError : undefined) ?? '저장 중 오류가 발생했습니다.';
+        errorMessage = (!jsonError ? (typeof response.error === 'string' ? response.error : undefined) : globalError ? globalError : undefined) ?? '저장 중 오류가 발생했습니다.';
         hasError = true;
     }
     return {

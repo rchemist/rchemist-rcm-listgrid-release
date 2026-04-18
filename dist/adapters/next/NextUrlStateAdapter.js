@@ -7,6 +7,9 @@
 // Bridges the library's framework-agnostic `UrlParser` shape into nuqs's
 // own parser factory so `useQueryStates` reads/writes Next's router state.
 import { useQueryStates as nuqsUseQueryStates, createParser as nuqsCreateParser, } from 'nuqs';
+// UrlParser<any> is intentional: the framework-agnostic contract accepts
+// heterogeneous parser value types per key — narrowing here would require
+// higher-kinded generics the host cannot supply.
 function toNuqsParsers(parsers) {
     const out = {};
     for (const key of Object.keys(parsers)) {

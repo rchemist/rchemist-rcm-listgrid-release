@@ -4,9 +4,9 @@ import { ViewListGridProps } from "../types/ViewListGrid.types";
 import { SearchForm } from "../../../form/SearchForm";
 export declare const SubCollectionViewModal: ({ entityForm, managedId, props, setManagedId, fetchData, setOpenBaseLoading, mappedBy }: {
     entityForm: EntityForm;
-    managedId: any;
+    managedId: string | undefined;
     props: ViewListGridProps;
-    setManagedId: React.Dispatch<any>;
+    setManagedId: React.Dispatch<React.SetStateAction<string | undefined>>;
     fetchData: (form?: SearchForm) => void;
     setOpenBaseLoading: (open: boolean) => void;
     mappedBy?: string;

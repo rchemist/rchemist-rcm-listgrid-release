@@ -3,11 +3,11 @@ export type ApiMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 export interface ApiRequestOptions {
     url: string;
     method?: ApiMethod;
-    formData?: any;
+    formData?: unknown;
     entityFormName?: string;
     extensionPoint?: string;
     serverProxy?: boolean;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export interface ApiClient {
     callExternalHttpRequest<T = any>(options: ApiRequestOptions): Promise<ResponseData<T>>;

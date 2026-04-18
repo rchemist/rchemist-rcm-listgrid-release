@@ -24,10 +24,6 @@ export async function logExcelDownload(usePassword, condition) {
         console.error('Excel download log failed:', e);
     }
 }
-// Password-protected Excel encryption is Node-only (officecrypto-tool + Buffer).
-// Lazy-resolved so browser bundles don't blow up on import; host apps that need
-// the feature install `officecrypto-tool` as a peer and call
-// `registerExcelCrypto(require('officecrypto-tool'))` at bootstrap.
 let officeCrypto = null;
 export function registerExcelCrypto(impl) {
     officeCrypto = impl;
@@ -40,6 +36,7 @@ function mustOfficeCrypto() {
     return officeCrypto;
 }
 function toNodeBuffer(data) {
+    // (globalThis as any) kept — Node Buffer polyfill surface is untyped in browser builds
     const B = globalThis.Buffer;
     if (!B) {
         throw new Error('[@rcm/listgrid] password-protected Excel export needs a Node Buffer polyfill in the browser.');

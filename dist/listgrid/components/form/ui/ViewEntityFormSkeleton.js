@@ -45,7 +45,7 @@ export const ViewEntityFormSkeleton = ({ entityForm, inlineMode = false, subColl
                                     : 'rcm-skeleton', style: size(40, index === 0 ? 96 : 80) }, tab.id))) })), tabs.length > 0 && (_jsx(FieldGroupsSkeleton, { fieldGroups: tabs[0].fieldGroups, entityForm: entityForm, subCollectionEntity: subCollectionEntity })), !inlineMode && (_jsxs("div", { className: "rcm-action-bar-end", children: [_jsx("div", { className: "rcm-skeleton rcm-skeleton-accent", style: size(40, 80) }), _jsx("div", { className: "rcm-skeleton", style: size(40, 80) }), _jsx("div", { className: "rcm-skeleton rcm-skeleton-danger", style: size(40, 80) })] }))] }) })] }));
 };
 const FieldGroupsSkeleton = ({ fieldGroups, entityForm, subCollectionEntity }) => {
-    const sortedGroups = [...fieldGroups].sort((a, b) => a.order - b.order);
+    const sortedGroups = [...fieldGroups].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
     return (_jsx("div", { className: "rcm-stack", children: sortedGroups.map((group) => {
             const containerClass = subCollectionEntity
                 ? 'rcm-panel rcm-panel-muted rcm-panel-compact'
@@ -62,6 +62,8 @@ const FieldSkeleton = ({ fieldName: _fieldName, field }) => {
     const getFieldHeight = () => {
         if (!field)
             return 40;
+        // Subclass-specific config access (e.g. CustomOptionField.config.fieldType);
+        // EntityField base has no `config`, so we probe via a narrow structural cast.
         const fieldType = field.config?.fieldType;
         switch (fieldType) {
             case 'HTML':

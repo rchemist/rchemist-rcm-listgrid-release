@@ -174,11 +174,13 @@ export function isEquals(value, other) {
     if (typeof value === 'object' && typeof other === 'object' &&
         value !== null && other !== null &&
         !Array.isArray(value) && !Array.isArray(other)) {
-        const keysA = Object.keys(value);
-        const keysB = Object.keys(other);
+        const a = value;
+        const b = other;
+        const keysA = Object.keys(a);
+        const keysB = Object.keys(b);
         if (keysA.length !== keysB.length)
             return false;
-        return keysA.every(key => keysB.includes(key) && isEquals(value[key], other[key]));
+        return keysA.every(key => keysB.includes(key) && isEquals(a[key], b[key]));
     }
     return false;
 }
@@ -240,8 +242,9 @@ export function removeTrailingSeparator(input, separator) {
 // -- JSON helpers (from jsonUtils.ts) --------------------------------------
 function reviver(_key, value) {
     if (typeof value === 'object' && value !== null) {
-        if (value.dataType === 'Map') {
-            return new Map(value.value);
+        const record = value;
+        if (record.dataType === 'Map' && record.value) {
+            return new Map(record.value);
         }
     }
     return value;
@@ -274,6 +277,7 @@ export function stringify(obj, beautify) {
         return '{}';
     }
 }
+// intentional: JSON.parse returns arbitrary data and consumers dereference fields directly
 export function parse(str) {
     return JSON.parse(str, reviver);
 }
@@ -458,6 +462,8 @@ export function getDefinedDates(type) {
 // -- API re-exports (host-supplied ApiClient; see src/listgrid/api) --------
 export { callExternalHttpRequest, getExternalApiData, getExternalApiDataWithError, } from '../api';
 // -- Other -----------------------------------------------------------------
+// intentional: legacy placeholders kept for API parity with the original @gjcu/ui surface
+// (consumers dereference fields on these dynamically — tightening breaks out-of-scope)
 export const RequestUtil = {};
 export const EntityError = undefined;
 export { ResponseData } from '../api';

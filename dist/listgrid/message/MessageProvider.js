@@ -58,5 +58,6 @@ export function clearAllToasts() {
 // The original exported `ShowError` (PascalCase) as well — likely a React component.
 // Stub it as a no-op renderless component for now; host apps that need a
 // visual error display can override via showError or component props.
+// intentional: host apps pass arbitrary props to the renderless stub (DECISIONS #21)
 export const ShowError = () => null;
 //# sourceMappingURL=MessageProvider.js.map

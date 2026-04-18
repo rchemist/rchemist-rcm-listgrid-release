@@ -41,11 +41,13 @@ export function isEquals(value, other) {
     if (typeof value === 'object' && typeof other === 'object' &&
         value !== null && other !== null &&
         !Array.isArray(value) && !Array.isArray(other)) {
-        const keysA = Object.keys(value);
-        const keysB = Object.keys(other);
+        const a = value;
+        const b = other;
+        const keysA = Object.keys(a);
+        const keysB = Object.keys(b);
         if (keysA.length !== keysB.length)
             return false;
-        return keysA.every(key => keysB.includes(key) && isEquals(value[key], other[key]));
+        return keysA.every(key => keysB.includes(key) && isEquals(a[key], b[key]));
     }
     return false;
 }

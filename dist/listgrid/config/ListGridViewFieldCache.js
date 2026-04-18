@@ -12,8 +12,8 @@ class CacheContext {
     }
     static create(value) {
         const cache = new CacheContext();
-        const data = parse(value);
         if (value) {
+            const data = parse(value);
             cache.data = new Map(Object.entries(data.data));
         }
         return cache;

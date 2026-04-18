@@ -1,12 +1,13 @@
 import { InlineExpansionState, ViewRowItemProps } from "../types/RowItem.types";
+import { SelectionOptions } from "../types/ViewListGrid.types";
 export interface ViewRowsProps extends ViewRowItemProps {
     item: any;
     index: number;
-    checkItem: (id: any) => void;
+    checkItem: (id: string) => void;
     draggable: boolean;
     totalCount: number;
     sortableList: any[];
-    selectionOptions?: any;
+    selectionOptions?: SelectionOptions;
     showCheckboxInput?: boolean;
     /** SubCollection 인라인 확장 상태 */
     inlineExpansion?: InlineExpansionState;

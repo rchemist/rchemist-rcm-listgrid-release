@@ -1,9 +1,9 @@
-import { ItemCheckable } from "../types/ViewListGrid.types";
+import { ItemCheckable, SelectionOptions } from "../types/ViewListGrid.types";
 interface EntireCheckerProps extends ItemCheckable {
     total: number;
-    listIds: any[];
+    listIds: string[];
     subCollection?: boolean;
-    selectionOptions?: any;
+    selectionOptions?: SelectionOptions;
     rows?: any[];
     showCheckboxInput?: boolean;
 }

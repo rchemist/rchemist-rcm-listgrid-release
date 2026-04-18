@@ -10,7 +10,7 @@ export declare function getColorSuffix(color: ColorType | string): string;
 export declare function getMaxWidthClassName(size: SizeType | undefined): string;
 export declare function getAlignClassName(alignType: "left" | "center" | "right", flex?: boolean): "justify-start" | "justify-center" | "justify-end" | "text-left" | "text-center" | "text-right";
 export declare function getGutterValue(gutter: GutterType): string;
-export declare function getResponsiveClasses(value: ResponsiveValue<any>, prefix: string, valueMap?: Record<string, string> | ((val: any) => string)): string;
+export declare function getResponsiveClasses(value: ResponsiveValue<string | number>, prefix: string, valueMap?: Record<string, string> | ((val: string | number) => string)): string;
 export declare function getShapeClassName(shape: ShapeType): string;
 export declare function getSizeClassName(size: SizeType): string;
 export declare function getColorClass(color: ColorType | string, variant: VariantType): string;

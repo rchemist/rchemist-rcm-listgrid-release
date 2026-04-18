@@ -70,11 +70,13 @@ const simpleStringify = (object) => {
             object[eachIdx] = Array.from(object[eachIdx]);
             simpleStringify(object);
         }
-        else if (typeof object[eachIdx] == 'object')
+        else if (typeof object[eachIdx] == 'object' && object[eachIdx] !== null) {
             simpleStringify(object[eachIdx]);
+        }
     }
     return JSON.stringify(object);
 };
+// intentional: JSON.parse returns arbitrary data and consumers dereference fields directly
 export function parse(str) {
     return JSON.parse(str, reviver);
 }

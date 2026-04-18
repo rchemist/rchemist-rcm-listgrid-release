@@ -5,6 +5,7 @@
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import React, { ReactNode } from 'react';
+import { EntityForm } from '../../../config/EntityForm';
 export interface EntityFormScopeContextValue {
     depth: number;
     maxInlineDepth: number;
@@ -17,7 +18,7 @@ export interface EntityFormScopeContextValue {
     toggleExpansion?: (id: string) => void;
     collapseItem?: (id: string) => void;
     collapseAll?: () => void;
-    parentEntityForm?: any;
+    parentEntityForm?: EntityForm;
 }
 declare const EntityFormScopeContext: React.Context<EntityFormScopeContextValue>;
 export interface EntityFormScopeProviderProps {
@@ -27,7 +28,7 @@ export interface EntityFormScopeProviderProps {
     maxExpandedItems?: number;
     expansionMode?: 'single' | 'multiple';
     forceModalMode?: boolean;
-    parentEntityForm?: any;
+    parentEntityForm?: EntityForm;
 }
 /**
  * Provider component for EntityFormScope context

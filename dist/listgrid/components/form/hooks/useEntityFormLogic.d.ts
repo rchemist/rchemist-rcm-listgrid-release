@@ -54,8 +54,8 @@ export declare function useEntityFormLogic(props: ViewEntityFormProps): {
     showModal: (options: ModalOptions) => string;
     closeModal: (id: string) => Promise<void>;
     closeTopModal: () => Promise<void>;
-    getModalData: (id: string) => any;
-    updateModalData: (id: string, data: any) => void;
+    getModalData: (id: string) => unknown;
+    updateModalData: (id: string, data: Partial<ModalOptions>) => void;
     resetEntityForm: (delay?: number, preserveState?: boolean) => Promise<void>;
     triggerAutoSave: () => void;
     clearAutoSave: () => void;

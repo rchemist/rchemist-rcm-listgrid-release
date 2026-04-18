@@ -12,6 +12,9 @@
 // synthetic responses (e.g. client-side 500s when session is missing).
 // The original @gjcu/ui ResponseData was also a class; instance methods like
 // `isError()` are preserved.
+// T defaults to `any` — legacy callers dereference `response.data.field` directly
+// (see DECISIONS #21 / generic entity payload). Tightening to `unknown` breaks
+// downstream components outside this B-1 scope.
 export class ResponseData {
     constructor(init) {
         this.data = null;

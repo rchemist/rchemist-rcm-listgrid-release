@@ -57,7 +57,7 @@ export declare class SearchForm {
     withPreservedFilters(...filters: SearchValueConfig[]): this;
     withPageSize(pageSize: number): this;
     withSort(fieldName: string, direction?: Direction): this;
-    handleAndFilter(fieldName: string, value: any, op?: QueryConditionType, not?: boolean): this;
+    handleAndFilter(fieldName: string, value: string | number | boolean | string[] | null | undefined, op?: QueryConditionType, not?: boolean): this;
     withFilter(condition: 'AND' | 'OR', ...filterItems: FilterItem[]): this;
     withFilterIgnoreDuplicate(condition: 'AND' | 'OR', ...filterItems: FilterItem[]): this;
     isShouldReturnEmpty(): boolean;
@@ -68,9 +68,9 @@ export declare class SearchForm {
     clearSorts(): SearchForm;
     getFilters(): Map<'AND' | 'OR', FilterItem[]>;
     getSorts(): Map<string, Direction>;
-    filterValues(): Map<string, any>;
+    filterValues(): Map<string, string | string[]>;
     filterItems(): Map<string, {
-        value: string;
+        value: string | string[];
         operator: QueryConditionType;
     }>;
     getPage(): number;
@@ -82,7 +82,7 @@ export declare class SearchForm {
     isFilteredOrSorted(...fieldNames: string[]): boolean;
     clearFilterAndSort(): this;
     getSortDirection(name: string): Direction | null;
-    getSearchValue(name: string): any;
+    getSearchValue(name: string): string | string[] | null | undefined;
     /**
      * 조건 유형별 필터 조회
      * @param condition 'AND' 또는 'OR'
@@ -94,7 +94,7 @@ export declare class SearchForm {
      * @param name 필드명
      * @returns 필터 값 또는 null
      */
-    getSearchValueFromAnyCondition(name: string): any;
+    getSearchValueFromAnyCondition(name: string): string | string[] | null | undefined;
     /**
      * 다중 필드 OR 검색 필터 생성
      * @param value 검색값

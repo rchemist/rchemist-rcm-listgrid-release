@@ -3,6 +3,7 @@ import { FieldRenderParameters } from '../../config/EntityField';
 import React from "react";
 import { Validation } from '../../validations/Validation';
 import { RenderType } from '../../config/Config';
+import { EntityForm } from '../../config/EntityForm';
 interface TelephoneNumberFieldProps extends ListableFormFieldProps {
     validations?: Validation[];
 }
@@ -16,11 +17,11 @@ export declare class TelephoneNumberField extends ListableFormField<TelephoneNum
     /**
      * TelephoneNumberField 표시값 가져오기 (하이픈 포맷팅)
      */
-    getDisplayValue(entityForm: any, renderType?: RenderType): Promise<any>;
+    getDisplayValue(entityForm: EntityForm, renderType?: RenderType): Promise<any>;
     /**
      * TelephoneNumberField 저장값 가져오기 (하이픈 제거)
      */
-    getSaveValue(entityForm: any, renderType?: RenderType): Promise<any>;
+    getSaveValue(entityForm: EntityForm, renderType?: RenderType): Promise<any>;
     /**
      * TelephoneNumberField 리스트 아이템 렌더링 (하이픈 포맷팅)
      */

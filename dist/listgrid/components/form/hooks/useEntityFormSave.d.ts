@@ -1,6 +1,7 @@
 import { EntityForm } from '../../../config/EntityForm';
 import { EntityButtonLinkProps, RenderType } from '../../../config/Config';
 import { Session } from '../../../auth/types';
+import type { RouterApi } from '../../../router';
 /**
  * Custom hook for handling save/delete logic of EntityForm.
  * EntityForm 저장/삭제 로직을 처리하는 커스텀 훅
@@ -11,7 +12,7 @@ export declare const useEntityFormSave: ({ entityForm, isSubCollectionEntity, re
     isSubCollectionEntity: boolean;
     renderType: RenderType | undefined;
     pathname: string;
-    router: any;
+    router: RouterApi;
     buttonLinks?: EntityButtonLinkProps;
     postSave?: (entityForm: EntityForm) => Promise<EntityForm>;
     setEntityForm: (entityForm: EntityForm) => void;

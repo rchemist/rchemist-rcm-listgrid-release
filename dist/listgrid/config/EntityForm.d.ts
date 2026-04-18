@@ -77,7 +77,7 @@ export declare class EntityForm extends EntityFormExtensions {
         tabId: string;
     } | string, hidden?: boolean): this;
     delete(): Promise<EntityFormActionResult>;
-    deleteAll(idList: any[]): Promise<EntityFormActionResult>;
+    deleteAll(idList: (string | number | bigint | null | undefined)[]): Promise<EntityFormActionResult>;
     getFields(type?: FieldType, orderByView?: boolean): EntityField[];
     withOverrideSubmitData(fn: (entityForm: EntityForm, data: any) => Promise<{
         data: any;

@@ -125,6 +125,7 @@ export class EntityFormBase {
     getFetchedEntity() {
         return this.fetchedEntity;
     }
+    // intentional: values object is a generic entity payload
     async getValues() {
         const values = {};
         for (const field of this.fields.values()) {

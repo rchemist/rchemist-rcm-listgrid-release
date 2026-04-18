@@ -1,5 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { Suspense, lazy } from 'react';
+// intentional: generic component loading mirrors next/dynamic ComponentType<any> contract
 export function lazyImport(loader, options = {}) {
     const Lazy = lazy(loader);
     const fallback = options.loading ? options.loading() : null;

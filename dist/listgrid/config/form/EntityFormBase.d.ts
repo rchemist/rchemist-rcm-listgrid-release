@@ -127,7 +127,7 @@ export declare abstract class EntityFormBase {
     getCollection(name: string): SubCollectionField | undefined;
     getValue(name: string): Promise<any>;
     getFetchedEntity(): any;
-    getValues(): Promise<any>;
+    getValues(): Promise<Record<string, any>>;
     hasTab(id: string): boolean;
     getTab(tabId: string): EntityTab | undefined;
     getViewableTabs(includeHide?: boolean, createStepFields?: string[], session?: Session): Promise<EntityTab[]>;

@@ -1,12 +1,12 @@
 export interface IEntityError {
     error: IEntityErrorBody;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export interface IEntityErrorBody {
     error?: boolean | string;
     message?: string;
     fieldError?: Map<string, string[]> | Record<string, string[]>;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export declare class ResponseData<T = any> {
     data: T;

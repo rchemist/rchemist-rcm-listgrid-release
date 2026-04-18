@@ -218,7 +218,7 @@ export const RuleBasedFieldsView = (props) => {
             for (const fieldValue of fieldValues) {
                 const queryConditionType = fieldValue.queryConditionType;
                 const field = getField(fieldValue.name);
-                if (field.type === 'manyToOne') {
+                if (field?.type === 'manyToOne') {
                     // manyToOneField 인 경우에는 두가지 정보를 모두 서버로 보내자.
                     // @ManyToOne 으로 매핑되었을 수도 있고, 단순 key 만 저장하고 있을 수도 있기 때문이다.
                     filterItems.push({

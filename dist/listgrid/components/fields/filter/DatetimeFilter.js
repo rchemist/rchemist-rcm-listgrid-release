@@ -11,6 +11,7 @@ import { fDate, getDefinedDates } from "../../../misc";
 import { FlatPickrDateField } from "../../../ui";
 import { SafePerfectScrollbar } from "../../../ui";
 export const DatetimeFilter = (props) => {
+    // value is either a Promise<any> from filter framework or Date[] from handleValueChange
     const [value, setValue] = useState();
     function handleValueChange(type) {
         const values = getDefinedDates(type);
@@ -20,7 +21,7 @@ export const DatetimeFilter = (props) => {
     useEffect(() => {
         setValue(props.value);
     }, [props.value]);
-    return _jsxs("div", { children: [_jsx(FlatPickrDateField, { type: 'date', name: props.name, onChange: (val => {
+    return _jsxs("div", { children: [_jsx(FlatPickrDateField, { type: 'date', name: props.name, onChange: ((val) => {
                     if (Array.isArray(val) && val.length === 2) {
                         if (val[0] === val[1]) {
                             const until = new Date(val[1]);

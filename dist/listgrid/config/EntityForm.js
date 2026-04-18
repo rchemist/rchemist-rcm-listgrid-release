@@ -153,7 +153,7 @@ export class EntityForm extends EntityFormExtensions {
                         }
                         catch (e) {
                             console.error(e);
-                            if (e.message === '만료된 토큰 정보 입니다.') {
+                            if (e instanceof Error && e.message === '만료된 토큰 정보 입니다.') {
                                 throw new Error('만료된 토큰 정보 입니다.');
                             }
                             return { entityForm: entityForm, errors: ['데이터를 조회할 수 없습니다.'] };
@@ -553,6 +553,7 @@ export class EntityForm extends EntityFormExtensions {
                 let globalError;
                 if (response.error) {
                     try {
+                        // intentional: errorObject shape varies by backend error variant
                         let errorObject;
                         // entityError가 있으면 구조화된 정보 사용
                         if (response.entityError) {
@@ -673,6 +674,7 @@ export class EntityForm extends EntityFormExtensions {
     }
     async getSubmitFormData(forceIncludeExceptOnSave) {
         const renderType = this.getRenderType();
+        // intentional: generic entity payload assembled from heterogeneous fields
         let data = {};
         let error = false;
         let modifiedFields = [];

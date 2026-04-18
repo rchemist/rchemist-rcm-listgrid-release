@@ -2,7 +2,8 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import NextLink from 'next/link';
 import { useRouter, usePathname, useParams, useSearchParams } from 'next/navigation';
 const NextLinkComponent = (props) => {
-    // next/link accepts href as string | UrlObject; we pass through string.
+    // Bridge the framework-agnostic RouterLinkProps (href: string, loose onClick)
+    // into next/link's stricter prop shape via a single localized cast.
     return _jsx(NextLink, { ...props });
 };
 export const nextRouterServices = {

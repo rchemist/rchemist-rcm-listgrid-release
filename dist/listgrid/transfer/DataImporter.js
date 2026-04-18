@@ -281,13 +281,15 @@ export const DataImporter = (props) => {
             catch (error) {
                 console.error('Error in API call:', error);
                 setSuccess(false);
-                setImportError(error.message || '업로드에 실패하였습니다.');
+                const message = error instanceof Error ? error.message : '업로드에 실패하였습니다.';
+                setImportError(message);
             }
         }
         catch (error) {
             console.error('Error in onSubmit:', error);
             setSuccess(false);
-            setErrorMessage(error.message || '업로드 중 오류가 발생했습니다.');
+            const message = error instanceof Error ? error.message : '업로드 중 오류가 발생했습니다.';
+            setErrorMessage(message);
         }
     }
     let resultModalTitle = '';

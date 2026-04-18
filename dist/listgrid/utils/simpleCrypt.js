@@ -28,15 +28,17 @@ export function decrypt(ciphertext, decompress) {
 }
 export function hash(...input) {
     let inputs = '';
+    const normalized = [];
     for (let i = 0; i < input.length; i++) {
-        // TODO stringify
+        let s;
         if (input[i] === undefined || input[i] === null)
-            input[i] = '_NULL_';
+            s = '_NULL_';
         else if (typeof input[i] === 'object')
-            input[i] = stringify(input[i]);
+            s = stringify(input[i]);
         else
-            input[i] = String(input[i]);
-        inputs += input[i].trim();
+            s = String(input[i]);
+        normalized.push(s);
+        inputs += s.trim();
     }
     return CryptoJS.SHA256(inputs).toString();
 }

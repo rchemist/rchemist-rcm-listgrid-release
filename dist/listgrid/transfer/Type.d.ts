@@ -53,7 +53,7 @@ export type SampleDataItem = {
 };
 export interface ImportTransferConfig extends TransferConfig {
     sampleData?: SampleDataItem[][];
-    overrideParseResult?: (formData: DataRowSet, response: any) => {
+    overrideParseResult?: (formData: DataRowSet, response: unknown) => {
         success: boolean;
         result: DataTransferResult;
         error?: string;
@@ -69,7 +69,7 @@ export interface ExportTransferConfig extends TransferConfig {
 export interface TransferConfig {
     fields?: DataField[];
     url?: string;
-    description?: any;
+    description?: ReactNode;
     addedFields?: (row: DataRow) => Promise<DataRow>;
     overrideFormData?: (formData: DataRowSet) => Promise<DataRowSet>;
 }
@@ -87,7 +87,7 @@ export declare class DataTransferConfig implements IDataTransferConfig {
     withExportUrl(exportUrl: string): DataTransferConfig;
     withImportUrl(importUrl: string): DataTransferConfig;
     withExportFileName(exportFileName: string): DataTransferConfig;
-    withImportSampleData(importSampleData: any[]): DataTransferConfig;
+    withImportSampleData(importSampleData: SampleDataItem[][]): DataTransferConfig;
     withAddedExportFields(addedFields?: (row: DataRow) => Promise<DataRow>): DataTransferConfig;
     withAddedImportFields(addedFields?: (row: DataRow) => Promise<DataRow>): DataTransferConfig;
     withOverrideExportFormData(overrideFormData?: (formData: DataRowSet) => Promise<DataRowSet>): DataTransferConfig;
@@ -96,11 +96,13 @@ export declare class DataTransferConfig implements IDataTransferConfig {
     setDataFields(dataFields: DataField[]): void;
     private updateFields;
     private applyIdPolicy;
-    withExportDescription(description: any): DataTransferConfig;
-    withImportDescription(description: any): DataTransferConfig;
-    withImportOverrideParseResult(overrideParseResult: (formData: any, response: any) => {
+    withExportDescription(description: ReactNode): DataTransferConfig;
+    withImportDescription(description: ReactNode): DataTransferConfig;
+    withImportOverrideParseResult(overrideParseResult: (formData: DataRowSet, response: unknown) => {
         success: boolean;
         result: DataTransferResult;
+        error?: string;
+        errorView?: ReactNode;
     }): DataTransferConfig;
     validateDataFields(defaultFields: DataField[]): void;
 }
@@ -159,15 +161,15 @@ export interface DataExportCount {
     totalCount?: number;
 }
 export interface DataExportResult {
-    data: any;
+    data: unknown;
     page: number;
 }
 export declare function createFieldMap(...fields: DataField[]): Map<string, DataField>;
-export declare function getExportFileName(exportFileName: string | undefined, translation: any): string;
-export declare function isDataColumn(value: any): value is DataColumn;
-export declare function isDataRow(value: any): value is DataRow;
-export declare function isDataRowSet(value: any): value is DataRowSet;
-export declare function isSampleDataItem(value: any): value is SampleDataItem;
+export declare function getExportFileName(exportFileName: string | undefined, translation: (key: string) => string): string;
+export declare function isDataColumn(value: unknown): value is DataColumn;
+export declare function isDataRow(value: unknown): value is DataRow;
+export declare function isDataRowSet(value: unknown): value is DataRowSet;
+export declare function isSampleDataItem(value: unknown): value is SampleDataItem;
 export declare function getRangeDateValue(value: any): Promise<any>;
 export declare function getRangeDatetimeValue(value: any): Promise<any>;
 export declare function getImportedRangeDateValue(value: any): Promise<any>;

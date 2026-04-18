@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode } from 'react';
+import type { ComponentType, MouseEvent, ReactNode } from 'react';
 export interface RouterApi {
     push(url: string): void;
     replace(url: string): void;
@@ -11,7 +11,7 @@ export interface RouterLinkProps {
     href: string;
     children?: ReactNode;
     className?: string;
-    onClick?: (event: any) => void;
+    onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
     target?: string;
     [key: string]: any;
 }

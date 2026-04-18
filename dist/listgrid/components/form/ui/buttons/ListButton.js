@@ -18,7 +18,7 @@ export const ListButton = ({ entityForm, router, pathname, buttonLinks, subColle
         const currentOrigin = typeof window !== 'undefined' ? window.location.origin : '';
         // Use router.back() if we came from the list page (preserves URL query params)
         // Otherwise use router.push() for direct access (bookmarks, external links, etc.)
-        if (referrer && referrer.startsWith(currentOrigin) && referrer.includes(listUrl)) {
+        if (router.back && referrer && referrer.startsWith(currentOrigin) && referrer.includes(listUrl)) {
             router.back();
         }
         else {

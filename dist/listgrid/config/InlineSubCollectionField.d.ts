@@ -18,6 +18,7 @@ export interface InlineListFieldConfig {
 }
 /**
  * Row action button configuration
+ * `item` is a generic row payload — host apps know their own entity shape
  */
 export interface InlineRowAction {
     /** Unique action identifier */
