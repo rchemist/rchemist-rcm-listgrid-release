@@ -16,7 +16,7 @@ export const ExcelPasswordField = ({ password, onPasswordChange, error, onErrorC
                                         onPasswordChange('');
                                     }
                                     onErrorChange?.('');
-                                } }), _jsx("span", { className: "rcm-text-sm rcm-text-emphasis", children: usePasswordLabel })] }) }) }), usePassword && (_jsxs("div", { className: "rcm-field-root rcm-field-indent", children: [_jsx("label", { htmlFor: "excelPassword", className: "rcm-field-label", children: passwordLabel }), _jsx("input", { type: "text", className: "rcm-field-input rcm-field-input-compact", id: "excelPassword", name: "excelPassword", maxLength: 32, value: password, onChange: (event) => {
+                                } }), _jsx("span", { className: "rcm-text-sm rcm-text-emphasis", children: usePasswordLabel })] }) }) }), usePassword && (_jsxs("div", { className: "rcm-field-root rcm-field-indent", children: [_jsx("label", { htmlFor: "excelPassword", className: "rcm-field-label", children: passwordLabel }), _jsx("input", { type: "text", className: "rcm-input rcm-field-input-compact", id: "excelPassword", name: "excelPassword", maxLength: 32, value: password, onChange: (event) => {
                             onPasswordChange(event.target.value);
                             onErrorChange?.('');
                         } }), error && _jsx(ShowError, { message: error, gap: "0" })] }))] }));
