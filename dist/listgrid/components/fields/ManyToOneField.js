@@ -174,7 +174,7 @@ export class ManyToOneField extends AbstractManyToOneField {
             if (this.cardIcon) {
                 const IconComponent = this.cardIcon;
                 return {
-                    result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-bool-icon-frame rcm-bool-icon-frame-neutral", children: _jsx(IconComponent, { className: "rcm-bool-icon rcm-bool-icon-neutral", stroke: 1.75 }) }), _jsx("span", { className: "font-medium", children: displayValue })] }))
+                    result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "font-medium", children: displayValue })] }))
                 };
             }
             return { result: displayValue };
@@ -193,7 +193,7 @@ export class ManyToOneField extends AbstractManyToOneField {
             if (this.cardIcon && funcResult) {
                 const IconComponent = this.cardIcon;
                 return {
-                    result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-bool-icon-frame rcm-bool-icon-frame-neutral", children: _jsx(IconComponent, { className: "rcm-bool-icon rcm-bool-icon-neutral", stroke: 1.75 }) }), _jsx("span", { className: "font-medium", children: funcResult })] }))
+                    result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "font-medium", children: funcResult })] }))
                 };
             }
             return { result: funcResult };

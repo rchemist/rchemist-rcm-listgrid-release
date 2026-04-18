@@ -76,7 +76,7 @@ export class BooleanField extends OptionalField {
                 if (this.cardIcon) {
                     const IconComponent = this.cardIcon;
                     return {
-                        result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-bool-icon-frame rcm-bool-icon-frame-neutral", children: _jsx(IconComponent, { className: "rcm-bool-icon rcm-bool-icon-neutral", stroke: 1.75 }) }), _jsx("span", { className: "rcm-bool-label", children: option.label })] }))
+                        result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", children: option.label })] }))
                     };
                 }
                 return { result: option.label };
@@ -85,16 +85,15 @@ export class BooleanField extends OptionalField {
         // boolean 값에 따른 아이콘 렌더링
         if (value === true) {
             const IconComponent = this.cardIcon || IconCheck;
-            const frameClass = this.cardIcon ? 'rcm-bool-icon-frame-neutral' : 'rcm-bool-icon-frame-true';
-            const iconClass = this.cardIcon ? 'rcm-bool-icon-neutral' : 'rcm-bool-icon-true';
+            const frameColor = this.cardIcon ? undefined : 'success';
             return {
-                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: `rcm-bool-icon-frame ${frameClass}`, children: _jsx(IconComponent, { className: `rcm-bool-icon ${iconClass}`, stroke: 2 }) }), _jsx("span", { className: "rcm-bool-label rcm-bool-label-true", children: "\uC608" })] }))
+                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 2 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", "data-color": "success", children: "\uC608" })] }))
             };
         }
         // false 값
         const IconComponent = this.cardIcon || IconX;
         return {
-            result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-bool-icon-frame rcm-bool-icon-frame-neutral", children: _jsx(IconComponent, { className: "rcm-bool-icon rcm-bool-icon-false", stroke: 2 }) }), _jsx("span", { className: "rcm-bool-label rcm-bool-label-false", children: "\uC544\uB2C8\uC624" })] }))
+            result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", "data-tone": "disabled", stroke: 2 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", "data-tone": "muted", children: "\uC544\uB2C8\uC624" })] }))
         };
     }
     /**

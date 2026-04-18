@@ -117,10 +117,9 @@ export class NumberField extends ListableFormField {
             }
             // 일반 모드: 아이콘 + 텍스트
             const IconComponent = this.cardIcon || IconCoin;
-            const frameClass = this.cardIcon ? 'rcm-bool-icon-frame-neutral' : 'rcm-num-icon-frame-currency';
-            const iconClass = this.cardIcon ? 'rcm-bool-icon-neutral' : 'rcm-num-icon-currency';
+            const frameColor = this.cardIcon ? undefined : 'success';
             return {
-                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: `rcm-bool-icon-frame ${frameClass}`, children: _jsx(IconComponent, { className: `rcm-bool-icon ${iconClass}`, stroke: 1.75 }) }), _jsx("span", { className: "rcm-num-value rcm-num-value-emphasis", children: displayText })] }))
+                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-num-value rcm-num-value-emphasis", children: displayText })] }))
             };
         }
         // compact 모드: 텍스트만 반환
@@ -129,10 +128,9 @@ export class NumberField extends ListableFormField {
         }
         // 일반 모드: 아이콘 + 텍스트
         const IconComponent = this.cardIcon || IconHash;
-        const frameClass = this.cardIcon ? 'rcm-bool-icon-frame-neutral' : 'rcm-num-icon-frame-number';
-        const iconClass = this.cardIcon ? 'rcm-bool-icon-neutral' : 'rcm-num-icon-number';
+        const frameColor = this.cardIcon ? undefined : 'info';
         return {
-            result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: `rcm-bool-icon-frame ${frameClass}`, children: _jsx(IconComponent, { className: `rcm-bool-icon ${iconClass}`, stroke: 1.75 }) }), _jsx("span", { className: "rcm-num-value", children: formattedValue })] }))
+            result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-num-value", children: formattedValue })] }))
         };
     }
     /**

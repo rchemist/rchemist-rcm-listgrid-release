@@ -99,19 +99,18 @@ export class DateField extends AbstractDateField {
         }
         // 아이콘 컴포넌트 결정 (cardIcon > 기본 캘린더 아이콘)
         const IconComponent = this.cardIcon || IconCalendar;
-        const frameClass = this.cardIcon ? 'rcm-bool-icon-frame-neutral' : 'rcm-date-icon-frame';
-        const iconClass = this.cardIcon ? 'rcm-bool-icon-neutral' : 'rcm-date-icon';
+        const frameColor = this.cardIcon ? undefined : 'info';
         // range 타입인 경우 시작~끝 포맷
         if (this.range && Array.isArray(value) && value.length === 2) {
             const dateText = `${fDate(value[0], 'yyyy-MM-dd')} ~ ${fDate(value[1], 'yyyy-MM-dd')}`;
             return {
-                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: `rcm-bool-icon-frame ${frameClass}`, children: _jsx(IconComponent, { className: `rcm-bool-icon ${iconClass}`, stroke: 1.75 }) }), _jsx("span", { className: "rcm-bool-label", children: dateText })] }))
+                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", children: dateText })] }))
             };
         }
         // 일반 날짜: yyyy-MM-dd 포맷으로 표시 (캘린더 아이콘 포함)
         const dateText = fDate(value, 'yyyy-MM-dd');
         return {
-            result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: `rcm-bool-icon-frame ${frameClass}`, children: _jsx(IconComponent, { className: `rcm-bool-icon ${iconClass}`, stroke: 1.75 }) }), _jsx("span", { className: "rcm-bool-label", children: dateText })] }))
+            result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", children: dateText })] }))
         };
     }
     /**
