@@ -40,8 +40,8 @@ export const EntireChecker = ({ total, listIds, checkedItems, setCheckedItems, s
     const id = isTrue(subCollection) ? v1() : 'entire-checker';
     // showCheckboxInput이 false면 체크박스 없이 '#' 표시
     if (!showCheckboxInput) {
-        return _jsx("div", { className: "text-center font-medium", children: "#" });
+        return _jsx("div", { className: "rcm-entire-checker-placeholder", children: "#" });
     }
-    return _jsx("input", { type: "checkbox", "aria-label": "\uC804\uCCB4 \uC120\uD0DD", className: "form-checkbox", id: id, checked: checkAll, onChange: () => checkAllItems() });
+    return _jsx("input", { type: "checkbox", "aria-label": "\uC804\uCCB4 \uC120\uD0DD", className: "rcm-checkbox", id: id, checked: checkAll, onChange: () => checkAllItems() });
 };
 //# sourceMappingURL=EntireChecker.js.map

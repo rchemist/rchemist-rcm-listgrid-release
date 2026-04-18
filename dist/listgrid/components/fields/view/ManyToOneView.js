@@ -226,9 +226,7 @@ export const ManyToOneView = ({ config, required, parentEntityForm, ...props }) 
                 }, subCollection: true, readonly: true }))
         });
     };
-    return (_jsx("div", { className: "rcm-input-group-full", children: _jsxs("div", { className: "rcm-input-group-full-center", children: [_jsx("div", { className: "rcm-input-group-full-relative", children: _jsx("div", { className: "dropdown flex w-full", children: _jsx("input", { type: "text", className: `peer cursor-pointer form-input 
-                w-full min-w-full cursor-not-allowed font-normal focus:!border-white-light 
-                rounded-r-none border-r-0 !pr-10`, placeholder: !readonly ? `찾기 버튼을 눌러 ${props.label} 을(를) 선택해 주세요` : '', value: name, disabled: readonly, readOnly: true, onClick: () => {
+    return (_jsx("div", { className: "rcm-input-group-full", children: _jsxs("div", { className: "rcm-input-group-full-center", children: [_jsx("div", { className: "rcm-input-group-full-relative", children: _jsx("div", { className: "rcm-m2o-input-wrap", children: _jsx("input", { type: "text", className: "rcm-input rcm-m2o-input", placeholder: !readonly ? `찾기 버튼을 눌러 ${props.label} 을(를) 선택해 주세요` : '', value: name, disabled: readonly, readOnly: true, onClick: () => {
                                 if (!isBlank(value)) {
                                     if (isModifiable && !readonly) {
                                         handleEditModal();

@@ -17,7 +17,7 @@ export const LinkFieldView = (props) => {
     useEffect(() => {
         setValue(props.value);
     }, [props.value]);
-    const input = _jsx("input", { type: 'text', className: readonlyClass(props.readonly, `form-input ${!isBlank(value) ? ' rounded-r-none border-r-0' : ''} ${props.className}`), id: `${props.name}`, value: value ?? '', placeholder: props.placeHolder, disabled: props.readonly, min: props.min, max: props.max, onChange: (e) => {
+    const input = _jsx("input", { type: 'text', className: readonlyClass(props.readonly, `rcm-input${!isBlank(value) ? ' rcm-link-input-grouped' : ''}${props.className ? ' ' + props.className : ''}`), id: `${props.name}`, value: value ?? '', placeholder: props.placeHolder, disabled: props.readonly, min: props.min, max: props.max, onChange: (e) => {
             const value = e.target.value ?? '';
             setValidatedValue(props, value, setValue);
         } });
@@ -26,7 +26,7 @@ export const LinkFieldView = (props) => {
                                 window.open(normalizeUrl(value), "_blank");
                             }, children: _jsx(IconExternalLink, { className: "rcm-m2o-action-icon" }) }))] }) }) });
     }
-    return (_jsx("div", { className: "rcm-input-group-full", children: _jsxs("div", { className: "rcm-input-group-full-center", children: [_jsx("div", { className: "rcm-input-group-full-relative", children: _jsx("div", { className: "dropdown flex w-full", children: input }) }), !isBlank(value) && (_jsx("button", { type: "button", className: "rcm-link-button rcm-input-addon-btn", onClick: () => {
+    return (_jsx("div", { className: "rcm-input-group-full", children: _jsxs("div", { className: "rcm-input-group-full-center", children: [_jsx("div", { className: "rcm-input-group-full-relative", children: _jsx("div", { className: "rcm-m2o-input-wrap", children: input }) }), !isBlank(value) && (_jsx("button", { type: "button", className: "rcm-link-button rcm-input-addon-btn", onClick: () => {
                         window.open(normalizeUrl(value), "_blank");
                     }, children: _jsx(IconExternalLink, { className: "rcm-m2o-action-icon" }) }))] }) }));
 };

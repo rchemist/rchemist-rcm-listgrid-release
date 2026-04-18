@@ -32,7 +32,7 @@ export const RowItem = (props) => {
         if (props.onSelect) {
             colspan++;
         }
-        return _jsx("tbody", { className: themeClasses.table?.tbody ?? "overflow-auto p-0 !border-0", children: _jsx("tr", { children: _jsx("td", { colSpan: colspan, children: _jsx("div", { className: themeClasses.empty?.container ?? "flex h-full !border-0 min-h-[400px] items-center whitespace-nowrap justify-center text-md sm:min-h-[300px]", children: props.messages?.noData ?? '데이터가 없습니다.' }) }) }) });
+        return _jsx("tbody", { className: themeClasses.table?.tbody ?? "rcm-listgrid-tbody", children: _jsx("tr", { children: _jsx("td", { colSpan: colspan, children: _jsx("div", { className: themeClasses.empty?.container ?? "rcm-listgrid-empty", children: props.messages?.noData ?? '데이터가 없습니다.' }) }) }) });
     }
     return _jsx(React.Fragment, { children: showList() });
     function onDrag(list) {
@@ -46,12 +46,12 @@ export const RowItem = (props) => {
     function showList() {
         const totalCount = sortableList.length - 1;
         if (props.managePriority) {
-            return _jsx(ReactSortable, { tag: 'tbody', list: sortableList, setList: list => sortRowsPriority(list), animation: 200, swap: true, swapThreshold: 1, className: themeClasses.table?.tbody ?? "overflow-auto p-0 !border-0", children: sortableList.map((item, index) => {
+            return _jsx(ReactSortable, { tag: 'tbody', list: sortableList, setList: list => sortRowsPriority(list), animation: 200, swap: true, swapThreshold: 1, className: themeClasses.table?.tbody ?? "rcm-listgrid-tbody", children: sortableList.map((item, index) => {
                     return _createElement(ViewRows, { ...props, key: `view_row_${item.id}_${index}`, sortableList: sortableList, totalCount: totalCount, draggable: draggable, item: item, index: index, onDrag: onDrag, checkItem: checkItem, selectionOptions: props.selectionOptions, showCheckboxInput: props.showCheckboxInput });
                 }) });
         }
         else {
-            return _jsx("tbody", { className: themeClasses.table?.tbody ?? "overflow-auto p-0 !border-0", children: sortableList.map((item, index) => {
+            return _jsx("tbody", { className: themeClasses.table?.tbody ?? "rcm-listgrid-tbody", children: sortableList.map((item, index) => {
                     return _createElement(ViewRows, { ...props, key: `view_row_${item.id}_${index}`, sortableList: sortableList, totalCount: totalCount, draggable: draggable, item: item, index: index, onDrag: onDrag, checkItem: checkItem, selectionOptions: props.selectionOptions, showCheckboxInput: props.showCheckboxInput });
                 }) });
         }

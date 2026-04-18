@@ -20,7 +20,7 @@ export async function getManyToOneLink(renderType, field) {
         const idName = await field.getMappedIdName(renderType);
         const menuUrl = `${field.config.entityForm.menuUrl}/${idName?.id ?? ''}`;
         const tooltip = `${idName?.name ?? field.getLabel()} 보기`;
-        return _jsx(Tooltip, { label: tooltip, color: 'gray', children: _jsx(Link, { href: menuUrl, target: '_blank', className: "mb-2", children: _jsx(IconExternalLink, { className: 'text-secondary h-4 w-4 ml-1' }) }) });
+        return _jsx(Tooltip, { label: tooltip, color: 'gray', children: _jsx(Link, { href: menuUrl, target: '_blank', className: "rcm-m2o-external-link", children: _jsx(IconExternalLink, { className: "rcm-icon", "data-size": "md", "data-tone": "muted" }) }) });
     }
     return null;
 }

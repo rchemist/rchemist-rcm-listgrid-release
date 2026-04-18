@@ -101,9 +101,9 @@ export const ViewEntityForm = (props) => {
                                                         if (fieldElement) {
                                                             fieldElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                                             // 포커스 효과 추가 (선택사항)
-                                                            fieldElement.classList.add('ring-2', 'ring-primary');
+                                                            fieldElement.classList.add('rcm-field-focus-ring');
                                                             setTimeout(() => {
-                                                                fieldElement.classList.remove('ring-2', 'ring-primary');
+                                                                fieldElement.classList.remove('rcm-field-focus-ring');
                                                             }, 2000);
                                                         }
                                                     }, 100);
@@ -131,6 +131,6 @@ export const ViewEntityForm = (props) => {
                                                     panels.push(_jsx(ViewTabPanel, { id: tab.id, tabIndex: tabIndex, readonly: readonly, subCollectionEntity: isSubCollectionEntity, session: session ?? undefined, createStepFields: createStepFields, entityForm: entityForm, setEntityForm: setEntityForm, resetEntityForm: resetEntityForm, hideMappedByFields: props.hideMappedByFields }, `${index}_${cacheKey}`));
                                                 });
                                                 return panels;
-                                            }() })] }), !showButtonsInTabRow && (_jsxs("div", { className: cn("mt-6 flex flex-col items-center gap-3", classNames.footer?.container), children: [useCreateStep && createStepButtonPosition === 'bottom' && entityForm && (_jsx(CreateStepButtons, { currentStep: currentStep, maxStep: maxStep, entityForm: entityForm, setEntityForm: setEntityForm, setCurrentStep: setCurrentStep, onClickSaveButton: onClickSaveButton, session: session ?? undefined })), !showButtonsInHeader && !(useCreateStep && createStepButtonPosition === 'bottom') && (_jsx(ViewEntityFormButtons, { buttons: buttons }))] }))] }) }) }) })] }));
+                                            }() })] }), !showButtonsInTabRow && (_jsxs("div", { className: cn("rcm-form-footer", classNames.footer?.container), children: [useCreateStep && createStepButtonPosition === 'bottom' && entityForm && (_jsx(CreateStepButtons, { currentStep: currentStep, maxStep: maxStep, entityForm: entityForm, setEntityForm: setEntityForm, setCurrentStep: setCurrentStep, onClickSaveButton: onClickSaveButton, session: session ?? undefined })), !showButtonsInHeader && !(useCreateStep && createStepButtonPosition === 'bottom') && (_jsx(ViewEntityFormButtons, { buttons: buttons }))] }))] }) }) }) })] }));
 };
 //# sourceMappingURL=ViewEntityForm.js.map

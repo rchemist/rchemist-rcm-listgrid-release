@@ -31,6 +31,6 @@ export const CacheClearButton = ({ entityForm, setNotifications, setErrors, onRe
             }
         });
     };
-    return (_jsx("button", { type: "button", className: "btn btn-outline-primary", onClick: handleCacheDelete, children: "\uCE90\uC2DC \uC0AD\uC81C" }));
+    return (_jsx("button", { type: "button", className: "rcm-button", "data-variant": "outline", onClick: handleCacheDelete, children: "\uCE90\uC2DC \uC0AD\uC81C" }));
 };
 //# sourceMappingURL=CacheClearButton.js.map
