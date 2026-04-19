@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 import { Validation } from '../../validations/Validation';
 import { FormField, FormFieldProps } from './abstract';
 import { FieldRenderParameters } from '../../config/EntityField';
-import { PasswordStrength } from "../../ui";
+import { PasswordStrength } from '../../ui';
 interface PasswordFieldProps extends FormFieldProps {
     strength?: PasswordStrength;
 }

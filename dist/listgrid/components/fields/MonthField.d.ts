@@ -1,14 +1,14 @@
 import { ListableFormField, ListableFormFieldProps } from './abstract';
-import React from "react";
+import React from 'react';
 import { FieldRenderParameters } from '../../config/EntityField';
 import { EntityForm } from '../../config/EntityForm';
 import { ValidateResult } from '../../validations/Validation';
-import { MinMaxStringLimit } from "../../form/Type";
+import { MinMaxStringLimit } from '../../form/Type';
 interface MonthFieldProps extends ListableFormFieldProps {
-    limit?: MinMaxStringLimit;
+    limit?: MinMaxStringLimit | undefined;
 }
 export declare class MonthField extends ListableFormField<MonthField> {
-    limit?: MinMaxStringLimit;
+    limit?: MinMaxStringLimit | undefined;
     constructor(name: string, order: number, limit?: MinMaxStringLimit);
     /**
      * MonthField 핵심 렌더링 로직

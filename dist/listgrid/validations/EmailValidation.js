@@ -5,7 +5,7 @@
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import { RegexValidation } from '../validations/RegexValidation';
-import { RegexEmailAddress } from "../misc";
+import { RegexEmailAddress } from '../misc';
 export class EmailValidation extends RegexValidation {
     constructor(id, regex, message) {
         super(id ?? 'EmailValidation', regex ?? RegexEmailAddress, message ?? '이메일 형식으로 입력해주세요');

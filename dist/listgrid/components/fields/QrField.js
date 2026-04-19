@@ -1,6 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { FormField } from './abstract';
-import QRCode from "qrcode.react";
+import QRCode from 'qrcode.react';
 import { isBlank } from '../../utils/StringUtil';
 export class QrField extends FormField {
     constructor(name, order, findValue) {
@@ -27,6 +27,6 @@ export class QrField extends FormField {
     }
 }
 export const QrViewer = (props) => {
-    return _jsx("div", { className: `p-2`, children: _jsx(QRCode, { value: props.value }) });
+    return (_jsx("div", { className: `p-2`, children: _jsx(QRCode, { value: props.value }) }));
 };
 //# sourceMappingURL=QrField.js.map

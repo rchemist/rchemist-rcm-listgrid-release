@@ -6,7 +6,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import { RuleBasedFieldsView } from './RuleBasedFieldView';
-import { RuleConditionValue } from './Type';
+import { RuleConditionValue, } from './Type';
 export const RuleFieldView = (props) => {
     const value = getValue(props.value);
     function getValue(v) {
@@ -30,7 +30,6 @@ export const RuleFieldView = (props) => {
             return undefined;
         }
     }
-    return _jsx("div", { className: 'border rounded-md p-4', children: _jsx(RuleBasedFieldsView, { ...props, value: value, viewType: 'field', onSubmitField: props.onSubmit, onCancel: () => {
-            } }) });
+    return (_jsx("div", { className: 'border rounded-md p-4', children: _jsx(RuleBasedFieldsView, { ...props, value: value, viewType: 'field', onSubmitField: props.onSubmit, onCancel: () => { } }) }));
 };
 //# sourceMappingURL=RuleFieldView.js.map

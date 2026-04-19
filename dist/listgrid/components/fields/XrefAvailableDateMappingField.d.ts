@@ -1,6 +1,6 @@
 import { FormField, FormFieldProps } from './abstract';
 import { FieldRenderParameters } from '../../config/EntityField';
-import React from "react";
+import React from 'react';
 import { EntityForm } from '../../config/EntityForm';
 import { RenderType } from '../../config/Config';
 export interface XrefAvailableDateMappingFieldProps extends FormFieldProps {

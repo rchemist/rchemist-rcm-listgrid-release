@@ -14,9 +14,7 @@ import { useEntityFormTheme } from '../context/EntityFormThemeContext';
 // targeting `.rcm-skeleton` via an unlayered selector.
 const size = (height, width) => ({
     height: typeof height === 'number' ? `${height}px` : height,
-    ...(width !== undefined
-        ? { width: typeof width === 'number' ? `${width}px` : width }
-        : {}),
+    ...(width !== undefined ? { width: typeof width === 'number' ? `${width}px` : width } : {}),
 });
 /**
  * EntityForm 구조 기반 스켈레톤 컴포넌트
@@ -32,19 +30,17 @@ export const ViewEntityFormSkeleton = ({ entityForm, inlineMode = false, subColl
     }
     // 탭 정보 추출
     const tabs = Array.from(entityForm.tabs.values())
-        .filter(tab => !tab.hidden)
+        .filter((tab) => !tab.hidden)
         .sort((a, b) => a.order - b.order);
     const showTabs = tabs.length > 1;
     return (_jsxs("div", { className: cn('rcm-pulse', classNames.root), children: [!inlineMode && (_jsx("div", { className: "rcm-skeleton-row", children: _jsx("div", { className: "rcm-skeleton", style: size(28, 192) }) })), _jsx("div", { className: cn(inlineMode ? 'rcm-panel rcm-panel-compact' : 'rcm-skeleton-panel', inlineMode ? '' : classNames.panel?.container), children: _jsxs("div", { className: cn(inlineMode ? '' : 'rcm-skeleton-inner', inlineMode ? '' : classNames.panel?.inner), children: [inlineMode && (_jsxs("div", { className: showTabs
                                 ? 'rcm-row-between rcm-skeleton-tab-bar'
                                 : 'rcm-row-between rcm-skeleton-row', children: [_jsx("div", { className: "rcm-row rcm-flex-1", children: showTabs &&
-                                        tabs.map((tab, index) => (_jsx("div", { className: index === 0
-                                                ? 'rcm-skeleton rcm-skeleton-accent'
-                                                : 'rcm-skeleton', style: size(32, index === 0 ? 80 : 64) }, tab.id))) }), _jsxs("div", { className: "rcm-row", children: [_jsx("div", { className: "rcm-skeleton rcm-skeleton-accent", style: size(28, 56) }), _jsx("div", { className: "rcm-skeleton rcm-skeleton-danger", style: size(28, 56) })] })] })), !inlineMode && showTabs && (_jsx("div", { className: "rcm-row rcm-skeleton-tab-bar", children: tabs.map((tab, index) => (_jsx("div", { className: index === 0
+                                        tabs.map((tab, index) => (_jsx("div", { className: index === 0 ? 'rcm-skeleton rcm-skeleton-accent' : 'rcm-skeleton', style: size(32, index === 0 ? 80 : 64) }, tab.id))) }), _jsxs("div", { className: "rcm-row", children: [_jsx("div", { className: "rcm-skeleton rcm-skeleton-accent", style: size(28, 56) }), _jsx("div", { className: "rcm-skeleton rcm-skeleton-danger", style: size(28, 56) })] })] })), !inlineMode && showTabs && (_jsx("div", { className: "rcm-row rcm-skeleton-tab-bar", children: tabs.map((tab, index) => (_jsx("div", { className: index === 0
                                     ? 'rcm-skeleton rcm-skeleton-accent rcm-skeleton-tab-active'
                                     : 'rcm-skeleton', style: size(40, index === 0 ? 96 : 80) }, tab.id))) })), tabs.length > 0 && (_jsx(FieldGroupsSkeleton, { fieldGroups: tabs[0].fieldGroups, entityForm: entityForm, subCollectionEntity: subCollectionEntity })), !inlineMode && (_jsxs("div", { className: "rcm-action-bar-end", children: [_jsx("div", { className: "rcm-skeleton rcm-skeleton-accent", style: size(40, 80) }), _jsx("div", { className: "rcm-skeleton", style: size(40, 80) }), _jsx("div", { className: "rcm-skeleton rcm-skeleton-danger", style: size(40, 80) })] }))] }) })] }));
 };
-const FieldGroupsSkeleton = ({ fieldGroups, entityForm, subCollectionEntity }) => {
+const FieldGroupsSkeleton = ({ fieldGroups, entityForm, subCollectionEntity, }) => {
     const sortedGroups = [...fieldGroups].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
     return (_jsx("div", { className: "rcm-stack", children: sortedGroups.map((group) => {
             const containerClass = subCollectionEntity
@@ -54,7 +50,7 @@ const FieldGroupsSkeleton = ({ fieldGroups, entityForm, subCollectionEntity }) =
                             .sort((a, b) => a.order - b.order)
                             .map((fieldItem) => {
                             const field = entityForm.fields.get(fieldItem.name);
-                            return (_jsx(FieldSkeleton, { fieldName: fieldItem.name, field: field }, fieldItem.name));
+                            return (_jsx(FieldSkeleton, { fieldName: fieldItem.name, ...(field !== undefined ? { field } : {}) }, fieldItem.name));
                         }) })] }, group.id));
         }) }));
 };

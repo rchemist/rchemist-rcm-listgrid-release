@@ -7,8 +7,8 @@ import { jsx as _jsx } from "react/jsx-runtime";
  */
 import { FormField } from './abstract';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { MarkdownEditor } from "../../ui";
-import { isEquals } from "../../misc";
+import { MarkdownEditor } from '../../ui';
+import { isEquals } from '../../misc';
 import { isBlank } from '../../utils/StringUtil';
 export class HtmlField extends FormField {
     constructor(name, order) {
@@ -31,7 +31,7 @@ export class HtmlField extends FormField {
             return { result: null };
         }
         return {
-            result: _jsx("div", { dangerouslySetInnerHTML: { __html: String(value) } })
+            result: _jsx("div", { dangerouslySetInnerHTML: { __html: String(value) } }),
         };
     }
     /**
@@ -50,9 +50,7 @@ export class HtmlField extends FormField {
             const isNullDefaultValue = this.isEqualsOrEmpty(this.value.default);
             const isNullFetchedValue = this.isEqualsOrEmpty(this.value.fetched);
             const isNullCurrentValue = this.isEqualsOrEmpty(this.value.current);
-            if (isNullDefaultValue
-                && isNullFetchedValue
-                && isNullCurrentValue) {
+            if (isNullDefaultValue && isNullFetchedValue && isNullCurrentValue) {
                 return false;
             }
             if (this.value.fetched !== undefined) {

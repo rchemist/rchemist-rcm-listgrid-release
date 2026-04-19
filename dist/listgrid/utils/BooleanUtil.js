@@ -11,6 +11,6 @@ export function isTrue(value, defaultValue) {
     if (typeof value === 'boolean') {
         return value;
     }
-    return (value === 'true' || value === '1' || value === 'on' || value === 'yes' || value === '예');
+    return value === 'true' || value === '1' || value === 'on' || value === 'yes' || value === '예';
 }
 //# sourceMappingURL=BooleanUtil.js.map

@@ -6,9 +6,9 @@ export interface DataImportResultViewProps {
 }
 export declare const DataImportResultView: FC<DataImportResultViewProps>;
 export interface ImportErrorViewProps {
-    importError?: string;
-    errorMessage?: string;
-    importErrorView?: ReactNode;
+    importError?: string | undefined;
+    errorMessage?: string | undefined;
+    importErrorView?: ReactNode | undefined;
 }
 export declare const ImportErrorView: FC<ImportErrorViewProps>;
 //# sourceMappingURL=DataImportResultView.d.ts.map

@@ -5,29 +5,31 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { Tooltip } from "../../../../ui";
-import { showConfirm, showSuccess } from "../../../../message";
-import { isEmpty, isTrue } from "../../../../utils";
-import { EntityError, parse, removeTrailingSeparator } from "../../../../misc";
-import { cn } from "../../../../utils/cn";
+import { Tooltip } from '../../../../ui';
+import { showConfirm, showSuccess } from '../../../../message';
+import { isEmpty, isTrue } from '../../../../utils';
+import { EntityError, parse, removeTrailingSeparator } from '../../../../misc';
+import { cn } from '../../../../utils/cn';
 export const DeleteButton = ({ entityForm, router, pathname, buttonLinks, setErrors, openBaseLoading, postDelete, buttonClassNames, ...props }) => {
     const neverDelete = isTrue(entityForm.neverDelete);
     if (neverDelete) {
-        const active = entityForm.getField("active")?.value?.current ?? true;
+        const active = entityForm.getField('active')?.value?.current ?? true;
         if (!active) {
-            return (_jsx(Tooltip, { color: "red", label: `사용 중지 되었습니다. 상태정보 > 사용 여부를 변경해 다시 사용할 수 있습니다.`, children: _jsx("button", { type: "button", disabled: true, className: cn("rcm-button", buttonClassNames?.delete), "data-variant": "primary", "data-color": "error", children: "\uC0AC\uC6A9 \uC548 \uD568" }, "button_delete") }));
+            return (_jsx(Tooltip, { color: "red", label: `사용 중지 되었습니다. 상태정보 > 사용 여부를 변경해 다시 사용할 수 있습니다.`, children: _jsx("button", { type: "button", disabled: true, className: cn('rcm-button', buttonClassNames?.delete), "data-variant": "primary", "data-color": "error", children: "\uC0AC\uC6A9 \uC548 \uD568" }, 'button_delete') }));
         }
     }
-    const message = neverDelete ? "사용 중지" : "삭제";
-    const text = neverDelete ? "이 데이터는 삭제할 수 없으며, 사용 중지 처리만 가능합니다." : "삭제된 데이터는 복구할 수 없습니다.";
-    const confirmButtonText = neverDelete ? "사용 중지" : "삭제";
-    return (_jsx("button", { type: "button", className: cn("rcm-button", buttonClassNames?.delete), "data-variant": "primary", "data-color": "error", onClick: () => {
+    const message = neverDelete ? '사용 중지' : '삭제';
+    const text = neverDelete
+        ? '이 데이터는 삭제할 수 없으며, 사용 중지 처리만 가능합니다.'
+        : '삭제된 데이터는 복구할 수 없습니다.';
+    const confirmButtonText = neverDelete ? '사용 중지' : '삭제';
+    return (_jsx("button", { type: "button", className: cn('rcm-button', buttonClassNames?.delete), "data-variant": "primary", "data-color": "error", onClick: () => {
             (async () => {
                 showConfirm({
                     title: text,
-                    message: message + "하시겠습니까?",
+                    message: message + '하시겠습니까?',
                     confirmButtonText: confirmButtonText,
-                    cancelButtonText: "돌아가기",
+                    cancelButtonText: '돌아가기',
                     onConfirm: async () => {
                         openBaseLoading?.(true);
                         const deleteResult = await entityForm.delete();
@@ -54,7 +56,7 @@ export const DeleteButton = ({ entityForm, router, pathname, buttonLinks, setErr
                                 }
                                 // sub collection 인 경우에는 refresh 가 아니라 지워졌음을 상위로 전파해야 한다.
                                 if (!isTrue(props.subCollection)) {
-                                    const listUrl = result.redirectUrl ?? (removeTrailingSeparator(pathname, "/") || "/");
+                                    const listUrl = result.redirectUrl ?? (removeTrailingSeparator(pathname, '/') || '/');
                                     if (router !== undefined) {
                                         router.push(listUrl);
                                     }
@@ -63,7 +65,7 @@ export const DeleteButton = ({ entityForm, router, pathname, buttonLinks, setErr
                         if (isTrue(deleteResult.refreshOrList)) {
                             // 정상 완료되어 리프레시가 필요한 경우
                             showSuccess({
-                                message: message + "가 완료 되었습니다",
+                                message: message + '가 완료 되었습니다',
                             });
                             setTimeout(() => {
                                 onThen(deleteResult);
@@ -75,12 +77,14 @@ export const DeleteButton = ({ entityForm, router, pathname, buttonLinks, setErr
                                 // {"error":{"error":true,"status":400,"errorType":"CANNOT_DELETE_IS_USED_SEMESTER","message":"학기 정보에 사용중인 등록금 정보를 삭제할 수 없습니다","fieldError":{}}}
                                 // EntityError 형태로 온다는 뜻이다. 문자열을 json 으로 파싱하되, 문자열이 아니라면 그대로 둔다.
                                 const error = deleteResult.errors[0];
-                                if (typeof error === "string") {
+                                if (typeof error === 'string') {
                                     try {
                                         const json = parse(error);
                                         if (json.error) {
                                             const entityError = EntityError.create(json);
-                                            setErrors(entityError.error.message ? [entityError.error.message] : ["삭제 중 오류가 발생했습니다."]);
+                                            setErrors(entityError.error.message
+                                                ? [entityError.error.message]
+                                                : ['삭제 중 오류가 발생했습니다.']);
                                         }
                                     }
                                     catch (e) {
@@ -99,6 +103,6 @@ export const DeleteButton = ({ entityForm, router, pathname, buttonLinks, setErr
                     },
                 });
             })();
-        }, children: message }, "button_delete"));
+        }, children: message }, 'button_delete'));
 };
 //# sourceMappingURL=DeleteButton.js.map

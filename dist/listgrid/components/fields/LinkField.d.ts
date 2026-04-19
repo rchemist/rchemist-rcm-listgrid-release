@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { CheckButtonValidationField, CheckButtonValidationFieldProps, ViewListProps, ViewListResult } from './abstract';
 import { FieldRenderParameters, FilterRenderParameters } from '../../config/EntityField';
 interface LinkFieldProps extends CheckButtonValidationFieldProps {

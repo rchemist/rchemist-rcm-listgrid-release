@@ -6,11 +6,11 @@
  */
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-import { ListableFormField } from './abstract';
+import { ListableFormField, } from './abstract';
 import { PhoneNumberValidation } from '../../validations/PhoneNumberValidation';
 import { RegexValidation } from '../../validations/RegexValidation';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { formatPhoneNumber, removePhoneNumberHyphens } from "../../utils/PhoneUtil";
+import { formatPhoneNumber, removePhoneNumberHyphens } from '../../utils/PhoneUtil';
 import { PhoneNumberFieldView } from './view/PhoneNumberFieldView';
 import { PhoneNumberListView } from './view/PhoneNumberListView';
 export class PhoneNumberField extends ListableFormField {
@@ -36,11 +36,11 @@ export class PhoneNumberField extends ListableFormField {
             // validations에서 RegexValidation 찾기
             let regex;
             if (this.validations) {
-                const regexValidation = this.validations.find(v => v instanceof RegexValidation);
+                const regexValidation = this.validations.find((v) => v instanceof RegexValidation);
                 if (regexValidation) {
                     regex = {
                         pattern: regexValidation.regex,
-                        message: regexValidation.message || '전화번호 형식이 올바르지 않습니다.'
+                        message: regexValidation.message || '전화번호 형식이 올바르지 않습니다.',
                     };
                 }
             }
@@ -79,7 +79,7 @@ export class PhoneNumberField extends ListableFormField {
         if (this.enableSms && value) {
             return Promise.resolve({
                 result: (_jsx(PhoneNumberListView, { phoneNumber: value, formattedValue: formatted, enableSms: this.enableSms, session: props.entityForm.session })),
-                linkOnCell: true // Prevent row click from triggering when clicking the dropdown
+                linkOnCell: true, // Prevent row click from triggering when clicking the dropdown
             });
         }
         return Promise.resolve({ result: formatted });

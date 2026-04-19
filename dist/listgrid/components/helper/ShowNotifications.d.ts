@@ -1,5 +1,5 @@
-import React from "react";
-import { ColorType } from "../../common/type";
+import React from 'react';
+import { ColorType } from '../../common/type';
 interface ListGridNotificationsProps {
     messages?: string[] | Map<string, string>;
     error?: unknown;

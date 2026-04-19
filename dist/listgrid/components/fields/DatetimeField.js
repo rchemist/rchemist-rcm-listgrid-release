@@ -5,15 +5,15 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { AbstractDateField } from './abstract';
-import { fDate, fDateTime, fToNow } from "../../misc";
+import { AbstractDateField, } from './abstract';
+import { fDate, fDateTime, fToNow } from '../../misc';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { FlatPickrDateField } from "../../ui";
+import { FlatPickrDateField } from '../../ui';
 import { isTrue } from '../../utils/BooleanUtil';
 import { DatetimeFilter } from './filter/DatetimeFilter';
 import { isBlank } from '../../utils/StringUtil';
-import { Tooltip } from "../../ui";
-import { TextInput } from "../../ui";
+import { Tooltip } from '../../ui';
+import { TextInput } from '../../ui';
 export class DatetimeField extends AbstractDateField {
     constructor(name, order, limit, range) {
         super(name, order, 'date', limit, range);
@@ -25,10 +25,7 @@ export class DatetimeField extends AbstractDateField {
                 const today = new Date();
                 const tomorrow = new Date(today);
                 tomorrow.setDate(today.getDate() + 1);
-                return [
-                    fDate(today, `yyyy-MM-dd HH:mm`),
-                    fDate(tomorrow, `yyyy-MM-dd HH:mm`)
-                ];
+                return [fDate(today, `yyyy-MM-dd HH:mm`), fDate(tomorrow, `yyyy-MM-dd HH:mm`)];
             }
             return fDate(new Date(), `yyyy-MM-dd'T'HH:mm`);
         }
@@ -42,12 +39,12 @@ export class DatetimeField extends AbstractDateField {
             const readonly = isTrue(this.readonly);
             const value = (await this.getCurrentValue(params.entityForm.getRenderType())) + '';
             if (readonly) {
-                return _jsx(TextInput, { name: `${this.name}_${params.entityForm.id}`, readonly: true, onChange: () => {
+                return (_jsx(TextInput, { name: `${this.name}_${params.entityForm.id}`, readonly: true, onChange: () => {
                         // do nothing
-                    }, value: fDateTime(value) });
+                    }, value: fDateTime(value) }));
             }
             else {
-                return _jsx(FlatPickrDateField, { type: 'datetime', limit: this.limit, range: this.range, ...await getInputRendererParameters(this, params) });
+                return (_jsx(FlatPickrDateField, { type: 'datetime', limit: this.limit, range: this.range, ...await getInputRendererParameters(this, params) }));
             }
         })();
     }
@@ -83,7 +80,9 @@ export class DatetimeField extends AbstractDateField {
                     return Promise.resolve({ result: '' });
                 }
                 else {
-                    return Promise.resolve({ result: _jsx(Tooltip, { label: `${fDateTime(props.item[this.name])}`, children: _jsx("span", { children: value }) }) });
+                    return Promise.resolve({
+                        result: (_jsx(Tooltip, { label: `${fDateTime(props.item[this.name])}`, children: _jsx("span", { children: value }) })),
+                    });
                 }
             }
         }

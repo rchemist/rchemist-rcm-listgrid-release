@@ -1,7 +1,7 @@
 import { EntityFormBase } from '../../config/form/EntityFormBase';
 import { FieldError } from '../../config/EntityFormTypes';
 import { ManageEntityForm } from '../../config/Config';
-export declare abstract class EntityFormValidation extends EntityFormBase {
+export declare abstract class EntityFormValidation<T extends object = any> extends EntityFormBase<T> {
     constructor(name: string, url: string);
     getFieldValidationState(fieldName: string): {
         validated: boolean;

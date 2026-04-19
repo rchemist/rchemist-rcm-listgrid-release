@@ -1,6 +1,6 @@
 import { InputRendererProps } from '../../../config/Config';
-import React from "react";
-import { TooltipColor } from "../../../ui";
+import React from 'react';
+import { TooltipColor } from '../../../ui';
 interface LinkFieldProps extends InputRendererProps {
     min?: string;
     max?: string;

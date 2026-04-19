@@ -1,4 +1,4 @@
-import { ViewListGridClassNames } from "../../types/ViewListGridTheme.types";
+import { ViewListGridClassNames } from '../../types/ViewListGridTheme.types';
 /**
  * 모달용 ListGrid 테마 변형 — 중립 버전.
  *

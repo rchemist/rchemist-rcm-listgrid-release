@@ -6,17 +6,17 @@
  */
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-import { ListableFormField } from './abstract';
+import { ListableFormField, } from './abstract';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import { RegexValidation } from '../../validations/RegexValidation';
-import { readonlyClass } from "../../ui";
-import { formatPhoneNumber, removePhoneNumberHyphens } from "../../utils/PhoneUtil";
+import { readonlyClass } from '../../ui';
+import { formatPhoneNumber, removePhoneNumberHyphens } from '../../utils/PhoneUtil';
 /**
  * 전화번호 입력 내부 컴포넌트 (TelephoneNumberField용)
  * 입력 시 하이픈을 자동으로 제거하고, 표시 시 하이픈을 포맷팅합니다.
  */
-const TelephoneNumberInput = ({ name, value, onChange, onError, readonly = false, placeHolder, regex }) => {
+const TelephoneNumberInput = ({ name, value, onChange, onError, readonly = false, placeHolder, regex, }) => {
     // 표시용 값 (하이픈 포함)
     const [displayValue, setDisplayValue] = useState('');
     // 외부 value가 변경되면 displayValue 동기화 (하이픈 포맷팅)
@@ -61,7 +61,9 @@ const TelephoneNumberInput = ({ name, value, onChange, onError, readonly = false
 export class TelephoneNumberField extends ListableFormField {
     constructor(name, order, validations) {
         super(name, order, 'text');
-        this.validations = validations;
+        if (validations !== undefined) {
+            this.validations = validations;
+        }
     }
     /**
      * TelephoneNumberField 핵심 렌더링 로직
@@ -72,11 +74,11 @@ export class TelephoneNumberField extends ListableFormField {
             // validations에서 RegexValidation 찾기
             let regex;
             if (this.validations) {
-                const regexValidation = this.validations.find(v => v instanceof RegexValidation);
+                const regexValidation = this.validations.find((v) => v instanceof RegexValidation);
                 if (regexValidation) {
                     regex = {
                         pattern: regexValidation.regex,
-                        message: regexValidation.message || '전화번호 형식이 올바르지 않습니다.'
+                        message: regexValidation.message || '전화번호 형식이 올바르지 않습니다.',
                     };
                 }
             }
@@ -120,8 +122,7 @@ export class TelephoneNumberField extends ListableFormField {
         return new TelephoneNumberField(name, order, this.validations);
     }
     static create(props) {
-        return new TelephoneNumberField(props.name, props.order, props.validations)
-            .copyFields(props, true);
+        return new TelephoneNumberField(props.name, props.order, props.validations).copyFields(props, true);
     }
 }
 //# sourceMappingURL=TelephoneNumberField.js.map

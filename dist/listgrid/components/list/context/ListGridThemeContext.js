@@ -4,14 +4,14 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-"use client";
+'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-import { createContext, useContext, useMemo } from "react";
-import { cn as cnUtil } from "../../../utils/cn";
-import { defaultListGridTheme } from "../themes/defaultListGridTheme";
-import { mainListGridTheme } from "../themes/variants/mainTheme";
-import { subCollectionListGridTheme } from "../themes/variants/subCollectionTheme";
-import { modalListGridTheme } from "../themes/variants/modalTheme";
+import { createContext, useContext, useMemo } from 'react';
+import { cn as cnUtil } from '../../../utils/cn';
+import { defaultListGridTheme } from '../themes/defaultListGridTheme';
+import { mainListGridTheme } from '../themes/variants/mainTheme';
+import { subCollectionListGridTheme } from '../themes/variants/subCollectionTheme';
+import { modalListGridTheme } from '../themes/variants/modalTheme';
 /**
  * 두 객체를 깊게 병합하는 유틸리티
  * 커스텀 테마가 기본 테마를 오버라이드
@@ -26,8 +26,8 @@ const deepMerge = (base, override) => {
             const overrideValue = override[key];
             if (baseValue &&
                 overrideValue &&
-                typeof baseValue === "object" &&
-                typeof overrideValue === "object" &&
+                typeof baseValue === 'object' &&
+                typeof overrideValue === 'object' &&
                 !Array.isArray(baseValue) &&
                 !Array.isArray(overrideValue)) {
                 // 중첩 객체 병합
@@ -46,12 +46,12 @@ const deepMerge = (base, override) => {
  */
 const getVariantTheme = (variant) => {
     switch (variant) {
-        case "main":
+        case 'main':
             return mainListGridTheme;
-        case "subCollection":
+        case 'subCollection':
             return subCollectionListGridTheme;
-        case "modal":
-        case "popup":
+        case 'modal':
+        case 'popup':
             return modalListGridTheme;
         default:
             return undefined;
@@ -64,7 +64,7 @@ const getVariantTheme = (variant) => {
 const ListGridThemeContext = createContext({
     classNames: defaultListGridTheme,
     cn: (base, custom) => (custom ? cnUtil(base, custom) : base),
-    variant: "default",
+    variant: 'default',
 });
 /**
  * ListGrid 테마 Provider
@@ -88,7 +88,7 @@ const ListGridThemeContext = createContext({
  * </ListGridThemeProvider>
  * ```
  */
-export const ListGridThemeProvider = ({ theme, variant = "default", children, }) => {
+export const ListGridThemeProvider = ({ theme, variant = 'default', children, }) => {
     const value = useMemo(() => {
         // 1. 기본 테마
         let mergedClassNames = { ...defaultListGridTheme };
@@ -111,7 +111,7 @@ export const ListGridThemeProvider = ({ theme, variant = "default", children, })
             variant,
         };
     }, [theme, variant]);
-    return (_jsx(ListGridThemeContext.Provider, { value: value, children: children }));
+    return _jsx(ListGridThemeContext.Provider, { value: value, children: children });
 };
 /**
  * ListGrid 테마 훅
@@ -136,7 +136,7 @@ export const useListGridTheme = () => {
         return {
             classNames: defaultListGridTheme,
             cn: (base, custom) => (custom ? cnUtil(base, custom) : base),
-            variant: "default",
+            variant: 'default',
         };
     }
     return context;

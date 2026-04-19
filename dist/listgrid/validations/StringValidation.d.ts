@@ -1,7 +1,7 @@
 import { ValidateResult, ValidationItem } from '../validations/Validation';
 import { EntityForm } from '../config/EntityForm';
 import { FieldValue } from '../config/Config';
-import { MinMaxLimit } from "../form/Type";
+import { MinMaxLimit } from '../form/Type';
 export declare class StringValidation extends ValidationItem {
     length?: MinMaxLimit;
     regex?: RegExp;

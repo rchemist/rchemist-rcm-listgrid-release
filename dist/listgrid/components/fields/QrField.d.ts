@@ -1,6 +1,6 @@
 import { FormField } from './abstract';
-import { ReactNode } from "react";
-import { FieldRenderParameters } from "../../config/EntityField";
+import { ReactNode } from 'react';
+import { FieldRenderParameters } from '../../config/EntityField';
 import { EntityForm } from '../../config/EntityForm';
 export declare class QrField extends FormField<QrField> {
     findValue: (entityForm: EntityForm) => Promise<string>;

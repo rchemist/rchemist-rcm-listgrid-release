@@ -12,7 +12,7 @@ import { getAlertStyles } from '../hooks/useAlertManager';
  * AlertItem 컴포넌트
  * 개별 알림 아이템을 렌더링합니다.
  */
-export const AlertItem = React.memo(function AlertItem({ alert, onLinkClick, onClose, t }) {
+export const AlertItem = React.memo(function AlertItem({ alert, onLinkClick, onClose, t, }) {
     const styles = getAlertStyles(alert.color);
     const IconComponent = styles.icon;
     const hasLink = !!alert.link;

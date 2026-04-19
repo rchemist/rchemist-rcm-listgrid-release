@@ -4,41 +4,41 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-"use client";
+'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Static imports for core components
-import { ViewEntityFormTitle } from "./ui/ViewEntityFormTitle";
-import { ViewEntityFormButtons } from "./ui/ViewEntityFormButtons";
-import { ViewEntityFormSkeleton } from "./ui/ViewEntityFormSkeleton";
+import { ViewEntityFormTitle } from './ui/ViewEntityFormTitle';
+import { ViewEntityFormButtons } from './ui/ViewEntityFormButtons';
+import { ViewEntityFormSkeleton } from './ui/ViewEntityFormSkeleton';
 import { Tab } from '@headlessui/react';
 // Dynamic imports to reduce bundle size
-import { dynamic } from "../../utils/lazy";
-import { useEntityFormLogic } from "./hooks/useEntityFormLogic";
-import { clearAllToasts } from "../../message";
+import { dynamic } from '../../utils/lazy';
+import { useEntityFormLogic } from './hooks/useEntityFormLogic';
+import { clearAllToasts } from '../../message';
 // Theme system
-import { useEntityFormTheme } from "./context/EntityFormThemeContext";
+import { useEntityFormTheme } from './context/EntityFormThemeContext';
 // Lazy load heavy components
-const ViewEntityFormErrors = dynamic(() => import("./ui/ViewEntityFormErrors").then(mod => ({ default: mod.ViewEntityFormErrors })), {
-    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-xs" })
+const ViewEntityFormErrors = dynamic(() => import('./ui/ViewEntityFormErrors').then((mod) => ({ default: mod.ViewEntityFormErrors })), {
+    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-xs" }),
 });
-const ViewEntityFormAlerts = dynamic(() => import("./ui/ViewEntityFormAlerts").then(mod => ({ default: mod.ViewEntityFormAlerts })), {
-    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-xs" })
+const ViewEntityFormAlerts = dynamic(() => import('./ui/ViewEntityFormAlerts').then((mod) => ({ default: mod.ViewEntityFormAlerts })), {
+    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-xs" }),
 });
-const ViewTab = dynamic(() => import("./ViewTab").then(mod => ({ default: mod.ViewTab })), {
-    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-tab" })
+const ViewTab = dynamic(() => import('./ViewTab').then((mod) => ({ default: mod.ViewTab })), {
+    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-tab" }),
 });
-const ViewTabPanel = dynamic(() => import("./ViewTabPanel").then(mod => ({ default: mod.ViewTabPanel })), {
-    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-panel" })
+const ViewTabPanel = dynamic(() => import('./ViewTabPanel').then((mod) => ({ default: mod.ViewTabPanel })), {
+    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-panel" }),
 });
-const SafePerfectScrollbar = dynamic(() => import('../../ui').then(mod => ({ default: mod.SafePerfectScrollbar })), {
+const SafePerfectScrollbar = dynamic(() => import('../../ui').then((mod) => ({ default: mod.SafePerfectScrollbar })), {
     ssr: false,
-    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-fill" })
+    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-fill" }),
 });
-const CreateStepView = dynamic(() => import("./ui/CreateStepView").then(mod => ({ default: mod.CreateStepView })), {
-    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-md" })
+const CreateStepView = dynamic(() => import('./ui/CreateStepView').then((mod) => ({ default: mod.CreateStepView })), {
+    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-md" }),
 });
-const CreateStepButtons = dynamic(() => import("./ui/CreateStepButtons").then(mod => ({ default: mod.CreateStepButtons })), {
-    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-lg" })
+const CreateStepButtons = dynamic(() => import('./ui/CreateStepButtons').then((mod) => ({ default: mod.CreateStepButtons })), {
+    loading: () => _jsx("div", { className: "rcm-skeleton-placeholder-lg" }),
 });
 /**
  * ViewEntityForm component (render-only structure)
@@ -62,19 +62,19 @@ export const ViewEntityForm = (props) => {
     // Show loading UI if loading, error, not initialized, or required data is missing
     const loading = loadingError || !initialized || !entityForm || !tabs || tabs.length === 0;
     if (loading) {
-        return (_jsx(ViewEntityFormSkeleton, { entityForm: entityForm, inlineMode: isInlineMode, subCollectionEntity: isSubCollectionEntity }));
+        return (_jsx(ViewEntityFormSkeleton, { ...(entityForm !== undefined ? { entityForm } : {}), inlineMode: isInlineMode, subCollectionEntity: isSubCollectionEntity }));
     }
     // 버튼 위치 결정 (기본값: header)
     // 인라인 모드에서는 탭 영역 옆에 버튼 배치
     const buttonPosition = props.buttonPosition ?? 'header';
     const showButtonsInHeader = buttonPosition === 'header' && !isInlineMode;
     const showButtonsInTabRow = isInlineMode;
-    return (_jsxs("div", { id: `view-entity-form-${entityForm.name}${isSubCollectionEntity ? '-sub' : ''}`, className: classNames.root, children: [_jsxs("div", { className: "rcm-form-sticky-header", children: [_jsxs("div", { className: cn("rcm-form-header", classNames.header?.container), children: [_jsx("div", { className: cn("rcm-form-header-title", classNames.header?.titleWrapper), children: _jsx(ViewEntityFormTitle, { title: title, hideTitle: props.hideTitle }) }), showButtonsInHeader && (_jsx("div", { className: cn("rcm-form-header-buttons", classNames.header?.buttonWrapper), children: _jsx(ViewEntityFormButtons, { buttons: buttons }) }))] }), headerAreaContent && (_jsx("div", { className: cn("rcm-form-header-area", classNames.headerArea?.container), children: headerAreaContent }))] }), useCreateStep && entityForm && (_jsx(CreateStepView, { currentStep: currentStep, setCurrentStep: setCurrentStep, maxStep: maxStep, entityForm: entityForm, setEntityForm: setEntityForm, onClickSaveButton: onClickSaveButton, showStepper: showStepper, setShowStepper: setShowStepper, session: session ?? undefined, buttonPosition: createStepButtonPosition ?? 'top' })), _jsx(SafePerfectScrollbar, { className: cn("rcm-form-scroll-container", classNames.panel?.scrollContainer), children: _jsx("div", { className: cn("rcm-form-layout-wrapper", classNames.panel?.layoutWrapper), children: _jsx("div", { className: cn(isInlineMode ? "rcm-form-panel rcm-form-panel-inline" : "rcm-form-panel", classNames.panel?.container), children: _jsxs("div", { className: cn("rcm-form-panel-inner", classNames.panel?.inner), children: [_jsx(ViewEntityFormAlerts, { alertMessages: entityForm.getAlertMessages(), onRemove: (key) => {
+    return (_jsxs("div", { id: `view-entity-form-${entityForm.name}${isSubCollectionEntity ? '-sub' : ''}`, className: classNames.root, children: [_jsxs("div", { className: "rcm-form-sticky-header", children: [_jsxs("div", { className: cn('rcm-form-header', classNames.header?.container), children: [_jsx("div", { className: cn('rcm-form-header-title', classNames.header?.titleWrapper), children: _jsx(ViewEntityFormTitle, { title: title, ...(props.hideTitle !== undefined ? { hideTitle: props.hideTitle } : {}) }) }), showButtonsInHeader && (_jsx("div", { className: cn('rcm-form-header-buttons', classNames.header?.buttonWrapper), children: _jsx(ViewEntityFormButtons, { buttons: buttons }) }))] }), headerAreaContent && (_jsx("div", { className: cn('rcm-form-header-area', classNames.headerArea?.container), children: headerAreaContent }))] }), useCreateStep && entityForm && (_jsx(CreateStepView, { currentStep: currentStep, setCurrentStep: setCurrentStep, maxStep: maxStep, entityForm: entityForm, setEntityForm: setEntityForm, onClickSaveButton: onClickSaveButton, showStepper: showStepper, setShowStepper: setShowStepper, session: session ?? undefined, buttonPosition: createStepButtonPosition ?? 'top' })), _jsx(SafePerfectScrollbar, { className: cn('rcm-form-scroll-container', classNames.panel?.scrollContainer), children: _jsx("div", { className: cn('rcm-form-layout-wrapper', classNames.panel?.layoutWrapper), children: _jsx("div", { className: cn(isInlineMode ? 'rcm-form-panel rcm-form-panel-inline' : 'rcm-form-panel', classNames.panel?.container), children: _jsxs("div", { className: cn('rcm-form-panel-inner', classNames.panel?.inner), children: [_jsx(ViewEntityFormAlerts, { alertMessages: entityForm.getAlertMessages(), onRemove: (key) => {
                                         const updatedForm = entityForm.clone().removeAlertMessage(key);
                                         setEntityForm(updatedForm);
                                     }, onTabChange: (tabId) => {
                                         // tab id로 tab index 찾기
-                                        const index = tabs.findIndex(tab => tab.id === tabId);
+                                        const index = tabs.findIndex((tab) => tab.id === tabId);
                                         if (index !== -1) {
                                             setSelectedTabIndex(index);
                                             setTabIndex(tabId);
@@ -85,7 +85,7 @@ export const ViewEntityForm = (props) => {
                                         if (field) {
                                             const fieldTabId = field.getTabId();
                                             if (fieldTabId) {
-                                                const tabIdx = tabs.findIndex(tab => tab.id === fieldTabId);
+                                                const tabIdx = tabs.findIndex((tab) => tab.id === fieldTabId);
                                                 if (tabIdx !== -1) {
                                                     setSelectedTabIndex(tabIdx);
                                                     setTabIndex(fieldTabId);
@@ -113,18 +113,19 @@ export const ViewEntityForm = (props) => {
                                     }, tabs: tabs, entityForm: entityForm }), _jsxs(Tab.Group, { selectedIndex: selectedTabIndex, onChange: (index) => {
                                         clearAllToasts();
                                         setSelectedTabIndex(index);
-                                    }, children: [showButtonsInTabRow && (_jsxs("div", { className: `rcm-form-tab-row ${tabs.length > 1 ? 'rcm-form-tab-row-border' : ''}`, children: [_jsx("div", { className: "rcm-form-tab-row-tabs", children: tabs.length > 1 && (_jsx(Tab.List, { className: cn("rcm-tab-list-inline", useCreateStep ? "rcm-hide" : undefined), children: tabs.map((tab, index) => (_jsx(ViewTab, { id: tab.id, label: tab.label, tabIndex: tabIndex, description: tab.description, entityForm: entityForm, createStepFields: createStepFields, setTabIndex: setTabIndex }, `${index}_${cacheKey}_tab`))) })) }), _jsx("div", { className: "rcm-form-tab-buttons", children: _jsx(ViewEntityFormButtons, { buttons: buttons }) })] })), !showButtonsInTabRow && tabs.length > 1 && (_jsx(SafePerfectScrollbar, { className: cn(useCreateStep ? "rcm-hide" : "rcm-tab-scroll"), children: _jsx(Tab.List, { className: cn("rcm-tab-list", classNames.tabs?.list), children: function () {
+                                    }, children: [showButtonsInTabRow && (_jsxs("div", { className: `rcm-form-tab-row ${tabs.length > 1 ? 'rcm-form-tab-row-border' : ''}`, children: [_jsx("div", { className: "rcm-form-tab-row-tabs", children: tabs.length > 1 && (_jsx(Tab.List, { className: cn('rcm-tab-list-inline', useCreateStep ? 'rcm-hide' : undefined), children: tabs.map((tab, index) => (_jsx(ViewTab, { id: tab.id, label: tab.label, tabIndex: tabIndex, description: tab.description, entityForm: entityForm, createStepFields: createStepFields, setTabIndex: setTabIndex }, `${index}_${cacheKey}_tab`))) })) }), _jsx("div", { className: "rcm-form-tab-buttons", children: _jsx(ViewEntityFormButtons, { buttons: buttons }) })] })), !showButtonsInTabRow && tabs.length > 1 && (_jsx(SafePerfectScrollbar, { className: cn(useCreateStep ? 'rcm-hide' : 'rcm-tab-scroll'), children: _jsx(Tab.List, { className: cn('rcm-tab-list', classNames.tabs?.list), children: (function () {
                                                     const tabsView = [];
                                                     tabs.forEach((tab, index) => {
                                                         tabsView.push(_jsx(ViewTab, { id: tab.id, label: tab.label, tabIndex: tabIndex, description: tab.description, entityForm: entityForm, createStepFields: createStepFields, setTabIndex: setTabIndex }, `${index}_${cacheKey}_tab`));
                                                     });
                                                     return tabsView;
-                                                }() }) })), _jsx(Tab.Panels, { children: function () {
+                                                })() }) })), _jsx(Tab.Panels, { children: (function () {
                                                 const panels = [];
                                                 tabs.forEach((tab, index) => {
                                                     panels.push(_jsx(ViewTabPanel, { id: tab.id, tabIndex: tabIndex, readonly: readonly, subCollectionEntity: isSubCollectionEntity, session: session ?? undefined, createStepFields: createStepFields, entityForm: entityForm, setEntityForm: setEntityForm, resetEntityForm: resetEntityForm, hideMappedByFields: props.hideMappedByFields }, `${index}_${cacheKey}`));
                                                 });
                                                 return panels;
-                                            }() })] }), !showButtonsInTabRow && (_jsxs("div", { className: cn("rcm-form-footer", classNames.footer?.container), children: [useCreateStep && createStepButtonPosition === 'bottom' && entityForm && (_jsx(CreateStepButtons, { currentStep: currentStep, maxStep: maxStep, entityForm: entityForm, setEntityForm: setEntityForm, setCurrentStep: setCurrentStep, onClickSaveButton: onClickSaveButton, session: session ?? undefined })), !showButtonsInHeader && !(useCreateStep && createStepButtonPosition === 'bottom') && (_jsx(ViewEntityFormButtons, { buttons: buttons }))] }))] }) }) }) })] }));
+                                            })() })] }), !showButtonsInTabRow && (_jsxs("div", { className: cn('rcm-form-footer', classNames.footer?.container), children: [useCreateStep && createStepButtonPosition === 'bottom' && entityForm && (_jsx(CreateStepButtons, { currentStep: currentStep, maxStep: maxStep, entityForm: entityForm, setEntityForm: setEntityForm, setCurrentStep: setCurrentStep, onClickSaveButton: onClickSaveButton, session: session ?? undefined })), !showButtonsInHeader &&
+                                            !(useCreateStep && createStepButtonPosition === 'bottom') && (_jsx(ViewEntityFormButtons, { buttons: buttons }))] }))] }) }) }) })] }));
 };
 //# sourceMappingURL=ViewEntityForm.js.map

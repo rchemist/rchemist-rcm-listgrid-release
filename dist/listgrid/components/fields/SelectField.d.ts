@@ -1,5 +1,5 @@
-import React from "react";
-import { SelectOption } from "../../form/Type";
+import React from 'react';
+import { SelectOption } from '../../form/Type';
 import { FieldValue } from '../../config/Config';
 import { FieldRenderParameters, FilterRenderParameters } from '../../config/EntityField';
 import { OptionalField, OptionalFieldProps, UserListFieldProps as ListFieldProps, ViewListProps, ViewListResult, ViewRenderProps, ViewRenderResult } from './abstract';

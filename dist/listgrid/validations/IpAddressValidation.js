@@ -6,7 +6,7 @@
  */
 import { ValidationItem } from './Validation';
 // IP 주소 검증 정규식: XXX.XXX.XXX.XXX, XXX.XXX.XXX.*, XXX.XXX.*, XXX.*
-const ipSegment = "(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])";
+const ipSegment = '(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])';
 export const RegexAllowedIpAddr = new RegExp(`^(${ipSegment}\\.${ipSegment}\\.${ipSegment}\\.${ipSegment}|` +
     `${ipSegment}\\.${ipSegment}\\.${ipSegment}\\.\\*|` +
     `${ipSegment}\\.${ipSegment}\\.\\*|` +
@@ -21,8 +21,9 @@ export const RegexAllowedIpAddr = new RegExp(`^(${ipSegment}\\.${ipSegment}\\.${
  * - XXX.* (와일드카드, 예: 192.*)
  */
 export class IpAddressValidation extends ValidationItem {
-    constructor(id = "ip-address-format", message) {
-        super(id, message ?? "유효하지 않은 IP 주소 형식입니다. 허용 형식: XXX.XXX.XXX.XXX, XXX.XXX.XXX.*, XXX.XXX.*, XXX.*");
+    constructor(id = 'ip-address-format', message) {
+        super(id, message ??
+            '유효하지 않은 IP 주소 형식입니다. 허용 형식: XXX.XXX.XXX.XXX, XXX.XXX.XXX.*, XXX.XXX.*, XXX.*');
     }
     validate(entityForm, value, message) {
         const ipAddresses = value?.current;
@@ -30,7 +31,7 @@ export class IpAddressValidation extends ValidationItem {
             return Promise.resolve(this.returnValidateResult(false, message));
         }
         for (const ip of ipAddresses) {
-            if (!ip || ip.trim() === "")
+            if (!ip || ip.trim() === '')
                 continue;
             if (!RegexAllowedIpAddr.test(ip.trim())) {
                 const errorMessage = `유효하지 않은 IP 주소 형식입니다: ${ip}. 허용 형식: 숫자 XXX.XXX.XXX.XXX, XXX.XXX.XXX.*, XXX.XXX.*, XXX.*`;
@@ -57,7 +58,7 @@ export function validateIpAddressTag(value) {
     }
     return {
         valid: false,
-        message: `유효하지 않은 IP 주소 형식입니다: ${value}. 허용 형식: XXX.XXX.XXX.XXX, XXX.XXX.XXX.*, XXX.XXX.*, XXX.*`
+        message: `유효하지 않은 IP 주소 형식입니다: ${value}. 허용 형식: XXX.XXX.XXX.XXX, XXX.XXX.XXX.*, XXX.XXX.*, XXX.*`,
     };
 }
 //# sourceMappingURL=IpAddressValidation.js.map

@@ -12,8 +12,8 @@ import { jsx as _jsx } from "react/jsx-runtime";
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { useCallback } from "react";
-import { useContentAsset } from "./hooks/useContentAsset";
+import { useCallback } from 'react';
+import { useContentAsset } from './hooks/useContentAsset';
 import { ContentAssetItemUI } from './components/ContentAssetItemUI';
 import { AddContentDialog } from './components/AddContentDialog';
 import { useModalManagerStore } from '../../../store';
@@ -22,14 +22,14 @@ import { useModalManagerStore } from '../../../store';
  * ContentAssetField의 메인 렌더링 컴포넌트
  */
 export const ContentAssetItem = (props) => {
-    const { assets, loading, errors, titleErrors, setTitleErrors, handleAddAsset, handleRemoveAsset, handleUpdateAsset, handleTitleBlur, handleFileUpload, validateAll, canAddMore, isEmpty, isReadonly } = useContentAsset({
+    const { assets, loading, errors, titleErrors, setTitleErrors, handleAddAsset, handleRemoveAsset, handleUpdateAsset, handleTitleBlur, handleFileUpload, validateAll, canAddMore, isEmpty, isReadonly, } = useContentAsset({
         value: props.value,
         onChange: props.onChange,
         onError: props.onError,
         clearError: props.clearError,
         entityForm: props.entityForm,
         maxItems: props.maxItems,
-        readonly: props.readonly
+        readonly: props.readonly,
     });
     // GlobalModalManager 사용
     const { openModal } = useModalManagerStore();
@@ -38,8 +38,8 @@ export const ContentAssetItem = (props) => {
     // 항목 추가 - 다이얼로그 열기
     const handleAddItem = useCallback(() => {
         openModal({
-            title: "컨텐츠 추가",
-            size: "sm",
+            title: '컨텐츠 추가',
+            size: 'sm',
             content: (_jsx(AddContentDialog, { onAdd: (title, content) => {
                     // 새 항목 추가
                     handleAddAsset();
@@ -50,9 +50,9 @@ export const ContentAssetItem = (props) => {
                     if (content) {
                         handleUpdateAsset(newIndex, 'content', content);
                     }
-                }, existingTitles: assets.map(asset => asset.title) })),
+                }, existingTitles: assets.map((asset) => asset.title) })),
             closeOnEscape: true,
-            closeOnClickOutside: true
+            closeOnClickOutside: true,
         });
     }, [openModal, handleAddAsset, handleUpdateAsset, assets]);
     // Title 변경 핸들러
@@ -60,7 +60,7 @@ export const ContentAssetItem = (props) => {
         handleUpdateAsset(index, 'title', value);
         // 타이핑 중에는 에러 제거
         if (titleErrors[index]) {
-            setTitleErrors(prev => {
+            setTitleErrors((prev) => {
                 const newErrors = { ...prev };
                 delete newErrors[index];
                 return newErrors;

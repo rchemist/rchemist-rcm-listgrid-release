@@ -17,7 +17,7 @@ export class RegexValidation extends ValidationItem {
         if (isBlank(currentValue)) {
             return Promise.resolve(this.returnValidateResult(false, message));
         }
-        const error = (!this.regex.test(currentValue));
+        const error = !this.regex.test(currentValue);
         return Promise.resolve(this.returnValidateResult(error, message));
     }
 }

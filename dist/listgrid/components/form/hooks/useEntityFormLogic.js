@@ -5,19 +5,19 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { usePathname, useRouter } from "../../../router";
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { usePathname, useRouter } from '../../../router';
 import { isTrue } from '../../../utils/BooleanUtil';
 import { useModalManagerStore } from '../../../store';
 import { useSession } from '../../../auth';
-import { useLoadingStore } from "../../../loading";
+import { useLoadingStore } from '../../../loading';
 // Dynamic import for getEntityFormButtons to reduce bundle size
-import { showSuccess } from "../../../message";
+import { showSuccess } from '../../../message';
 import { subStringBeforeLast } from '../../../utils/StringUtil';
-import { useEntityFormInitializer } from "./useEntityFormInitializer";
-import { useEntityFormSave } from "./useEntityFormSave";
-import { useEntityFormTitle } from "./useEntityFormTitle";
-import { useEntityFormAutoSave } from "./useEntityFormAutoSave";
+import { useEntityFormInitializer } from './useEntityFormInitializer';
+import { useEntityFormSave } from './useEntityFormSave';
+import { useEntityFormTitle } from './useEntityFormTitle';
+import { useEntityFormAutoSave } from './useEntityFormAutoSave';
 /**
  * useEntityFormLogic 훅
  * - ViewEntityForm의 모든 상태/핸들러/로직을 관리하는 커스텀 훅
@@ -29,14 +29,16 @@ export function useEntityFormLogic(props) {
     // 상태 선언
     const [entityForm, setEntityForm] = useState();
     const entityFormRef = useRef(entityForm);
-    useEffect(() => { entityFormRef.current = entityForm; }, [entityForm]);
+    useEffect(() => {
+        entityFormRef.current = entityForm;
+    }, [entityForm]);
     const [tabIndex, setTabIndex] = useState();
     const [cacheKey, setCacheKey] = useState();
     const [loadingError, setLoadingError] = useState(false);
     const [initialized, setInitialized] = useState(false);
     const [errors, setErrors] = useState([]);
     const [notifications, setNotifications] = useState([]);
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState('');
     const [renderType, setRenderType] = useState();
     const [selectedTabIndex, setSelectedTabIndex] = useState(0);
     const [currentStep, setCurrentStep] = useState(0);
@@ -77,7 +79,7 @@ export function useEntityFormLogic(props) {
     // title 계산 훅 (title 반환형)
     const getEntityFormTitle = useEntityFormTitle({
         entityForm: entityForm ?? props.entityForm,
-        customTitle: props.title,
+        ...(props.title !== undefined ? { customTitle: props.title } : {}),
     });
     // title 갱신 함수 - useCallback으로 메모이제이션
     const updateTitle = useCallback(async (form) => {
@@ -104,7 +106,7 @@ export function useEntityFormLogic(props) {
             const result = await props.postSave(entityForm);
             if (isSubCollectionEntity) {
                 await showSuccess({
-                    message: "데이터가 저장되었습니다.",
+                    message: '데이터가 저장되었습니다.',
                     topLayer: true,
                 });
                 setTimeout(() => {
@@ -117,10 +119,10 @@ export function useEntityFormLogic(props) {
             return result;
         }
         if (!isSubCollectionEntity) {
-            if (renderType === "create") {
-                const url = subStringBeforeLast(pathname, "/add") + "/" + entityForm.id;
+            if (renderType === 'create') {
+                const url = subStringBeforeLast(pathname, '/add') + '/' + entityForm.id;
                 await showSuccess({
-                    message: "데이터가 저장되었습니다.",
+                    message: '데이터가 저장되었습니다.',
                     topLayer: true,
                 });
                 setTimeout(() => {
@@ -129,15 +131,15 @@ export function useEntityFormLogic(props) {
             }
             else {
                 setCacheKey(`${new Date().getTime()}`);
-                setNotifications(["데이터가 저장되었습니다."]);
+                setNotifications(['데이터가 저장되었습니다.']);
                 setEntityForm(entityForm);
                 await updateTitle(entityForm);
             }
         }
         else {
             await showSuccess({
-                message: "데이터가 저장되었습니다.",
-                topLayer: true
+                message: '데이터가 저장되었습니다.',
+                topLayer: true,
             });
             setTimeout(() => {
                 if (props.buttonLinks?.onSave) {
@@ -147,7 +149,15 @@ export function useEntityFormLogic(props) {
         }
         await updateTitle(entityForm);
         return entityForm;
-    }, [props.postSave, props.buttonLinks, isSubCollectionEntity, renderType, pathname, router, updateTitle]);
+    }, [
+        props.postSave,
+        props.buttonLinks,
+        isSubCollectionEntity,
+        renderType,
+        pathname,
+        router,
+        updateTitle,
+    ]);
     const postDelete = useCallback(async (entityForm) => {
         if (props.postDelete) {
             await props.postDelete(entityForm);
@@ -158,9 +168,9 @@ export function useEntityFormLogic(props) {
         entityForm: props.entityForm,
         isSubCollectionEntity,
         pathname: pathname,
-        session: session ?? undefined,
-        buttonLinks: props.buttonLinks,
-        onInitialize: props.onInitialize,
+        ...(session ? { session } : {}),
+        ...(props.buttonLinks !== undefined ? { buttonLinks: props.buttonLinks } : {}),
+        ...(props.onInitialize !== undefined ? { onInitialize: props.onInitialize } : {}),
         setTabs,
         setTabIndex,
         setEntityForm,
@@ -174,7 +184,7 @@ export function useEntityFormLogic(props) {
         renderType,
         pathname: pathname,
         router,
-        buttonLinks: props.buttonLinks,
+        ...(props.buttonLinks !== undefined ? { buttonLinks: props.buttonLinks } : {}),
         postSave: postSave,
         setEntityForm,
         setNotifications,
@@ -182,12 +192,12 @@ export function useEntityFormLogic(props) {
         setCacheKey,
         setErrors,
         setOpenBaseLoading,
-        session: session ?? undefined,
+        ...(session ? { session } : {}),
     });
     // 최초 마운트 시 EntityForm 초기화
     useEffect(() => {
-        if (!initialized && typeof window !== "undefined" && props.entityForm) {
-            setRenderType(props.entityForm.id !== undefined ? "update" : "create");
+        if (!initialized && typeof window !== 'undefined' && props.entityForm) {
+            setRenderType(props.entityForm.id !== undefined ? 'update' : 'create');
             initializeEntityForm();
             setInitialized(true);
         }
@@ -201,9 +211,9 @@ export function useEntityFormLogic(props) {
     }, [entityForm, session]);
     // AutoSave 훅 초기화
     const { triggerSave: triggerAutoSave, clearAutoSave, saveNow: saveAutoSaveNow, } = useEntityFormAutoSave({
-        entityForm,
+        ...(entityForm !== undefined ? { entityForm } : {}),
         enabled: props.autoSave ?? false,
-        autoSaveKey: props.autoSaveKey,
+        ...(props.autoSaveKey !== undefined ? { autoSaveKey: props.autoSaveKey } : {}),
     });
     // clearAutoSaveRef 업데이트 (postSave에서 사용)
     useEffect(() => {
@@ -240,9 +250,10 @@ export function useEntityFormLogic(props) {
             }, 100);
             return () => clearTimeout(timer);
         }
+        return undefined;
     }, [entityForm, initialized, loadingError, props.onLoad]);
     // CreateStep 관련 - useMemo로 메모이제이션
-    const useCreateStep = useMemo(() => renderType === "create" &&
+    const useCreateStep = useMemo(() => renderType === 'create' &&
         entityForm?.getCreateStep() !== undefined &&
         entityForm?.getCreateStep().length > 0, [renderType, entityForm]);
     const maxStep = useMemo(() => (entityForm?.getCreateStep()?.length ?? 1) - 1, [entityForm]);
@@ -266,7 +277,7 @@ export function useEntityFormLogic(props) {
             for (const tab of allTabs) {
                 const viewableFieldGroups = await entityForm.getViewableFieldGroups({
                     tabId: tab.id,
-                    createStepFields: step.fields
+                    createStepFields: step.fields,
                 });
                 if (viewableFieldGroups.length > 0) {
                     firstVisibleTabId = tab.id;
@@ -274,7 +285,7 @@ export function useEntityFormLogic(props) {
                 }
             }
             if (firstVisibleTabId) {
-                const tabIndex = allTabs.findIndex(tab => tab.id === firstVisibleTabId);
+                const tabIndex = allTabs.findIndex((tab) => tab.id === firstVisibleTabId);
                 setTabIndex(firstVisibleTabId);
                 setSelectedTabIndex(tabIndex);
             }
@@ -310,15 +321,15 @@ export function useEntityFormLogic(props) {
         const updateButtons = async () => {
             try {
                 // Dynamic import to reduce initial bundle size
-                const { getEntityFormButtons } = await import("../ui/ViewEntityFormButtons");
+                const { getEntityFormButtons } = await import('../ui/ViewEntityFormButtons');
                 const newButtons = await getEntityFormButtons({
                     readonly: readonly,
                     entityForm: entityForm,
                     postSave: postSave,
                     postDelete: postDelete,
-                    buttonLinks: props.buttonLinks,
-                    buttons: props.buttons,
-                    excludeButtons: props.excludeButtons,
+                    ...(props.buttonLinks !== undefined ? { buttonLinks: props.buttonLinks } : {}),
+                    ...(props.buttons !== undefined ? { buttons: props.buttons } : {}),
+                    ...(props.excludeButtons !== undefined ? { excludeButtons: props.excludeButtons } : {}),
                     subCollection: isSubCollectionEntity,
                     setEntityForm: setEntityForm,
                     setErrors: setErrors,
@@ -385,7 +396,7 @@ export function useEntityFormLogic(props) {
                 for (const tab of allTabs) {
                     const viewableFieldGroups = await ef.getViewableFieldGroups({
                         tabId: tab.id,
-                        createStepFields: step.fields
+                        createStepFields: step.fields,
                     });
                     if (viewableFieldGroups.length > 0) {
                         firstVisibleTabId = tab.id;
@@ -393,7 +404,7 @@ export function useEntityFormLogic(props) {
                     }
                 }
                 if (firstVisibleTabId) {
-                    const tabIndex = allTabs.findIndex(tab => tab.id === firstVisibleTabId);
+                    const tabIndex = allTabs.findIndex((tab) => tab.id === firstVisibleTabId);
                     setTabIndex(firstVisibleTabId);
                     setSelectedTabIndex(tabIndex);
                 }
@@ -412,13 +423,13 @@ export function useEntityFormLogic(props) {
         const currentScroll = preserveState ? window.scrollY : 0;
         // 지연 시간이 있으면 대기
         if (delay && delay > 0) {
-            await new Promise(resolve => setTimeout(resolve, delay));
+            await new Promise((resolve) => setTimeout(resolve, delay));
         }
         // BaseLoading 표시
         setOpenBaseLoading(true);
         try {
             // 로딩이 표시될 시간을 주기 위한 짧은 대기
-            await new Promise(resolve => setTimeout(resolve, 50));
+            await new Promise((resolve) => setTimeout(resolve, 50));
             // EntityForm 재초기화 - 이미 생성된 initializeEntityForm 함수 사용
             if (props.entityForm) {
                 await initializeEntityForm({ preserveTabIndex: preserveState });
@@ -428,7 +439,7 @@ export function useEntityFormLogic(props) {
                     setTimeout(() => {
                         window.scrollTo({
                             top: currentScroll,
-                            behavior: "instant"
+                            behavior: 'instant',
                         });
                     }, 50);
                 }
@@ -443,7 +454,17 @@ export function useEntityFormLogic(props) {
             // 로딩 종료
             setOpenBaseLoading(false);
         }
-    }, [tabIndex, selectedTabIndex, props.entityForm, initializeEntityForm, setOpenBaseLoading, setTabIndex, setSelectedTabIndex, setCacheKey, setLoadingError]);
+    }, [
+        tabIndex,
+        selectedTabIndex,
+        props.entityForm,
+        initializeEntityForm,
+        setOpenBaseLoading,
+        setTabIndex,
+        setSelectedTabIndex,
+        setCacheKey,
+        setLoadingError,
+    ]);
     return {
         entityForm,
         setEntityForm,

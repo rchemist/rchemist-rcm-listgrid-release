@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
-import { FieldRenderParameters } from "../../config/EntityField";
-import { FormField } from "./abstract";
+import { ReactNode } from 'react';
+import { FieldRenderParameters } from '../../config/EntityField';
+import { FormField } from './abstract';
 export declare class ProfileField extends FormField<ProfileField> {
     constructor(name: string, order: number);
     /**

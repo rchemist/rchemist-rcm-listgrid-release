@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { FormField } from "./FormField";
+import { FormField } from './FormField';
 import { isTrue } from '../../../utils/BooleanUtil';
 /**
  * 중첩 객체에서 dot notation 경로로 값을 가져온다.
@@ -91,7 +91,11 @@ export class ListableFormField extends FormField {
      * @protected
      */
     renderListFilterOriginal({ onChange, ...params }) {
-        return this.render({ ...params, required: false, onChange: (value) => onChange(value) });
+        return this.render({
+            ...params,
+            required: false,
+            onChange: (value) => onChange(value),
+        });
     }
     /**
      * 리스트 아이템 렌더링 - renderListItemInstance가 null이면 원본 기본 로직 사용
@@ -131,7 +135,7 @@ export class ListableFormField extends FormField {
             entityForm: props.entityForm ?? {},
             item: props.item,
             router: null,
-            viewUrl: ''
+            viewUrl: '',
         };
         // 기존 renderListItemInstance 로직 재사용
         const listResult = await this.renderListItemInstance(viewListProps);
@@ -146,7 +150,10 @@ export class ListableFormField extends FormField {
         if (typeof props === 'number') {
             props = { order: props };
         }
-        this.listConfig = { ...this.listConfig, support: true, order: props?.order };
+        const base = { ...this.listConfig, support: true };
+        if (props?.order !== undefined)
+            base.order = props.order;
+        this.listConfig = base;
         // quickSearch는 명시적으로 설정된 경우에만 적용
         // (원칙: quickSearch: true가 명시적으로 설정된 필드들만 대상으로 한다)
         if (props?.quickSearch !== undefined) {
@@ -171,20 +178,26 @@ export class ListableFormField extends FormField {
             }
         }
         else {
-            this.listConfig = undefined;
+            delete this.listConfig;
         }
         return this;
     }
     withOverrideRenderListItem(overrideRenderList) {
-        this.overrideRenderListItem = overrideRenderList;
+        if (overrideRenderList !== undefined)
+            this.overrideRenderListItem = overrideRenderList;
+        else
+            delete this.overrideRenderListItem;
         return this;
     }
     withOverrideRenderListFilter(overrideRenderFilter) {
-        this.overrideRenderListFilter = overrideRenderFilter;
+        if (overrideRenderFilter !== undefined)
+            this.overrideRenderListFilter = overrideRenderFilter;
+        else
+            delete this.overrideRenderListFilter;
         return this;
     }
     isSupportList() {
-        return this.listConfig !== undefined && (isTrue(this.listConfig.support));
+        return this.listConfig !== undefined && isTrue(this.listConfig.support);
     }
     getListConfig() {
         const listConfig = { ...this.listConfig };
@@ -217,7 +230,7 @@ export class ListableFormField extends FormField {
             this.type === 'image') {
             return 'center';
         }
-        return "left";
+        return 'left';
     }
     /**
      * 목록 필터 사용 여부 설정.
@@ -266,7 +279,9 @@ export class ListableFormField extends FormField {
         return isTrue(this.getListConfig()?.sortable, true);
     }
     copyFields(origin, includeValue = true) {
-        super.copyFields(origin, includeValue).withListConfig(origin.listConfig)
+        super
+            .copyFields(origin, includeValue)
+            .withListConfig(origin.listConfig)
             .withOverrideRenderListItem(origin.overrideRenderListItem);
         if (isTrue(origin.showList)) {
             this.useListField();

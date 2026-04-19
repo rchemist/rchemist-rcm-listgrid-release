@@ -5,13 +5,13 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { AbstractDateField } from './abstract';
+import { AbstractDateField, } from './abstract';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { fDate } from "../../misc";
-import { FlatPickrDateField } from "../../ui";
-import { IconCalendar } from "@tabler/icons-react";
+import { fDate } from '../../misc';
+import { FlatPickrDateField } from '../../ui';
+import { IconCalendar } from '@tabler/icons-react';
 import { isTrue } from '../../utils/BooleanUtil';
-import { TextInput } from "../../ui";
+import { TextInput } from '../../ui';
 export class DateField extends AbstractDateField {
     constructor(name, order, limit, range) {
         super(name, order, 'date', limit, range);
@@ -23,10 +23,7 @@ export class DateField extends AbstractDateField {
                 const today = new Date();
                 const tomorrow = new Date(today);
                 tomorrow.setDate(today.getDate() + 1);
-                return [
-                    fDate(today),
-                    fDate(tomorrow)
-                ];
+                return [fDate(today), fDate(tomorrow)];
             }
             return fDate(new Date());
         }
@@ -38,7 +35,7 @@ export class DateField extends AbstractDateField {
     renderInstance(params) {
         return (async () => {
             const readonly = isTrue(this.readonly);
-            let value = (await this.getCurrentValue(params.entityForm.getRenderType()));
+            let value = await this.getCurrentValue(params.entityForm.getRenderType());
             if (value) {
                 if (this.range && Array.isArray(value)) {
                     value = `${fDate(value[0])} ~ ${fDate(value[1])}`;
@@ -48,11 +45,11 @@ export class DateField extends AbstractDateField {
                 }
             }
             if (readonly) {
-                return _jsx(TextInput, { name: `${this.name}_${params.entityForm.id}`, readonly: true, onChange: (value) => {
+                return (_jsx(TextInput, { name: `${this.name}_${params.entityForm.id}`, readonly: true, onChange: (value) => {
                         // do nothing
-                    }, value: value });
+                    }, value: value }));
             }
-            return _jsx(FlatPickrDateField, { type: 'date', limit: this.limit, range: this.range, ...await getInputRendererParameters(this, params) });
+            return (_jsx(FlatPickrDateField, { type: 'date', limit: this.limit, range: this.range, ...await getInputRendererParameters(this, params) }));
         })();
     }
     /**
@@ -60,19 +57,19 @@ export class DateField extends AbstractDateField {
      */
     renderListFilterInstance(params) {
         return (async () => {
-            return _jsx(FlatPickrDateField, { type: 'date', name: this.getName(), onChange: (value) => {
+            return (_jsx(FlatPickrDateField, { type: 'date', name: this.getName(), onChange: (value) => {
                     if (Array.isArray(value) && value.length === 2) {
                         if (value[0] === value[1]) {
                             const until = new Date(value[1]);
                             until.setDate(until.getDate() + 1);
-                            params.onChange([value[0], fDate(until, `yyyy-MM-dd`)], "BETWEEN");
+                            params.onChange([value[0], fDate(until, `yyyy-MM-dd`)], 'BETWEEN');
                         }
                         else {
-                            params.onChange(value, "BETWEEN");
+                            params.onChange(value, 'BETWEEN');
                         }
                         return;
                     }
-                }, limit: this.limit, range: true, value: params.value });
+                }, limit: this.limit, range: true, value: params.value }));
         })();
     }
     /**
@@ -82,7 +79,7 @@ export class DateField extends AbstractDateField {
         const value = props.item[this.name];
         if (this.range && Array.isArray(value) && value.length === 2) {
             return Promise.resolve({
-                result: `${fDate(value[0], 'yyyy-MM-dd')} ~ ${fDate(value[1], 'yyyy-MM-dd')}`
+                result: `${fDate(value[0], 'yyyy-MM-dd')} ~ ${fDate(value[1], 'yyyy-MM-dd')}`,
             });
         }
         return Promise.resolve({ result: fDate(value ?? '', 'yyyy-MM-dd') });
@@ -104,13 +101,13 @@ export class DateField extends AbstractDateField {
         if (this.range && Array.isArray(value) && value.length === 2) {
             const dateText = `${fDate(value[0], 'yyyy-MM-dd')} ~ ${fDate(value[1], 'yyyy-MM-dd')}`;
             return {
-                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", children: dateText })] }))
+                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", children: dateText })] })),
             };
         }
         // 일반 날짜: yyyy-MM-dd 포맷으로 표시 (캘린더 아이콘 포함)
         const dateText = fDate(value, 'yyyy-MM-dd');
         return {
-            result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", children: dateText })] }))
+            result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", children: dateText })] })),
         };
     }
     /**
@@ -120,8 +117,7 @@ export class DateField extends AbstractDateField {
         return new DateField(name, order, this.limit, this.range);
     }
     static create(props) {
-        return new DateField(props.name, props.order, props.limit, props.range)
-            .copyFields(props, true);
+        return new DateField(props.name, props.order, props.limit, props.range).copyFields(props, true);
     }
 }
 //# sourceMappingURL=DateField.js.map

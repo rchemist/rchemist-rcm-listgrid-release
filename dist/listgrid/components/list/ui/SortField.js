@@ -1,6 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 // import {SearchFormState} from '../state/State';
-import { IconSortAscendingLetters, IconSortDescending, IconSortDescendingLetters } from "@tabler/icons-react";
+import { IconSortAscendingLetters, IconSortDescending, IconSortDescendingLetters, } from '@tabler/icons-react';
 export const SortField = ({ name, searchForm, onChangeSearchForm }) => {
     const sorts = searchForm.getSorts();
     const sorted = sorts.has(name);
@@ -36,6 +36,8 @@ export const SortField = ({ name, searchForm, onChangeSearchForm }) => {
             return _jsx(IconSortAscendingLetters, { className: `w-3.5 text-primary` });
         }
     };
-    return _jsx("button", { onClick: () => { changeSort(); }, children: icon() });
+    return (_jsx("button", { onClick: () => {
+            changeSort();
+        }, children: icon() }));
 };
 //# sourceMappingURL=SortField.js.map

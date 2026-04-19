@@ -1,5 +1,5 @@
-import { InlineExpansionState, ViewRowItemProps } from "../types/RowItem.types";
-import { SelectionOptions } from "../types/ViewListGrid.types";
+import { InlineExpansionState, ViewRowItemProps } from '../types/RowItem.types';
+import { SelectionOptions } from '../types/ViewListGrid.types';
 export interface ViewRowsProps extends ViewRowItemProps {
     item: any;
     index: number;

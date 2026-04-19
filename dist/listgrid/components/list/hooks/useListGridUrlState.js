@@ -6,7 +6,7 @@
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import { useCallback, useRef } from 'react';
-import { parseAsString, useQueryStates } from "../../../urlState";
+import { parseAsString, useQueryStates } from '../../../urlState';
 import { hasUrlParams, parseAsFilters, parseAsPage, parseAsPageSize, parseAsSort, } from './urlStateParsers';
 import { areUrlStatesEqual, mergeUrlAndSessionState, searchFormToUrlState, } from './searchFormUrlSync';
 /**

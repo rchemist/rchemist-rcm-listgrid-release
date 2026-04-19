@@ -1,8 +1,8 @@
-import { SearchForm } from "../../../form/SearchForm";
+import { SearchForm } from '../../../form/SearchForm';
 import { EntityForm } from '../../../config/EntityForm';
 import { DataTransferConfig } from '../../../transfer/Type';
-import { ReactNode } from "react";
-import { SelectionOptions } from "./ViewListGrid.types";
+import { ReactNode } from 'react';
+import { SelectionOptions } from './ViewListGrid.types';
 import { Session } from '../../../auth/types';
 export interface ListGridHeaderProps extends ListGridHeaderButtonProps {
     buttons?: ((props: ListGridHeaderButtonProps) => Promise<ReactNode>)[];

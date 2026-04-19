@@ -7,7 +7,7 @@ import type { RouterApi } from '../../../router';
  * EntityForm 저장/삭제 로직을 처리하는 커스텀 훅
  * @param params - 저장/삭제에 필요한 파라미터 객체
  */
-export declare const useEntityFormSave: ({ entityForm, isSubCollectionEntity, renderType, pathname, router, buttonLinks, postSave, setEntityForm, setNotifications, setTitleText, setCacheKey, setErrors, setOpenBaseLoading, session }: {
+export declare const useEntityFormSave: ({ entityForm, isSubCollectionEntity, renderType, pathname, router, buttonLinks, postSave, setEntityForm, setNotifications, setTitleText, setCacheKey, setErrors, setOpenBaseLoading, session, }: {
     entityForm: EntityForm;
     isSubCollectionEntity: boolean;
     renderType: RenderType | undefined;

@@ -6,10 +6,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import ReactDOM from "react-dom";
-import { Transition } from "@headlessui/react";
-import { IconX } from "@tabler/icons-react";
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
+import { Transition } from '@headlessui/react';
+import { IconX } from '@tabler/icons-react';
 import { getOverlayZIndex } from '../../../store';
 export const FilterDropdown = ({ isOpen, onClose, children, onApply, onClear, size = 'sm', placement = 'left', anchorRef, }) => {
     const dropdownRef = useRef(null);
@@ -24,10 +24,14 @@ export const FilterDropdown = ({ isOpen, onClose, children, onApply, onClear, si
     // 크기별 너비 (px)
     const getDropdownWidth = () => {
         switch (size) {
-            case 'sm': return 260;
-            case 'md': return 360;
-            case 'lg': return 420;
-            default: return 260;
+            case 'sm':
+                return 260;
+            case 'md':
+                return 360;
+            case 'lg':
+                return 420;
+            default:
+                return 260;
         }
     };
     // 크기별 클래스 설정
@@ -88,15 +92,15 @@ export const FilterDropdown = ({ isOpen, onClose, children, onApply, onClear, si
     // ESC 키 감지
     useEffect(() => {
         const handleEscape = (event) => {
-            if (event.key === "Escape") {
+            if (event.key === 'Escape') {
                 onClose();
             }
         };
         if (isOpen) {
-            document.addEventListener("keydown", handleEscape);
+            document.addEventListener('keydown', handleEscape);
         }
         return () => {
-            document.removeEventListener("keydown", handleEscape);
+            document.removeEventListener('keydown', handleEscape);
         };
     }, [isOpen, onClose]);
     const usePortal = !!anchorRef?.current;

@@ -5,10 +5,10 @@ export declare class EntityTab {
     id: string;
     label: string;
     order: number;
-    hidden?: boolean;
+    hidden?: boolean | undefined;
     description?: string | React.ReactNode;
     fieldGroups: EntityFieldGroup[];
-    requiredPermissions?: string[];
+    requiredPermissions?: string[] | undefined;
     constructor(config?: TabInfo);
     /**
      * 이 탭을 보기 위해 필요한 권한을 설정합니다.

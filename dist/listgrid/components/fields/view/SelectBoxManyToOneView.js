@@ -4,15 +4,15 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-"use client";
+'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Select from "react-select";
-import { AbstractManyToOneField } from "../abstract";
-import { SearchForm } from "../../../form/SearchForm";
-import { getManyToOneEntityValue } from "../ManyToOneField";
-import { PageResult } from "../../../form/Type";
-import { isTrue } from "../../../utils/BooleanUtil";
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Select from 'react-select';
+import { AbstractManyToOneField } from '../abstract';
+import { SearchForm } from '../../../form/SearchForm';
+import { getManyToOneEntityValue } from '../ManyToOneField';
+import { PageResult } from '../../../form/Type';
+import { isTrue } from '../../../utils/BooleanUtil';
 const CACHE_TTL = 5 * 60 * 1000; // 5분
 const dataCache = new Map();
 function getCachedData(cacheKey) {
@@ -171,12 +171,12 @@ export const SelectBoxManyToOneView = ({ field, entityForm, value, onChange, rea
                     if (config.filter) {
                         for (const filterItem of config.filter) {
                             if (filterItem) {
-                                searchForm.withFilter("AND", ...(await filterItem(entityFormRef.current)));
+                                searchForm.withFilter('AND', ...(await filterItem(entityFormRef.current)));
                             }
                         }
                     }
                     if (config.entityForm.neverDelete) {
-                        searchForm.handleAndFilter("active", "true");
+                        searchForm.handleAndFilter('active', 'true');
                     }
                     searchForm.withPage(0).withPageSize(500);
                     const url = config.entityForm.getUrl();
@@ -209,7 +209,7 @@ export const SelectBoxManyToOneView = ({ field, entityForm, value, onChange, rea
     }, [cacheKey, fieldName]);
     // SelectOption 목록 생성
     const options = useMemo(() => {
-        const opts = items.map(item => ({
+        const opts = items.map((item) => ({
             label: getLabel(item),
             value: getValue(item),
             data: item,
@@ -233,7 +233,7 @@ export const SelectBoxManyToOneView = ({ field, entityForm, value, onChange, rea
                 const entity = await getManyToOneEntityValue(field.getName(), value, config);
                 if (entity) {
                     const id = getValue(entity);
-                    const found = options.find(opt => opt.value === id);
+                    const found = options.find((opt) => opt.value === id);
                     setSelectedOption(found ?? null);
                 }
                 else {
@@ -243,7 +243,7 @@ export const SelectBoxManyToOneView = ({ field, entityForm, value, onChange, rea
             else {
                 // required가 아니면 빈 옵션 선택
                 if (!isTrue(required)) {
-                    const emptyOption = options.find(opt => opt.value === '');
+                    const emptyOption = options.find((opt) => opt.value === '');
                     setSelectedOption(emptyOption ?? null);
                 }
                 else {
@@ -268,7 +268,7 @@ export const SelectBoxManyToOneView = ({ field, entityForm, value, onChange, rea
     if (loading || !mounted) {
         return (_jsx("div", { className: "rcm-select-loading-wrapper", children: _jsxs("div", { className: "rcm-select-loading", children: [_jsxs("svg", { className: "rcm-select-loading-spinner", xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", children: [_jsx("circle", { className: "rcm-spinner-track", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }), _jsx("path", { className: "rcm-spinner-head", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })] }), _jsx("span", { className: "rcm-select-loading-text", children: "\uBD88\uB7EC\uC624\uB294 \uC911..." })] }) }));
     }
-    return (_jsx("div", { className: "custom-select whitespace-nowrap", children: _jsx(Select, { classNamePrefix: "react-select", options: options, value: selectedOption, isSearchable: isSearchable, menuPortalTarget: typeof document !== 'undefined' ? document.body : null, menuPosition: menuPosition, menuPlacement: menuPlacement, isDisabled: isTrue(readonly), placeholder: placeholder, onChange: handleChange, isClearable: false, noOptionsMessage: () => "선택 가능한 항목이 없습니다.", styles: {
+    return (_jsx("div", { className: "custom-select whitespace-nowrap", children: _jsx(Select, { classNamePrefix: "react-select", options: options, value: selectedOption, isSearchable: isSearchable, menuPortalTarget: typeof document !== 'undefined' ? document.body : null, menuPosition: menuPosition, menuPlacement: menuPlacement, isDisabled: isTrue(readonly), placeholder: placeholder, onChange: handleChange, isClearable: false, noOptionsMessage: () => '선택 가능한 항목이 없습니다.', styles: {
                 control: (base) => ({
                     ...base,
                     minHeight: '36px',

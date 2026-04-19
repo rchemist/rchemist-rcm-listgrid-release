@@ -5,19 +5,19 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { ListableFormField } from './abstract';
-import { LazyFileUploadInput as FileUploadInput } from "../../ui";
+import { ListableFormField, } from './abstract';
+import { LazyFileUploadInput as FileUploadInput } from '../../ui';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { isEmpty } from "../../utils";
-import { getAccessableAssetUrl } from "../../misc";
-import { TextInput } from "../../ui";
+import { isEmpty } from '../../utils';
+import { getAccessableAssetUrl } from '../../misc';
+import { TextInput } from '../../ui';
 export class ImageField extends ListableFormField {
     constructor(name, order, config) {
         super(name, order, 'file');
         this.config = config;
         this.listConfig = {
             filterable: false,
-            sortable: false
+            sortable: false,
         };
     }
     withConfig(config) {
@@ -70,7 +70,7 @@ export class ImageField extends ListableFormField {
                 config = {
                     maxCount: 1,
                     extensions: ['png', 'jpeg', 'jpg', 'gif', 'webp', 'svg'],
-                    fileTypes: ['image/*']
+                    fileTypes: ['image/*'],
                 };
             }
             else {
@@ -84,7 +84,7 @@ export class ImageField extends ListableFormField {
                     config.maxCount = 1;
                 }
             }
-            return _jsx(FileUploadInput, { config: config, ...await getInputRendererParameters(this, params) });
+            return (_jsx(FileUploadInput, { config: config, ...await getInputRendererParameters(this, params) }));
         })();
     }
     /**
@@ -98,7 +98,7 @@ export class ImageField extends ListableFormField {
      */
     renderListFilterInstance(params) {
         return (async () => {
-            return _jsx(TextInput, { name: `${this.name}_${params.entityForm.id}`, onChange: (value) => params.onChange(value, 'LIKE'), value: params.value });
+            return (_jsx(TextInput, { name: `${this.name}_${params.entityForm.id}`, onChange: (value) => params.onChange(value, 'LIKE'), value: params.value }));
         })();
     }
     /**
@@ -112,22 +112,21 @@ export class ImageField extends ListableFormField {
                 if (!isEmpty(file.existFiles)) {
                     const imgUrl = getAccessableAssetUrl(file.existFiles[0].url);
                     return {
-                        result: _jsx("div", { className: "rcm-image-field-cell", children: _jsxs("div", { className: "rcm-image-field-hover-group", children: [_jsx("img", { className: "rcm-image-field-thumb", src: `${imgUrl}`, onError: (event) => {
+                        result: (_jsx("div", { className: "rcm-image-field-cell", children: _jsxs("div", { className: "rcm-image-field-hover-group", children: [_jsx("img", { className: "rcm-image-field-thumb", src: `${imgUrl}`, onError: (event) => {
                                             event.currentTarget.src = '/assets/images/no-image.png';
                                         }, alt: "primary image" }), _jsx("div", { className: "rcm-image-field-preview-wrap", children: _jsx("img", { className: "rcm-image-field-preview", src: `${imgUrl}`, onError: (event) => {
                                                 event.currentTarget.src = '/assets/images/no-image.png';
-                                            }, alt: "enlarged image" }) })] }) })
+                                            }, alt: "enlarged image" }) })] }) })),
                     };
                 }
             }
             return {
-                result: _jsx("div", { className: "rcm-image-field-cell", children: _jsx("img", { className: "rcm-image-field-thumb rcm-image-field-thumb-placeholder", src: `/assets/images/no-image.png`, alt: "no image" }) })
+                result: (_jsx("div", { className: "rcm-image-field-cell", children: _jsx("img", { className: "rcm-image-field-thumb rcm-image-field-thumb-placeholder", src: `/assets/images/no-image.png`, alt: "no image" }) })),
             };
         })();
     }
     static create(props) {
-        return new ImageField(props.name, props.order, props.config)
-            .copyFields(props, true);
+        return new ImageField(props.name, props.order, props.config).copyFields(props, true);
     }
 }
 //# sourceMappingURL=ImageField.js.map

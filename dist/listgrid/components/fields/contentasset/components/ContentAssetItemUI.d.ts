@@ -1,5 +1,5 @@
-import React from "react";
-import { ContentAsset, ContentAssetError } from "../types";
+import React from 'react';
+import { ContentAsset, ContentAssetError } from '../types';
 interface ContentAssetItemUIProps {
     items: ContentAsset[];
     loading: boolean;
@@ -10,8 +10,8 @@ interface ContentAssetItemUIProps {
     readonly: boolean;
     canAddMore: boolean;
     isEmpty: boolean;
-    acceptedFileTypes?: string[];
-    maxFileSize?: number;
+    acceptedFileTypes?: string[] | undefined;
+    maxFileSize?: number | undefined;
     onUpdateAsset: (index: number, field: keyof ContentAsset, value: any) => void;
     onTitleBlur: (index: number, value: string) => void;
     onTitleChange: (index: number, value: string) => void;
@@ -20,7 +20,7 @@ interface ContentAssetItemUIProps {
     onAddItem: () => void;
     onFileUpload: (index: number, file: File, onProgress?: (progress: number) => void) => Promise<void>;
     onUploadProgress: (index: number) => (progress: number) => void;
-    fieldErrors?: string[];
+    fieldErrors?: string[] | undefined;
 }
 /**
  * ContentAssetItemUI

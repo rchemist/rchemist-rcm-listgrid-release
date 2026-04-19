@@ -5,12 +5,12 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { getNestedValue, ListableFormField } from "./ListableFormField";
+import { getNestedValue, ListableFormField, } from './ListableFormField';
 import { ValidateResult } from '../../../validations/Validation';
-import { hexHash } from "../../../utils/hash";
-import { isEquals } from "../../../misc";
+import { hexHash } from '../../../utils/hash';
+import { isEquals } from '../../../misc';
 import { isTrue } from '../../../utils/BooleanUtil';
-import { Badge } from "../../../ui";
+import { Badge } from '../../../ui';
 import { isBlank } from '../../../utils/StringUtil';
 function isEqualOptions(a, b) {
     if (a === undefined && b === undefined) {
@@ -39,15 +39,24 @@ export class OptionalField extends ListableFormField {
      * @param props direction 설정
      */
     withComboType(props) {
-        this.combo = props;
+        if (props !== undefined)
+            this.combo = props;
+        else
+            delete this.combo;
         return this;
     }
     withOptions(options) {
-        this.options = options ? [...options] : undefined;
+        if (options !== undefined)
+            this.options = [...options];
+        else
+            delete this.options;
         return this;
     }
     withPreservedOptions(options) {
-        this.preservedOptions = options ? [...options] : undefined;
+        if (options !== undefined)
+            this.preservedOptions = [...options];
+        else
+            delete this.preservedOptions;
         return this;
     }
     /**
@@ -59,7 +68,7 @@ export class OptionalField extends ListableFormField {
         this.chipConfig = {
             enabled,
             maxOptions: config?.maxOptions ?? DEFAULT_CHIP_MAX_OPTIONS,
-            maxLabelLength: config?.maxLabelLength ?? DEFAULT_CHIP_MAX_LABEL_LENGTH
+            maxLabelLength: config?.maxLabelLength ?? DEFAULT_CHIP_MAX_LABEL_LENGTH,
         };
         return this;
     }
@@ -100,7 +109,12 @@ export class OptionalField extends ListableFormField {
     }
     changeOptions(options, defaultValue) {
         if (this.preservedOptions === undefined || !isEqualOptions(this.options, options)) {
-            this.preservedOptions = this.options ? [...this.options] : undefined;
+            if (this.options !== undefined) {
+                this.preservedOptions = [...this.options];
+            }
+            else {
+                delete this.preservedOptions;
+            }
             this.options = [...options];
             if (defaultValue !== undefined) {
                 this.withDefaultValue(defaultValue);
@@ -114,14 +128,17 @@ export class OptionalField extends ListableFormField {
             if (!isEqualOptions(this.preservedOptions, this.options)) {
                 this.resetValue(renderType);
                 this.options = [...this.preservedOptions];
-                this.preservedOptions = undefined;
+                delete this.preservedOptions;
                 return true;
             }
         }
         return false;
     }
     copyFields(origin, includeValue = true) {
-        const result = super.copyFields(origin, includeValue).withComboType(origin.combo).withOptions(origin.options)
+        const result = super
+            .copyFields(origin, includeValue)
+            .withComboType(origin.combo)
+            .withOptions(origin.options)
             .withPreservedOptions(origin.preservedOptions);
         if (origin.chipConfig) {
             result.chipConfig = { ...origin.chipConfig };
@@ -140,7 +157,10 @@ export class MultipleOptionalField extends OptionalField {
      * @param limit
      */
     withLimit(limit) {
-        this.limit = limit;
+        if (limit !== undefined)
+            this.limit = limit;
+        else
+            delete this.limit;
         return this;
     }
     /**
@@ -148,7 +168,12 @@ export class MultipleOptionalField extends OptionalField {
      * @param min
      */
     withMin(min) {
-        this.limit = { min: min, max: this.limit?.max };
+        const newLimit = {};
+        if (min !== undefined)
+            newLimit.min = min;
+        if (this.limit?.max !== undefined)
+            newLimit.max = this.limit.max;
+        this.limit = newLimit;
         return this;
     }
     /**
@@ -156,7 +181,12 @@ export class MultipleOptionalField extends OptionalField {
      * @param max
      */
     withMax(max) {
-        this.limit = { min: this.limit?.min, max: max };
+        const newLimit = {};
+        if (this.limit?.min !== undefined)
+            newLimit.min = this.limit.min;
+        if (max !== undefined)
+            newLimit.max = max;
+        this.limit = newLimit;
         return this;
     }
     createCacheKey(renderType) {
@@ -168,21 +198,25 @@ export class MultipleOptionalField extends OptionalField {
     }
     constructor(name, order, type, options, limit) {
         super(name, order, type);
-        this.options = options;
-        this.limit = limit;
+        if (options !== undefined)
+            this.options = options;
+        if (limit !== undefined)
+            this.limit = limit;
     }
     copyFields(origin, includeValue = true) {
-        return super.copyFields(origin, includeValue)
-            .withLimit(this.limit);
+        return super.copyFields(origin, includeValue).withLimit(this.limit);
     }
     async validate(entityForm, session) {
-        return await this.validateWithLimit({
+        const infoParams = session !== undefined ? { entityForm, session } : { entityForm };
+        const validateProps = {
             previousResult: await super.validate(entityForm, session),
             entityForm: entityForm,
-            required: await this.isRequired({ entityForm, session }),
-            limit: this.limit,
-            value: this.getCurrentValue(entityForm.getRenderType())
-        });
+            required: await this.isRequired(infoParams),
+            value: this.getCurrentValue(entityForm.getRenderType()),
+        };
+        if (this.limit !== undefined)
+            validateProps.limit = this.limit;
+        return await this.validateWithLimit(validateProps);
     }
     async validateWithLimit(props) {
         const result = props.previousResult;
@@ -233,18 +267,22 @@ export function renderListOptionalField(field, props) {
     if (isBlank(value)) {
         return Promise.resolve({ result: '' });
     }
-    const option = field.options?.find(option => option.value === value);
+    const option = field.options?.find((option) => option.value === value);
     if (option) {
-        const color = option.color ?? (field.type === 'boolean' ? (isTrue(value) ? 'info' : 'secondary') : 'primary');
-        const label = option.listLabel ?? (option.label ?? option.value);
+        const color = option.color ??
+            (field.type === 'boolean' ? (isTrue(value) ? 'info' : 'secondary') : 'primary');
+        const label = option.listLabel ?? option.label ?? option.value;
         return Promise.resolve({
-            result: _jsx(Badge, { color: color, variant: 'outline', children: label }),
-            linkOnCell: true
+            result: (_jsx(Badge, { color: color, variant: 'outline', children: label })),
+            linkOnCell: true,
         });
     }
-    const color = field.type === 'boolean' ? isTrue(value) ? 'info' : 'dark' : undefined;
-    const label = field.type === 'boolean' ? isTrue(value) ? '예' : '아니오' : value;
-    return Promise.resolve({ result: _jsx(Badge, { color: color, variant: 'outline', children: label }), linkOnCell: true });
+    const color = field.type === 'boolean' ? (isTrue(value) ? 'info' : 'dark') : undefined;
+    const label = field.type === 'boolean' ? (isTrue(value) ? '예' : '아니오') : value;
+    return Promise.resolve({
+        result: (_jsx(Badge, { color: color, variant: 'outline', children: label })),
+        linkOnCell: true,
+    });
 }
 export function renderListMultipleOptionalField(field, props) {
     // 중첩 객체 접근 지원 (예: score.student.name)
@@ -256,7 +294,7 @@ export function renderListMultipleOptionalField(field, props) {
         if (field.options) {
             for (const option of field.options) {
                 if (option.value === value) {
-                    return option.listLabel ?? (option.label ?? option.value);
+                    return option.listLabel ?? option.label ?? option.value;
                 }
             }
         }
@@ -264,12 +302,15 @@ export function renderListMultipleOptionalField(field, props) {
     }
     if (Array.isArray(value)) {
         return Promise.resolve({
-            result: _jsx("span", { className: 'space-x-0.5', children: value.map((v, index) => _jsx(Badge, { color: v.color ?? 'secondary', variant: 'outline', children: getDisplayValue(v) }, `${field.name}_${index}`)) })
+            result: (_jsx("span", { className: 'space-x-0.5', children: value.map((v, index) => (_jsx(Badge, { color: v.color ?? 'secondary', variant: 'outline', children: getDisplayValue(v) }, `${field.name}_${index}`))) })),
         }); // 여러개 선택시 배열로 반환한다.
     }
-    const option = field.options?.find(option => option.value === value);
+    const option = field.options?.find((option) => option.value === value);
     if (option) {
-        return Promise.resolve({ result: _jsx(Badge, { color: option.color ?? undefined, children: option.label }), linkOnCell: false });
+        return Promise.resolve({
+            result: _jsx(Badge, { color: option.color ?? undefined, children: option.label }),
+            linkOnCell: false,
+        });
     }
     return Promise.resolve({ result: _jsx(Badge, { children: value }), linkOnCell: false });
 }

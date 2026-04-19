@@ -4,18 +4,18 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-"use client";
+'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { AbstractManyToOneField } from "../abstract";
-import { SearchForm } from "../../../form/SearchForm";
-import { isBlank } from "../../../utils/StringUtil";
-import { getManyToOneEntityValue } from "../ManyToOneField";
-import { IconCheck, IconChevronLeft, IconChevronRight, IconEdit, IconSearch, IconX } from "@tabler/icons-react";
-import { ViewListGrid } from "../../list/ViewListGrid";
-import { ListGrid } from "../../../config/ListGrid";
-import { useModalManagerStore } from "../../../store";
-import { PageResult } from "../../../form/Type";
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AbstractManyToOneField } from '../abstract';
+import { SearchForm } from '../../../form/SearchForm';
+import { isBlank } from '../../../utils/StringUtil';
+import { getManyToOneEntityValue } from '../ManyToOneField';
+import { IconCheck, IconChevronLeft, IconChevronRight, IconEdit, IconSearch, IconX, } from '@tabler/icons-react';
+import { ViewListGrid } from '../../list/ViewListGrid';
+import { ListGrid } from '../../../config/ListGrid';
+import { useModalManagerStore } from '../../../store';
+import { PageResult } from '../../../form/Type';
 /**
  * CardManyToOneView
  *
@@ -45,14 +45,14 @@ import { PageResult } from "../../../form/Type";
  * </EntityFormThemeProvider>
  * ```
  */
-export const CardManyToOneView = ({ field, entityForm, value, onChange, readonly, session, columns = 3, mobileColumns, gridClassName, cardConfig, items: providedItems, loadItems, emptyMessage = "선택 가능한 항목이 없습니다.", showSearchButton = true, showAllWhenEmpty = true, pageSize = 6, searchFirst = false, searchPlaceholder, searchFields = ['name'], }) => {
+export const CardManyToOneView = ({ field, entityForm, value, onChange, readonly, session, columns = 3, mobileColumns, gridClassName, cardConfig, items: providedItems, loadItems, emptyMessage = '선택 가능한 항목이 없습니다.', showSearchButton = true, showAllWhenEmpty = true, pageSize = 6, searchFirst = false, searchPlaceholder, searchFields = ['name'], }) => {
     const { openModal, closeModal } = useModalManagerStore();
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(!searchFirst); // searchFirst면 초기 로딩 상태 false
     const [selectedItem, setSelectedItem] = useState(null);
     const [isChanging, setIsChanging] = useState(false); // 변경 모드 상태
     const [currentPage, setCurrentPage] = useState(0);
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState('');
     const [hasSearched, setHasSearched] = useState(false); // searchFirst 모드에서 검색 실행 여부
     const [isSearching, setIsSearching] = useState(false); // 검색 중 상태
     // ManyToOne config 가져오기 - field.getName()을 의존성으로 사용해서 안정성 확보
@@ -121,12 +121,12 @@ export const CardManyToOneView = ({ field, entityForm, value, onChange, readonly
                         for (const filterItem of config.filter) {
                             if (filterItem) {
                                 // 최신 entityForm 사용
-                                searchForm.withFilter("AND", ...(await filterItem(entityFormRef.current)));
+                                searchForm.withFilter('AND', ...(await filterItem(entityFormRef.current)));
                             }
                         }
                     }
                     if (config.entityForm.neverDelete) {
-                        searchForm.handleAndFilter("active", "true");
+                        searchForm.handleAndFilter('active', 'true');
                     }
                     searchForm.withPage(0).withPageSize(100);
                     const url = config.entityForm.getUrl();
@@ -189,10 +189,10 @@ export const CardManyToOneView = ({ field, entityForm, value, onChange, readonly
         openModal({
             modalId,
             title: `${field.getLabel()} 검색`,
-            size: "5xl",
+            size: '5xl',
             content: (_jsx("div", { className: "rcm-modal-content-scroll", children: _jsx(ViewListGrid, { listGrid: new ListGrid(config.entityForm).withSearchForm(searchForm), options: {
                         popup: true,
-                        filterable: config.filterable,
+                        ...(config.filterable !== undefined ? { filterable: config.filterable } : {}),
                         readonly: true,
                         selection: { enabled: false },
                         manyToOne: {
@@ -207,18 +207,18 @@ export const CardManyToOneView = ({ field, entityForm, value, onChange, readonly
     // 타이틀 가져오기
     const getTitle = useCallback((item) => {
         if (cardConfig?.titleField) {
-            if (typeof cardConfig.titleField === "function") {
+            if (typeof cardConfig.titleField === 'function') {
                 return cardConfig.titleField(item);
             }
-            return item[cardConfig.titleField] ?? "";
+            return item[cardConfig.titleField] ?? '';
         }
         if (config?.field?.name) {
-            if (typeof config.field.name === "function") {
+            if (typeof config.field.name === 'function') {
                 return config.field.name(item);
             }
-            return item[config.field.name] ?? "";
+            return item[config.field.name] ?? '';
         }
-        return item.name ?? item.title ?? "";
+        return item.name ?? item.title ?? '';
     }, [cardConfig, config]);
     // 페이징/검색 필요 여부
     const needsPagination = items.length > pageSize;
@@ -259,25 +259,25 @@ export const CardManyToOneView = ({ field, entityForm, value, onChange, readonly
             if (config.filter) {
                 for (const filterItem of config.filter) {
                     if (filterItem) {
-                        searchForm.withFilter("AND", ...(await filterItem(entityFormRef.current)));
+                        searchForm.withFilter('AND', ...(await filterItem(entityFormRef.current)));
                     }
                 }
             }
             // 검색어 필터 추가 (OR 조건으로 searchFields에 대해 검색)
-            const searchFilters = searchFields.map(fieldName => ({
+            const searchFilters = searchFields.map((fieldName) => ({
                 name: fieldName,
                 value: `%${query.trim()}%`,
                 queryConditionType: 'LIKE',
             }));
             if (searchFilters.length === 1) {
-                searchForm.withFilter("AND", searchFilters[0]);
+                searchForm.withFilter('AND', searchFilters[0]);
             }
             else {
                 // 여러 필드에 대해 OR 검색
-                searchForm.withFilter("OR", ...searchFilters);
+                searchForm.withFilter('OR', ...searchFilters);
             }
             if (config.entityForm.neverDelete) {
-                searchForm.handleAndFilter("active", "true");
+                searchForm.handleAndFilter('active', 'true');
             }
             searchForm.withPage(0).withPageSize(pageSize * 3); // 검색 시 더 많이 가져옴
             const url = config.entityForm.getUrl();
@@ -286,7 +286,7 @@ export const CardManyToOneView = ({ field, entityForm, value, onChange, readonly
             setCurrentPage(0);
         }
         catch (e) {
-            console.error("Server search failed:", e);
+            console.error('Server search failed:', e);
             setItems([]);
         }
         finally {
@@ -307,30 +307,30 @@ export const CardManyToOneView = ({ field, entityForm, value, onChange, readonly
     // 라벨(뱃지) 가져오기
     const getLabel = useCallback((item) => {
         if (cardConfig?.labelField) {
-            if (typeof cardConfig.labelField === "function") {
+            if (typeof cardConfig.labelField === 'function') {
                 return cardConfig.labelField(item);
             }
-            return item[cardConfig.labelField] ?? "";
+            return item[cardConfig.labelField] ?? '';
         }
-        return "";
+        return '';
     }, [cardConfig]);
     // 설명 가져오기
     const getDescription = useCallback((item) => {
         if (cardConfig?.descriptionField) {
-            if (typeof cardConfig.descriptionField === "function") {
+            if (typeof cardConfig.descriptionField === 'function') {
                 return cardConfig.descriptionField(item);
             }
-            return item[cardConfig.descriptionField] ?? "";
+            return item[cardConfig.descriptionField] ?? '';
         }
         else if (cardConfig?.descriptionField === '') {
-            return "";
+            return '';
         }
-        return item.description ?? "";
+        return item.description ?? '';
     }, [cardConfig]);
     // 이미지 가져오기
     const getImage = useCallback((item) => {
         if (cardConfig?.imageField) {
-            if (typeof cardConfig.imageField === "function") {
+            if (typeof cardConfig.imageField === 'function') {
                 return cardConfig.imageField(item);
             }
             return item[cardConfig.imageField];
@@ -348,7 +348,7 @@ export const CardManyToOneView = ({ field, entityForm, value, onChange, readonly
         const image = getImage(item);
         const label = getLabel(item);
         const description = getDescription(item);
-        return (_jsxs("div", { className: cardConfig?.selectedContainerClassName ?? "rcm-card-m2o rcm-card-m2o-selected", children: [_jsx("span", { className: cardConfig?.checkIconClassName ?? "rcm-card-m2o-check rcm-icon-frame", "data-shape": "circle", "data-color": "success", children: _jsx(IconCheck, { size: 14 }) }), image && (_jsx("div", { className: "rcm-card-m2o-image-wrap", children: _jsx("img", { src: image, alt: getTitle(item), className: "rcm-card-m2o-image" }) })), !isBlank(label) && (_jsx("span", { className: cardConfig?.labelClassName ?? "rcm-badge", "data-color": "primary", children: label })), _jsx("h4", { className: cardConfig?.titleClassName ?? "rcm-text", "data-weight": "semibold", children: getTitle(item) }), !isBlank(description) && (_jsx("p", { className: cardConfig?.descriptionClassName ?? "rcm-card-m2o-description rcm-text", "data-tone": "muted", "data-size": "sm", children: description })), cardConfig?.renderAction && (_jsx("div", { className: "rcm-card-m2o-action", children: cardConfig.renderAction(item) }))] }, item.id));
+        return (_jsxs("div", { className: cardConfig?.selectedContainerClassName ?? 'rcm-card-m2o rcm-card-m2o-selected', children: [_jsx("span", { className: cardConfig?.checkIconClassName ?? 'rcm-card-m2o-check rcm-icon-frame', "data-shape": "circle", "data-color": "success", children: _jsx(IconCheck, { size: 14 }) }), image && (_jsx("div", { className: "rcm-card-m2o-image-wrap", children: _jsx("img", { src: image, alt: getTitle(item), className: "rcm-card-m2o-image" }) })), !isBlank(label) && (_jsx("span", { className: cardConfig?.labelClassName ?? 'rcm-badge', "data-color": "primary", children: label })), _jsx("h4", { className: cardConfig?.titleClassName ?? 'rcm-text', "data-weight": "semibold", children: getTitle(item) }), !isBlank(description) && (_jsx("p", { className: cardConfig?.descriptionClassName ?? 'rcm-card-m2o-description rcm-text', "data-tone": "muted", "data-size": "sm", children: description })), cardConfig?.renderAction && (_jsx("div", { className: "rcm-card-m2o-action", children: cardConfig.renderAction(item) }))] }, item.id));
     }, [cardConfig, getTitle, getLabel, getDescription, getImage]);
     // 선택 가능한 카드 렌더링 (편집 모드)
     const renderSelectableCard = useCallback((item, selected, onSelect) => {
@@ -356,8 +356,9 @@ export const CardManyToOneView = ({ field, entityForm, value, onChange, readonly
         const label = getLabel(item);
         const description = getDescription(item);
         return (_jsxs("div", { onClick: onSelect, className: `rcm-card-m2o rcm-card-m2o-clickable ${selected
-                ? (cardConfig?.selectedContainerClassName ?? "rcm-card-m2o-selected")
-                : (cardConfig?.containerClassName ?? "rcm-card-m2o-default")}`, children: [selected && (_jsx("span", { className: cardConfig?.checkIconClassName ?? "rcm-card-m2o-check rcm-icon-frame", "data-shape": "circle", "data-color": "success", children: _jsx(IconCheck, { size: 14 }) })), image && (_jsx("div", { className: "rcm-card-m2o-image-wrap", children: _jsx("img", { src: image, alt: getTitle(item), className: "rcm-card-m2o-image" }) })), !isBlank(label) && (_jsx("span", { className: cardConfig?.labelClassName ?? "rcm-badge", "data-color": "neutral", children: label })), _jsx("h4", { className: cardConfig?.titleClassName ?? "rcm-card-m2o-title-sm rcm-text", "data-weight": "semibold", children: getTitle(item) }), !isBlank(description) && (_jsx("p", { className: cardConfig?.descriptionClassName ?? "rcm-card-m2o-description rcm-card-m2o-description-clamp rcm-text", "data-tone": "muted", "data-size": "sm", children: description })), cardConfig?.renderAction && (_jsx("div", { className: "rcm-card-m2o-action", children: cardConfig.renderAction(item) }))] }, item.id));
+                ? (cardConfig?.selectedContainerClassName ?? 'rcm-card-m2o-selected')
+                : (cardConfig?.containerClassName ?? 'rcm-card-m2o-default')}`, children: [selected && (_jsx("span", { className: cardConfig?.checkIconClassName ?? 'rcm-card-m2o-check rcm-icon-frame', "data-shape": "circle", "data-color": "success", children: _jsx(IconCheck, { size: 14 }) })), image && (_jsx("div", { className: "rcm-card-m2o-image-wrap", children: _jsx("img", { src: image, alt: getTitle(item), className: "rcm-card-m2o-image" }) })), !isBlank(label) && (_jsx("span", { className: cardConfig?.labelClassName ?? 'rcm-badge', "data-color": "neutral", children: label })), _jsx("h4", { className: cardConfig?.titleClassName ?? 'rcm-card-m2o-title-sm rcm-text', "data-weight": "semibold", children: getTitle(item) }), !isBlank(description) && (_jsx("p", { className: cardConfig?.descriptionClassName ??
+                        'rcm-card-m2o-description rcm-card-m2o-description-clamp rcm-text', "data-tone": "muted", "data-size": "sm", children: description })), cardConfig?.renderAction && (_jsx("div", { className: "rcm-card-m2o-action", children: cardConfig.renderAction(item) }))] }, item.id));
     }, [cardConfig, getTitle, getLabel, getDescription, getImage]);
     if (loading) {
         return (_jsx("div", { className: "rcm-card-m2o-loading", children: _jsx("div", { className: "rcm-card-m2o-spinner" }) }));
@@ -365,7 +366,7 @@ export const CardManyToOneView = ({ field, entityForm, value, onChange, readonly
     // readonly 모드: 선택된 카드만 표시
     if (readonly) {
         if (!selectedItem) {
-            return (_jsx("div", { className: "rcm-card-m2o-empty-readonly", children: "\uC120\uD0DD\uB41C \uD56D\uBAA9\uC774 \uC5C6\uC2B5\uB2C8\uB2E4." }));
+            return _jsx("div", { className: "rcm-card-m2o-empty-readonly", children: "\uC120\uD0DD\uB41C \uD56D\uBAA9\uC774 \uC5C6\uC2B5\uB2C8\uB2E4." });
         }
         return (_jsx("div", { className: "rcm-card-m2o-wrapper", children: cardConfig?.renderCard
                 ? cardConfig.renderCard(selectedItem, true, () => { })
@@ -378,7 +379,15 @@ export const CardManyToOneView = ({ field, entityForm, value, onChange, readonly
                     : renderSelectedCard(selectedItem), _jsxs("div", { className: "rcm-card-m2o-actions", children: [_jsxs("button", { type: "button", onClick: handleToggleChange, className: "rcm-button", "data-variant": "outline", "data-size": "sm", children: [_jsx(IconEdit, { size: 16 }), "\uBCC0\uACBD"] }), _jsxs("button", { type: "button", onClick: handleClear, className: "rcm-button", "data-size": "sm", children: [_jsx(IconX, { size: 16 }), "\uC120\uD0DD \uD574\uC81C"] })] })] }));
     }
     // 편집 모드: 변경 중이거나 선택된 카드가 없는 경우
-    return (_jsxs("div", { className: "rcm-card-m2o-wrapper", children: [isChanging && selectedItem && (_jsxs("div", { className: "rcm-card-m2o-change-header", children: [_jsx("h4", { className: "rcm-text", "data-weight": "semibold", children: "\uB2E4\uB978 \uD56D\uBAA9\uC744 \uC120\uD0DD\uD574\uC8FC\uC138\uC694" }), _jsx("button", { type: "button", onClick: handleToggleChange, className: "rcm-button", "data-variant": "ghost", "data-size": "sm", children: "\uCDE8\uC18C" })] })), searchFirst && (_jsxs("div", { className: "rcm-card-m2o-search-section", children: [_jsxs("div", { className: "rcm-card-m2o-search-row", children: [_jsxs("div", { className: "rcm-card-m2o-search-input-wrap", children: [_jsx(IconSearch, { size: 18, className: "rcm-card-m2o-search-icon rcm-icon", "data-size": "sm", "data-tone": "muted" }), _jsx("input", { type: "text", value: searchQuery, onChange: handleSearchChange, onKeyDown: handleSearchKeyDown, placeholder: searchPlaceholder ?? "검색어를 입력하세요...", className: "rcm-card-m2o-search-input rcm-input", "data-size": "sm" }), searchQuery && (_jsx("button", { type: "button", onClick: () => { setSearchQuery(""); setItems([]); setHasSearched(false); setCurrentPage(0); }, className: "rcm-card-m2o-search-clear rcm-icon-btn", "data-size": "sm", children: _jsx(IconX, { size: 16 }) }))] }), _jsxs("button", { type: "button", onClick: () => handleServerSearch(searchQuery), disabled: isSearching || isBlank(searchQuery.trim()), className: "rcm-button", "data-variant": "primary", "data-size": "sm", children: [isSearching ? (_jsx("div", { className: "rcm-card-m2o-spinner rcm-card-m2o-spinner-inverse" })) : (_jsx(IconSearch, { size: 16 })), "\uAC80\uC0C9"] })] }), (hasSearched || isSearching) && (_jsx("span", { className: "rcm-card-m2o-search-status rcm-text", "data-size": "xs", "data-tone": "muted", children: isSearching ? '검색 중...' : `검색 결과: ${items.length}건` }))] })), !searchFirst && needsPagination && (_jsxs("div", { className: "rcm-card-m2o-search-section", children: [_jsxs("div", { className: "rcm-card-m2o-search-input-wrap", children: [_jsx(IconSearch, { size: 18, className: "rcm-card-m2o-search-icon rcm-icon", "data-size": "sm", "data-tone": "muted" }), _jsx("input", { type: "text", value: searchQuery, onChange: handleSearchChange, placeholder: "\uC774\uB984\uC73C\uB85C \uAC80\uC0C9...", className: "rcm-card-m2o-search-input rcm-input", "data-size": "sm" }), searchQuery && (_jsx("button", { type: "button", onClick: () => { setSearchQuery(""); setCurrentPage(0); }, className: "rcm-card-m2o-search-clear rcm-icon-btn", "data-size": "sm", children: _jsx(IconX, { size: 16 }) }))] }), _jsxs("span", { className: "rcm-card-m2o-search-status rcm-text", "data-size": "xs", "data-tone": "muted", children: ["\uCD1D ", filteredItems.length, "\uAC1C ", searchQuery && `(검색결과)`] })] })), searchFirst && !hasSearched ? (_jsxs("div", { className: "rcm-card-m2o-search-empty", children: [_jsx(IconSearch, { size: 32, className: "rcm-card-m2o-search-empty-icon rcm-icon", "data-size": "lg", "data-tone": "disabled" }), _jsx("p", { className: "rcm-text", "data-tone": "muted", children: "\uAC80\uC0C9\uC5B4\uB97C \uC785\uB825\uD558\uACE0 \uAC80\uC0C9 \uBC84\uD2BC\uC744 \uD074\uB9AD\uD558\uC138\uC694" })] })) : paginatedItems.length > 0 ? (_jsxs("div", { id: `card-grid-${field.getName()}`, className: gridClassName ?? "rcm-card-m2o-grid", style: !gridClassName
+    return (_jsxs("div", { className: "rcm-card-m2o-wrapper", children: [isChanging && selectedItem && (_jsxs("div", { className: "rcm-card-m2o-change-header", children: [_jsx("h4", { className: "rcm-text", "data-weight": "semibold", children: "\uB2E4\uB978 \uD56D\uBAA9\uC744 \uC120\uD0DD\uD574\uC8FC\uC138\uC694" }), _jsx("button", { type: "button", onClick: handleToggleChange, className: "rcm-button", "data-variant": "ghost", "data-size": "sm", children: "\uCDE8\uC18C" })] })), searchFirst && (_jsxs("div", { className: "rcm-card-m2o-search-section", children: [_jsxs("div", { className: "rcm-card-m2o-search-row", children: [_jsxs("div", { className: "rcm-card-m2o-search-input-wrap", children: [_jsx(IconSearch, { size: 18, className: "rcm-card-m2o-search-icon rcm-icon", "data-size": "sm", "data-tone": "muted" }), _jsx("input", { type: "text", value: searchQuery, onChange: handleSearchChange, onKeyDown: handleSearchKeyDown, placeholder: searchPlaceholder ?? '검색어를 입력하세요...', className: "rcm-card-m2o-search-input rcm-input", "data-size": "sm" }), searchQuery && (_jsx("button", { type: "button", onClick: () => {
+                                            setSearchQuery('');
+                                            setItems([]);
+                                            setHasSearched(false);
+                                            setCurrentPage(0);
+                                        }, className: "rcm-card-m2o-search-clear rcm-icon-btn", "data-size": "sm", children: _jsx(IconX, { size: 16 }) }))] }), _jsxs("button", { type: "button", onClick: () => handleServerSearch(searchQuery), disabled: isSearching || isBlank(searchQuery.trim()), className: "rcm-button", "data-variant": "primary", "data-size": "sm", children: [isSearching ? (_jsx("div", { className: "rcm-card-m2o-spinner rcm-card-m2o-spinner-inverse" })) : (_jsx(IconSearch, { size: 16 })), "\uAC80\uC0C9"] })] }), (hasSearched || isSearching) && (_jsx("span", { className: "rcm-card-m2o-search-status rcm-text", "data-size": "xs", "data-tone": "muted", children: isSearching ? '검색 중...' : `검색 결과: ${items.length}건` }))] })), !searchFirst && needsPagination && (_jsxs("div", { className: "rcm-card-m2o-search-section", children: [_jsxs("div", { className: "rcm-card-m2o-search-input-wrap", children: [_jsx(IconSearch, { size: 18, className: "rcm-card-m2o-search-icon rcm-icon", "data-size": "sm", "data-tone": "muted" }), _jsx("input", { type: "text", value: searchQuery, onChange: handleSearchChange, placeholder: "\uC774\uB984\uC73C\uB85C \uAC80\uC0C9...", className: "rcm-card-m2o-search-input rcm-input", "data-size": "sm" }), searchQuery && (_jsx("button", { type: "button", onClick: () => {
+                                    setSearchQuery('');
+                                    setCurrentPage(0);
+                                }, className: "rcm-card-m2o-search-clear rcm-icon-btn", "data-size": "sm", children: _jsx(IconX, { size: 16 }) }))] }), _jsxs("span", { className: "rcm-card-m2o-search-status rcm-text", "data-size": "xs", "data-tone": "muted", children: ["\uCD1D ", filteredItems.length, "\uAC1C ", searchQuery && `(검색결과)`] })] })), searchFirst && !hasSearched ? (_jsxs("div", { className: "rcm-card-m2o-search-empty", children: [_jsx(IconSearch, { size: 32, className: "rcm-card-m2o-search-empty-icon rcm-icon", "data-size": "lg", "data-tone": "disabled" }), _jsx("p", { className: "rcm-text", "data-tone": "muted", children: "\uAC80\uC0C9\uC5B4\uB97C \uC785\uB825\uD558\uACE0 \uAC80\uC0C9 \uBC84\uD2BC\uC744 \uD074\uB9AD\uD558\uC138\uC694" })] })) : paginatedItems.length > 0 ? (_jsxs("div", { id: `card-grid-${field.getName()}`, className: gridClassName ?? 'rcm-card-m2o-grid', style: !gridClassName
                     ? {
                         gridTemplateColumns: `repeat(${mobileColumns ?? columns}, minmax(0, 1fr))`,
                     }
@@ -394,7 +403,11 @@ export const CardManyToOneView = ({ field, entityForm, value, onChange, readonly
                             return cardConfig.renderCard(item, selected, () => handleSelect(item));
                         }
                         return renderSelectableCard(item, selected, () => handleSelect(item));
-                    })] })) : (_jsx("div", { className: "rcm-card-m2o-no-results", children: _jsx("p", { children: searchFirst && hasSearched ? "검색 결과가 없습니다." : (searchQuery ? "검색 결과가 없습니다." : emptyMessage) }) })), needsPagination && totalPages > 1 && (_jsxs("div", { className: "rcm-card-m2o-pagination", children: [_jsx("button", { type: "button", onClick: () => handlePageChange(currentPage - 1), disabled: currentPage === 0, className: "rcm-icon-btn", "data-size": "sm", children: _jsx(IconChevronLeft, { size: 18 }) }), _jsx("div", { className: "rcm-card-m2o-page-numbers", children: Array.from({ length: totalPages }, (_, i) => {
+                    })] })) : (_jsx("div", { className: "rcm-card-m2o-no-results", children: _jsx("p", { children: searchFirst && hasSearched
+                        ? '검색 결과가 없습니다.'
+                        : searchQuery
+                            ? '검색 결과가 없습니다.'
+                            : emptyMessage }) })), needsPagination && totalPages > 1 && (_jsxs("div", { className: "rcm-card-m2o-pagination", children: [_jsx("button", { type: "button", onClick: () => handlePageChange(currentPage - 1), disabled: currentPage === 0, className: "rcm-icon-btn", "data-size": "sm", children: _jsx(IconChevronLeft, { size: 18 }) }), _jsx("div", { className: "rcm-card-m2o-page-numbers", children: Array.from({ length: totalPages }, (_, i) => {
                             const isActive = currentPage === i;
                             return (_jsx("button", { type: "button", onClick: () => handlePageChange(i), className: "rcm-button", "data-variant": isActive ? 'primary' : 'ghost', "data-size": "sm", children: i + 1 }, i));
                         }) }), _jsx("button", { type: "button", onClick: () => handlePageChange(currentPage + 1), disabled: currentPage >= totalPages - 1, className: "rcm-icon-btn", "data-size": "sm", children: _jsx(IconChevronRight, { size: 18 }) })] }))] }));

@@ -155,7 +155,7 @@ export class FileFieldValue {
     addNewValue(fileInfo) {
         if (fileInfo.id === undefined || fileInfo.id === null || fileInfo.id === '')
             return false;
-        const exist = this.newFiles.some(v => v.url === fileInfo.url);
+        const exist = this.newFiles.some((v) => v.url === fileInfo.url);
         if (!exist) {
             this.newFiles.push(fileInfo);
             return true;
@@ -165,17 +165,17 @@ export class FileFieldValue {
     addExistValue(fileInfo) {
         if (fileInfo.id === undefined || fileInfo.id === null || fileInfo.id === '')
             return false;
-        const inNew = this.newFiles.some(v => v.url === fileInfo.url);
+        const inNew = this.newFiles.some((v) => v.url === fileInfo.url);
         if (inNew)
             return false;
-        const inExist = this.existFiles.some(v => v.url === fileInfo.url);
+        const inExist = this.existFiles.some((v) => v.url === fileInfo.url);
         if (inExist)
             return false;
         this.existFiles.push(fileInfo);
         return true;
     }
     addDeleteValue(fileInfo) {
-        const already = this.deleteFiles.some(v => v.url === fileInfo.url);
+        const already = this.deleteFiles.some((v) => v.url === fileInfo.url);
         if (already)
             return undefined;
         let exist = false;
@@ -213,26 +213,27 @@ export class FileFieldValue {
     }
     getCurrentFileList() {
         const all = [...this.existFiles, ...this.newFiles];
-        return all.filter(file => !this.deleteFiles.some(d => d.url === file.url));
+        return all.filter((file) => !this.deleteFiles.some((d) => d.url === file.url));
     }
     isDirty() {
-        return (this.newFiles.length > 0 ||
-            (this.deleteFiles.length > 0 && this.existFiles.length > 0));
+        return this.newFiles.length > 0 || (this.deleteFiles.length > 0 && this.existFiles.length > 0);
     }
     hasValue() {
-        return (this.existFiles.length > 0 ||
-            this.newFiles.length > 0 ||
-            this.deleteFiles.length > 0);
+        return this.existFiles.length > 0 || this.newFiles.length > 0 || this.deleteFiles.length > 0;
     }
     rollbackDeleteFile(file) {
         for (let i = 0; i < this.deleteFiles.length; i++) {
             if (this.deleteFiles[i].url === file.url) {
                 this.deleteFiles.splice(i, 1);
-                if (file.deleteType === 'new') {
-                    this.newFiles.push({ ...file, deleteType: undefined });
-                }
-                else if (file.deleteType === 'exist') {
-                    this.existFiles.push({ ...file, deleteType: undefined });
+                {
+                    const { deleteType: _dt, ...rest } = file;
+                    void _dt;
+                    if (file.deleteType === 'new') {
+                        this.newFiles.push(rest);
+                    }
+                    else if (file.deleteType === 'exist') {
+                        this.existFiles.push(rest);
+                    }
                 }
                 break;
             }
@@ -240,12 +241,18 @@ export class FileFieldValue {
     }
     getRenderKey() {
         let key = '';
-        this.existFiles.forEach(v => { key += 'exist_' + v.id; });
-        this.newFiles.forEach(v => { key += 'new_' + v.id; });
-        this.deleteFiles.forEach(v => { key += 'delete_' + v.id; });
+        this.existFiles.forEach((v) => {
+            key += 'exist_' + v.id;
+        });
+        this.newFiles.forEach((v) => {
+            key += 'new_' + v.id;
+        });
+        this.deleteFiles.forEach((v) => {
+            key += 'delete_' + v.id;
+        });
         let hash = 0;
         for (let i = 0; i < key.length; i++) {
-            hash = ((hash << 5) - hash) + key.charCodeAt(i);
+            hash = (hash << 5) - hash + key.charCodeAt(i);
             hash = hash & hash;
         }
         return String(hash);

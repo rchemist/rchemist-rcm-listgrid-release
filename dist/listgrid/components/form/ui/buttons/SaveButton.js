@@ -5,14 +5,14 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { useState } from "react";
-import { isEmpty } from "../../../../utils";
-import { openToast } from "../../../../message";
-import { useEntityFormTheme } from "../../context/EntityFormThemeContext";
+import { useState } from 'react';
+import { isEmpty } from '../../../../utils';
+import { openToast } from '../../../../message';
+import { useEntityFormTheme } from '../../context/EntityFormThemeContext';
 export const SaveButton = ({ entityForm, postSave, router, pathname, setEntityForm, buttonLinks, openBaseLoading, session, buttonClassNames, ...props }) => {
     const { classNames, cn, buttonLabels } = useEntityFormTheme();
     const [isSaving, setIsSaving] = useState(false);
-    return (_jsx("button", { type: "button", disabled: isSaving, className: cn("rcm-button", buttonClassNames?.save ?? classNames.buttons?.save), "data-variant": "primary", onClick: (e) => {
+    return (_jsx("button", { type: "button", disabled: isSaving, className: cn('rcm-button', buttonClassNames?.save ?? classNames.buttons?.save), "data-variant": "primary", onClick: (e) => {
             e.stopPropagation();
             if (isSaving)
                 return;
@@ -34,21 +34,21 @@ export const SaveButton = ({ entityForm, postSave, router, pathname, setEntityFo
                         }
                     }
                     else {
-                        const error = saveResult.errors?.[0] ?? "저장 중 오류가 발생 했습니다.";
+                        const error = saveResult.errors?.[0] ?? '저장 중 오류가 발생 했습니다.';
                         props.setErrors([error]);
                         openToast({
                             message: `${error}`,
-                            color: "danger",
+                            color: 'danger',
                             showCloseButton: false,
                         });
                     }
                 }
                 catch (err) {
-                    const message = err instanceof Error ? err.message : "저장 중 오류가 발생 했습니다.";
+                    const message = err instanceof Error ? err.message : '저장 중 오류가 발생 했습니다.';
                     props.setErrors([message]);
                     openToast({
                         message,
-                        color: "danger",
+                        color: 'danger',
                         showCloseButton: false,
                     });
                 }
@@ -57,6 +57,6 @@ export const SaveButton = ({ entityForm, postSave, router, pathname, setEntityFo
                     openBaseLoading?.(false);
                 }
             })();
-        }, children: buttonLabels?.save ?? '저장' }, "button_save"));
+        }, children: buttonLabels?.save ?? '저장' }, 'button_save'));
 };
 //# sourceMappingURL=SaveButton.js.map

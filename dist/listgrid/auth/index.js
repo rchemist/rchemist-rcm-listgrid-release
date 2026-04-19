@@ -4,9 +4,7 @@ export function hasAnyRole(session, ...allowedRoles) {
     if (!session)
         return false;
     const user = typeof session.getUser === 'function' ? session.getUser() : undefined;
-    const roles = user?.roles ??
-        session.roles ??
-        session.authentication?.roles;
+    const roles = user?.roles ?? session.roles ?? session.authentication?.roles;
     if (Array.isArray(roles)) {
         return roles.some((role) => allowedRoles.includes(role));
     }

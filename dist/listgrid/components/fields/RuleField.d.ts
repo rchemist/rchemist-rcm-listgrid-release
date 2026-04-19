@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { FieldRenderParameters } from "../../config/EntityField";
+import { ReactNode } from 'react';
+import { FieldRenderParameters } from '../../config/EntityField';
 import { FormField } from './abstract';
 import { RuleFieldEntityForm } from './rule/Type';
 export declare class RuleField extends FormField<RuleField> {

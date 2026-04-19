@@ -134,7 +134,7 @@ function onChangeDerivedValidations(name, options) {
     };
 }
 function onChangeSetSelectOptions(name, options) {
-    function changeOptions({ key, field, value, entityForm, defaultValue }) {
+    function changeOptions({ key, field, value, entityForm, defaultValue, }) {
         if (key === field.getName()) {
             if (field instanceof OptionalField) {
                 return field.changeOptions(value);

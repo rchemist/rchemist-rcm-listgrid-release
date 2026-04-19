@@ -1,1 +1,1 @@
-{"version":3,"file":"NextUrlStateAdapter.d.ts","sourceRoot":"","sources":["../../../src/adapters/next/NextUrlStateAdapter.ts"],"names":[],"mappings":"AAaA,OAAO,KAAK,EAGR,gBAAgB,EAEnB,MAAM,yBAAyB,CAAC;AAoBjC,eAAO,MAAM,oBAAoB,EAAE,gBASlC,CAAC"}
+{"version":3,"file":"NextUrlStateAdapter.d.ts","sourceRoot":"","sources":["../../../src/adapters/next/NextUrlStateAdapter.ts"],"names":[],"mappings":"AAUA,OAAO,KAAK,EAGV,gBAAgB,EAEjB,MAAM,yBAAyB,CAAC;AAoBjC,eAAO,MAAM,oBAAoB,EAAE,gBASlC,CAAC"}

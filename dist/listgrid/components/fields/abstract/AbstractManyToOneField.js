@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { ListableFormField } from "./ListableFormField";
+import { ListableFormField } from './ListableFormField';
 /**
  * Abstract base class for ManyToOne relationship fields
  * This class provides common functionality for ManyToOneField and UserField

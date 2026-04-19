@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
-import { EntityField, FieldRenderParameters } from "../../config/EntityField";
-import { FormField } from "../fields/abstract";
-import { RenderType } from "../../config/Config";
+import { ReactNode } from 'react';
+import { EntityField, FieldRenderParameters } from '../../config/EntityField';
+import { FormField } from '../fields/abstract';
+import { RenderType } from '../../config/Config';
 export declare function getInputRendererParameters(field: FormField<any>, params: FieldRenderParameters): Promise<{
     value: any;
     name: string;

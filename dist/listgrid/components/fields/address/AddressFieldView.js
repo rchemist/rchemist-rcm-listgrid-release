@@ -3,8 +3,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { isTrue } from '../../../utils/BooleanUtil';
 import { defaultString, isBlank } from '../../../utils/StringUtil';
 import { KakaoMap } from '../address/KakaoMap';
-import { PostCodeSelector } from "./PostCodeSelector";
-import { useEffect, useState } from "react";
+import { PostCodeSelector } from './PostCodeSelector';
+import { useEffect, useState } from 'react';
 import { getRuntimeConfig } from '../../../config/RuntimeConfig';
 const kakaoMapApiKey = getRuntimeConfig().kakaoMapAppKey;
 export const AddressFieldView = ({ entityForm, onChange, ...props }) => {
@@ -35,7 +35,7 @@ export const AddressFieldView = ({ entityForm, onChange, ...props }) => {
         (async () => {
             const state = (await entityForm.getValue(getFieldName('state'))) ?? '';
             const city = (await entityForm.getValue(getFieldName('city'))) ?? '';
-            const postalCode = await entityForm.getValue(getFieldName('postalCode')) ?? '';
+            const postalCode = (await entityForm.getValue(getFieldName('postalCode'))) ?? '';
             const address1 = (await entityForm.getValue(getFieldName('address1'))) ?? '';
             const address2 = (await entityForm.getValue(getFieldName('address2'))) ?? '';
             const longitude = (await entityForm.getValue(getFieldName('longitude'))) ?? '';
@@ -50,7 +50,7 @@ export const AddressFieldView = ({ entityForm, onChange, ...props }) => {
                 address1,
                 address2,
                 longitude,
-                latitude
+                latitude,
             });
         })();
         setClientView(true);
@@ -66,7 +66,7 @@ export const AddressFieldView = ({ entityForm, onChange, ...props }) => {
             latitude: latitude,
         }, true);
     }
-    return _jsxs("div", { children: [_jsx(PostCodeSelector, { required: isTrue(props.required), address: address, onSubmit: (address) => {
+    return (_jsxs("div", { children: [_jsx(PostCodeSelector, { required: isTrue(props.required), address: address, onSubmit: (address) => {
                     onChange({
                         state: defaultString(address.state),
                         city: defaultString(address.city),
@@ -83,13 +83,11 @@ export const AddressFieldView = ({ entityForm, onChange, ...props }) => {
                         address1: '',
                         address2: '',
                         postalCode: '',
-                        longitude: undefined,
-                        latitude: undefined,
                     }, true);
-                } }), (showMap) && _jsx(KakaoMap, { ...address, apiKey: kakaoMapApiKey, onSetCoordinates: (latitude, longitude) => {
+                } }), showMap && (_jsx(KakaoMap, { ...address, apiKey: kakaoMapApiKey, onSetCoordinates: (latitude, longitude) => {
                     if (latitude !== address?.latitude || longitude !== address?.longitude) {
                         onSetCoordinates(latitude, longitude);
                     }
-                } })] });
+                } }))] }));
 };
 //# sourceMappingURL=AddressFieldView.js.map

@@ -7,6 +7,6 @@ interface CopyableTextViewProps {
     value: string;
     displayValue?: string;
 }
-export declare const CopyableTextView: ({ value, displayValue, }: CopyableTextViewProps) => import("react/jsx-runtime").JSX.Element;
+export declare const CopyableTextView: ({ value, displayValue }: CopyableTextViewProps) => import("react/jsx-runtime").JSX.Element;
 export {};
 //# sourceMappingURL=CopyableTextView.d.ts.map

@@ -1,7 +1,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { isTrue } from '../../../utils/BooleanUtil';
-import { v1 } from "uuid";
-export const EntireChecker = ({ total, listIds, checkedItems, setCheckedItems, subCollection, selectionOptions, rows, showCheckboxInput }) => {
+import { v1 } from 'uuid';
+export const EntireChecker = ({ total, listIds, checkedItems, setCheckedItems, subCollection, selectionOptions, rows, showCheckboxInput, }) => {
     // 선택 가능한 항목 필터링
     const selectableIds = selectionOptions?.selectableFilter && rows
         ? rows.filter(selectionOptions.selectableFilter).map((item) => item.id)
@@ -42,6 +42,6 @@ export const EntireChecker = ({ total, listIds, checkedItems, setCheckedItems, s
     if (!showCheckboxInput) {
         return _jsx("div", { className: "rcm-entire-checker-placeholder", children: "#" });
     }
-    return _jsx("input", { type: "checkbox", "aria-label": "\uC804\uCCB4 \uC120\uD0DD", className: "rcm-checkbox", id: id, checked: checkAll, onChange: () => checkAllItems() });
+    return (_jsx("input", { type: 'checkbox', "aria-label": "\uC804\uCCB4 \uC120\uD0DD", className: "rcm-checkbox", id: id, checked: checkAll, onChange: () => checkAllItems() }));
 };
 //# sourceMappingURL=EntireChecker.js.map

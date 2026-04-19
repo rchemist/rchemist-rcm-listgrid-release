@@ -171,16 +171,19 @@ export function isEquals(value, other) {
     if (value === other)
         return true;
     // plain object deep comparison (matches original CompareUtil.isEquals)
-    if (typeof value === 'object' && typeof other === 'object' &&
-        value !== null && other !== null &&
-        !Array.isArray(value) && !Array.isArray(other)) {
+    if (typeof value === 'object' &&
+        typeof other === 'object' &&
+        value !== null &&
+        other !== null &&
+        !Array.isArray(value) &&
+        !Array.isArray(other)) {
         const a = value;
         const b = other;
         const keysA = Object.keys(a);
         const keysB = Object.keys(b);
         if (keysA.length !== keysB.length)
             return false;
-        return keysA.every(key => keysB.includes(key) && isEquals(a[key], b[key]));
+        return keysA.every((key) => keysB.includes(key) && isEquals(a[key], b[key]));
     }
     return false;
 }
@@ -195,7 +198,7 @@ export function isEqualCollection(value, other, ignoreOrder = false) {
     if (value.length !== other.length)
         return false;
     if (isTrue(ignoreOrder)) {
-        return value.every(v => other.includes(v));
+        return value.every((v) => other.includes(v));
     }
     return value.every((v, i) => isEquals(v, other[i]));
 }
@@ -383,7 +386,8 @@ export function getSessionStorageObject(key, customParse) {
 // Originals are module-level constants pulled from env. Library-consumer
 // Next.js bundles substitute NEXT_PUBLIC_* at build time, so this reads the
 // same env var and matches the original shape (plain strings, not Proxies).
-export const ASSET_SERVER_URL = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_ASSET_SERVER) || 'http://127.0.0.1:8320';
+export const ASSET_SERVER_URL = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_ASSET_SERVER) ||
+    'http://127.0.0.1:8320';
 export const ASSET_PREFIX = '/static-resource/';
 // Host-configuration override — hosts that set the env var don't need this;
 // hosts that bootstrap at runtime (non-Next environments) can override here.
@@ -460,7 +464,7 @@ export function getDefinedDates(type) {
     return [start, end];
 }
 // -- API re-exports (host-supplied ApiClient; see src/listgrid/api) --------
-export { callExternalHttpRequest, getExternalApiData, getExternalApiDataWithError, } from '../api';
+export { callExternalHttpRequest, getExternalApiData, getExternalApiDataWithError } from '../api';
 // -- Other -----------------------------------------------------------------
 // intentional: legacy placeholders kept for API parity with the original @gjcu/ui surface
 // (consumers dereference fields on these dynamically — tightening breaks out-of-scope)

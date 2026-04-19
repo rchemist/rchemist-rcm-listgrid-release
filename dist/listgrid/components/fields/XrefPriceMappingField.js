@@ -7,7 +7,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
  */
 import { FormField } from './abstract';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { isEmpty } from "../../utils";
+import { isEmpty } from '../../utils';
 import { XrefPriceMappingView } from './view/XrefPiceMappingView';
 export class XrefPriceMappingField extends FormField {
     constructor(name, order, props) {
@@ -23,16 +23,16 @@ export class XrefPriceMappingField extends FormField {
             entityForm: props.entityForm,
             initPrice: props.initPrice,
             priceHelpText: props.priceHelpText,
-            filterItems: props.filterItems
-        })
-            .copyFields(props, true);
+            filterItems: props.filterItems,
+        }).copyFields(props, true);
     }
     /**
      * XrefPriceMappingField 핵심 렌더링 로직 (원본 render 로직 보존)
      */
     renderInstance(params) {
         return (async () => {
-            return _jsx(XrefPriceMappingView, { ...await getInputRendererParameters(this, { ...params }), priceHelpText: this.priceHelpText, initPrice: this.initPrice, parentEntityForm: params.entityForm, filters: this.filterItems, entityForm: this.entityForm });
+            const inputParams = await getInputRendererParameters(this, { ...params });
+            return (_jsx(XrefPriceMappingView, { ...inputParams, priceHelpText: this.priceHelpText, initPrice: this.initPrice, parentEntityForm: params.entityForm, filters: this.filterItems, entityForm: this.entityForm }));
         })();
     }
     /**
@@ -43,7 +43,7 @@ export class XrefPriceMappingField extends FormField {
             entityForm: this.entityForm,
             initPrice: this.initPrice,
             priceHelpText: this.priceHelpText,
-            filterItems: this.filterItems
+            filterItems: this.filterItems,
         });
     }
     // override

@@ -12,33 +12,33 @@
  */
 export const mainListGridTheme = {
     panel: {
-        container: "rcm-listgrid-panel rcm-listgrid-panel-main",
-        mainEntity: "",
-        subCollection: "rcm-listgrid-panel-sub",
-        default: "",
+        container: 'rcm-listgrid-panel rcm-listgrid-panel-main',
+        mainEntity: '',
+        subCollection: 'rcm-listgrid-panel-sub',
+        default: '',
     },
     header: {
-        container: "rcm-listgrid-header",
-        titleWrapper: "rcm-listgrid-title",
-        titleText: "rcm-listgrid-title",
-        buttonGroup: "rcm-listgrid-button-group",
+        container: 'rcm-listgrid-header',
+        titleWrapper: 'rcm-listgrid-title',
+        titleText: 'rcm-listgrid-title',
+        buttonGroup: 'rcm-listgrid-button-group',
     },
     searchBar: {
-        container: "rcm-listgrid-searchbar",
-        innerWrapper: "rcm-listgrid-searchbar-inner",
-        layoutWrapper: "rcm-row-between rcm-gap-sm",
+        container: 'rcm-listgrid-searchbar',
+        innerWrapper: 'rcm-listgrid-searchbar-inner',
+        layoutWrapper: 'rcm-row-between rcm-gap-sm',
     },
     table: {
-        responsiveWrapper: "rcm-skeleton-table-wrapper",
-        container: "rcm-scroll-y",
-        table: "rcm-table",
-        thead: "rcm-listgrid-thead",
-        headerRow: "",
-        tbody: "rcm-listgrid-tbody",
+        responsiveWrapper: 'rcm-skeleton-table-wrapper',
+        container: 'rcm-scroll-y',
+        table: 'rcm-table',
+        thead: 'rcm-listgrid-thead',
+        headerRow: '',
+        tbody: 'rcm-listgrid-tbody',
     },
     pagination: {
-        container: "rcm-listgrid-pagination",
-        wrapper: "",
+        container: 'rcm-listgrid-pagination',
+        wrapper: '',
     },
 };
 //# sourceMappingURL=mainTheme.js.map

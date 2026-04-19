@@ -5,12 +5,12 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { showConfirm } from "../../../../message";
+import { showConfirm } from '../../../../message';
 import { removeTrailingSeparator } from '../../../../utils/StringUtil';
 import { isTrue } from '../../../../utils/BooleanUtil';
-import { cn } from "../../../../utils/cn";
+import { cn } from '../../../../utils/cn';
 export const ListButton = ({ entityForm, router, pathname, buttonLinks, subCollection, openBaseLoading, readonly, buttonClassNames, }) => {
-    const listUrl = removeTrailingSeparator(pathname, "/") || "/";
+    const listUrl = removeTrailingSeparator(pathname, '/') || '/';
     const navigateToList = () => {
         openBaseLoading?.(true);
         // Check if user came from the list page (to preserve URL state like page, filters)
@@ -18,23 +18,26 @@ export const ListButton = ({ entityForm, router, pathname, buttonLinks, subColle
         const currentOrigin = typeof window !== 'undefined' ? window.location.origin : '';
         // Use router.back() if we came from the list page (preserves URL query params)
         // Otherwise use router.push() for direct access (bookmarks, external links, etc.)
-        if (router.back && referrer && referrer.startsWith(currentOrigin) && referrer.includes(listUrl)) {
+        if (router.back &&
+            referrer &&
+            referrer.startsWith(currentOrigin) &&
+            referrer.includes(listUrl)) {
             router.back();
         }
         else {
             router.push(listUrl);
         }
     };
-    return (_jsx("button", { className: cn("rcm-button", buttonClassNames?.list), "data-variant": "outline", onClick: (e) => {
+    return (_jsx("button", { className: cn('rcm-button', buttonClassNames?.list), "data-variant": "outline", onClick: (e) => {
             (async () => {
                 e.stopPropagation();
                 const dirty = isTrue(readonly) ? false : entityForm.isDirty();
                 if (dirty) {
                     showConfirm({
-                        title: subCollection ? "이 창을 닫으시겠습니까?" : "목록으로 돌아가시겠습니까?",
-                        message: "수정 중인 정보가 있습니다.",
-                        confirmButtonText: subCollection ? "닫기" : "목록으로",
-                        cancelButtonText: "취소",
+                        title: subCollection ? '이 창을 닫으시겠습니까?' : '목록으로 돌아가시겠습니까?',
+                        message: '수정 중인 정보가 있습니다.',
+                        confirmButtonText: subCollection ? '닫기' : '목록으로',
+                        cancelButtonText: '취소',
                         onConfirm: async () => {
                             if (buttonLinks?.onClickList) {
                                 await buttonLinks.onClickList();
@@ -42,7 +45,7 @@ export const ListButton = ({ entityForm, router, pathname, buttonLinks, subColle
                             else {
                                 navigateToList();
                             }
-                        }
+                        },
                     });
                 }
                 else {
@@ -54,6 +57,6 @@ export const ListButton = ({ entityForm, router, pathname, buttonLinks, subColle
                     }
                 }
             })();
-        }, children: subCollection ? "닫기" : "목록" }, "button_list"));
+        }, children: subCollection ? '닫기' : '목록' }, 'button_list'));
 };
 //# sourceMappingURL=ListButton.js.map

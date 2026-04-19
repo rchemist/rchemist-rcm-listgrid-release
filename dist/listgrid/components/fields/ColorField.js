@@ -1,9 +1,9 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-import { useEffect, useState } from "react";
-import { ListableFormField } from "./abstract";
+import { useEffect, useState } from 'react';
+import { ListableFormField } from './abstract';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { ColorInput } from "../../ui";
+import { ColorInput } from '../../ui';
 export class ColorField extends ListableFormField {
     constructor(name, order) {
         super(name, order, 'custom');
@@ -13,7 +13,7 @@ export class ColorField extends ListableFormField {
      */
     renderInstance(params) {
         return (async () => {
-            const inputParam = { ...await getInputRendererParameters(this, params) };
+            const inputParam = { ...(await getInputRendererParameters(this, params)) };
             return _jsx(ColorInputField, { ...inputParam });
         })();
     }
@@ -32,16 +32,33 @@ export class ColorField extends ListableFormField {
 }
 async function renderColorListField(field, props) {
     const value = props.item[field.name] ?? '#fff';
-    return { result: _jsx("div", { children: _jsx("div", { className: `w-5 h-5 !bg-[${value}] rounded-full` }) }) };
+    return {
+        result: (_jsx("div", { children: _jsx("div", { className: `w-5 h-5 !bg-[${value}] rounded-full` }) })),
+    };
 }
 const ColorInputField = ({ name, label, required = false, readonly = false, withAlpha = false, ...props }) => {
     const [value, setValue] = useState();
     useEffect(() => {
         setValue(props.value);
     }, [props.value]);
-    return _jsx(ColorInput, { name: name, value: value, onChangeEnd: (color) => {
+    return (_jsx(ColorInput, { name: name, value: value, onChangeEnd: (color) => {
             setValue(color);
             props.onChange(color);
-        }, format: 'hex', swatches: ['#2e2e2e', '#868e96', '#fa5252', '#e64980', '#be4bdb', '#7950f2', '#4c6ef5', '#228be6', '#15aabf', '#12b886', '#40c057', '#82c91e', '#fab005', '#ffffff'], disabled: readonly, withAlpha: withAlpha });
+        }, format: 'hex', swatches: [
+            '#2e2e2e',
+            '#868e96',
+            '#fa5252',
+            '#e64980',
+            '#be4bdb',
+            '#7950f2',
+            '#4c6ef5',
+            '#228be6',
+            '#15aabf',
+            '#12b886',
+            '#40c057',
+            '#82c91e',
+            '#fab005',
+            '#ffffff',
+        ], disabled: readonly, withAlpha: withAlpha }));
 };
 //# sourceMappingURL=ColorField.js.map

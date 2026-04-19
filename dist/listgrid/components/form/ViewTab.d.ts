@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { TabIndexable } from './types/ViewEntityForm.types';
 import { EntityForm } from '../../config/EntityForm';
 /**

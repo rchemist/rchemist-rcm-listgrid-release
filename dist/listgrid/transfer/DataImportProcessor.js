@@ -6,18 +6,18 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { Table } from "../ui";
-import { SafePerfectScrollbar } from "../ui";
-import { Box } from "../ui";
-import { Flex } from "../ui";
-import { Grid } from "../ui";
-import { Paper } from "../ui";
-import { useEffect, useState } from "react";
+import { Table } from '../ui';
+import { SafePerfectScrollbar } from '../ui';
+import { Box } from '../ui';
+import { Flex } from '../ui';
+import { Grid } from '../ui';
+import { Paper } from '../ui';
+import { useEffect, useState } from 'react';
 // CSS module removed in Stage 8 (host app supplies styling)
 const classes = {};
 import { DataImportResultView, ImportErrorView } from '../transfer/DataImportResultView';
 import { defaultString } from '../utils/StringUtil';
-import { isEmpty } from "../utils";
+import { isEmpty } from '../utils';
 export const DataImportProcessor = ({ resultView, data, importResult, onSubmit, cancelImport, onImportSuccess, viewError, importErrorView, importError, errorMessage, preview, ...props }) => {
     const [fields, setFields] = useState([]);
     useEffect(() => {
@@ -26,7 +26,6 @@ export const DataImportProcessor = ({ resultView, data, importResult, onSubmit, 
                 // 첫줄은 헤더로 {id: '아이디', name: '이름', ...} 형식으로 데이터가 들어 온다.
                 const header = data[0];
                 return header[field.getName()] !== undefined;
-                ;
             });
             setFields(fields);
         }
@@ -34,16 +33,16 @@ export const DataImportProcessor = ({ resultView, data, importResult, onSubmit, 
     if (isEmpty(fields)) {
         return _jsx(_Fragment, {});
     }
-    return (_jsx(_Fragment, { children: _jsxs(Box, { children: [resultView && _jsxs(Box, { children: [_jsx(Box, { style: { padding: `2rem` }, children: _jsx(DataImportResultView, { result: importResult, fields: fields }) }), _jsx(Flex, { align: 'center', style: { width: '100%', paddingTop: 2 }, justify: 'center', children: _jsx("button", { type: "button", className: "rcm-button", "data-variant": "outline", onClick: () => {
+    return (_jsx(_Fragment, { children: _jsxs(Box, { children: [resultView && (_jsxs(Box, { children: [_jsx(Box, { style: { padding: `2rem` }, children: _jsx(DataImportResultView, { result: importResult, fields: fields }) }), _jsx(Flex, { align: 'center', style: { width: '100%', paddingTop: 2 }, justify: 'center', children: _jsx("button", { type: "button", className: "rcm-button", "data-variant": "outline", onClick: () => {
                                     cancelImport();
                                     onImportSuccess?.call(this);
-                                }, children: "\uD655\uC778" }) })] }), !resultView && _jsxs(Box, { children: [viewError && _jsxs(Box, { style: { padding: `2rem` }, children: [_jsx(ImportErrorView, { importError: importError, importErrorView: importErrorView, errorMessage: errorMessage }), _jsx(Flex, { align: 'center', style: { width: '100%', marginTop: `2rem` }, justify: 'center', children: _jsx("button", { type: "button", className: "rcm-button", "data-variant": "ghost", onClick: () => {
+                                }, children: "\uD655\uC778" }) })] })), !resultView && (_jsxs(Box, { children: [viewError && (_jsxs(Box, { style: { padding: `2rem` }, children: [_jsx(ImportErrorView, { importError: importError, importErrorView: importErrorView, errorMessage: errorMessage }), _jsx(Flex, { align: 'center', style: { width: '100%', marginTop: `2rem` }, justify: 'center', children: _jsx("button", { type: "button", className: "rcm-button", "data-variant": "ghost", onClick: () => {
                                             cancelImport();
-                                        }, children: "\uB2EB\uAE30" }) })] }), preview && _jsxs(Box, { style: { padding: `2rem` }, children: [_jsx(DataImportPreview, { data: data, fields: fields }), _jsxs(Flex, { gap: 10, align: 'center', style: { width: '100%', marginTop: `2rem` }, justify: 'center', children: [_jsx("button", { type: "button", className: "rcm-button", "data-variant": "primary", onClick: () => {
+                                        }, children: "\uB2EB\uAE30" }) })] })), preview && (_jsxs(Box, { style: { padding: `2rem` }, children: [_jsx(DataImportPreview, { data: data, fields: fields }), _jsxs(Flex, { gap: 10, align: 'center', style: { width: '100%', marginTop: `2rem` }, justify: 'center', children: [_jsx("button", { type: "button", className: "rcm-button", "data-variant": "primary", onClick: () => {
                                                 onSubmit();
                                             }, children: "\uC5C5\uB85C\uB4DC" }), _jsx("button", { type: "button", className: "rcm-button", "data-variant": "outline", onClick: () => {
                                                 cancelImport();
-                                            }, children: "\uCDE8\uC18C" })] })] })] })] }) }));
+                                            }, children: "\uCDE8\uC18C" })] })] }))] }))] }) }));
 };
 export const DataImportPreview = ({ fields, data }) => {
     function showRows() {
@@ -54,10 +53,10 @@ export const DataImportPreview = ({ fields, data }) => {
                             const cells = [];
                             fields.map((field, index) => {
                                 const fieldName = field.getName();
-                                cells.push(_jsx(Table.Td, { className: classes.row, children: defaultString(row.find(r => r.name === fieldName)?.value) }, 'cell_' + fieldName + '_' + index));
+                                cells.push(_jsx(Table.Td, { className: classes.row, children: defaultString(row.find((r) => r.name === fieldName)?.value) }, 'cell_' + fieldName + '_' + index));
                             });
                             return cells;
-                        }())] }, 'row_' + index));
+                        })()] }, 'row_' + index));
             }
         });
         return rowFields;

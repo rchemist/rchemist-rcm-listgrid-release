@@ -5,6 +5,7 @@ export function RouterProvider({ value, children }) {
     return _jsx(RouterContext.Provider, { value: value, children: children });
 }
 function mustRouter(caller) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks -- assertion helper always invoked from within hooks/components below
     const ctx = useContext(RouterContext);
     if (!ctx) {
         throw new Error(`[@rcm/listgrid] ${caller} must be called within a <RouterProvider>. ` +

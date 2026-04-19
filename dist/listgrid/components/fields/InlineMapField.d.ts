@@ -1,16 +1,16 @@
 import { FormField, FormFieldProps } from './abstract';
-import React from "react";
+import React from 'react';
 import { InlineMapConfig, MapKey } from '../../config/Config';
 import { FieldRenderParameters } from '../../config/EntityField';
-import { InlineMapPendingRef, KeyValue } from "../../ui";
-import { MinMaxLimit } from "../../form/Type";
+import { InlineMapPendingRef, KeyValue } from '../../ui';
+import { MinMaxLimit } from '../../form/Type';
 import { EntityForm } from '../../config/EntityForm';
 import { RenderType } from '../../config/Config';
 interface InlineMapFieldProps extends FormFieldProps {
-    config?: InlineMapConfig;
+    config?: InlineMapConfig | undefined;
 }
 export declare class InlineMapField extends FormField<InlineMapField> {
-    config?: InlineMapConfig;
+    config?: InlineMapConfig | undefined;
     pendingRef: {
         current: InlineMapPendingRef;
     };

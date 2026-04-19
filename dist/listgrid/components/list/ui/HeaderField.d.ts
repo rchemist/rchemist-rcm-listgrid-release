@@ -1,6 +1,6 @@
 import { ListableFormField } from '../../fields/abstract';
-import { SearchForm } from "../../../form/SearchForm";
-import { ViewFieldManageable } from "../types/ViewListGrid.types";
+import { SearchForm } from '../../../form/SearchForm';
+import { ViewFieldManageable } from '../types/ViewListGrid.types';
 import { EntityForm } from '../../../config/EntityForm';
 interface ViewHeaderFieldProps extends ViewFieldManageable {
     gridId: string;

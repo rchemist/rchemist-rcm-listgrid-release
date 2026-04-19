@@ -11,8 +11,8 @@
  *  limitations under the License.
  */
 import { STATUS_TAB_INFO } from './Config';
-import { AbstractManyToOneField, CheckButtonValidationField, FormField } from '../components/fields/abstract';
-import { callExternalHttpRequest, endsWith, getExternalApiDataWithError, isEmpty, isTrue, parse } from '../utils';
+import { AbstractManyToOneField, CheckButtonValidationField, FormField, } from '../components/fields/abstract';
+import { callExternalHttpRequest, endsWith, getExternalApiDataWithError, isEmpty, isTrue, parse, } from '../utils';
 import { ResponseData } from '../api';
 import { useSession } from '../auth';
 import { CustomOptionField, getCustomOptionValues } from '../components/fields/CustomOptionField';
@@ -76,7 +76,9 @@ export class EntityForm extends EntityFormExtensions {
         entityForm.onFetchData = this.onFetchData ? [...this.onFetchData] : undefined;
         entityForm.onInitialize = this.onInitialize ? [...this.onInitialize] : undefined;
         entityForm.onFetchListData = this.onFetchListData ? [...this.onFetchListData] : undefined;
-        entityForm.appendAdvancedSearchFields = this.appendAdvancedSearchFields ? [...this.appendAdvancedSearchFields] : undefined;
+        entityForm.appendAdvancedSearchFields = this.appendAdvancedSearchFields
+            ? [...this.appendAdvancedSearchFields]
+            : undefined;
         entityForm.readonly = this.readonly;
         entityForm.dataPreloaded = this.dataPreloaded;
         entityForm.fetchedEntity = this.fetchedEntity;
@@ -149,12 +151,12 @@ export class EntityForm extends EntityFormExtensions {
                             else if (response.error) {
                                 throw new Error(response.error);
                             }
-                            throw new Error("response error");
+                            throw new Error('response error');
                         }
                         catch (e) {
                             console.error(e);
                             if (e instanceof Error && e.message === '만료된 토큰 정보 입니다.') {
-                                throw new Error('만료된 토큰 정보 입니다.');
+                                throw new Error('만료된 토큰 정보 입니다.', { cause: e });
                             }
                             return { entityForm: entityForm, errors: ['데이터를 조회할 수 없습니다.'] };
                         }
@@ -182,23 +184,21 @@ export class EntityForm extends EntityFormExtensions {
             // PhoneNumberField 가 있다면 sourceType, enableSms 설정
             if (field instanceof PhoneNumberField) {
                 // 만약 이 PhoneNumberField 의 enableSMS 가 true 라면, view 페이지에서 SMS 발송 이력 필드를 자동으로 추가한다.
-                if (isTrue(field.enableSms) && hasAnyRole(entityForm.session, 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_STAFF')) {
+                if (isTrue(field.enableSms) &&
+                    hasAnyRole(entityForm.session, 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_STAFF')) {
                     // SMS 발송 이력 탭 정의 (STATUS_TAB_INFO.order - 10 = 999990)
                     const SMS_HISTORY_TAB = {
                         id: 'smsHistory',
                         label: 'SMS 발송 이력',
                         order: STATUS_TAB_INFO.order - 10,
-                        hidden: false
+                        hidden: false,
                     };
                     const smsHistoryField = createSmsHistoryField(field.getName() + 'SmsHistory', field.getOrder() + 1, field.getName());
                     if (smsHistoryField) {
-                        smsHistoryField
-                            .withLabel('SMS 발송 이력')
-                            .withModifyOnly()
-                            .withHideLabel(true);
+                        smsHistoryField.withLabel('SMS 발송 이력').withModifyOnly().withHideLabel(true);
                         entityForm.addFields({
                             tab: SMS_HISTORY_TAB,
-                            items: [smsHistoryField]
+                            items: [smsHistoryField],
                         });
                     }
                 }
@@ -234,13 +234,21 @@ export class EntityForm extends EntityFormExtensions {
                         if (objectValue !== undefined && objectValue !== null) {
                             const fieldName = keyParts[keyParts.length - 1];
                             if (objectValue[fieldName] !== undefined) {
-                                field.value = { current: objectValue[fieldName], fetched: objectValue[fieldName], default: field.value?.default };
+                                field.value = {
+                                    current: objectValue[fieldName],
+                                    fetched: objectValue[fieldName],
+                                    default: field.value?.default,
+                                };
                             }
                         }
                     }
                     else {
                         if (fetchedEntity[key] !== undefined) {
-                            field.value = { current: fetchedEntity[key], fetched: fetchedEntity[key], default: field.value?.default };
+                            field.value = {
+                                current: fetchedEntity[key],
+                                fetched: fetchedEntity[key],
+                                default: field.value?.default,
+                            };
                         }
                     }
                 });
@@ -290,71 +298,66 @@ export class EntityForm extends EntityFormExtensions {
      * @since 1.0.0
      */
     withHidden(props, hidden) {
-        try {
-            if (typeof props === 'string') {
-                const name = props;
-                const hiddenValue = hidden ?? false;
-                const field = this.getField(name);
-                if (field) {
-                    this.fields.set(name, field.withHidden(hiddenValue));
-                    return this;
-                }
-                const collection = this.getCollection(name);
-                if (collection) {
-                    this.collections.set(name, collection.withHidden(hiddenValue));
-                    return this;
-                }
+        if (typeof props === 'string') {
+            const name = props;
+            const hiddenValue = hidden ?? false;
+            const field = this.getField(name);
+            if (field) {
+                this.fields.set(name, field.withHidden(hiddenValue));
                 return this;
             }
-            const { type, hidden: hiddenValue } = props;
-            switch (type) {
-                case 'FIELD':
-                    const { fieldName } = props;
-                    const field = this.getField(fieldName);
-                    if (field) {
-                        this.fields.set(fieldName, field.withHidden(hiddenValue));
-                    }
-                    else {
-                        const collection = this.getCollection(fieldName);
-                        if (collection) {
-                            this.collections.set(fieldName, collection.withHidden(hiddenValue));
-                        }
-                    }
-                    break;
-                case 'GROUP':
-                    const { tabId, fieldGroupId } = props;
-                    const tab = this.getTab(tabId);
-                    if (tab) {
-                        const fieldGroup = tab.fieldGroups.find((group) => group.id === fieldGroupId);
-                        if (fieldGroup) {
-                            let affectedFields = 0;
-                            fieldGroup.fields.forEach((field) => {
-                                this.withHidden({ type: 'FIELD', hidden: hiddenValue, fieldName: field.name });
-                                affectedFields++;
-                            });
-                        }
-                    }
-                    break;
-                case 'TAB':
-                    const { tabId: targetTabId } = props;
-                    const targetTab = this.getTab(targetTabId);
-                    if (targetTab) {
-                        targetTab.hidden = hiddenValue;
-                        let affectedFields = 0;
-                        targetTab.fieldGroups.forEach((fieldGroup) => {
-                            fieldGroup.fields.forEach((field) => {
-                                this.withHidden({ type: 'FIELD', hidden: hiddenValue, fieldName: field.name });
-                                affectedFields++;
-                            });
-                        });
-                    }
-                    break;
+            const collection = this.getCollection(name);
+            if (collection) {
+                this.collections.set(name, collection.withHidden(hiddenValue));
+                return this;
             }
             return this;
         }
-        catch (error) {
-            throw error;
+        const { type, hidden: hiddenValue } = props;
+        switch (type) {
+            case 'FIELD':
+                const { fieldName } = props;
+                const field = this.getField(fieldName);
+                if (field) {
+                    this.fields.set(fieldName, field.withHidden(hiddenValue));
+                }
+                else {
+                    const collection = this.getCollection(fieldName);
+                    if (collection) {
+                        this.collections.set(fieldName, collection.withHidden(hiddenValue));
+                    }
+                }
+                break;
+            case 'GROUP':
+                const { tabId, fieldGroupId } = props;
+                const tab = this.getTab(tabId);
+                if (tab) {
+                    const fieldGroup = tab.fieldGroups.find((group) => group.id === fieldGroupId);
+                    if (fieldGroup) {
+                        let affectedFields = 0;
+                        fieldGroup.fields.forEach((field) => {
+                            this.withHidden({ type: 'FIELD', hidden: hiddenValue, fieldName: field.name });
+                            affectedFields++;
+                        });
+                    }
+                }
+                break;
+            case 'TAB':
+                const { tabId: targetTabId } = props;
+                const targetTab = this.getTab(targetTabId);
+                if (targetTab) {
+                    targetTab.hidden = hiddenValue;
+                    let affectedFields = 0;
+                    targetTab.fieldGroups.forEach((fieldGroup) => {
+                        fieldGroup.fields.forEach((field) => {
+                            this.withHidden({ type: 'FIELD', hidden: hiddenValue, fieldName: field.name });
+                            affectedFields++;
+                        });
+                    });
+                }
+                break;
         }
+        return this;
     }
     async delete() {
         if (!(this instanceof EntityForm)) {
@@ -380,7 +383,11 @@ export class EntityForm extends EntityFormExtensions {
         const formData = {};
         formData['revisionEntityName'] = this.getRevisionEntityName();
         formData['ids'] = idList;
-        const response = await getExternalApiDataWithError({ url: url, method: 'DELETE', formData: formData });
+        const response = await getExternalApiDataWithError({
+            url: url,
+            method: 'DELETE',
+            formData: formData,
+        });
         if (response.data) {
             // 정상 삭제된 경우
             result.refreshOrList = true;
@@ -402,7 +409,9 @@ export class EntityForm extends EntityFormExtensions {
         const fields = [];
         Array.from(this.fields.values()).forEach((field) => {
             if (type === undefined || field.type === type) {
-                const target = (isTrue(orderByView)) ? field.withOrder(this.getViewOrder(field.getTabId(), field.getFieldGroupId(), field.order)) : field;
+                const target = isTrue(orderByView)
+                    ? field.withOrder(this.getViewOrder(field.getTabId(), field.getFieldGroupId(), field.order))
+                    : field;
                 fields.push(target);
             }
         });
@@ -434,12 +443,20 @@ export class EntityForm extends EntityFormExtensions {
                 }
                 if (objectValue !== undefined && objectValue !== null) {
                     const fieldName = keyParts[keyParts.length - 1];
-                    field.value = { current: objectValue[fieldName], fetched: objectValue[fieldName], default: field.value?.default };
+                    field.value = {
+                        current: objectValue[fieldName],
+                        fetched: objectValue[fieldName],
+                        default: field.value?.default,
+                    };
                 }
             }
             else {
                 if (entity[key] !== undefined) {
-                    field.value = { current: entity[key], fetched: entity[key], default: field.value?.default };
+                    field.value = {
+                        current: entity[key],
+                        fetched: entity[key],
+                        default: field.value?.default,
+                    };
                 }
                 else {
                     // json 에 데이터가 없다는 것은 해당 field 가 비어 있다는 뜻이다.
@@ -480,7 +497,8 @@ export class EntityForm extends EntityFormExtensions {
         }
         try {
             return await callExternalHttpRequest({
-                url: fetchUrl, method: 'GET'
+                url: fetchUrl,
+                method: 'GET',
             });
         }
         catch (error) {
@@ -497,13 +515,19 @@ export class EntityForm extends EntityFormExtensions {
         // 필드 에러 초기화
         this.errors = [];
         let form = this.clone(true);
-        if (renderType === 'update' && !(this.isDirty())) {
+        if (renderType === 'update' && !this.isDirty()) {
             // update 에서 변경된 정보가 전혀 없다면 수정할 내용이 없다는 에러를 낸다.
             return { actionType: renderType, entityForm: form, errors: ['수정된 항목이 없습니다.'] };
         }
-        const fieldErrors = isTrue(skipValidation) ? [] : await this.validate({ fieldNames: undefined, session });
+        const fieldErrors = isTrue(skipValidation)
+            ? []
+            : await this.validate({ fieldNames: undefined, session });
         if (!isEmpty(fieldErrors)) {
-            return { actionType: renderType, entityForm: form.withErrors(fieldErrors), errors: ['입력 값이 올바르지 않습니다.'] };
+            return {
+                actionType: renderType,
+                entityForm: form.withErrors(fieldErrors),
+                errors: ['입력 값이 올바르지 않습니다.'],
+            };
         }
         const submitFormData = await this.getSubmitFormData(forceIncludeExceptOnSave);
         if (submitFormData.error) {
@@ -522,8 +546,8 @@ export class EntityForm extends EntityFormExtensions {
                 formData: submitFormData.data,
                 overrideHeaders: new Map([
                     ['X-EntityForm-Name', this.name],
-                    ['X-Extension-Point', extensionPoint]
-                ])
+                    ['X-Extension-Point', extensionPoint],
+                ]),
             });
             if (response.data) {
                 // entityForm 이 데이터로 넘어 온다.
@@ -542,7 +566,11 @@ export class EntityForm extends EntityFormExtensions {
                         }
                     }
                 }
-                const result = { actionType: renderType, entityForm: form, errors: [] };
+                const result = {
+                    actionType: renderType,
+                    entityForm: form,
+                    errors: [],
+                };
                 // 확장 포인트 처리
                 await this.postSave?.(result);
                 return result;
@@ -558,7 +586,8 @@ export class EntityForm extends EntityFormExtensions {
                         // entityError가 있으면 구조화된 정보 사용
                         if (response.entityError) {
                             // entityError.error가 객체인지 문자열인지 확인
-                            if (typeof response.entityError.error === 'object' && response.entityError.error !== null) {
+                            if (typeof response.entityError.error === 'object' &&
+                                response.entityError.error !== null) {
                                 errorObject = response.entityError.error;
                             }
                             else if (typeof response.entityError.error === 'string') {
@@ -608,7 +637,11 @@ export class EntityForm extends EntityFormExtensions {
                                     if (entries.length > 0) {
                                         entries.forEach(([fieldName, fieldError]) => {
                                             const label = form.getLabel(fieldName) ?? '저장 오류';
-                                            fieldErrors.push({ name: fieldName, label: label, errors: fieldError });
+                                            fieldErrors.push({
+                                                name: fieldName,
+                                                label: label,
+                                                errors: fieldError,
+                                            });
                                             hasFieldErrors = true;
                                         });
                                     }
@@ -630,26 +663,25 @@ export class EntityForm extends EntityFormExtensions {
                 }
                 // fieldError가 있으면 에러 메시지를 표시하지 않음 (필드별로 표시되므로)
                 let errorMessage;
-                let hasError = false;
                 if (fieldErrors.length > 0) {
                     // 필드 에러가 있으면 일반 에러 메시지는 표시하지 않지만, 에러 상태임은 표시
-                    errorMessage = undefined;
-                    hasError = true;
-                    return { actionType: renderType, entityForm: form.withErrors(fieldErrors), errors: ['입력 값이 올바르지 않습니다.'] };
+                    return {
+                        actionType: renderType,
+                        entityForm: form.withErrors(fieldErrors),
+                        errors: ['입력 값이 올바르지 않습니다.'],
+                    };
                 }
                 else {
                     // 필드 에러가 없을 때만 일반 에러 메시지 표시
-                    errorMessage = (!jsonError ? response.error : globalError ? globalError : undefined) ?? '저장 중 오류가 발생했습니다.';
+                    errorMessage =
+                        (!jsonError ? response.error : globalError ? globalError : undefined) ??
+                            '저장 중 오류가 발생했습니다.';
                 }
-                // fieldError가 있거나 errorMessage가 있으면 errors 배열에 최소한 하나의 항목을 추가
+                // errorMessage 가 있으면 errors 배열에 최소한 하나의 항목을 추가
                 // 이렇게 해야 호출하는 쪽에서 에러 상태임을 인식할 수 있음
                 const errors = [];
                 if (errorMessage) {
                     errors.push(errorMessage);
-                }
-                else if (hasError) {
-                    // fieldError가 있지만 일반 메시지가 없는 경우, 빈 문자열이라도 추가하여 에러 상태임을 표시
-                    errors.push('');
                 }
                 return { actionType: renderType, entityForm: form, errors };
             }
@@ -688,7 +720,9 @@ export class EntityForm extends EntityFormExtensions {
                 if (field instanceof AbstractManyToOneField) {
                     const manyToOneConfig = field.config;
                     const baseFieldName = fieldNameOverride || field.getName();
-                    const lastPart = baseFieldName.includes('.') ? baseFieldName.substring(baseFieldName.lastIndexOf('.') + 1) : baseFieldName;
+                    const lastPart = baseFieldName.includes('.')
+                        ? baseFieldName.substring(baseFieldName.lastIndexOf('.') + 1)
+                        : baseFieldName;
                     const idFieldName = endsWith(lastPart, 'Id') ? lastPart : `${lastPart}Id`;
                     if (value) {
                         const relationId = manyToOneConfig.field?.id ?? 'id';
@@ -710,7 +744,8 @@ export class EntityForm extends EntityFormExtensions {
                 }
                 const value = await field.getSaveValue(this, renderType);
                 const modifiedOnCreate = renderType === 'create' && value !== undefined;
-                if (modifiedOnCreate || (field.isDirty() && (!isTrue(field.exceptOnSave) || forceIncludeExceptOnSave))) {
+                if (modifiedOnCreate ||
+                    (field.isDirty() && (!isTrue(field.exceptOnSave) || forceIncludeExceptOnSave))) {
                     modifiedFields.push(field.getName());
                     // 만약 필드 이름에 . 가 있다면 특정 객체를 만들어야 한다.
                     const fieldName = field.getName();
@@ -755,7 +790,7 @@ export class EntityForm extends EntityFormExtensions {
             const result = await this.overrideSubmitData?.(this, data);
             data = result.data;
             if (isTrue(result.removePrevious)) {
-                modifiedFields = [...result.modifiedFields ?? []];
+                modifiedFields = [...(result.modifiedFields ?? [])];
             }
             else {
                 if (result.modifiedFields) {
@@ -781,7 +816,7 @@ export class EntityForm extends EntityFormExtensions {
             data,
             modifiedFields,
             error,
-            errors
+            errors,
         };
     }
     async validate(props) {
@@ -812,7 +847,7 @@ export class EntityForm extends EntityFormExtensions {
                     name: field.getName(),
                     label: field.getLabel(),
                     errors: [...errorMessages],
-                    tabId: field.getTabId()
+                    tabId: field.getTabId(),
                 });
             }
         }

@@ -1,8 +1,8 @@
 import { AbstractDateField, AbstractDateFieldProps, ViewListProps, ViewListResult, ViewRenderProps, ViewRenderResult } from './abstract';
-import React from "react";
+import React from 'react';
 import { FieldRenderParameters, FilterRenderParameters } from '../../config/EntityField';
 import { RenderType } from '../../config/Config';
-import { MinMaxStringLimit } from "../../form/Type";
+import { MinMaxStringLimit } from '../../form/Type';
 interface DateFieldProps extends AbstractDateFieldProps {
 }
 export declare class DateField extends AbstractDateField<DateField> {

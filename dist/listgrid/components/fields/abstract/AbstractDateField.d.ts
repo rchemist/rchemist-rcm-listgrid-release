@@ -1,11 +1,11 @@
-import { ListableFormField, ListableFormFieldProps } from "./ListableFormField";
+import { ListableFormField, ListableFormFieldProps } from './ListableFormField';
 import { FieldType } from '../../../config/Config';
-import { MinMaxStringLimit } from "../../../form/Type";
-export interface AbstractDateFieldProps extends ListableFormFieldProps {
+import { MinMaxStringLimit } from '../../../form/Type';
+export interface AbstractDateFieldProps<TValue = any, TForm extends object = any> extends ListableFormFieldProps<TValue, TForm> {
     limit?: MinMaxStringLimit;
     range?: boolean;
 }
-export declare abstract class AbstractDateField<T extends AbstractDateField<T>> extends ListableFormField<T> {
+export declare abstract class AbstractDateField<TSelf extends AbstractDateField<TSelf, TValue, TForm>, TValue = any, TForm extends object = any> extends ListableFormField<TSelf, TValue, TForm> {
     limit?: MinMaxStringLimit;
     range?: boolean;
     protected constructor(name: string, order: number, type: FieldType, limit?: MinMaxStringLimit, range?: boolean);
@@ -29,6 +29,6 @@ export declare abstract class AbstractDateField<T extends AbstractDateField<T>> 
      * @param max
      */
     withMax(max?: string): this;
-    protected copyFields(origin: ListableFormFieldProps, includeValue?: boolean): this;
+    protected copyFields(origin: ListableFormFieldProps<TValue, TForm>, includeValue?: boolean): this;
 }
 //# sourceMappingURL=AbstractDateField.d.ts.map

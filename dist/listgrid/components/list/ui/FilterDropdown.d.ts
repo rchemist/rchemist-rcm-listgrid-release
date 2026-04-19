@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 export type FilterDropdownSize = 'sm' | 'md' | 'lg';
 export type FilterDropdownPlacement = 'left' | 'right';
 interface FilterDropdownProps {

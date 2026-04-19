@@ -1,22 +1,22 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { Suspense, useEffect, useMemo, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useSession } from '../auth';
-import { usePathname, useSearchParams } from "../router";
-import { Breadcrumb } from "../ui";
+import { usePathname, useSearchParams } from '../router';
+import { Breadcrumb } from '../ui';
 import { checkAdminMenuPermission, DEFAULT_MENU_ALIAS } from '../menu/MenuPermissionChecker';
-import { LoadingOverlay } from "../ui";
-import { Skeleton } from "../ui";
-import { Alert } from "../ui";
-import { dynamic } from "../utils/lazy";
+import { LoadingOverlay } from '../ui';
+import { Skeleton } from '../ui';
+import { Alert } from '../ui';
+import { dynamic } from '../utils/lazy';
 // Dynamic import with better optimization
-const ViewEntityForm = dynamic(() => import("../components/form/ViewEntityForm").then(mod => ({
-    default: mod.ViewEntityForm
+const ViewEntityForm = dynamic(() => import('../components/form/ViewEntityForm').then((mod) => ({
+    default: mod.ViewEntityForm,
 })), {
     ssr: false,
-    loading: () => (_jsxs("div", { className: 'relative', children: [_jsx(LoadingOverlay, { visible: true }), _jsx("div", { className: 'w-full h-[400px]' })] }))
+    loading: () => (_jsxs("div", { className: 'relative', children: [_jsx(LoadingOverlay, { visible: true }), _jsx("div", { className: 'w-full h-[400px]' })] })),
 });
-export const ViewEntityFormWrapper = React.memo(({ props, breadcrumbs, anonymous, popupMode: popupModeProp = false, }) => {
+export const ViewEntityFormWrapper = React.memo(({ props, breadcrumbs, anonymous, popupMode: popupModeProp = false }) => {
     const [mounted, setMounted] = useState(false);
     const [permissionType, setPermissionType] = useState();
     const session = useSession();
@@ -32,6 +32,7 @@ export const ViewEntityFormWrapper = React.memo(({ props, breadcrumbs, anonymous
                 document.body.classList.remove('popup-mode');
             };
         }
+        return undefined;
     }, [popupMode]);
     // Memoize entity form props to prevent unnecessary re-renders
     const entityFormProps = useMemo(() => {
@@ -61,7 +62,7 @@ export const ViewEntityFormWrapper = React.memo(({ props, breadcrumbs, anonymous
             try {
                 const permissionType = await checkAdminMenuPermission({
                     url: pathname,
-                    alias: DEFAULT_MENU_ALIAS
+                    alias: DEFAULT_MENU_ALIAS,
                 });
                 if (isMounted) {
                     setPermissionType(permissionType);

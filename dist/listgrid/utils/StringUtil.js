@@ -4,14 +4,14 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { stringify } from "./jsonUtils";
-import { isTrue } from "./BooleanUtil";
+import { stringify } from './jsonUtils';
+import { isTrue } from './BooleanUtil';
 export function isBlank(data) {
     return data === undefined || data === null || data === '';
 }
 export function appendString(str, added, splitter) {
-    str = (str === null || str === undefined) ? "" : str;
-    const split = splitter === undefined ? " " : splitter;
+    str = str === null || str === undefined ? '' : str;
+    const split = splitter === undefined ? ' ' : splitter;
     if (isBlank(added)) {
         return str;
     }
@@ -142,7 +142,7 @@ export function getHashCode(data) {
         }
         for (let i = 0; i < data.length; i++) {
             const char = data.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
+            hash = (hash << 5) - hash + char;
             hash = hash & hash;
         }
         return hash;
@@ -187,7 +187,7 @@ export function endsWith(value, postFix, ignoreCase) {
 export function convertToCamelCase(input) {
     // 입력이 없거나 공백인 경우
     if (!input || input.trim().length === 0) {
-        return "";
+        return '';
     }
     // 공백 제거
     input = input.trim();
@@ -196,7 +196,9 @@ export function convertToCamelCase(input) {
     // 두 번째 글자부터 반복하여 처리
     for (let i = 1; i < input.length; i++) {
         // 현재 문자와 이전 문자가 둘 다 대문자이고, 이전 문자가 마지막 문자열이 아닐 때
-        if (input.charAt(i).toUpperCase() === input.charAt(i) && input.charAt(i - 1).toUpperCase() === input.charAt(i - 1) && i !== input.length - 1) {
+        if (input.charAt(i).toUpperCase() === input.charAt(i) &&
+            input.charAt(i - 1).toUpperCase() === input.charAt(i - 1) &&
+            i !== input.length - 1) {
             // 현재 문자를 소문자로 변환하여 결과에 추가
             result += input.charAt(i).toLowerCase();
         }
@@ -279,17 +281,17 @@ export function generateSlug(input) {
 }
 export function camelCaseToSnakeCase(camel, upperCase) {
     // 먼저 "-" 문자를 "_"로 대체
-    camel = camel.replace(/-/g, "_");
+    camel = camel.replace(/-/g, '_');
     let sb = [];
     const length = camel.length;
     for (let i = 0; i < length; ++i) {
         const char = camel.charAt(i);
-        if (char === char.toUpperCase() && char !== "_" && sb.length > 0) {
-            sb.push("_");
+        if (char === char.toUpperCase() && char !== '_' && sb.length > 0) {
+            sb.push('_');
         }
         sb.push(upperCase ? char.toUpperCase() : char.toLowerCase());
     }
-    return sb.join("");
+    return sb.join('');
 }
 export function splitWithSplitCode(value, split) {
     if (isBlank(value)) {

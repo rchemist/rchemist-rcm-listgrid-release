@@ -1,22 +1,22 @@
 import { FormField, FormFieldProps } from './abstract';
 import { FieldRenderParameters } from '../../config/EntityField';
-import React from "react";
+import React from 'react';
 import { EntityForm } from '../../config/EntityForm';
 import { RenderType } from '../../config/Config';
-import { FilterItem } from "../../form/SearchForm";
+import { FilterItem } from '../../form/SearchForm';
 interface XrefPriceAdditionalProps {
     entityForm: EntityForm;
     initPrice: (entityForm: EntityForm, rowValue: any) => Promise<void>;
-    priceHelpText?: string;
-    filterItems?: FilterItem[] | ((entityForm: EntityForm, parentEntityForm?: EntityForm) => Promise<FilterItem[]>);
+    priceHelpText?: string | undefined;
+    filterItems?: FilterItem[] | ((entityForm: EntityForm, parentEntityForm?: EntityForm) => Promise<FilterItem[]>) | undefined;
 }
 export interface XrefPriceMappingFieldProps extends FormFieldProps, XrefPriceAdditionalProps {
 }
 export declare class XrefPriceMappingField extends FormField<XrefPriceMappingField> {
     entityForm: EntityForm;
     initPrice: (entityForm: EntityForm, rowValue: any) => Promise<void>;
-    priceHelpText?: string;
-    filterItems?: FilterItem[] | ((entityForm: EntityForm, parentEntityForm?: EntityForm) => Promise<FilterItem[]>);
+    priceHelpText?: string | undefined;
+    filterItems?: FilterItem[] | ((entityForm: EntityForm, parentEntityForm?: EntityForm) => Promise<FilterItem[]>) | undefined;
     constructor(name: string, order: number, props: XrefPriceAdditionalProps);
     static create(props: XrefPriceMappingFieldProps): XrefPriceMappingField;
     /**

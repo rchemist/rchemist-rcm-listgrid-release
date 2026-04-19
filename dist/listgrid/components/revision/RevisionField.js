@@ -6,22 +6,27 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import { FormField } from '../fields/abstract';
-import { SearchForm } from "../../form/SearchForm";
-import { PageResult } from "../../form/Type";
+import { SearchForm } from '../../form/SearchForm';
+import { PageResult } from '../../form/Type';
 import { useModalManagerStore } from '../../store';
 import { useSession } from '../../auth';
 import { ViewEntityForm } from '../form/ViewEntityForm';
-import { IconHistory } from "@tabler/icons-react";
-import { fDateTime } from "../../misc";
-import { Pagination } from "../../ui";
-import { getTranslation } from "../../utils/i18n";
-const revisionApiUrl = "/revision";
+import { IconHistory } from '@tabler/icons-react';
+import { fDateTime } from '../../misc';
+import { Pagination } from '../../ui';
+import { getTranslation } from '../../utils/i18n';
+const revisionApiUrl = '/revision';
 // Audit/timestamp fields excluded from diff (always change on every update)
 const AUDIT_FIELD_NAMES = new Set([
-    'updatedAt', 'dateUpdated', 'modifiedAt', 'dateModified',
-    'lastModified', 'lastModifiedDate', 'auditable',
+    'updatedAt',
+    'dateUpdated',
+    'modifiedAt',
+    'dateModified',
+    'lastModified',
+    'lastModifiedDate',
+    'auditable',
 ]);
 /**
  * Compare two revision data objects and return the set of field names that differ.
@@ -44,12 +49,12 @@ const RevisionDiffWrapper = ({ changedFields, fieldLabelMap, hasPreviousRevision
     const containerId = 'revision-diff-container';
     const selectors = changedFields.size > 0
         ? Array.from(changedFields)
-            .map(name => `#${containerId} [data-field-name="${name}"]`)
+            .map((name) => `#${containerId} [data-field-name="${name}"]`)
             .join(',\n')
         : '';
     // Resolve display labels for changed fields (use label if available, skip otherwise)
     const changedFieldLabels = Array.from(changedFields)
-        .map(name => fieldLabelMap.get(name))
+        .map((name) => fieldLabelMap.get(name))
         .filter((label) => !!label);
     return (_jsxs("div", { id: containerId, className: "rcm-revision-diff-container", children: [changedFields.size > 0 && (_jsxs(_Fragment, { children: [_jsx("style", { children: `
             ${selectors} {
@@ -84,8 +89,7 @@ export class RevisionField extends FormField {
         return Promise.resolve(null);
     }
     static create(props) {
-        return new RevisionField(props.name, props.order)
-            .copyFields(props, true);
+        return new RevisionField(props.name, props.order).copyFields(props, true);
     }
 }
 const RevisionFieldRenderer = ({ entityForm }) => {
@@ -145,7 +149,7 @@ const RevisionFieldRenderer = ({ entityForm }) => {
             const previousData = JSON.parse(previousRevision.json);
             changedFields = getChangedFields(revisionData, previousData);
             // 수정일 등 항상 변경되는 감사(audit) 필드 제외
-            changedFields = new Set([...changedFields].filter(name => !AUDIT_FIELD_NAMES.has(name)));
+            changedFields = new Set([...changedFields].filter((name) => !AUDIT_FIELD_NAMES.has(name)));
         }
         // EntityForm 복제 및 초기화
         let revisionEntityForm = entityForm.clone(false);
@@ -172,7 +176,7 @@ const RevisionFieldRenderer = ({ entityForm }) => {
             title: `변경 이력 (${revision.name} / ${fDateTime(revision.createdAt, 'yyyy-MM-dd HH:mm:ss')})`,
             size: 'full',
             fullHeight: true,
-            content: (_jsx(RevisionDiffWrapper, { changedFields: changedFields, fieldLabelMap: fieldLabelMap, hasPreviousRevision: !!previousRevision, children: _jsx(ViewEntityForm, { readonly: true, entityForm: revisionEntityForm, session: session, hideTitle: true, hideAllButtons: true }) })),
+            content: (_jsx(RevisionDiffWrapper, { changedFields: changedFields, fieldLabelMap: fieldLabelMap, hasPreviousRevision: !!previousRevision, children: _jsx(ViewEntityForm, { readonly: true, entityForm: revisionEntityForm, ...(session !== undefined ? { session } : {}), hideTitle: true, hideAllButtons: true }) })),
         });
     };
     if (loading) {

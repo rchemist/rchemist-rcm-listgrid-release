@@ -89,23 +89,23 @@ export interface CardSubCollectionFetchOptions {
  * Extends SubCollectionField to display items in a card grid format
  */
 export declare class CardSubCollectionField extends SubCollectionField {
-    tooltip?: TooltipType;
+    tooltip?: TooltipType | undefined;
     fetchUrl: string;
-    fetchUrlFunction?: (parentEntityForm: EntityForm) => string;
-    cardConfig?: CardConfig;
-    fetchOptions?: CardSubCollectionFetchOptions;
+    fetchUrlFunction?: ((parentEntityForm: EntityForm) => string) | undefined;
+    cardConfig?: CardConfig | undefined;
+    fetchOptions?: CardSubCollectionFetchOptions | undefined;
     constructor(props: {
         entityForm: EntityForm;
         relation: CardSubCollectionRelation;
         order: number;
         name: string;
-        label?: LabelType;
-        helpText?: HelpTextType;
-        hidden?: HiddenType;
-        readonly?: ReadOnlyType;
-        fetchUrl?: string | ((parentEntityForm: EntityForm) => string);
-        cardConfig?: CardConfig;
-        fetchOptions?: CardSubCollectionFetchOptions;
+        label?: LabelType | undefined;
+        helpText?: HelpTextType | undefined;
+        hidden?: HiddenType | undefined;
+        readonly?: ReadOnlyType | undefined;
+        fetchUrl?: string | ((parentEntityForm: EntityForm) => string) | undefined;
+        cardConfig?: CardConfig | undefined;
+        fetchOptions?: CardSubCollectionFetchOptions | undefined;
     });
     /**
      * Override withTooltip to support tooltips (parent class doesn't support it)

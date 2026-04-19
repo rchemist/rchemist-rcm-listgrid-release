@@ -34,7 +34,7 @@ export function EntityFormScopeProvider({ children, depth = 0, maxInlineDepth, m
     // Calculate isInlineMode based on depth and maxInlineDepth
     const isInlineMode = effectiveDepth <= effectiveMaxInlineDepth && !effectiveForceModalMode;
     // Use expansion hook for managing expanded items
-    const { expandedItems, canExpand, toggleExpansion, collapseItem, collapseAll, } = useSubCollectionExpansion({
+    const { expandedItems, canExpand, toggleExpansion, collapseItem, collapseAll } = useSubCollectionExpansion({
         maxExpandedItems: effectiveMaxExpandedItems,
         expansionMode: effectiveExpansionMode,
     });
@@ -51,7 +51,7 @@ export function EntityFormScopeProvider({ children, depth = 0, maxInlineDepth, m
         toggleExpansion,
         collapseItem,
         collapseAll,
-        parentEntityForm,
+        ...(parentEntityForm !== undefined ? { parentEntityForm } : {}),
     }), [
         effectiveDepth,
         effectiveMaxInlineDepth,

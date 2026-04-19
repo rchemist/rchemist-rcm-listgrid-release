@@ -1,15 +1,15 @@
 import { InputRendererProps } from '../../../config/Config';
 import { EntityForm } from '../../../config/EntityForm';
-import { FilterItem } from "../../../form/SearchForm";
+import { FilterItem } from '../../../form/SearchForm';
 interface XrefPriorityMappingViewProps extends InputRendererProps {
     entityForm: EntityForm;
-    excludeId?: string;
-    add?: boolean;
-    parentEntityForm?: EntityForm;
-    filters?: FilterItem[] | ((entityForm: EntityForm, parentEntityForm?: EntityForm) => Promise<FilterItem[]>);
+    excludeId?: string | undefined;
+    add?: boolean | undefined;
+    parentEntityForm?: EntityForm | undefined;
+    filters?: FilterItem[] | ((entityForm: EntityForm, parentEntityForm?: EntityForm) => Promise<FilterItem[]>) | undefined;
 }
 export interface XrefPriorityMappingValue {
-    mapped?: XrefPriorityValue[];
+    mapped?: XrefPriorityValue[] | undefined;
 }
 interface XrefPriorityValue {
     id: string;

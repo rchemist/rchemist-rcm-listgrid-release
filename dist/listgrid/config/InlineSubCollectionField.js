@@ -36,12 +36,14 @@ export class InlineSubCollectionField extends SubCollectionField {
         }
         else if (props.rowActions && props.rowActions.length > 0) {
             // Convert deprecated rowActions to rowActionColumns for backward compatibility
-            this.inlineRowActionColumns = [{
+            this.inlineRowActionColumns = [
+                {
                     id: '_default',
                     label: props.rowActionsConfig?.label ?? '작업',
                     order: props.rowActionsConfig?.order ?? 9999,
                     actions: props.rowActions,
-                }];
+                },
+            ];
         }
         // Set default fetchOptions
         const defaultFetchOptions = {
@@ -77,12 +79,14 @@ export class InlineSubCollectionField extends SubCollectionField {
     withRowActions(...actions) {
         this.inlineRowActions = actions;
         // Convert to rowActionColumns for backward compatibility
-        this.inlineRowActionColumns = [{
+        this.inlineRowActionColumns = [
+            {
                 id: '_default',
                 label: this.inlineRowActionsConfig?.label ?? '작업',
                 order: this.inlineRowActionsConfig?.order ?? 9999,
                 actions: actions,
-            }];
+            },
+        ];
         return this;
     }
     /**
@@ -93,7 +97,7 @@ export class InlineSubCollectionField extends SubCollectionField {
         this.inlineRowActionsConfig = config;
         // Update existing rowActionColumns if present
         if (this.inlineRowActionColumns && this.inlineRowActionColumns.length > 0) {
-            const defaultColumn = this.inlineRowActionColumns.find(col => col.id === '_default');
+            const defaultColumn = this.inlineRowActionColumns.find((col) => col.id === '_default');
             if (defaultColumn) {
                 defaultColumn.label = config.label ?? defaultColumn.label;
                 defaultColumn.order = config.order ?? defaultColumn.order;
@@ -189,7 +193,7 @@ export class InlineSubCollectionField extends SubCollectionField {
                     additionalFilters[0].items.unshift(mappedByFilter);
                 }
                 // Apply all filters
-                additionalFilters.forEach(filterGroup => {
+                additionalFilters.forEach((filterGroup) => {
                     searchForm.withFilter(filterGroup.condition, ...filterGroup.items);
                 });
             }
@@ -205,7 +209,9 @@ export class InlineSubCollectionField extends SubCollectionField {
      */
     async render({ entityForm, session, }) {
         // Lazy load the InlineSubCollectionView component
-        const InlineSubCollectionView = React.lazy(() => import('../components/list/ui/InlineSubCollectionView').then(m => ({ default: m.InlineSubCollectionView })));
+        const InlineSubCollectionView = React.lazy(() => import('../components/list/ui/InlineSubCollectionView').then((m) => ({
+            default: m.InlineSubCollectionView,
+        })));
         // Determine readonly status
         const readonly = await this.isReadonly({ entityForm, session });
         // Get tooltip
@@ -215,7 +221,32 @@ export class InlineSubCollectionField extends SubCollectionField {
         if (this.fetchOptions?.useSearchForm) {
             initialSearchForm = await this.buildSearchForm(entityForm);
         }
-        return (_jsx(React.Suspense, { fallback: _jsx("div", { className: "rcm-loading-overlay", children: _jsx("div", { className: "rcm-spinner" }) }), children: _jsx(InlineSubCollectionView, { parentEntityForm: entityForm, parentId: entityForm.id, entityForm: this.entityForm, relation: this.relation, readonly: readonly, session: session, listFields: this.inlineListFields, rowActions: this.inlineRowActions, rowActionsConfig: this.inlineRowActionsConfig, rowActionColumns: this.inlineRowActionColumns, pagination: this.inlinePagination, globalListConfig: this.inlineGlobalListConfig, fetchOptions: this.fetchOptions, initialSearchForm: initialSearchForm, tooltip: tooltip, hideTitle: this.hideTitle, viewListOptions: this.viewListOptions }) }));
+        const viewProps = {
+            parentEntityForm: entityForm,
+            parentId: entityForm.id,
+            entityForm: this.entityForm,
+            relation: this.relation,
+            readonly,
+            ...(session !== undefined ? { session } : {}),
+            ...(this.inlineListFields !== undefined ? { listFields: this.inlineListFields } : {}),
+            ...(this.inlineRowActions !== undefined ? { rowActions: this.inlineRowActions } : {}),
+            ...(this.inlineRowActionsConfig !== undefined
+                ? { rowActionsConfig: this.inlineRowActionsConfig }
+                : {}),
+            ...(this.inlineRowActionColumns !== undefined
+                ? { rowActionColumns: this.inlineRowActionColumns }
+                : {}),
+            ...(this.inlinePagination !== undefined ? { pagination: this.inlinePagination } : {}),
+            ...(this.inlineGlobalListConfig !== undefined
+                ? { globalListConfig: this.inlineGlobalListConfig }
+                : {}),
+            ...(this.fetchOptions !== undefined ? { fetchOptions: this.fetchOptions } : {}),
+            ...(initialSearchForm !== undefined ? { initialSearchForm } : {}),
+            tooltip,
+            ...(this.hideTitle !== undefined ? { hideTitle: this.hideTitle } : {}),
+            ...(this.viewListOptions !== undefined ? { viewListOptions: this.viewListOptions } : {}),
+        };
+        return (_jsx(React.Suspense, { fallback: _jsx("div", { className: "rcm-loading-overlay", children: _jsx("div", { className: "rcm-spinner" }) }), children: _jsx(InlineSubCollectionView, { ...viewProps }) }));
     }
 }
 //# sourceMappingURL=InlineSubCollectionField.js.map

@@ -1,11 +1,11 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-import { useEffect, useState } from "react";
-import { Paper } from "../../../ui";
+import { useEffect, useState } from 'react';
+import { Paper } from '../../../ui';
 import { ViewListGrid } from '../../list/ViewListGrid';
 import { ListGrid } from '../../../config/ListGrid';
-import { SearchForm } from "../../../form/SearchForm";
-import { isEmpty } from "../../../utils";
+import { SearchForm } from '../../../form/SearchForm';
+import { isEmpty } from '../../../utils';
 import { isTrue } from '../../../utils/BooleanUtil';
 import { useModalManagerStore } from '../../../store';
 export const XrefPriorityMappingView = ({ entityForm, excludeId, add, parentEntityForm, ...props }) => {
@@ -42,7 +42,7 @@ export const XrefPriorityMappingView = ({ entityForm, excludeId, add, parentEnti
     const viewSearchForm = new SearchForm().withPageSize(1000);
     if (mappingValue.mapped !== undefined && mappingValue.mapped.length > 0) {
         // 이미 매핑된 정보는 확인할 수 없게 한다.
-        const idList = mappingValue.mapped.map(m => m.id);
+        const idList = mappingValue.mapped.map((m) => m.id);
         searchForm.withFilter('AND', { name: 'id', queryConditionType: 'NOT_IN', values: idList });
         // viewSearchForm 에서는 이미 매핑된 정보만 표시되도록 한다.
         viewSearchForm.withFilter('AND', { name: 'id', queryConditionType: 'IN', values: idList });
@@ -55,7 +55,7 @@ export const XrefPriorityMappingView = ({ entityForm, excludeId, add, parentEnti
         searchForm.withFilter('AND', ...filters);
         viewSearchForm.withFilter('AND', ...filters);
     }
-    return _jsx("div", { className: 'w-full', children: _jsx(ViewListGrid, { listGrid: new ListGrid(entityForm).withSearchForm(viewSearchForm), options: {
+    return (_jsx("div", { className: 'w-full', children: _jsx(ViewListGrid, { listGrid: new ListGrid(entityForm).withSearchForm(viewSearchForm), options: {
                 hideTitle: true,
                 filterable: false,
                 sortable: false,
@@ -85,7 +85,9 @@ export const XrefPriorityMappingView = ({ entityForm, excludeId, add, parentEnti
                             return aIndex - bIndex;
                             // return a.priority - b.priority;
                         });
-                        newValue.mapped?.forEach((m, index) => { m.priority = index + 1; });
+                        newValue.mapped?.forEach((m, index) => {
+                            m.priority = index + 1;
+                        });
                         setValue(newValue);
                         props.onChange(newValue, false);
                     }
@@ -96,13 +98,14 @@ export const XrefPriorityMappingView = ({ entityForm, excludeId, add, parentEnti
                             onDelete(checkedItems);
                         }
                         return Promise.resolve({ entityForm: _entityForm });
-                    }
+                    },
                 },
                 subCollection: {
-                    add: readonly ? false : isTrue(add), delete: !readonly,
+                    add: readonly ? false : isTrue(add),
+                    delete: !readonly,
                     modifyOnView: false,
                     buttons: [
-                        () => readonly ? null : _jsx("button", { type: "button", className: `btn btn-outline-secondary h-[34px]`, disabled: readonly, onClick: () => {
+                        () => readonly ? null : (_jsx("button", { type: "button", className: `btn btn-outline-secondary h-[34px]`, disabled: readonly, onClick: () => {
                                 const modalId = `xref-priority-mapping-${props.name}`;
                                 openModal({
                                     modalId,
@@ -119,27 +122,29 @@ export const XrefPriorityMappingView = ({ entityForm, excludeId, add, parentEnti
                                                 },
                                                 selection: {
                                                     enabled: true,
-                                                    actions: [{
+                                                    actions: [
+                                                        {
                                                             label: '선택 완료',
                                                             onClick: async (_entityForm, checkedItems) => {
                                                                 onChangeMultiple(checkedItems);
                                                                 closeModal(modalId);
                                                             },
                                                             color: 'primary',
-                                                        }],
+                                                        },
+                                                    ],
                                                     deleteButton: false,
-                                                }
+                                                },
                                             } }) })),
                                 });
-                            }, children: "\uC120\uD0DD" })
-                    ]
-                }
-            } }, listKey) });
+                            }, children: "\uC120\uD0DD" })),
+                    ],
+                },
+            } }, listKey) }));
     function onChange(id) {
         if (mappingValue.mapped === undefined) {
             mappingValue.mapped = [];
         }
-        mappingValue.mapped = mappingValue.mapped.filter(x => x.id !== id);
+        mappingValue.mapped = mappingValue.mapped.filter((x) => x.id !== id);
         const newPriority = mappingValue.mapped.length + 1;
         mappingValue.mapped = [...mappingValue.mapped, { id: id, priority: newPriority }];
         setValue({ ...mappingValue });
@@ -151,7 +156,7 @@ export const XrefPriorityMappingView = ({ entityForm, excludeId, add, parentEnti
             mappingValue.mapped = [];
         }
         for (const id of ids) {
-            mappingValue.mapped = mappingValue.mapped.filter(x => x.id !== id);
+            mappingValue.mapped = mappingValue.mapped.filter((x) => x.id !== id);
             const newPriority = mappingValue.mapped.length + 1;
             mappingValue.mapped = [...mappingValue.mapped, { id: id, priority: newPriority }];
         }
@@ -163,7 +168,7 @@ export const XrefPriorityMappingView = ({ entityForm, excludeId, add, parentEnti
         if (mappingValue.mapped === undefined) {
             mappingValue.mapped = [];
         }
-        mappingValue.mapped = mappingValue.mapped.filter(x => !idList.includes(x.id));
+        mappingValue.mapped = mappingValue.mapped.filter((x) => !idList.includes(x.id));
         // priority 재설정
         mappingValue.mapped.forEach((m, index) => {
             m.priority = index + 1;

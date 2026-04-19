@@ -6,56 +6,80 @@
  */
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { ListableFormField } from './abstract';
-import { NumberInput } from "../../ui";
+import { ListableFormField, } from './abstract';
+import { NumberInput } from '../../ui';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { formatPrice } from "../../misc";
-import { IconCoin, IconHash } from "@tabler/icons-react";
+import { formatPrice } from '../../misc';
+import { IconCoin, IconHash } from '@tabler/icons-react';
 import { NumberFilter } from './filter/NumberFilter';
-import { ValidateResult } from "../../validations/Validation";
+import { ValidateResult } from '../../validations/Validation';
 export class NumberField extends ListableFormField {
     withMin(min) {
         if (this.limit) {
-            this.limit.min = min;
+            if (min !== undefined)
+                this.limit.min = min;
+            else
+                delete this.limit.min;
         }
         else {
-            this.limit = { min: min };
+            const newLimit = {};
+            if (min !== undefined)
+                newLimit.min = min;
+            this.limit = newLimit;
         }
         return this;
     }
     withMax(max) {
         if (this.limit) {
-            this.limit.max = max;
+            if (max !== undefined)
+                this.limit.max = max;
+            else
+                delete this.limit.max;
         }
         else {
-            this.limit = { max: max };
+            const newLimit = {};
+            if (max !== undefined)
+                newLimit.max = max;
+            this.limit = newLimit;
         }
         return this;
     }
     withLimit(limit) {
-        this.limit = limit;
+        if (limit !== undefined)
+            this.limit = limit;
+        else
+            delete this.limit;
         return this;
     }
     withCurrency(currency) {
-        this.currency = currency;
+        if (currency !== undefined)
+            this.currency = currency;
+        else
+            delete this.currency;
         return this;
     }
     withDouble(double) {
-        this.double = double;
+        if (double !== undefined)
+            this.double = double;
+        else
+            delete this.double;
         return this;
     }
     constructor(name, order, props) {
         super(name, order, 'number');
-        this.limit = props?.limit;
-        this.currency = props?.currency;
-        this.double = props?.double;
+        if (props?.limit !== undefined)
+            this.limit = props.limit;
+        if (props?.currency !== undefined)
+            this.currency = props.currency;
+        if (props?.double !== undefined)
+            this.double = props.double;
     }
     /**
      * NumberField 핵심 렌더링 로직
      */
     renderInstance(params) {
         return (async () => {
-            return _jsx(NumberInput, { limit: this.limit, currency: this.currency, double: this.double, ...await getInputRendererParameters(this, params) });
+            return (_jsx(NumberInput, { limit: this.limit, currency: this.currency, double: this.double, ...await getInputRendererParameters(this, params) }));
         })();
     }
     /**
@@ -63,11 +87,11 @@ export class NumberField extends ListableFormField {
      */
     renderListFilterInstance(params) {
         return (async () => {
-            return _jsx(NumberFilter, { onChange: (queryConditionType, value) => {
+            return (_jsx(NumberFilter, { onChange: (queryConditionType, value) => {
                     params.onChange(value, queryConditionType);
                 }, onRemove: () => {
                     params.onChange('');
-                } });
+                } }));
         })();
     }
     /**
@@ -102,13 +126,19 @@ export class NumberField extends ListableFormField {
         // currency 설정이 있으면 통화 기호 추가
         if (this.currency) {
             const currencyCode = this.currency.currencyCode ?? 'KRW';
-            const currencySymbol = currencyCode === 'KRW' ? '원' :
-                currencyCode === 'USD' ? '$' :
-                    currencyCode === 'EUR' ? '€' :
-                        currencyCode === 'JPY' ? '¥' :
-                            currencyCode === 'GBP' ? '£' : '';
+            const currencySymbol = currencyCode === 'KRW'
+                ? '원'
+                : currencyCode === 'USD'
+                    ? '$'
+                    : currencyCode === 'EUR'
+                        ? '€'
+                        : currencyCode === 'JPY'
+                            ? '¥'
+                            : currencyCode === 'GBP'
+                                ? '£'
+                                : '';
             // position에 따라 기호 위치 결정
-            const displayText = (this.currency.position === 'after' || currencyCode === 'KRW')
+            const displayText = this.currency.position === 'after' || currencyCode === 'KRW'
                 ? `${formattedValue}${currencySymbol}`
                 : `${currencySymbol}${formattedValue}`;
             // compact 모드: 텍스트만 반환
@@ -119,7 +149,7 @@ export class NumberField extends ListableFormField {
             const IconComponent = this.cardIcon || IconCoin;
             const frameColor = this.cardIcon ? undefined : 'success';
             return {
-                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-num-value rcm-num-value-emphasis", children: displayText })] }))
+                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-num-value rcm-num-value-emphasis", children: displayText })] })),
             };
         }
         // compact 모드: 텍스트만 반환
@@ -130,26 +160,36 @@ export class NumberField extends ListableFormField {
         const IconComponent = this.cardIcon || IconHash;
         const frameColor = this.cardIcon ? undefined : 'info';
         return {
-            result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-num-value", children: formattedValue })] }))
+            result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-num-value", children: formattedValue })] })),
         };
     }
     /**
      * NumberField 인스턴스 생성
      */
     createInstance(name, order) {
-        return new NumberField(name, order, {
-            limit: this.limit,
-            currency: this.currency,
-            double: this.double
-        });
+        const ctorProps = {};
+        if (this.limit !== undefined)
+            ctorProps.limit = this.limit;
+        if (this.currency !== undefined)
+            ctorProps.currency = this.currency;
+        if (this.double !== undefined)
+            ctorProps.double = this.double;
+        return new NumberField(name, order, ctorProps);
     }
     static create(props) {
-        return new NumberField(props.name, props.order, { limit: props.limit, currency: props.currency, double: props.double })
-            .copyFields(props, true);
+        const ctorProps = {};
+        if (props.limit !== undefined)
+            ctorProps.limit = props.limit;
+        if (props.currency !== undefined)
+            ctorProps.currency = props.currency;
+        if (props.double !== undefined)
+            ctorProps.double = props.double;
+        return new NumberField(props.name, props.order, ctorProps).copyFields(props, true);
     }
     async validate(entityForm, session) {
         // hidden 또는 readonly인 경우 min/max 검증 건너뛰기
-        if (await this.isHidden({ entityForm, session }) || await this.isReadonly({ entityForm, session })) {
+        if ((await this.isHidden({ entityForm, session })) ||
+            (await this.isReadonly({ entityForm, session }))) {
             return ValidateResult.success();
         }
         const result = await super.validate(entityForm, session);
@@ -175,7 +215,7 @@ export class NumberField extends ListableFormField {
     }
     hasError(result) {
         if (Array.isArray(result)) {
-            return result.some(r => r.hasError());
+            return result.some((r) => r.hasError());
         }
         return result.hasError();
     }

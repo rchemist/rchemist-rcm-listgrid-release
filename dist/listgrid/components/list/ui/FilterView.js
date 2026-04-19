@@ -1,7 +1,7 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import { isTrue } from '../../../utils/BooleanUtil';
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 export const FilterView = ({ entityForm, field, value, resetValue, onChange }) => {
     const [view, setView] = useState(undefined);
     useEffect(() => {
@@ -10,7 +10,7 @@ export const FilterView = ({ entityForm, field, value, resetValue, onChange }) =
                 const view = await field.viewListFilter({
                     entityForm: entityForm,
                     onChange: (value, op) => onChange(field.getName(), value, op),
-                    value: isTrue(resetValue) ? undefined : value
+                    value: isTrue(resetValue) ? undefined : value,
                 });
                 setView(view);
             })();
@@ -18,6 +18,6 @@ export const FilterView = ({ entityForm, field, value, resetValue, onChange }) =
     }, []);
     if (view === undefined || view == null)
         return null;
-    return (_jsx("div", { children: view }));
+    return _jsx("div", { children: view });
 };
 //# sourceMappingURL=FilterView.js.map

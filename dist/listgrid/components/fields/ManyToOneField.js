@@ -5,12 +5,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { AbstractManyToOneField } from './abstract';
+import { AbstractManyToOneField, } from './abstract';
 import { ManyToOneView } from './view/ManyToOneView';
 import { ManyToOneMultiFilterView } from './view/ManyToOneMultiFilterView';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
 import { isBlank } from '../../utils/StringUtil';
-import { ManyToOneListView } from "./view/ManyToOneListView";
+import { ManyToOneListView } from './view/ManyToOneListView';
 import { CardManyToOneView } from './view/CardManyToOneView';
 import { SelectBoxManyToOneView } from './view/SelectBoxManyToOneView';
 import { isTrue } from '../../utils/BooleanUtil';
@@ -27,14 +27,52 @@ export class ManyToOneField extends AbstractManyToOneField {
         return (async () => {
             // 카드뷰 옵션이 활성화된 경우
             if (this.useCardView) {
-                return _jsx(CardManyToOneView, { field: this, entityForm: params.entityForm, value: await this.getCurrentValue(params.entityForm.getRenderType()), onChange: (value, propagation) => params.onChange?.(value, propagation), onError: params.onError ?? (() => { }), clearError: params.clearError ?? (() => { }), required: params.required ?? false, readonly: params.readonly ?? false, session: params.session, columns: this.cardViewConfig?.columns, mobileColumns: this.cardViewConfig?.mobileColumns, pageSize: this.cardViewConfig?.pageSize, showSearchButton: this.cardViewConfig?.showSearchButton, showAllWhenEmpty: this.cardViewConfig?.showAllWhenEmpty, emptyMessage: this.cardViewConfig?.emptyMessage, gridClassName: this.cardViewConfig?.gridClassName, cardConfig: this.cardViewConfig?.cardConfig, searchFirst: this.cardViewConfig?.searchFirst, searchPlaceholder: this.cardViewConfig?.searchPlaceholder, searchFields: this.cardViewConfig?.searchFields });
+                return (_jsx(CardManyToOneView, { field: this, entityForm: params.entityForm, value: await this.getCurrentValue(params.entityForm.getRenderType()), onChange: (value, propagation) => params.onChange?.(value, propagation), onError: params.onError ?? (() => { }), clearError: params.clearError ?? (() => { }), required: params.required ?? false, readonly: params.readonly ?? false, ...(params.session !== undefined && { session: params.session }), ...(this.cardViewConfig?.columns !== undefined && {
+                        columns: this.cardViewConfig.columns,
+                    }), ...(this.cardViewConfig?.mobileColumns !== undefined && {
+                        mobileColumns: this.cardViewConfig.mobileColumns,
+                    }), ...(this.cardViewConfig?.pageSize !== undefined && {
+                        pageSize: this.cardViewConfig.pageSize,
+                    }), ...(this.cardViewConfig?.showSearchButton !== undefined && {
+                        showSearchButton: this.cardViewConfig.showSearchButton,
+                    }), ...(this.cardViewConfig?.showAllWhenEmpty !== undefined && {
+                        showAllWhenEmpty: this.cardViewConfig.showAllWhenEmpty,
+                    }), ...(this.cardViewConfig?.emptyMessage !== undefined && {
+                        emptyMessage: this.cardViewConfig.emptyMessage,
+                    }), ...(this.cardViewConfig?.gridClassName !== undefined && {
+                        gridClassName: this.cardViewConfig.gridClassName,
+                    }), ...(this.cardViewConfig?.cardConfig !== undefined && {
+                        cardConfig: this.cardViewConfig.cardConfig,
+                    }), ...(this.cardViewConfig?.searchFirst !== undefined && {
+                        searchFirst: this.cardViewConfig.searchFirst,
+                    }), ...(this.cardViewConfig?.searchPlaceholder !== undefined && {
+                        searchPlaceholder: this.cardViewConfig.searchPlaceholder,
+                    }), ...(this.cardViewConfig?.searchFields !== undefined && {
+                        searchFields: this.cardViewConfig.searchFields,
+                    }) }));
             }
             // 셀렉트박스뷰 옵션이 활성화된 경우
             if (this.useSelectBoxView) {
-                return _jsx(SelectBoxManyToOneView, { field: this, entityForm: params.entityForm, value: await this.getCurrentValue(params.entityForm.getRenderType()), onChange: (value, propagation) => params.onChange?.(value, propagation), onError: params.onError ?? (() => { }), clearError: params.clearError ?? (() => { }), required: params.required ?? false, readonly: params.readonly ?? false, session: params.session, labelField: this.selectBoxViewConfig?.labelField, valueField: this.selectBoxViewConfig?.valueField, placeholder: this.selectBoxViewConfig?.placeholder, nullValueLabel: this.selectBoxViewConfig?.nullValueLabel, isSearchable: this.selectBoxViewConfig?.isSearchable, menuPosition: this.selectBoxViewConfig?.menuPosition, menuPlacement: this.selectBoxViewConfig?.menuPlacement });
+                return (_jsx(SelectBoxManyToOneView, { field: this, entityForm: params.entityForm, value: await this.getCurrentValue(params.entityForm.getRenderType()), onChange: (value, propagation) => params.onChange?.(value, propagation), onError: params.onError ?? (() => { }), clearError: params.clearError ?? (() => { }), required: params.required ?? false, readonly: params.readonly ?? false, ...(params.session !== undefined && { session: params.session }), ...(this.selectBoxViewConfig?.labelField !== undefined && {
+                        labelField: this.selectBoxViewConfig.labelField,
+                    }), ...(this.selectBoxViewConfig?.valueField !== undefined && {
+                        valueField: this.selectBoxViewConfig.valueField,
+                    }), ...(this.selectBoxViewConfig?.placeholder !== undefined && {
+                        placeholder: this.selectBoxViewConfig.placeholder,
+                    }), ...(this.selectBoxViewConfig?.nullValueLabel !== undefined && {
+                        nullValueLabel: this.selectBoxViewConfig.nullValueLabel,
+                    }), ...(this.selectBoxViewConfig?.isSearchable !== undefined && {
+                        isSearchable: this.selectBoxViewConfig.isSearchable,
+                    }), ...(this.selectBoxViewConfig?.menuPosition !== undefined && {
+                        menuPosition: this.selectBoxViewConfig.menuPosition,
+                    }), ...(this.selectBoxViewConfig?.menuPlacement !== undefined && {
+                        menuPlacement: this.selectBoxViewConfig.menuPlacement,
+                    }) }));
             }
             // 기존 ManyToOneView 사용
-            return _jsx(ManyToOneView, { config: this.config, parentEntityForm: params.entityForm, ...await getInputRendererParameters(this, params) });
+            const inputParams = await getInputRendererParameters(this, params);
+            const { attributes: _ignoredAttrs, ...restInput } = inputParams;
+            return (_jsx(ManyToOneView, { config: this.config, parentEntityForm: params.entityForm, ...restInput, ...(inputParams.attributes !== undefined && { attributes: inputParams.attributes }) }));
         })();
     }
     /**
@@ -66,11 +104,15 @@ export class ManyToOneField extends AbstractManyToOneField {
         // multiFilter가 true이면 다중 선택 UI 렌더링
         if (isTrue(this.listConfig?.multiFilter)) {
             return (async () => {
-                return _jsx(ManyToOneMultiFilterView, { name: this.name, label: typeof this.label === 'string' ? this.label : this.name, config: this.config, parentEntityForm: params.entityForm, value: params.value, onChange: (values) => params.onChange(values, 'IN') });
+                return (_jsx(ManyToOneMultiFilterView, { name: this.name, label: typeof this.label === 'string' ? this.label : this.name, config: this.config, parentEntityForm: params.entityForm, value: params.value, onChange: (values) => params.onChange(values, 'IN') }));
             })();
         }
         // 기본 단일 선택 UI 렌더링
-        return this.render({ ...params, required: false, onChange: (value, propagation) => params.onChange(value) });
+        return this.render({
+            ...params,
+            required: false,
+            onChange: (value, propagation) => params.onChange(value),
+        });
     }
     /**
      * ManyToOneField 리스트 아이템 렌더링 (원본 renderListItem 로직 보존)
@@ -97,7 +139,9 @@ export class ManyToOneField extends AbstractManyToOneField {
                     value = this.config.field?.name(targetEntity);
                 }
                 else {
-                    const displayProperty = this.config.field?.name ? this.config.field.name.toString() : 'name';
+                    const displayProperty = this.config.field?.name
+                        ? this.config.field.name.toString()
+                        : 'name';
                     if (targetEntity[fieldName]?.[displayProperty]) {
                         value = parentObject[fieldName]?.[displayProperty];
                     }
@@ -113,7 +157,9 @@ export class ManyToOneField extends AbstractManyToOneField {
                 }
             }
             if (value !== undefined) {
-                return { result: id === undefined ? value : _jsx(ManyToOneListView, { id: id, value: value, entityForm: this.config.entityForm }) };
+                return {
+                    result: id === undefined ? (value) : (_jsx(ManyToOneListView, { id: id, value: value, entityForm: this.config.entityForm })),
+                };
             }
             if (this.config.displayFunc !== undefined) {
                 // 목록 같은 경우 이 값을 참조할 때 targetEntity 가 해당 row 일 수 있다.
@@ -174,7 +220,7 @@ export class ManyToOneField extends AbstractManyToOneField {
             if (this.cardIcon) {
                 const IconComponent = this.cardIcon;
                 return {
-                    result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "font-medium", children: displayValue })] }))
+                    result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "font-medium", children: displayValue })] })),
                 };
             }
             return { result: displayValue };
@@ -193,7 +239,7 @@ export class ManyToOneField extends AbstractManyToOneField {
             if (this.cardIcon && funcResult) {
                 const IconComponent = this.cardIcon;
                 return {
-                    result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "font-medium", children: funcResult })] }))
+                    result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "font-medium", children: funcResult })] })),
                 };
             }
             return { result: funcResult };
@@ -205,7 +251,10 @@ export class ManyToOneField extends AbstractManyToOneField {
         if (typeof props === 'number') {
             props = { order: props };
         }
-        this.listConfig = { ...this.listConfig, support: true, order: props?.order };
+        const base = { ...this.listConfig, support: true };
+        if (props?.order !== undefined)
+            base.order = props.order;
+        this.listConfig = base;
         // quickSearch가 명시적으로 true로 설정된 경우에만 true로 설정
         this.listConfig.quickSearch = props?.quickSearch === true;
         this.listConfig.sortable = false;
@@ -248,7 +297,10 @@ export class ManyToOneField extends AbstractManyToOneField {
      */
     withCardView(config) {
         this.useCardView = true;
-        this.cardViewConfig = config;
+        if (config !== undefined)
+            this.cardViewConfig = config;
+        else
+            delete this.cardViewConfig;
         return this;
     }
     /**
@@ -271,7 +323,10 @@ export class ManyToOneField extends AbstractManyToOneField {
      */
     withSelectBoxView(config) {
         this.useSelectBoxView = true;
-        this.selectBoxViewConfig = config;
+        if (config !== undefined)
+            this.selectBoxViewConfig = config;
+        else
+            delete this.selectBoxViewConfig;
         return this;
     }
 }

@@ -1,6 +1,6 @@
 import { ModifyEntityFormFunc } from '../config/Config';
 import { Validation } from '../validations/Validation';
-import { SelectOption } from "../form/Type";
+import { SelectOption } from '../form/Type';
 export type ConditionalProps = {
     value: any;
     result: Map<string, boolean>;

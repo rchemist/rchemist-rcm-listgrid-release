@@ -6,9 +6,9 @@
  */
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useState } from "react";
-import { SelectBox } from "../../../ui";
-import { TextInput } from "../../../ui";
+import React, { useState } from 'react';
+import { SelectBox } from '../../../ui';
+import { TextInput } from '../../../ui';
 import { isBlank } from '../../../utils/StringUtil';
 export const NumberFilter = (props) => {
     const [type, setType] = useState('BETWEEN');
@@ -52,19 +52,19 @@ export const NumberFilter = (props) => {
         setEnd(undefined);
         props.onRemove();
     }
-    return _jsxs("div", { className: 'flex w-full space-x-2', children: [_jsx("div", { className: 'w-[140px]', children: _jsx(SelectBox, { value: type, required: true, name: 'type', options: [...NumberFilterTypes], onChange: (value) => {
+    return (_jsxs("div", { className: 'flex w-full space-x-2', children: [_jsx("div", { className: 'w-[140px]', children: _jsx(SelectBox, { value: type, required: true, name: 'type', options: [...NumberFilterTypes], onChange: (value) => {
                         changeType(value);
-                    } }) }), _jsxs("div", { className: 'w-full flex space-x-2 items-center', children: [_jsx(TextInput, { name: 'start', type: "number", value: start ?? '', onChange: (value) => {
+                    } }) }), _jsxs("div", { className: 'w-full flex space-x-2 items-center', children: [_jsx(TextInput, { name: 'start', type: 'number', value: start ?? '', onChange: (value) => {
                             if (!isBlank(value) && isNaN(Number(value))) {
                                 return;
                             }
                             setValue('start', value);
-                        } }), filterType.showEnd && _jsxs(React.Fragment, { children: [_jsx("span", { children: "~" }), _jsx(TextInput, { name: 'end', type: "number", value: end ?? '', onChange: (value) => {
+                        } }), filterType.showEnd && (_jsxs(React.Fragment, { children: [_jsx("span", { children: "~" }), _jsx(TextInput, { name: 'end', type: 'number', value: end ?? '', onChange: (value) => {
                                     if (!isBlank(value) && isNaN(Number(value))) {
                                         return;
                                     }
                                     setValue('end', value);
-                                } })] })] })] });
+                                } })] }))] })] }));
 };
 const NumberFilterTypes = [
     { value: 'BETWEEN', label: '범위', showEnd: true },

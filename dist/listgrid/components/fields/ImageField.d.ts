@@ -1,12 +1,12 @@
 import { ListableFormField, ListableFormFieldProps, ViewListProps, ViewListResult } from './abstract';
-import React from "react";
+import React from 'react';
 import { IAssetConfig } from '../../config/Config';
 import { FieldRenderParameters, FilterRenderParameters } from '../../config/EntityField';
 interface ImageFieldProps extends ListableFormFieldProps {
-    config?: IAssetConfig;
+    config?: IAssetConfig | undefined;
 }
 export declare class ImageField extends ListableFormField<ImageField> {
-    config?: IAssetConfig;
+    config?: IAssetConfig | undefined;
     constructor(name: string, order: number, config?: IAssetConfig);
     withConfig(config?: IAssetConfig): this;
     withMaxSize(maxSize?: number): this;

@@ -4,11 +4,11 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-"use client";
+'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-import { createContext, useContext, useMemo } from "react";
-import { cn as cnUtil } from "../../../utils/cn";
-import { defaultEntityFormTheme } from "../themes/defaultTheme";
+import { createContext, useContext, useMemo } from 'react';
+import { cn as cnUtil } from '../../../utils/cn';
+import { defaultEntityFormTheme } from '../themes/defaultTheme';
 /**
  * 두 객체를 깊게 병합하는 유틸리티
  * 커스텀 테마가 기본 테마를 오버라이드
@@ -23,8 +23,8 @@ const deepMerge = (base, override) => {
             const overrideValue = override[key];
             if (baseValue &&
                 overrideValue &&
-                typeof baseValue === "object" &&
-                typeof overrideValue === "object" &&
+                typeof baseValue === 'object' &&
+                typeof overrideValue === 'object' &&
                 !Array.isArray(baseValue) &&
                 !Array.isArray(overrideValue)) {
                 // 중첩 객체 병합
@@ -45,10 +45,7 @@ const deepMerge = (base, override) => {
 const EntityFormThemeContext = createContext({
     classNames: defaultEntityFormTheme,
     cn: (base, custom) => (custom ? cnUtil(base, custom) : base),
-    fieldRenderers: undefined,
     getFieldRenderer: () => undefined,
-    buttonLabels: undefined,
-    stepperRenderer: undefined,
     createStepButtonPosition: 'top',
 });
 /**
@@ -81,21 +78,27 @@ export const EntityFormThemeProvider = ({ theme, fieldRenderers, buttonLabels, s
     const value = useMemo(() => {
         // 기본 테마와 커스텀 테마를 deep merge
         const mergedClassNames = deepMerge(defaultEntityFormTheme, theme);
-        return {
+        const base = {
             classNames: mergedClassNames,
             cn: (base, custom) => {
                 if (!custom)
                     return base;
                 return cnUtil(base, custom);
             },
-            fieldRenderers,
             getFieldRenderer: (fieldName) => {
                 return fieldRenderers?.[fieldName];
             },
-            buttonLabels,
-            stepperRenderer,
-            createStepButtonPosition,
         };
+        if (fieldRenderers !== undefined)
+            base.fieldRenderers = fieldRenderers;
+        if (buttonLabels !== undefined)
+            base.buttonLabels = buttonLabels;
+        if (stepperRenderer !== undefined)
+            base.stepperRenderer = stepperRenderer;
+        if (createStepButtonPosition !== undefined) {
+            base.createStepButtonPosition = createStepButtonPosition;
+        }
+        return base;
     }, [theme, fieldRenderers, buttonLabels, stepperRenderer, createStepButtonPosition]);
     return (_jsx(EntityFormThemeContext.Provider, { value: value, children: children }));
 };
@@ -122,10 +125,7 @@ export const useEntityFormTheme = () => {
         return {
             classNames: defaultEntityFormTheme,
             cn: (base, custom) => (custom ? cnUtil(base, custom) : base),
-            fieldRenderers: undefined,
             getFieldRenderer: () => undefined,
-            buttonLabels: undefined,
-            stepperRenderer: undefined,
             createStepButtonPosition: 'top',
         };
     }

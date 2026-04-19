@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from 'react';
 import { EntityTab } from '../../../config/EntityTab';
 import { EntityForm } from '../../../config/EntityForm';
 import { Session } from '../../../auth/types';

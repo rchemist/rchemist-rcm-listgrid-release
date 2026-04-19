@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
-import { FieldRenderParameters } from "../../config/EntityField";
-import { ListableFormField, ViewListProps, ViewListResult } from "./abstract";
+import { ReactNode } from 'react';
+import { FieldRenderParameters } from '../../config/EntityField';
+import { ListableFormField, ViewListProps, ViewListResult } from './abstract';
 export declare class ColorField extends ListableFormField<ColorField> {
     constructor(name: string, order: number);
     /**

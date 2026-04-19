@@ -1,5 +1,5 @@
-import React from "react";
-import { BreadcrumbItem } from "../ui";
+import React from 'react';
+import { BreadcrumbItem } from '../ui';
 import { ViewListGridProps } from '../components/list/types/ViewListGrid.types';
 interface OptimizedViewListGridWrapperProps {
     props: ViewListGridProps;

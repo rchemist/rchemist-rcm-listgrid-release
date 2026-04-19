@@ -1,7 +1,7 @@
 import { ListableFormField, ListableFormFieldProps, UserListFieldProps } from './abstract';
-import React from "react";
+import React from 'react';
 import { FieldRenderParameters, FilterRenderParameters } from '../../config/EntityField';
-import { MinMaxLimit } from "../../form/Type";
+import { MinMaxLimit } from '../../form/Type';
 interface YearFieldProps extends ListableFormFieldProps {
     limit?: MinMaxLimit;
 }

@@ -5,8 +5,8 @@
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import { RegexValidation } from '../validations/RegexValidation';
-import { RegexTelephoneNumber } from "../misc";
-import { removePhoneNumberHyphens } from "../utils/PhoneUtil";
+import { RegexTelephoneNumber } from '../misc';
+import { removePhoneNumberHyphens } from '../utils/PhoneUtil';
 import { isBlank } from '../utils/StringUtil';
 export class TelephoneNumberValidation extends RegexValidation {
     constructor(id, regex, message) {

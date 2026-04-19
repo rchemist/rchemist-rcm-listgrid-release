@@ -1,14 +1,14 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 import { FormField, FULL_WIDTH_FIELD_TYPES } from '../fields/abstract';
 import { FieldRenderer } from './FieldRenderer';
-import { isEmpty } from "../../utils";
+import { isEmpty } from '../../utils';
 import { SubCollectionRenderer } from './SubCollectionRenderer';
-import { getTranslation } from "../../utils/i18n";
+import { getTranslation } from '../../utils/i18n';
 import { isBlank } from '../../utils/StringUtil';
 import { ViewHelpIcon } from './ui/ViewHelpIcon';
-import { useEntityFormTheme } from "./context/EntityFormThemeContext";
+import { useEntityFormTheme } from './context/EntityFormThemeContext';
 /**
  * Determine grid col-span class based on field layout type.
  * Uses library-owned `rcm-col-span-full` (defined in base.css) instead of
@@ -70,7 +70,7 @@ export const ViewFieldGroup = ({ entityForm, setEntityForm, readonly, subCollect
         patternsToExclude.add(baseField);
         // 3. Nested pattern prefix (e.g., "student.", "enrollment.student.")
         const nestedPattern = `${baseField}.`;
-        return fields.filter(field => {
+        return fields.filter((field) => {
             if (!(field instanceof FormField)) {
                 return true; // Keep non-FormField items
             }
@@ -106,7 +106,12 @@ export const ViewFieldGroup = ({ entityForm, setEntityForm, readonly, subCollect
             const fieldGroups = entityForm.getTab(props.tabId)?.fieldGroups ?? [];
             if (fieldGroups.length > 1) {
                 for (const fieldGroup of fieldGroups) {
-                    if (fieldGroup.id !== props.groupId && await entityForm.isViewableFieldGroup({ tabId: props.tabId, fieldGroupId: fieldGroup.id, createStepFields })) {
+                    if (fieldGroup.id !== props.groupId &&
+                        (await entityForm.isViewableFieldGroup({
+                            tabId: props.tabId,
+                            fieldGroupId: fieldGroup.id,
+                            createStepFields,
+                        }))) {
                         collapsable = true;
                         break;
                     }
@@ -118,7 +123,7 @@ export const ViewFieldGroup = ({ entityForm, setEntityForm, readonly, subCollect
     // 필드 또는 서브콜렉션이 하나라도 있으면 표시 (필터링된 필드 기준)
     // Show if there is at least one field or sub-collection (using filtered fields)
     const showFields = !isEmpty(filteredFields);
-    const showCollections = (entityForm?.id !== undefined && !isEmpty(subCollections));
+    const showCollections = entityForm?.id !== undefined && !isEmpty(subCollections);
     // 그룹 정보가 없거나, 표시할 필드/서브콜렉션이 없으면 렌더링하지 않음
     // If no group info or nothing to show, do not render
     if (fieldGroup === undefined || !(showFields || showCollections))
@@ -130,9 +135,9 @@ export const ViewFieldGroup = ({ entityForm, setEntityForm, readonly, subCollect
     const containerClass = subCollectionEntity
         ? 'rcm-fieldgroup-subcollection'
         : cn('rcm-fieldgroup', classNames.fieldGroup?.container);
-    return _jsx(_Fragment, { children: _jsxs("div", { className: containerClass, children: [_jsx("div", { className: cn(open ? 'rcm-fieldgroup-header' : '', subCollectionEntity ? '' : classNames.fieldGroup?.header), children: _jsx("div", { className: "rcm-row-between", children: _jsxs("h5", { className: cn('rcm-fieldgroup-title', subCollectionEntity ? '' : classNames.fieldGroup?.title), children: [fieldGroup.label, _jsxs("div", { className: cn('rcm-row rcm-gap-sm', subCollectionEntity ? '' : classNames.fieldGroup?.actions), children: [!isBlank(helpText) && _jsx(ViewHelpIcon, { helpText: helpText }), collapsable && _jsx("span", { className: cn('rcm-fieldgroup-collapse', subCollectionEntity ? '' : classNames.fieldGroup?.collapseToggle), onClick: () => {
+    return (_jsx(_Fragment, { children: _jsxs("div", { className: containerClass, children: [_jsx("div", { className: cn(open ? 'rcm-fieldgroup-header' : '', subCollectionEntity ? '' : classNames.fieldGroup?.header), children: _jsx("div", { className: "rcm-row-between", children: _jsxs("h5", { className: cn('rcm-fieldgroup-title', subCollectionEntity ? '' : classNames.fieldGroup?.title), children: [fieldGroup.label, _jsxs("div", { className: cn('rcm-row rcm-gap-sm', subCollectionEntity ? '' : classNames.fieldGroup?.actions), children: [!isBlank(helpText) && _jsx(ViewHelpIcon, { helpText: helpText }), collapsable && (_jsx("span", { className: cn('rcm-fieldgroup-collapse', subCollectionEntity ? '' : classNames.fieldGroup?.collapseToggle), onClick: () => {
                                                 setOpen(!open);
-                                            }, children: _jsx("div", { className: open ? '' : 'rcm-rotate-180', children: _jsx("svg", { xmlns: "http://www.w3.org/2000/svg", width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", children: _jsx("path", { stroke: "#5B6B79", strokeLinecap: "round", strokeLinejoin: "round", strokeMiterlimit: "10", strokeWidth: "1.5", d: "M19.92 15.05L13.4 8.53c-.77-.77-2.03-.77-2.8 0l-6.52 6.52" }) }) }) })] })] }) }) }), open && _jsxs("div", { className: cn(subCollectionEntity ? 'rcm-stack' : 'rcm-field-grid', subCollectionEntity ? undefined : classNames.fieldGroup?.content), children: [filteredFields?.map((field, index) => {
+                                            }, children: _jsx("div", { className: open ? '' : 'rcm-rotate-180', children: _jsx("svg", { xmlns: "http://www.w3.org/2000/svg", width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", children: _jsx("path", { stroke: "#5B6B79", strokeLinecap: "round", strokeLinejoin: "round", strokeMiterlimit: "10", strokeWidth: "1.5", d: "M19.92 15.05L13.4 8.53c-.77-.77-2.03-.77-2.8 0l-6.52 6.52" }) }) }) }))] })] }) }) }), open && (_jsxs("div", { className: cn(subCollectionEntity ? 'rcm-stack' : 'rcm-field-grid', subCollectionEntity ? undefined : classNames.fieldGroup?.content), children: [filteredFields?.map((field, index) => {
                             if (field instanceof FormField) {
                                 if (readonly) {
                                     field.withReadOnly(true);
@@ -142,7 +147,9 @@ export const ViewFieldGroup = ({ entityForm, setEntityForm, readonly, subCollect
                                 const forceNewRow = prevField instanceof FormField && prevField.lineBreak;
                                 const colSpanClass = getFieldColSpanClass(field);
                                 const className = forceNewRow ? `${colSpanClass} rcm-col-start-1-lg` : colSpanClass;
-                                return _jsx("div", { className: className, children: _jsx(FieldRenderer, { field: field, entityForm: entityForm, setEntityForm: setEntityForm, subCollectionEntity: subCollectionEntity, session: session, resetEntityForm: props.resetEntityForm }) }, field.getName());
+                                return (_jsx("div", { className: className, children: _jsx(FieldRenderer, { field: field, entityForm: entityForm, ...(setEntityForm !== undefined ? { setEntityForm } : {}), ...(subCollectionEntity !== undefined ? { subCollectionEntity } : {}), ...(session !== undefined ? { session } : {}), ...(props.resetEntityForm !== undefined
+                                            ? { resetEntityForm: props.resetEntityForm }
+                                            : {}) }) }, field.getName()));
                             }
                             else {
                                 return null;
@@ -152,7 +159,7 @@ export const ViewFieldGroup = ({ entityForm, setEntityForm, readonly, subCollect
                                 if (readonly) {
                                     collection.withReadOnly(true);
                                 }
-                                return _jsx("div", { className: "rcm-col-span-full", children: _jsx(SubCollectionRenderer, { entityForm: entityForm, collection: collection, session: session }) }, `subCollection_${collection.getName()}_${entityForm.id}`);
-                            })] })] }) });
+                                return (_jsx("div", { className: "rcm-col-span-full", children: _jsx(SubCollectionRenderer, { entityForm: entityForm, collection: collection, ...(session !== undefined ? { session } : {}) }) }, `subCollection_${collection.getName()}_${entityForm.id}`));
+                            })] }))] }) }));
 };
 //# sourceMappingURL=ViewFieldGroup.js.map

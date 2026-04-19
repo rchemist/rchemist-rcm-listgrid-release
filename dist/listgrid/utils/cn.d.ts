@@ -1,4 +1,4 @@
-import { type ClassValue } from "clsx";
+import { type ClassValue } from 'clsx';
 /**
  * Tailwind CSS 클래스 병합 유틸리티
  * - clsx로 조건부 클래스를 처리하고

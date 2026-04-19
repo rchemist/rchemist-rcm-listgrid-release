@@ -1,6 +1,6 @@
 import { FormField, FormFieldProps } from './abstract';
 import { FieldInfoParameters, FieldRenderParameters } from '../../config/EntityField';
-import React from "react";
+import React from 'react';
 export declare class MappedJoinField extends FormField<MappedJoinField> {
     constructor(name: string);
     /**

@@ -1,6 +1,6 @@
-import { SearchForm } from "../../../form/SearchForm";
-import { ListableFormField } from "../../fields/abstract";
-import { ViewFieldManageable } from "../types/ViewListGrid.types";
+import { SearchForm } from '../../../form/SearchForm';
+import { ListableFormField } from '../../fields/abstract';
+import { ViewFieldManageable } from '../types/ViewListGrid.types';
 export interface SearchBarActionsProps extends ViewFieldManageable {
     searchForm: SearchForm;
     handlePageSizeChange: (value: string) => void;

@@ -17,7 +17,7 @@ export class MappedJoinField extends FormField {
      */
     renderInstance(params) {
         return (async () => {
-            return _jsx("input", { type: 'hidden', name: `${this.getName()}`, value: await this.getCurrentValue(params.entityForm.getRenderType()) });
+            return (_jsx("input", { type: 'hidden', name: `${this.getName()}`, value: await this.getCurrentValue(params.entityForm.getRenderType()) }));
         })();
     }
     /**
@@ -27,8 +27,7 @@ export class MappedJoinField extends FormField {
         return new MappedJoinField(name);
     }
     static create(props) {
-        return new MappedJoinField(props.name)
-            .copyFields(props, true);
+        return new MappedJoinField(props.name).copyFields(props, true);
     }
     async isHidden(props) {
         return Promise.resolve(true);

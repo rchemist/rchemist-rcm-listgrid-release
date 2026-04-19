@@ -6,18 +6,18 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { createFieldMap } from '../transfer/Type';
-import { useState } from "react";
-import { getTranslation } from "../utils/i18n";
+import { createFieldMap, } from '../transfer/Type';
+import { useState } from 'react';
+import { getTranslation } from '../utils/i18n';
 import { isTrue } from '../utils/BooleanUtil';
 import { isBlank, subStringBetween } from '../utils/StringUtil';
-import { isEmpty } from "../utils";
+import { isEmpty } from '../utils';
 import * as XLSX from 'xlsx-js-style';
-import { getAccessableAssetUrl, getExternalApiDataWithError } from "../misc";
+import { getAccessableAssetUrl, getExternalApiDataWithError } from '../misc';
 import DataImportSample from '../transfer/DataImportSample';
-import { Modal } from "../ui";
+import { Modal } from '../ui';
 import { DataImportProcessor } from '../transfer/DataImportProcessor';
-import { FileUploadInput } from "../ui";
+import { FileUploadInput } from '../ui';
 export const DataImporter = (props) => {
     const [open, setOpen] = useState(false);
     const [data, setData] = useState([]);
@@ -41,7 +41,7 @@ export const DataImporter = (props) => {
     const allowUpdate = props.config?.mode?.update !== false;
     const addedImportFields = props.config?.addedFields;
     const overrideFormData = props.config?.overrideFormData;
-    const url = props.config?.url;
+    const url = props.config.url;
     const overrideParseResult = props.config?.overrideParseResult;
     const description = props.config?.description ?? '';
     const sampleData = props.config?.sampleData ?? [];
@@ -50,6 +50,8 @@ export const DataImporter = (props) => {
         if (currentFiles.length === 0)
             return;
         const file = currentFiles[0];
+        if (!file)
+            return;
         let result = [];
         if (file instanceof File) {
             // 사용자가 직접 업로드한 파일
@@ -76,8 +78,11 @@ export const DataImporter = (props) => {
                         const row = result[0];
                         row.findIndex((cell, excelColIndex) => {
                             // cell 내용이 이름\n[필드이름] 형태라면
-                            if ((cell.includes('[') && cell.includes(']'))) {
-                                const fieldName = subStringBetween(cell, '[', ']').trim().replace(/\n/g, '').replace(' ', '');
+                            if (cell.includes('[') && cell.includes(']')) {
+                                const fieldName = subStringBetween(cell, '[', ']')
+                                    .trim()
+                                    .replace(/\n/g, '')
+                                    .replace(' ', '');
                                 cell = fieldName;
                             }
                             if (fieldMap.has(cell)) {
@@ -100,7 +105,10 @@ export const DataImporter = (props) => {
                                     const field = fields[arrayIndex];
                                     if (field) {
                                         const fieldName = field.getName();
-                                        newRow.push({ name: fieldName, value: await field.getValueOnImport(row[excelColIndex]) });
+                                        newRow.push({
+                                            name: fieldName,
+                                            value: await field.getValueOnImport(row[excelColIndex]),
+                                        });
                                     }
                                 });
                                 sheetData.push(newRow);
@@ -128,10 +136,10 @@ export const DataImporter = (props) => {
             reset();
             const fileUrl = getAccessableAssetUrl(file.url);
             fetch(fileUrl)
-                .then(response => {
+                .then((response) => {
                 return response.arrayBuffer();
             })
-                .then(buffer => {
+                .then((buffer) => {
                 try {
                     const wb = XLSX.read(buffer, { type: 'array' });
                     const wsname = wb.SheetNames[0] || '';
@@ -151,8 +159,11 @@ export const DataImporter = (props) => {
                         const row = result[0];
                         row.findIndex((cell, excelColIndex) => {
                             // cell 내용이 이름\n[필드이름] 형태라면
-                            if ((cell.includes('[') && cell.includes(']'))) {
-                                const fieldName = subStringBetween(cell, '[', ']').trim().replace(/\n/g, '').replace(' ', '');
+                            if (cell.includes('[') && cell.includes(']')) {
+                                const fieldName = subStringBetween(cell, '[', ']')
+                                    .trim()
+                                    .replace(/\n/g, '')
+                                    .replace(' ', '');
                                 cell = fieldName;
                             }
                             if (fieldMap.has(cell)) {
@@ -175,7 +186,10 @@ export const DataImporter = (props) => {
                                     const field = fields[arrayIndex];
                                     if (field) {
                                         const fieldName = field.getName();
-                                        newRow.push({ name: fieldName, value: await field.getValueOnImport(row[excelColIndex]) });
+                                        newRow.push({
+                                            name: fieldName,
+                                            value: await field.getValueOnImport(row[excelColIndex]),
+                                        });
                                     }
                                 });
                                 sheetData.push(newRow);
@@ -196,7 +210,7 @@ export const DataImporter = (props) => {
                     setErrorMessage('엑셀 파일을 읽는 중 오류가 발생했습니다. 파일 형식(xlsx)을 확인하세요.');
                 }
             })
-                .catch(error => {
+                .catch((error) => {
                 setErrorMessage('파일을 읽는 중 오류가 발생했습니다.');
             });
         }
@@ -243,7 +257,7 @@ export const DataImporter = (props) => {
             try {
                 // 서버에 전송하기 위한 데이터 형식으로 변환한다.
                 const importData = {
-                    rows: []
+                    rows: [],
                 };
                 const rows = [];
                 formData.forEach((row) => {
@@ -253,12 +267,12 @@ export const DataImporter = (props) => {
                     });
                     rows.push(rowMap);
                     importData.rows.push({
-                        properties: rowMap
+                        properties: rowMap,
                     });
                 });
                 const response = await getExternalApiDataWithError({
                     url: url,
-                    formData: importData
+                    formData: importData,
                 });
                 if (overrideParseResult) {
                     const overrideParseResultResult = overrideParseResult(formData, response.data);
@@ -308,11 +322,14 @@ export const DataImporter = (props) => {
                 props.onClose(false);
             }, children: [_jsxs("div", { className: "rcm-importer-body", children: [_jsx(DataImportSample, { fields: fields, sampleData: sampleData, sampleFileName: props.sampleFileName, allowUpdate: allowUpdate }), _jsxs("div", { className: "rcm-importer-section", children: [_jsx("h3", { className: "rcm-text", "data-weight": "semibold", children: t('form.list.dataTransfer.tab.import.file.label') || '업로드할 파일 선택' }), _jsx(FileUploadInput, { name: 'file', value: undefined, onChange: onFileUpload, config: {
                                         maxCount: 1,
-                                        fileTypes: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'],
-                                        extensions: ['xlsx', 'xls']
-                                    } })] }), description && (_jsx("div", { className: "rcm-importer-description", style: { wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'normal' }, children: description }))] }), open && _jsx(Modal, { size: '5xl', title: resultModalTitle, zIndex: 11000, opened: open, closeOnClickOutside: false, closeOnEscape: false, onClose: () => {
+                                        fileTypes: [
+                                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                            'application/vnd.ms-excel',
+                                        ],
+                                        extensions: ['xlsx', 'xls'],
+                                    } })] }), description && (_jsx("div", { className: "rcm-importer-description", style: { wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'normal' }, children: description }))] }), open && (_jsx(Modal, { size: '5xl', title: resultModalTitle, zIndex: 11000, opened: open, closeOnClickOutside: false, closeOnEscape: false, onClose: () => {
                         cancelImport();
-                    }, children: _jsx(DataImportProcessor, { fields: fields, data: data, preview: preview, errorMessage: errorMessage, importError: importError, importErrorView: importErrorView, viewError: errorView, importResult: importResult, cancelImport: cancelImport, resultView: resultView, onImportSuccess: onImportSuccess, onSubmit: onSubmit }) })] }) }));
+                    }, children: _jsx(DataImportProcessor, { fields: fields, data: data, preview: preview, errorMessage: errorMessage, importError: importError, importErrorView: importErrorView, viewError: errorView, importResult: importResult, cancelImport: cancelImport, resultView: resultView, onImportSuccess: onImportSuccess, onSubmit: onSubmit }) }))] }) }));
     function cancelImport() {
         setOpen(false);
         setData([]);

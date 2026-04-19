@@ -7,8 +7,8 @@ import { jsx as _jsx } from "react/jsx-runtime";
  */
 import { FormField } from './abstract';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { MarkdownEditor } from "../../ui";
-import { isEquals } from "../../misc";
+import { MarkdownEditor } from '../../ui';
+import { isEquals } from '../../misc';
 import { isBlank } from '../../utils/StringUtil';
 export class MarkdownField extends FormField {
     constructor(name, order) {
@@ -38,9 +38,7 @@ export class MarkdownField extends FormField {
             const isNullDefaultValue = this.isEqualsOrEmpty(this.value.default);
             const isNullFetchedValue = this.isEqualsOrEmpty(this.value.fetched);
             const isNullCurrentValue = this.isEqualsOrEmpty(this.value.current);
-            if (isNullDefaultValue
-                && isNullFetchedValue
-                && isNullCurrentValue) {
+            if (isNullDefaultValue && isNullFetchedValue && isNullCurrentValue) {
                 return false;
             }
             if (this.value.fetched !== undefined) {

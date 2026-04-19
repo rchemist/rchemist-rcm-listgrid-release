@@ -4,10 +4,10 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { SearchForm } from "../form/SearchForm";
+import { SearchForm } from '../form/SearchForm';
 import { AbstractManyToOneField, ListableFormField } from '../components/fields/abstract';
 import { isTrue } from '../utils/BooleanUtil';
-import { PageResult } from "../form/Type";
+import { PageResult } from '../form/Type';
 export class ListGrid {
     constructor(entityForm) {
         this.entityForm = entityForm.clone(true);
@@ -43,12 +43,20 @@ export class ListGrid {
                         if (targetEntityForm) {
                             const nameField = targetEntityForm.getField('name');
                             if (nameField) {
-                                quickSearchFields.push({ name: `${entityField.getName()}.name`, label: entityField.getLabel(), order: idx });
+                                quickSearchFields.push({
+                                    name: `${entityField.getName()}.name`,
+                                    label: entityField.getLabel(),
+                                    order: idx,
+                                });
                             }
                         }
                     }
                     else {
-                        quickSearchFields.push({ name: entityField.getName(), label: entityField.getLabel(), order: idx });
+                        quickSearchFields.push({
+                            name: entityField.getName(),
+                            label: entityField.getLabel(),
+                            order: idx,
+                        });
                     }
                 }
             }
@@ -78,7 +86,7 @@ export class ListGrid {
                     autoQuickSearchFields.push({
                         name: listField.getName(),
                         label: listField.getLabel(),
-                        order: idx
+                        order: idx,
                     });
                 }
             });
@@ -90,17 +98,17 @@ export class ListGrid {
                     const otherFields = autoQuickSearchFields.slice(1);
                     return {
                         ...field,
-                        orFields: otherFields.map(f => f.name),
-                        orFieldLabels: otherFields.map(f => f.label),
+                        orFields: otherFields.map((f) => f.name),
+                        orFieldLabels: otherFields.map((f) => f.label),
                     };
                 }
             }
         }
         // Build orFields from multiple quickSearch fields (OR condition support)
         if (field !== undefined && quickSearchFields.length > 1) {
-            const otherFields = quickSearchFields.filter(f => f.name !== field.name);
-            const orFields = otherFields.map(f => f.name);
-            const orFieldLabels = otherFields.map(f => f.label);
+            const otherFields = quickSearchFields.filter((f) => f.name !== field.name);
+            const orFields = otherFields.map((f) => f.name);
+            const orFieldLabels = otherFields.map((f) => f.label);
             return {
                 ...field,
                 orFields: orFields.length > 0 ? orFields : undefined,
@@ -130,7 +138,7 @@ export class ListGrid {
                 list: [],
                 totalCount: 0,
                 totalPage: 1,
-                searchForm: searchForm.withPage(0)
+                searchForm: searchForm.withPage(0),
             });
         }
         const url = this.getEntityForm().getUrl();

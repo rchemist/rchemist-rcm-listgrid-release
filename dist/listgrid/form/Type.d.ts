@@ -1,4 +1,4 @@
-import { AdditionalColorType, ColorType } from "../common/type";
+import { AdditionalColorType, ColorType } from '../common/type';
 import { SearchForm } from './SearchForm';
 export interface SelectOption {
     label?: string;

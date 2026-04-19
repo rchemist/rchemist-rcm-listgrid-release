@@ -35,23 +35,23 @@ export interface TableConfig {
  * Extends SubCollectionField to display items in a table format
  */
 export declare class TableSubCollectionField extends SubCollectionField {
-    tooltip?: TooltipType;
+    tooltip?: TooltipType | undefined;
     fetchUrl: string;
-    fetchUrlFunction?: (parentEntityForm: EntityForm) => string;
-    tableConfig?: TableConfig;
-    fetchOptions?: CardSubCollectionFetchOptions;
+    fetchUrlFunction?: ((parentEntityForm: EntityForm) => string) | undefined;
+    tableConfig?: TableConfig | undefined;
+    fetchOptions?: CardSubCollectionFetchOptions | undefined;
     constructor(props: {
         entityForm: EntityForm;
         relation: CardSubCollectionRelation;
         order: number;
         name: string;
-        label?: LabelType;
-        helpText?: HelpTextType;
-        hidden?: HiddenType;
-        readonly?: ReadOnlyType;
-        fetchUrl?: string | ((parentEntityForm: EntityForm) => string);
-        tableConfig?: TableConfig;
-        fetchOptions?: CardSubCollectionFetchOptions;
+        label?: LabelType | undefined;
+        helpText?: HelpTextType | undefined;
+        hidden?: HiddenType | undefined;
+        readonly?: ReadOnlyType | undefined;
+        fetchUrl?: string | ((parentEntityForm: EntityForm) => string) | undefined;
+        tableConfig?: TableConfig | undefined;
+        fetchOptions?: CardSubCollectionFetchOptions | undefined;
     });
     withTooltip(tooltip?: TooltipType): this;
     getTooltip(props: FieldInfoParameters): Promise<ReactNode>;

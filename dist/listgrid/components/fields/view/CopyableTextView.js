@@ -16,34 +16,34 @@ export const CopyButton = ({ value, className }) => {
             await navigator.clipboard.writeText(value);
             showToast({
                 message: '복사되었습니다.',
-                color: 'success'
+                color: 'success',
             });
         }
         catch (error) {
             console.error('Failed to copy:', error);
             showToast({
                 message: '복사에 실패했습니다.',
-                color: 'danger'
+                color: 'danger',
             });
         }
     };
-    return (_jsx("div", { className: className ?? "rcm-copy-addon-wrap", children: _jsx(Tooltip, { label: "\uBCF5\uC0AC", children: _jsx("button", { type: "button", className: "rcm-icon-btn", "data-size": "sm", onClick: handleCopy, children: _jsx(IconCopy, { className: "rcm-icon", "data-size": "sm" }) }) }) }));
+    return (_jsx("div", { className: className ?? 'rcm-copy-addon-wrap', children: _jsx(Tooltip, { label: "\uBCF5\uC0AC", children: _jsx("button", { type: "button", className: "rcm-icon-btn", "data-size": "sm", onClick: handleCopy, children: _jsx(IconCopy, { className: "rcm-icon", "data-size": "sm" }) }) }) }));
 };
-export const CopyableTextView = ({ value, displayValue, }) => {
+export const CopyableTextView = ({ value, displayValue }) => {
     return (_jsxs("div", { className: "rcm-copy-text-wrap", children: [_jsx("span", { children: displayValue ?? value }), _jsx(Tooltip, { label: "\uBCF5\uC0AC", children: _jsx("button", { className: "rcm-icon-btn", "data-size": "xs", onClick: async (e) => {
                         e.stopPropagation();
                         try {
                             await navigator.clipboard.writeText(value);
                             showToast({
                                 message: '복사되었습니다.',
-                                color: 'success'
+                                color: 'success',
                             });
                         }
                         catch (error) {
                             console.error('Failed to copy:', error);
                             showToast({
                                 message: '복사에 실패했습니다.',
-                                color: 'danger'
+                                color: 'danger',
                             });
                         }
                     }, children: _jsx(IconCopy, { className: "rcm-icon", "data-size": "xs" }) }) })] }));

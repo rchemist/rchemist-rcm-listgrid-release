@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { ListGridHeaderProps } from "../types/ListGridHeader.types";
+import { ReactNode } from 'react';
+import { ListGridHeaderProps } from '../types/ListGridHeader.types';
 export declare const HeaderActionButtons: React.FC<ListGridHeaderProps & {
     headerButtons: ReactNode[];
     checkedButtons: ReactNode[];

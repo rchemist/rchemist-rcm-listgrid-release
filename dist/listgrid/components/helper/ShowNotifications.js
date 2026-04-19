@@ -6,11 +6,15 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { IconAlertTriangle, IconSquareRoundedX } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { IconAlertTriangle, IconSquareRoundedX } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 import { isTrue } from '../../utils/BooleanUtil';
 export const ShowNotifications = ({ error, color, timeout, showClose = false, onClick, ...props }) => {
-    const bgColor = color !== undefined ? `bg-${color}-light` : isTrue(error) ? 'bg-danger-light' : 'bg-success-light';
+    const bgColor = color !== undefined
+        ? `bg-${color}-light`
+        : isTrue(error)
+            ? 'bg-danger-light'
+            : 'bg-success-light';
     const textColor = color !== undefined ? `text-${color}` : isTrue(error) ? 'text-danger' : 'text-success';
     const [view, setView] = useState(null);
     const processMessages = () => {
@@ -21,7 +25,7 @@ export const ShowNotifications = ({ error, color, timeout, showClose = false, on
                 .filter((message) => message !== undefined && message !== null && message !== '')
                 .map((message, index) => ({
                 id: index.toString(),
-                message: message.replace(/(?:\r\n|\r|\n)/g, '<br />')
+                message: message.replace(/(?:\r\n|\r|\n)/g, '<br />'),
             }));
         }
         else {
@@ -30,7 +34,7 @@ export const ShowNotifications = ({ error, color, timeout, showClose = false, on
                 if (value !== undefined && value !== null && value !== '') {
                     items.push({
                         id: key,
-                        message: value.replace(/(?:\r\n|\r|\n)/g, '<br />')
+                        message: value.replace(/(?:\r\n|\r|\n)/g, '<br />'),
                     });
                 }
             });

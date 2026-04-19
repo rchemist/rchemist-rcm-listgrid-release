@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { ApiSpecification } from "./Type";
+import { ReactNode } from 'react';
+import { ApiSpecification } from './Type';
 export declare const ApiSpecificationButton: ({ apiSpec }: {
     apiSpec?: ApiSpecification | ReactNode;
 }) => import("react/jsx-runtime").JSX.Element | null;

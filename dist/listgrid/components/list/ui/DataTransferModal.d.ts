@@ -1,4 +1,4 @@
-import { SearchForm } from "../../../form/SearchForm";
+import { SearchForm } from '../../../form/SearchForm';
 import { DataTransferConfig } from '../../../transfer/Type';
 export declare const DataTransferModals: React.FC<{
     openDownload: boolean;

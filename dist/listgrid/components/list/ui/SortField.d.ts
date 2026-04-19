@@ -1,4 +1,4 @@
-import { SearchForm } from "../../../form/SearchForm";
+import { SearchForm } from '../../../form/SearchForm';
 interface SortFieldProps {
     name: string;
     searchForm: SearchForm;

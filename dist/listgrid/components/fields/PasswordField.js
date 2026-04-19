@@ -2,9 +2,9 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import { PasswordValidation } from '../../validations/PasswordValidation';
 import { FormField } from './abstract';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { PasswordStrengthView } from "../../ui";
-import { TextInput } from "../../ui";
-import { RegexValidation } from "../../validations/RegexValidation";
+import { PasswordStrengthView } from '../../ui';
+import { TextInput } from '../../ui';
+import { RegexValidation } from '../../validations/RegexValidation';
 export class PasswordField extends FormField {
     constructor(name, order, validations, strength) {
         super(name, order, 'password');
@@ -35,15 +35,14 @@ export class PasswordField extends FormField {
             })();
         }
         return (async () => {
-            return _jsx(PasswordStrengthView, { strength: this.strength, ...await getInputRendererParameters(this, params) });
+            return (_jsx(PasswordStrengthView, { strength: this.strength, ...await getInputRendererParameters(this, params) }));
         })();
     }
     /**
      * PasswordField 인스턴스 생성
      */
     createInstance(name, order) {
-        return new PasswordField(name, order)
-            .withStrength(this.strength);
+        return new PasswordField(name, order).withStrength(this.strength);
     }
     withStrength(strength) {
         this.strength = strength;
@@ -66,8 +65,7 @@ export class PasswordField extends FormField {
         return this;
     }
     static create(props) {
-        return new PasswordField(props.name, props.order, props.validations, props.strength)
-            .copyFields(props, true);
+        return new PasswordField(props.name, props.order, props.validations, props.strength).copyFields(props, true);
     }
 }
 //# sourceMappingURL=PasswordField.js.map

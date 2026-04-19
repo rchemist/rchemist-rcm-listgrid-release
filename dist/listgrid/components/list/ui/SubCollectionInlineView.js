@@ -23,24 +23,32 @@ export const SubCollectionInlineView = memo(({ entityForm, itemId, isExpanded, o
         onClickList: async () => {
             onCollapse();
         },
-        onSave: onSave ? {
-            success: () => {
-                onSave();
+        ...(onSave
+            ? {
+                onSave: {
+                    success: () => {
+                        onSave();
+                    },
+                },
             }
-        } : undefined,
-        onDelete: onDelete ? {
-            success: () => {
-                onDelete();
-                onCollapse();
+            : {}),
+        ...(onDelete
+            ? {
+                onDelete: {
+                    success: () => {
+                        onDelete();
+                        onCollapse();
+                    },
+                },
             }
-        } : undefined,
+            : {}),
     };
     return (_jsx("div", { "data-testid": "subcollection-inline-view", className: `
           subcollection-inline-view
           transition-all duration-300 ease-in-out
           overflow-hidden
           ${isExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}
-        `, children: _jsxs("div", { className: "\n          ml-4\n          border-l-4 border-primary/30\n          bg-white/50 dark:bg-gray-900/50\n          rounded-r-lg\n          overflow-x-hidden\n          max-w-full\n        ", children: [_jsx("div", { className: "\n            bg-primary/20 text-primary dark:bg-primary/30 dark:text-primary-light\n            text-xs font-medium\n            px-3 py-1.5\n            border-b border-primary/10\n          ", children: "\uC0C1\uC138 \uC815\uBCF4" }), _jsx("div", { className: "pl-4 pt-2", children: _jsx(ViewEntityForm, { entityForm: entityForm, readonly: readonly, excludeButtons: ['list'], hideTitle: true, buttonLinks: buttonLinks, buttonPosition: "header", subCollection: true, inlineMode: true, hideMappedByFields: mappedBy }) })] }) }));
+        `, children: _jsxs("div", { className: "\n          ml-4\n          border-l-4 border-primary/30\n          bg-white/50 dark:bg-gray-900/50\n          rounded-r-lg\n          overflow-x-hidden\n          max-w-full\n        ", children: [_jsx("div", { className: "\n            bg-primary/20 text-primary dark:bg-primary/30 dark:text-primary-light\n            text-xs font-medium\n            px-3 py-1.5\n            border-b border-primary/10\n          ", children: "\uC0C1\uC138 \uC815\uBCF4" }), _jsx("div", { className: "pl-4 pt-2", children: _jsx(ViewEntityForm, { entityForm: entityForm, readonly: readonly, excludeButtons: ['list'], hideTitle: true, buttonLinks: buttonLinks, buttonPosition: "header", subCollection: true, inlineMode: true, ...(mappedBy !== undefined ? { hideMappedByFields: mappedBy } : {}) }) })] }) }));
 });
 SubCollectionInlineView.displayName = 'SubCollectionInlineView';
 //# sourceMappingURL=SubCollectionInlineView.js.map

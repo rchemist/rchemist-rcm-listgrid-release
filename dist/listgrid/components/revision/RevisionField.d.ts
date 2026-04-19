@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { FormField, FormFieldProps } from '../fields/abstract';
 import { FieldRenderParameters, FilterRenderParameters } from '../../config/EntityField';
 interface RevisionFieldProps extends FormFieldProps {

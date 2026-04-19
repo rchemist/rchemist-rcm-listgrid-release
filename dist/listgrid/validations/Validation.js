@@ -27,7 +27,9 @@ export class ValidateResult {
 export class ValidationItem {
     constructor(id, message) {
         this.id = `${id}`;
-        this.message = message;
+        if (message !== undefined) {
+            this.message = message;
+        }
     }
     getErrorMessage() {
         return this.message ?? DEFAULT_ERROR_MESSAGE;
@@ -45,7 +47,7 @@ export class ValidationItem {
             }
             return String(currentValue);
         }
-        return (entityForm.getRenderType() === 'update') ? value?.fetched : value?.default;
+        return entityForm.getRenderType() === 'update' ? value?.fetched : value?.default;
     }
     /**
      * 현재 필드값을 number 로 반환하는 편의성 메소드
@@ -53,8 +55,7 @@ export class ValidationItem {
      * @param value
      */
     getValueAsNumber(entityForm, value) {
-        return Number(value?.current ??
-            (entityForm.getRenderType() === 'update') ? value?.fetched : value?.default);
+        return Number((value?.current ?? entityForm.getRenderType() === 'update') ? value?.fetched : value?.default);
     }
     /**
      * 현재 필드값을 boolean 로 반환하는 편의성 메소드.
@@ -62,8 +63,7 @@ export class ValidationItem {
      * @param value
      */
     getValueAsBoolean(entityForm, value) {
-        return Boolean(value?.current ??
-            (entityForm.getRenderType() === 'update') ? value?.fetched : value?.default);
+        return Boolean((value?.current ?? entityForm.getRenderType() === 'update') ? value?.fetched : value?.default);
     }
     /**
      * ValidateResult 를 반환하는 편의성 메소드.
@@ -71,7 +71,9 @@ export class ValidationItem {
      * @param message
      */
     returnValidateResult(error, message) {
-        return error ? ValidateResult.fail(message ?? this.getErrorMessage()) : ValidateResult.success();
+        return error
+            ? ValidateResult.fail(message ?? this.getErrorMessage())
+            : ValidateResult.success();
     }
 }
 //# sourceMappingURL=Validation.js.map

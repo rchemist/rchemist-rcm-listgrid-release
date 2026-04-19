@@ -1,4 +1,4 @@
-import { QueryConditionType } from "../../../form/SearchForm";
+import { QueryConditionType } from '../../../form/SearchForm';
 import { FormField } from '../abstract';
 import { EntityForm } from '../../../config/EntityForm';
 export interface RuleFieldValue {
@@ -14,7 +14,7 @@ export declare class RuleConditionValue {
     condition: 'AND' | 'OR';
     targetEntityPrefix: string;
     values: RuleFieldValue[];
-    constructor(id: number, condition: "AND" | "OR", targetEntityPrefix: string);
+    constructor(id: number, condition: 'AND' | 'OR', targetEntityPrefix: string);
     static create(data: unknown): RuleConditionValue;
     addValues(...values: RuleFieldValue[]): void;
     withValues(values: RuleFieldValue[]): this;
@@ -23,11 +23,11 @@ export declare class RuleConditionValue {
 export type ResultByCount = (count: number) => void;
 export type ResultByRuleCondition = (result: Map<number, RuleConditionValue>) => void;
 export interface RuleBasedFieldProps {
-    value?: Map<number, RuleConditionValue>;
-    onRefresh?: () => void;
-    setNotifications?: (notifications: string[]) => void;
-    parentId?: string;
-    fieldName?: string;
+    value?: Map<number, RuleConditionValue> | undefined;
+    onRefresh?: (() => void) | undefined;
+    setNotifications?: ((notifications: string[]) => void) | undefined;
+    parentId?: string | undefined;
+    fieldName?: string | undefined;
 }
 /**
  * Rule 이 항상 동일한 엔티티를 대상으로 적용되지는 않는다.

@@ -13,7 +13,7 @@ export class RuleConditionValue {
         this.targetEntityPrefix = targetEntityPrefix;
     }
     static create(data) {
-        if (typeof data === "string") {
+        if (typeof data === 'string') {
             const result = parse(data);
             const value = new RuleConditionValue(result.id, result.condition, result.targetEntityPrefix);
             if (result.values) {
@@ -26,13 +26,13 @@ export class RuleConditionValue {
         }
     }
     addValues(...values) {
-        values.forEach(newValue => {
-            const existingValueIndex = this.values.findIndex(v => v.id === newValue.id && v.name === newValue.name);
+        values.forEach((newValue) => {
+            const existingValueIndex = this.values.findIndex((v) => v.id === newValue.id && v.name === newValue.name);
             if (existingValueIndex !== -1) {
                 // 기존에 동일한 id와 name이 있는 경우, 해당 값을 업데이트
                 this.values[existingValueIndex] = {
                     ...this.values[existingValueIndex],
-                    ...newValue
+                    ...newValue,
                 };
             }
             else {

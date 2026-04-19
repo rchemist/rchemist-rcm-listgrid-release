@@ -1,13 +1,13 @@
 import { MultipleOptionalField, MultipleOptionalFieldProps, ViewListProps, ViewListResult } from './abstract';
-import React from "react";
-import { MinMaxLimit, SelectOption } from "../../form/Type";
+import React from 'react';
+import { MinMaxLimit, SelectOption } from '../../form/Type';
 import { FieldRenderParameters, FilterRenderParameters } from '../../config/EntityField';
-import { TagValidationResult } from "../../form/TagsInput/types";
+import { TagValidationResult } from '../../form/TagsInput/types';
 interface TagFieldProps extends MultipleOptionalFieldProps {
-    tagValidation?: (value: string) => TagValidationResult | Promise<TagValidationResult>;
+    tagValidation?: ((value: string) => TagValidationResult | Promise<TagValidationResult>) | undefined;
 }
 export declare class TagField extends MultipleOptionalField<TagField> {
-    tagValidation?: (value: string) => TagValidationResult | Promise<TagValidationResult>;
+    tagValidation?: ((value: string) => TagValidationResult | Promise<TagValidationResult>) | undefined;
     constructor(name: string, order: number, options?: SelectOption[], limit?: MinMaxLimit);
     /**
      * 태그 추가 시 실시간 검증 함수를 설정합니다.

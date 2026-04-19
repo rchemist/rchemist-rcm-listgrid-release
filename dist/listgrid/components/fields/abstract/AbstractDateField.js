@@ -4,19 +4,24 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { ListableFormField } from "./ListableFormField";
+import { ListableFormField } from './ListableFormField';
 export class AbstractDateField extends ListableFormField {
     constructor(name, order, type, limit, range) {
         super(name, order, type);
-        this.limit = limit;
-        this.range = range;
+        if (limit !== undefined)
+            this.limit = limit;
+        if (range !== undefined)
+            this.range = range;
     }
     /**
      * range 가 true 면, 시작 시각 ~ 종료 시각 두 가지를 입력받게 됩니다.
      * @param range
      */
     withRange(range) {
-        this.range = range;
+        if (range !== undefined)
+            this.range = range;
+        else
+            delete this.range;
         return this;
     }
     /**
@@ -24,7 +29,10 @@ export class AbstractDateField extends ListableFormField {
      * @param limit
      */
     withLimit(limit) {
-        this.limit = limit;
+        if (limit !== undefined)
+            this.limit = limit;
+        else
+            delete this.limit;
         return this;
     }
     /**
@@ -32,7 +40,12 @@ export class AbstractDateField extends ListableFormField {
      * @param min
      */
     withMin(min) {
-        this.limit = { min: min, max: this.limit?.max };
+        const newLimit = {};
+        if (min !== undefined)
+            newLimit.min = min;
+        if (this.limit?.max !== undefined)
+            newLimit.max = this.limit.max;
+        this.limit = newLimit;
         return this;
     }
     /**
@@ -40,7 +53,12 @@ export class AbstractDateField extends ListableFormField {
      * @param max
      */
     withMax(max) {
-        this.limit = { min: this.limit?.min, max: max };
+        const newLimit = {};
+        if (this.limit?.min !== undefined)
+            newLimit.min = this.limit.min;
+        if (max !== undefined)
+            newLimit.max = max;
+        this.limit = newLimit;
         return this;
     }
     copyFields(origin, includeValue = true) {

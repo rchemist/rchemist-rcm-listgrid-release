@@ -1,11 +1,11 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { CheckButtonValidationField } from './abstract';
-import { TextInput } from "../../ui";
+import { CheckButtonValidationField, } from './abstract';
+import { TextInput } from '../../ui';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { LinkFieldView } from "./view/LinkFieldView";
-import { IconExternalLink } from "@tabler/icons-react";
+import { LinkFieldView } from './view/LinkFieldView';
+import { IconExternalLink } from '@tabler/icons-react';
 import { isBlank } from '../../utils/StringUtil';
-import { normalizeUrl } from "../../misc";
+import { normalizeUrl } from '../../misc';
 export class LinkField extends CheckButtonValidationField {
     constructor(name, order) {
         super(name, order, 'text');
@@ -18,7 +18,8 @@ export class LinkField extends CheckButtonValidationField {
             return super.renderCheckButtonValidationField(params);
         }
         return (async () => {
-            return _jsx(LinkFieldView, { ...await getInputRendererParameters(this, params) });
+            const inputParams = await getInputRendererParameters(this, params);
+            return (_jsx(LinkFieldView, { ...inputParams }));
         })();
     }
     /**
@@ -32,9 +33,9 @@ export class LinkField extends CheckButtonValidationField {
      */
     renderListFilterInstance(params) {
         return (async () => {
-            return _jsx(TextInput, { name: `${this.name}_${params.entityForm.id}`, onChange: (value) => {
+            return (_jsx(TextInput, { name: `${this.name}_${params.entityForm.id}`, onChange: (value) => {
                     params.onChange(value, 'LIKE');
-                }, value: params.value });
+                }, value: params.value }));
         })();
     }
     /**
@@ -48,15 +49,14 @@ export class LinkField extends CheckButtonValidationField {
         // 링크가 존재하는 경우 클릭 가능한 링크로 렌더링
         const linkElement = (_jsxs("div", { className: "rcm-link-cell", children: [_jsx("span", { className: "rcm-truncate", children: value }), !isBlank(value) && (_jsx("button", { type: "button", className: "rcm-link-cell-btn", onClick: (e) => {
                         e.stopPropagation();
-                        window.open(normalizeUrl(value), "_blank");
+                        window.open(normalizeUrl(value), '_blank');
                     }, children: _jsx(IconExternalLink, { className: "rcm-link-cell-icon" }) }))] }));
         return Promise.resolve({
             result: linkElement,
         });
     }
     static create(props) {
-        return new LinkField(props.name, props.order)
-            .copyFields(props, true);
+        return new LinkField(props.name, props.order).copyFields(props, true);
     }
 }
 //# sourceMappingURL=LinkField.js.map

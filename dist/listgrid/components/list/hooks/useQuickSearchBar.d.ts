@@ -1,7 +1,7 @@
-import { QuickSearchBarProps } from "../QuickSearchBar";
+import { QuickSearchBarProps } from '../QuickSearchBar';
 import { QuickSearchProps } from '../../../config/ListGrid';
-import { ListableFormField } from "../../fields/abstract";
-import { SearchForm } from "../../../form/SearchForm";
+import { ListableFormField } from '../../fields/abstract';
+import { SearchForm } from '../../../form/SearchForm';
 export declare const PAGE_SIZE_STORAGE_KEY = "listgrid_global_page_size";
 export declare const DEFAULT_PAGE_SIZE = 20;
 export declare const getGlobalPageSize: () => number;

@@ -2,39 +2,39 @@ import { EntityItem } from '../config/EntityItem';
 import { EntityForm } from '../config/EntityForm';
 import { ConditionalReactNodeValue, HelpTextType, HiddenType, LabelType, ManyToOneFilter, OptionalBoolean, ReadOnlyType, ViewPreset } from '../config/Config';
 import { ListGrid } from '../config/ListGrid';
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 import { ViewListGridOptionProps } from '../components/list/types/ViewListGrid.types';
-import { FilterItem } from "../form/SearchForm";
-import { FieldInfoParameters } from "./EntityField";
+import { FilterItem } from '../form/SearchForm';
+import { FieldInfoParameters } from './EntityField';
 import { Session } from '../auth/types';
 export declare class SubCollectionField implements EntityItem {
     order: number;
     name: string;
-    label?: LabelType;
-    helpText?: HelpTextType;
-    hidden?: HiddenType;
-    readonly?: ReadOnlyType;
-    dynamicUrl?: (parentEntityForm: EntityForm) => string;
+    label?: LabelType | undefined;
+    helpText?: HelpTextType | undefined;
+    hidden?: HiddenType | undefined;
+    readonly?: ReadOnlyType | undefined;
+    dynamicUrl?: ((parentEntityForm: EntityForm) => string) | undefined;
     form?: {
         tabId: string;
         fieldGroupId: string;
-    };
+    } | undefined;
     entityForm: EntityForm;
-    hideLabel?: boolean;
+    hideLabel?: boolean | undefined;
     relation: SubCollectionRelation;
-    listViewFields?: string[];
-    viewListOptions?: ViewListGridOptionProps;
+    listViewFields?: string[] | undefined;
+    viewListOptions?: ViewListGridOptionProps | undefined;
     constructor(props: {
         entityForm: EntityForm;
         relation: SubCollectionRelation;
         order: number;
         name: string;
-        label?: LabelType;
-        helpText?: HelpTextType;
-        hidden?: HiddenType;
-        readonly?: ReadOnlyType;
-        dynamicUrl?: (parentEntityForm: EntityForm) => string;
-        viewListOptions?: ViewListGridOptionProps;
+        label?: LabelType | undefined;
+        helpText?: HelpTextType | undefined;
+        hidden?: HiddenType | undefined;
+        readonly?: ReadOnlyType | undefined;
+        dynamicUrl?: ((parentEntityForm: EntityForm) => string) | undefined;
+        viewListOptions?: ViewListGridOptionProps | undefined;
     });
     withTooltip(tooltip?: ConditionalReactNodeValue): this;
     clone(): SubCollectionField;
@@ -64,7 +64,7 @@ export declare class SubCollectionField implements EntityItem {
     withListViewFields(...listViewFields: string[]): this;
     withDynamicUrl(props: (parentEntityForm: EntityForm) => string): this;
     getListGrid(parentEntityForm: EntityForm): ListGrid;
-    render({ entityForm, session }: {
+    render({ entityForm, session, }: {
         entityForm: EntityForm;
         session?: Session;
     }): Promise<ReactNode | null>;

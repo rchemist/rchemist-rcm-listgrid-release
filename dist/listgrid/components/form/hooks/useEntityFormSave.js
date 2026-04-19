@@ -1,14 +1,14 @@
 'use client';
-import { useCallback } from "react";
-import { ExtensionPoint } from '../../../extensions/EntityFormExtension.types';
-import { isEmpty } from "../../../utils";
-import { openToast } from "../../../message";
+import { useCallback } from 'react';
+import { ExtensionPoint, } from '../../../extensions/EntityFormExtension.types';
+import { isEmpty } from '../../../utils';
+import { openToast } from '../../../message';
 /**
  * Custom hook for handling save/delete logic of EntityForm.
  * EntityForm 저장/삭제 로직을 처리하는 커스텀 훅
  * @param params - 저장/삭제에 필요한 파라미터 객체
  */
-export const useEntityFormSave = ({ entityForm, isSubCollectionEntity, renderType, pathname, router, buttonLinks, postSave, setEntityForm, setNotifications, setTitleText, setCacheKey, setErrors, setOpenBaseLoading, session }) => {
+export const useEntityFormSave = ({ entityForm, isSubCollectionEntity, renderType, pathname, router, buttonLinks, postSave, setEntityForm, setNotifications, setTitleText, setCacheKey, setErrors, setOpenBaseLoading, session, }) => {
     /**
      * EntityForm 저장 버튼 클릭 시 호출되는 함수
      * Handles save button click
@@ -24,9 +24,9 @@ export const useEntityFormSave = ({ entityForm, isSubCollectionEntity, renderTyp
         let processedEntityForm = entityForm;
         if (hasClientExtensions) {
             const context = {
-                session,
-                user: session?.getUser(),
-                entityForm: entityForm
+                entityForm: entityForm,
+                ...(session ? { session } : {}),
+                ...(session?.getUser() != null ? { user: session.getUser() } : {}),
             };
             // Pre Extension 실행 (Create/Update 구분)
             const extensionPoint = renderType === 'update' ? ExtensionPoint.PRE_UPDATE : ExtensionPoint.PRE_CREATE;
@@ -39,9 +39,9 @@ export const useEntityFormSave = ({ entityForm, isSubCollectionEntity, renderTyp
             let finalEntityForm = saveResult.entityForm;
             if (hasClientExtensions) {
                 const context = {
-                    session,
-                    user: session?.getUser(),
-                    entityForm: finalEntityForm
+                    entityForm: finalEntityForm,
+                    ...(session ? { session } : {}),
+                    ...(session?.getUser() != null ? { user: session.getUser() } : {}),
                 };
                 const extensionPoint = renderType === 'update' ? ExtensionPoint.POST_UPDATE : ExtensionPoint.POST_CREATE;
                 await finalEntityForm.executeClientExtensions(extensionPoint, finalEntityForm.fetchedEntity ?? {}, context);
@@ -62,9 +62,17 @@ export const useEntityFormSave = ({ entityForm, isSubCollectionEntity, renderTyp
             setEntityForm(saveResult.entityForm);
             setErrors([error]);
             setOpenBaseLoading(false);
-            openToast({ message: `${error}`, color: "danger", showCloseButton: false });
+            openToast({ message: `${error}`, color: 'danger', showCloseButton: false });
         }
-    }, [entityForm, session, postSave, setEntityForm, setErrors, setNotifications, setOpenBaseLoading]);
+    }, [
+        entityForm,
+        session,
+        postSave,
+        setEntityForm,
+        setErrors,
+        setNotifications,
+        setOpenBaseLoading,
+    ]);
     /**
      * EntityForm 삭제 후 처리
      * Handles post-delete logic
@@ -76,7 +84,7 @@ export const useEntityFormSave = ({ entityForm, isSubCollectionEntity, renderTyp
     }, [postSave]);
     return {
         onClickSaveButton,
-        handlePostDelete
+        handlePostDelete,
     };
 };
 //# sourceMappingURL=useEntityFormSave.js.map

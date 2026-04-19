@@ -1,7 +1,7 @@
 import { EntityFormBase } from './EntityFormBase';
 import { EntityFormValidation } from './EntityFormValidation';
 import { CopyEntityFormToInnerFieldsProps } from '../../config/EntityFormTypes';
-export declare abstract class EntityFormData extends EntityFormValidation {
+export declare abstract class EntityFormData<T extends object = any> extends EntityFormValidation<T> {
     constructor(name: string, url: string);
     resetValue(fieldName: string, loadOnChanges?: boolean): this;
     abstract executeOnChanges(fieldName: string): Promise<void>;
@@ -11,14 +11,16 @@ export declare abstract class EntityFormData extends EntityFormValidation {
      * @param value
      * @returns
      */
+    setValue<K extends keyof T & string>(fieldName: K, value: T[K]): this;
     setValue(fieldName: string, value: any): this;
-    setValues(cloned: EntityFormBase): this;
+    setValues(cloned: EntityFormBase<T>): this;
     /**
      * 단순히 필드값을 변경하는 setValue 와는 다르게 필드값이 변경되면 onChanges 에 등록된 함수를 실행한다.
      * @param fieldName
      * @param value
      * @returns
      */
+    changeValue<K extends keyof T & string>(fieldName: K, value: T[K]): this;
     changeValue(fieldName: string, value: any): this;
     clearOnChanges(): this;
     clearOnFetchData(): this;

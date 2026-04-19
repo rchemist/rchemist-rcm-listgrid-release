@@ -5,6 +5,7 @@ export function UrlStateProvider({ value, children }) {
     return _jsx(UrlStateContext.Provider, { value: value, children: children });
 }
 function mustUrlState() {
+    // eslint-disable-next-line react-hooks/rules-of-hooks -- assertion helper always invoked from within hooks/components below
     const ctx = useContext(UrlStateContext);
     if (!ctx) {
         throw new Error('[@rcm/listgrid] useQueryStates must be called within a <UrlStateProvider>. ' +

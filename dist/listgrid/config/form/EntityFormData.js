@@ -1,6 +1,6 @@
-import { isBlank, isEmpty, isTrue } from "../../utils";
+import { isBlank, isEmpty, isTrue } from '../../utils';
 import { EntityFormValidation } from './EntityFormValidation';
-import { DEFAULT_FIELD_GROUP_INFO, DEFAULT_TAB_INFO } from '../../config/Config';
+import { DEFAULT_FIELD_GROUP_INFO, DEFAULT_TAB_INFO, } from '../../config/Config';
 import { EntityFieldGroup } from '../../config/EntityFieldGroup';
 import { EntityTab } from '../../config/EntityTab';
 export class EntityFormData extends EntityFormValidation {
@@ -17,12 +17,6 @@ export class EntityFormData extends EntityFormValidation {
         }
         return this;
     }
-    /**
-     * 필드값을 변경한다.
-     * @param fieldName
-     * @param value
-     * @returns
-     */
     setValue(fieldName, value) {
         const field = this.getField(fieldName);
         if (field) {
@@ -40,12 +34,6 @@ export class EntityFormData extends EntityFormValidation {
         });
         return this;
     }
-    /**
-     * 단순히 필드값을 변경하는 setValue 와는 다르게 필드값이 변경되면 onChanges 에 등록된 함수를 실행한다.
-     * @param fieldName
-     * @param value
-     * @returns
-     */
     changeValue(fieldName, value) {
         const field = this.getField(fieldName);
         if (field) {
@@ -100,7 +88,9 @@ export class EntityFormData extends EntityFormValidation {
         let fieldGroup = props.fieldGroup ?? DEFAULT_FIELD_GROUP_INFO;
         let entityFieldGroup;
         if (this.tabs.get(tab.id)?.fieldGroups.find((group) => group.id === fieldGroup.id)) {
-            entityFieldGroup = this.tabs.get(tab.id)?.fieldGroups.find((group) => group.id === fieldGroup.id);
+            entityFieldGroup = this.tabs
+                .get(tab.id)
+                .fieldGroups.find((group) => group.id === fieldGroup.id);
         }
         else {
             entityFieldGroup = new EntityFieldGroup(fieldGroup);
@@ -165,14 +155,18 @@ export class EntityFormData extends EntityFormValidation {
                         }
                         // 기존 탭이 없는 경우에는 추가해야 한다.
                         if (!newTab) {
-                            newTab = explicitFieldInfo?.tab;
+                            newTab = explicitFieldInfo.tab;
                             this.tabs.set(newTab.id, new EntityTab(newTab));
                         }
                     }
                     // 필드 그룹 정보가 필드 단위로 변경된 경우
-                    let newFieldGroup = undefined;
-                    if (this.tabs.get(newTab.id)?.fieldGroups.find((group) => group.id === newField.getFieldGroupId())) {
-                        newFieldGroup = this.tabs.get(newTab.id)?.fieldGroups.find((group) => group.id === newField.getFieldGroupId());
+                    let newFieldGroup;
+                    if (this.tabs
+                        .get(newTab.id)
+                        ?.fieldGroups.find((group) => group.id === newField.getFieldGroupId())) {
+                        newFieldGroup = this.tabs
+                            .get(newTab.id)
+                            .fieldGroups.find((group) => group.id === newField.getFieldGroupId());
                     }
                     else {
                         newFieldGroup = new EntityFieldGroup(explicitFieldInfo?.fieldGroup ?? fieldGroup);

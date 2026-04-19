@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 import { ListableFormField, ListableFormFieldProps, ViewListProps, ViewListResult, ViewRenderProps, ViewRenderResult } from './abstract';
-import { MinMaxLimit } from "../../form/Type";
-import { Currency, Double } from "../../ui";
+import { MinMaxLimit } from '../../form/Type';
+import { Currency, Double } from '../../ui';
 import { FieldRenderParameters, FilterRenderParameters } from '../../config/EntityField';
-import { EntityForm } from "../../config/EntityForm";
+import { EntityForm } from '../../config/EntityForm';
 import { Session } from '../../auth/types';
-import { ValidateResult } from "../../validations/Validation";
+import { ValidateResult } from '../../validations/Validation';
 interface NumberFieldProps extends ListableFormFieldProps {
     currency?: Currency;
     double?: Double;

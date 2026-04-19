@@ -1,5 +1,5 @@
 import { EntityForm } from '../../../config/EntityForm';
-import { CreateUpdateOptions } from "../types/ViewListGrid.types";
+import { CreateUpdateOptions } from '../types/ViewListGrid.types';
 export interface SubCollectionModalProps {
     open: boolean;
     setOpen: (open: boolean) => void;

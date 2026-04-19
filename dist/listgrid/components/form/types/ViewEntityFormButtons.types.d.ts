@@ -1,5 +1,5 @@
 import { EntityForm } from '../../../config/EntityForm';
-import { EntityFormManageable } from "./ViewEntityForm.types";
+import { EntityFormManageable } from './ViewEntityForm.types';
 import { EntityButtonLinkProps } from '../../../config/Config';
 import { Session } from '../../../auth/types';
 import { EntityFormButton } from '../../../config/EntityFormButton';

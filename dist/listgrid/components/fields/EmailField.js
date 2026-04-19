@@ -9,9 +9,9 @@ import { CheckButtonValidationField } from './abstract';
 import { ValidateResult } from '../../validations/Validation';
 import { EmailValidation } from '../../validations/EmailValidation';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { TextInput } from "../../ui";
-import { DEFAULT_EMAIL_DOMAINS, EmailDomainCheckButtonInput, EmailDomainInput } from "../../ui";
-import { isEmpty } from "../../utils";
+import { TextInput } from '../../ui';
+import { DEFAULT_EMAIL_DOMAINS, EmailDomainCheckButtonInput, EmailDomainInput } from '../../ui';
+import { isEmpty } from '../../utils';
 export class EmailField extends CheckButtonValidationField {
     constructor(name, order, validations) {
         super(name, order, 'email');
@@ -59,7 +59,7 @@ export class EmailField extends CheckButtonValidationField {
         return (async () => {
             const entityForm = params.entityForm;
             const value = await entityForm.getValue(this.getName());
-            return _jsx(EmailDomainInput, { value: value, name: this.getName(), readonly: params.readonly, required: params.required, commonDomains: this.commonDomains, onChange: (newValue) => params.onChange(newValue) });
+            return (_jsx(EmailDomainInput, { value: value, name: this.getName(), readonly: params.readonly, required: params.required, commonDomains: this.commonDomains, onChange: (newValue) => params.onChange(newValue) }));
         })();
     }
     /**
@@ -69,8 +69,11 @@ export class EmailField extends CheckButtonValidationField {
         return (async () => {
             const entityForm = params.entityForm;
             const value = await entityForm.getValue(this.getName());
-            return _jsx(EmailDomainCheckButtonInput, { name: this.getName(), entityForm: entityForm, onError: params.onError, readonly: params.readonly, required: params.required, commonDomains: this.commonDomains, buttonLabel: this.checkButtonLabel, value: value, defaultValue: this.value?.fetched ?? this.value?.default ?? '', onValid: (newValue) => {
-                    entityForm.setFieldValidationState(this.getName(), { validated: true, color: 'success' });
+            return (_jsx(EmailDomainCheckButtonInput, { name: this.getName(), entityForm: entityForm, onError: params.onError, readonly: params.readonly, required: params.required, commonDomains: this.commonDomains, buttonLabel: this.checkButtonLabel, value: value, defaultValue: this.value?.fetched ?? this.value?.default ?? '', onValid: (newValue) => {
+                    entityForm.setFieldValidationState(this.getName(), {
+                        validated: true,
+                        color: 'success',
+                    });
                     params.onChange(newValue);
                 }, onClear: () => {
                     entityForm.clearFieldValidationState(this.getName());
@@ -84,7 +87,11 @@ export class EmailField extends CheckButtonValidationField {
                             for (const result of validateResult) {
                                 if (result.hasError()) {
                                     this.value = currentValue;
-                                    entityForm.setFieldValidationState(this.getName(), { validated: false, message: result.message, color: 'secondary' });
+                                    entityForm.setFieldValidationState(this.getName(), {
+                                        validated: false,
+                                        message: result.message,
+                                        color: 'secondary',
+                                    });
                                     return ValidateResult.fail(result.message + ' 입력 값을 변경하고 중복확인을 눌러 주세요.');
                                 }
                             }
@@ -92,7 +99,11 @@ export class EmailField extends CheckButtonValidationField {
                         else {
                             if (validateResult.hasError()) {
                                 this.value = currentValue;
-                                entityForm.setFieldValidationState(this.getName(), { validated: false, message: validateResult.message, color: 'secondary' });
+                                entityForm.setFieldValidationState(this.getName(), {
+                                    validated: false,
+                                    message: validateResult.message,
+                                    color: 'secondary',
+                                });
                                 return ValidateResult.fail(validateResult.message + ' 입력 값을 변경하고 중복확인을 눌러 주세요.');
                             }
                         }
@@ -101,10 +112,10 @@ export class EmailField extends CheckButtonValidationField {
                     entityForm.setFieldValidationState(this.getName(), {
                         validated: !result.error,
                         message: result.message,
-                        color: result.error ? 'secondary' : 'success'
+                        color: result.error ? 'secondary' : 'success',
                     });
                     return result;
-                } });
+                } }));
         })();
     }
     /**
@@ -112,7 +123,10 @@ export class EmailField extends CheckButtonValidationField {
      */
     renderListFilterInstance(params) {
         return (async () => {
-            return _jsx(TextInput, { ...await getInputRendererParameters(this, { ...params, onChange: (value) => params.onChange(value, 'LIKE') }) });
+            return (_jsx(TextInput, { ...await getInputRendererParameters(this, {
+                    ...params,
+                    onChange: (value) => params.onChange(value, 'LIKE'),
+                }) }));
         })();
     }
     /**
@@ -124,8 +138,7 @@ export class EmailField extends CheckButtonValidationField {
             .withCommonDomains(this.commonDomains);
     }
     static create(props) {
-        const field = new EmailField(props.name, props.order, props.validations)
-            .copyFields(props, true);
+        const field = new EmailField(props.name, props.order, props.validations).copyFields(props, true);
         if (props.text !== undefined) {
             field.withText(props.text);
         }

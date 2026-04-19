@@ -54,12 +54,15 @@ export function searchFormToUrlState(searchForm, quickSearchPropertyName, orFiel
             const urlFilters = [];
             for (const filter of andFilters) {
                 // Skip quick search filter with subFilters (handled via q parameter)
-                if (filter.subFilters && filter.subFilters.size > 0 &&
+                if (filter.subFilters &&
+                    filter.subFilters.size > 0 &&
                     quickSearchFields.includes(filter.name)) {
                     continue;
                 }
                 // Extract quick search to separate q parameter (legacy single field search)
-                if (quickSearchPropertyName && filter.name === quickSearchPropertyName && !orFields?.length) {
+                if (quickSearchPropertyName &&
+                    filter.name === quickSearchPropertyName &&
+                    !orFields?.length) {
                     // Legacy mode: if quickSearchValue is not set yet, use this filter's value
                     if (!quickSearchValue) {
                         urlState.q = filter.value ?? null;
@@ -80,7 +83,7 @@ export function searchFormToUrlState(searchForm, quickSearchPropertyName, orFiel
         const orFilters = filters.get('OR');
         if (orFilters && orFilters.length > 0) {
             // Filter out quick search filters and NOT conditions
-            const urlFilters = orFilters.filter(f => !f.not && !quickSearchFields.includes(f.name));
+            const urlFilters = orFilters.filter((f) => !f.not && !quickSearchFields.includes(f.name));
             if (urlFilters.length > 0) {
                 filtersState.OR = urlFilters;
             }

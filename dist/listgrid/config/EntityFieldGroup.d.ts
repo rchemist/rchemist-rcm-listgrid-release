@@ -1,4 +1,4 @@
-import { SpanValue } from "../common/type";
+import { SpanValue } from '../common/type';
 import { FieldGroupInfo, FieldGroupConfig } from '../config/Config';
 export declare class EntityFieldGroup {
     id: string;
@@ -11,11 +11,11 @@ export declare class EntityFieldGroup {
         md?: SpanValue;
         lg?: SpanValue;
         xl?: SpanValue;
-    };
+    } | undefined;
     fields: FieldGroupItem[];
-    description?: string;
-    config?: FieldGroupConfig;
-    requiredPermissions?: string[];
+    description?: string | undefined;
+    config?: FieldGroupConfig | undefined;
+    requiredPermissions?: string[] | undefined;
     constructor(config?: FieldGroupInfo);
     static create(id: string, label: string, order: number): EntityFieldGroup;
     /**

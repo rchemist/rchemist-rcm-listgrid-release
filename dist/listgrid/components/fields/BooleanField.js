@@ -1,9 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { OptionalField, renderListOptionalField } from './abstract';
-import { BooleanRadio } from "../../ui";
-import { RadioChip } from "../../ui";
+import { OptionalField, renderListOptionalField, } from './abstract';
+import { BooleanRadio } from '../../ui';
+import { RadioChip } from '../../ui';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { IconCheck, IconX } from "@tabler/icons-react";
+import { IconCheck, IconX } from '@tabler/icons-react';
 export class BooleanField extends OptionalField {
     constructor(name, order, emptyLabel) {
         super(name, order, 'boolean');
@@ -14,7 +14,7 @@ export class BooleanField extends OptionalField {
      */
     renderInstance(params) {
         return (async () => {
-            return _jsx(BooleanRadio, { options: this.options, combo: this.combo, ...await getInputRendererParameters(this, params), emptyLabel: this.emptyLabel });
+            return (_jsx(BooleanRadio, { options: this.options, combo: this.combo, ...await getInputRendererParameters(this, params), emptyLabel: this.emptyLabel }));
         })();
     }
     /**
@@ -26,7 +26,7 @@ export class BooleanField extends OptionalField {
         const filterOptions = [
             { label: '예', value: 'true' },
             { label: '아니오', value: 'false' },
-            { label: '전체', value: '' }
+            { label: '전체', value: '' },
         ];
         return (async () => {
             const inputParams = await getInputRendererParameters(this, {
@@ -40,7 +40,7 @@ export class BooleanField extends OptionalField {
                         params.onChange(false);
                     else
                         params.onChange(undefined);
-                }
+                },
             });
             // 현재 값을 string으로 변환
             // URL에서 오는 필터 값은 문자열 "true"/"false"이므로 문자열 비교도 처리
@@ -49,7 +49,7 @@ export class BooleanField extends OptionalField {
                 currentValue = 'true';
             else if (inputParams.value === false || inputParams.value === 'false')
                 currentValue = 'false';
-            return _jsx(RadioChip, { ...inputParams, value: currentValue, options: filterOptions, combo: { direction: 'row' } });
+            return (_jsx(RadioChip, { ...inputParams, value: currentValue, options: filterOptions, combo: { direction: 'row' } }));
         })();
     }
     /**
@@ -70,13 +70,13 @@ export class BooleanField extends OptionalField {
         }
         // options가 있으면 해당 label 찾기
         if (this.options && this.options.length > 0) {
-            const option = this.options.find(opt => opt.value === value);
+            const option = this.options.find((opt) => opt.value === value);
             if (option) {
                 // cardIcon이 있으면 아이콘과 함께 표시
                 if (this.cardIcon) {
                     const IconComponent = this.cardIcon;
                     return {
-                        result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", children: option.label })] }))
+                        result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", children: option.label })] })),
                     };
                 }
                 return { result: option.label };
@@ -87,13 +87,13 @@ export class BooleanField extends OptionalField {
             const IconComponent = this.cardIcon || IconCheck;
             const frameColor = this.cardIcon ? undefined : 'success';
             return {
-                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 2 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", "data-color": "success", children: "\uC608" })] }))
+                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", "data-color": frameColor, children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 2 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", "data-color": "success", children: "\uC608" })] })),
             };
         }
         // false 값
         const IconComponent = this.cardIcon || IconX;
         return {
-            result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", "data-tone": "disabled", stroke: 2 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", "data-tone": "muted", children: "\uC544\uB2C8\uC624" })] }))
+            result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", "data-tone": "disabled", stroke: 2 }) }), _jsx("span", { className: "rcm-text", "data-weight": "medium", "data-tone": "muted", children: "\uC544\uB2C8\uC624" })] })),
         };
     }
     /**
@@ -103,14 +103,13 @@ export class BooleanField extends OptionalField {
         return new BooleanField(name, order, this.emptyLabel);
     }
     static create(props) {
-        return new BooleanField(props.name, props.order, props.emptyLabel)
-            .copyFields(props, true);
+        return new BooleanField(props.name, props.order, props.emptyLabel).copyFields(props, true);
     }
     async getCurrentValue(renderType) {
         const value = await super.getCurrentValue(renderType);
         if (await this.isRequired({ renderType })) {
             if (value === undefined) {
-                const value = this.options?.[0].value ?? false;
+                const value = this.options?.[0]?.value ?? false;
                 this.withValue(value);
                 return value;
             }

@@ -7,9 +7,9 @@ import { DatetimeField } from './DatetimeField';
 import { MarkdownField } from './MarkdownField';
 import { EntityForm } from '../../config/EntityForm';
 import { AddFieldItemProps } from '../../config/EntityFormTypes';
-import { SelectOption } from "../../form/Type";
+import { SelectOption } from '../../form/Type';
 import { SelectField } from './SelectField';
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 export declare const SeoMetadataFields: FormField<any>[];
 export interface CommonFieldProps {
     label?: string;

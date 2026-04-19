@@ -464,6 +464,247 @@ Phase 8 에서 defaultListGridTheme / defaultTheme / subCollectionTheme 의 "rcm
 **grep 검증**: `rcm-button-primary` / `-outline` / `-danger` / `-outline-danger` / `-secondary` / `-sm` / `-icon` 모두 src/**/*.{ts,tsx} 참조 0. components.css 에도 해당 셀렉터 0.
 **유예 사항**: ViewListGridTheme.types 의 일부 theme slot (searchInput.button, advancedSearch.*, filterDropdown.*, priority.* 등) 은 현재 JSX 에서 소비되지 않지만 v0.2 major bump 전까지 공개 API breaking 을 피하고자 slot 자체는 유지 (string 만 비움). "TODO: remove in v0.2" JSDoc 으로 표시.
 
+### #71 v0.3 Task E 세션 2 — Generic refactor 구현 완료
+
+`docs/GENERIC_DESIGN.md` § 5 의 5 phase 순서대로 1 에이전트 구현. 세션 1 (#70) 의 설계를 거의 그대로 따름. 설계와 달라진 점은 아래 "설계 보정" 섹션 참고.
+
+**구현 결과 (전 phase 기준)**:
+- Phase 1 (foundation): `FieldValue<TValue = any>`. `ModifyEntityFormFunc<T = any>` / `ModifyFetchedEntityFormFunc<T>` / `OnInitializeFunc<T>` 3 callback 타입 제네릭화
+- Phase 2 (abstract chain): EntityFormBase → Validation → Data → Actions → Extensions → EntityForm 6 클래스에 `<T extends object = any>` 전파. 각 `extends Parent<T>`. clone/cloneWithEntityForm/merge 반환타입 `EntityForm<T>`. onChanges/onFetchData/onInitialize/onSave/postDelete/overrideFetchData/buttons/headerArea/withTitle.view/withPostDelete/withOverrideSubmitData/withCheckDuplicate 등 17 개 callback 시그니처 `EntityForm<T>` 승격
+- Phase 3 (keyof T overloads): getField / getValue / setValue / changeValue / setFetchedValue 에 `<K extends keyof T & string>` overload 추가. 순서 구체→일반 엄수
+- Phase 4 (FormField chain): `FormField<T>` → `FormField<TSelf, TValue = any, TForm extends object = any>` rename + append. 6 abstract (FormField / ListableFormField / OptionalField / MultipleOptionalField / CheckButtonValidationField / AbstractManyToOneField / AbstractDateField) 동일 패턴. 33+ concrete 서브클래스 무수정 동작 확인. FormFieldProps / ListableFormFieldProps / OptionalFieldProps / MultipleOptionalFieldProps / CheckButtonValidationFieldProps / AbstractManyToOneFieldProps / AbstractDateFieldProps 7 interface 전부 `<TValue, TForm>` 전파. FormField.value / getCurrentValue / getSaveValue / getFetchedValue 반환타입 `TValue | undefined` 로 승격
+- Phase 4b (추가 승격): fetchedEntity / getFetchedEntity / getValues / initialize 내 fetchedEntity 지역변수 `T` 계열로 승격
+- Phase 5 (검증): type-check PASS, 900+1 tests PASS (0 회귀), lint 0 errors, format:check PASS, build PASS
+
+**수치**:
+- `: any` 카운트 295 → 286 (9 건 감축). 설계 예상 (306 → 200대) 대비 보수적 — 이유: 다수 any 가 default `= any` 로 승격되어 같은 `: any` 문자열을 유지 (파라미터 타입이 제네릭 파라미터로 치환됐지만 grep 패턴에는 안 잡힘). 실제 "타입 파라미터로 치환된 논리적 any" 는 30+ 건
+- 테스트 900 passing + 1 todo → 동일 유지
+- commits: `a0af52e` (Phase 1-2), `4d6cfec` (Phase 3), `72f303b` (Phase 4), `0da1b68` (Phase 4b)
+
+**설계 보정 (#70 GENERIC_DESIGN.md 에 반영된 내용 외)**:
+1. **`EntityField.getDisplayValue` 인터페이스 시그니처 수정** — 기존 `Promise<string>` 선언이었으나 실제 모든 구현체 (FormField 포함) 는 `Promise<any>` 를 리턴하는 불일치 존재. Task E 구현 중 `FormField.getDisplayValue` 를 `Promise<TValue>` 로 승격 시도 시 EntityField 인터페이스와 비호환 드러남. **EntityField 인터페이스를 `Promise<any>` 로 바로잡음** (기존 코드의 잠재 버그 해소). 최종적으로 `FormField.getDisplayValue` 도 `Promise<any>` 유지 — TValue 로 좁히면 구현체 서브클래스 (SelectField 등 displayFunc 반환이 다양함) 에서 타입 오류 유발
+2. **`FormField.resetValue` / `withDefaultValue` 의 exactOptionalPropertyTypes 호환** — `this.value.current = this.value.fetched` 는 `TValue` vs `TValue | undefined` 충돌. `delete this.value.current` + 조건부 할당 패턴으로 교체
+3. **Phase 2 에서 원 설계 외 추가 승격**: EntityForm.setFetchedValues 의 entity 파라미터는 `Partial<T> | any` (타입 체크 편의 + 기존 동작 유지). initialize 의 `fetchedEntity` 지역변수는 `(T & Record<string, any>) | null` (T=any 디폴트에서 인덱스 접근 호환 확보)
+
+**가시화된 소비자 영향**:
+- 기존 `new EntityForm('User', '/api/user')` → `EntityForm<any>` 로 해석. 무수정 동작
+- 점진 승격 `new EntityForm<User>(...)` 사용 시 `getValue('name')` 이 `Promise<User['name']>` 로 narrow, `getValue('typo')` 는 컴파일 에러
+- 기존 `class MyField extends FormField<MyField>` → `FormField<MyField, any, any>` 로 해석. 무수정
+- 점진 승격 `extends FormField<MyField, string, User>` 사용 가능
+
+**gjcu 호스트 검증**: 구현 세션에서 실측은 안 함 (워크트리 격리 원칙). 설계 세션 (#70) 에서 예측한 13 + 1 + 10 + 1 개소 패턴은 전부 default = any 경로이므로 타입 오류 0 예상. 실측은 다음 세션 또는 alpha.46 배포 후 관찰
+
+**후속 과제 (Task F/G 후보)**:
+- `FieldRenderParameters<T, TValue>` 제네릭화 — UI 컴포넌트 층 전파 (FieldRenderer / ViewEntityForm 등). 설계 § 2.8 참고
+- `parse()` → `unknown` 전환 — 런타임 검증 도구 결합 시 의미
+- `attributes: Map<string, any>` → `Map<string, unknown>` — breaking. v0.2.0 major bump 시 후보
+
+### #70 v0.3 Task E 세션 1 — Generic refactor 설계 (`EntityForm<T>` / `FormField<TSelf, TValue, TForm>`)
+
+Task E 를 2 세션으로 분할 (설계 → 구현). 이 엔트리는 세션 1 산출물 (`docs/GENERIC_DESIGN.md`) 의 결정 기록. 구현 결과는 세션 2 이후 별도 엔트리.
+
+**핵심 결정 (변경 불가 포인트)**:
+
+1. **`EntityForm<T extends object = any>`** — entity 스키마 T 로 제네릭화. `Record<string, unknown>` 대신 `object` 로 constraint 한 이유: `keyof T` 를 좁은 union 으로 보존해야 `getValue<K extends keyof T & string>(name: K): Promise<T[K]>` 의 키 narrowing 이 실효. `= any` default 로 `new EntityForm(...)` bare call 호환.
+
+2. **FormField 기존 T 를 `TSelf` 로 rename + `TValue = any, TForm extends object = any` append** — `FormField<T extends FormField<T>>` 의 F-bounded 셀프 타입은 33+ 서브클래스의 `class XxxField extends FormField<XxxField>` 에서 쓰이므로 제거 불가. 앞이 아닌 **뒤에** 추가해서 `<Self>` 만 쓴 기존 서브클래스 전부 무수정 동작.
+
+3. **Inheritance chain 전부 제네릭 전파** — `EntityFormBase → EntityFormValidation → EntityFormData → EntityFormActions → EntityFormExtensions → EntityForm` 6 클래스. 각 `extends Parent<T>` 로 T 내려보냄.
+
+4. **`FieldValue<TValue = any>`** — `current/fetched/default` 승격. 가장 효과적인 any 감축 지점 (`FormField.value?: FieldValue<TValue>` 전파).
+
+5. **`FieldRenderParameters` 는 이 Task 에서 제외** — UI 컴포넌트 층 (FieldRenderer / ViewEntityForm 등) 까지 제네릭 전파가 폭증하므로 별도 Task F 로 분리. 구현 세션은 config 층만.
+
+6. **UIProvider `ComponentType<any>` 유지** — 의도된 any (DECISIONS #21). React 컴포넌트 prop 다형성은 제네릭으로 해결 불가.
+
+7. **기본값 전부 `= any`** — 소비자 무수정 호환 계약. gjcu 호스트 측정 결과 13 개소 `new EntityForm(...)` + 1 개소 `extends FormField<Self>` 전부 무수정 컴파일 예상.
+
+**소비자 영향 측정** (gjcu admin 기준):
+- `new EntityForm(...)`: 13 개소 → `EntityForm<any>` 로 암묵 유지
+- `extends FormField<Self>`: 1 개소 (RelatedMemoField) → default any 로 무수정
+- `entityForm.getValue('name')`: 10+ 개소 → `Promise<any>` 유지 (옵션으로 `EntityForm<User>` 승격 시 narrowing)
+- `getField('x') as SubClass` cast 패턴: 1 개소 → 변경 없음 (필드클래스 ↔ 엔티티키 1:1 매핑 불가 — generic 으로 해결 안 됨)
+
+**Any 감축 예상**: 306 → ~200~230. 승격 가능 ~70~90 건 (FieldValue 3, getField/getValue 관련 15, displayFunc/saveValue 8, getCurrentValue 등 10, setFetchedValue 1, withValue/setValue 6, config/form 내부 ~25). 유지: UIProvider wrapper, parse(), attributes: Map<string, any>, ConditionalProps.value.
+
+**Breaking change 판정**: 타입/런타임 모두 호환. overload 시그니처 순서 (구체 → 일반) 로 `T = any` 시 `keyof any & string` = `string` 으로 축약 → 기존 호출 무변경 해석. **alpha.46 minor bump 권고**. v0.2.0 major bump 불필요 (소비자 관점 차이 없음).
+
+**구현 전략**: **1 에이전트** (3 병렬 불가 — 전역 타입 시그니처 변경은 중간 상태가 깨짐). 5 phase 순서:
+1. foundation types (FieldValue, EntityField, ModifyEntityFormFunc)
+2. abstract chain 제네릭화 (5 abstract + EntityForm)
+3. 메소드 overload 추가 (getField / getValue / setValue / withValue)
+4. FormField 체인 (FormField + 5 abstract fields)
+5. 검증 (type-check + test + lint + format + build + gjcu 재설치)
+
+**설계 변경 포인트** (원 설계 대비):
+- `docs/NEXT_SESSION.md` § 4 의 초기 제안 `FormField<TValue = any, TForm = any>` → **`FormField<TSelf, TValue, TForm>`** 3-param 으로 수정. 이유: 기존 서브클래스 33+ 개의 `FormField<T>` 사용 (T=subclass) 을 무수정 호환하려면 F-bounded 셀프 타입 유지 필수. 제거하면 33+ concrete 필드 + gjcu host subclass 모두 수정 필요 → 설계 목표 (backward-compat) 위배.
+
+**Why 세션 분리**: 세션 1 에서 설계 vagueness 를 제거하지 않으면 구현 세션에서 반복 수정 (제네릭 파라미터 위치 / constraint / 전파 범위 변경) 이 메인 context 폭증의 주범이 됨. gjcu 사용 패턴 측정 + F-bounded 셀프 타입 유지 결정이 설계 단계에서 확정되어야 구현 세션은 기계적 리팩터로 수렴.
+
+**산출물**: `docs/GENERIC_DESIGN.md` (11 섹션). 세션 2 진입 시 § 0 TL;DR + § 5 구현 전략 + § 9 프롬프트 를 순서대로 따름.
+
+### #69 v0.3 Task D — exactOptionalPropertyTypes 승격 (430 errors → 0)
+
+`docs/NEXT_SESSION.md` § 3 (Task D) 실행. 3 병렬 에이전트로 영역별 분담:
+
+1. **D-1 (config/transfer/form)**: 151 → 0, 24 파일. EntityForm 29, InlineSubCollectionField 18, SubCollectionField 15, EntityFormBase 14, TableSubCollectionField/CardSubCollectionField 8+8, transfer/Type 17 등
+2. **D-2 (components/fields)**: 190 → 0, 52 파일. **2 세션 분할** (첫 세션 101 개 수정 후 병렬 응답 실패로 중단 → 재개 세션이 잔여 89 처리). FormField 25 (abstract), SelectField 14, OptionalField 12, ManyToOneField 11, NumberField 10, ApplyFullAddressFields 8, ListableFormField/Xref 계열/Address/ContentAsset 등
+3. **D-3 (list+form+revision+validations+ui+adapters)**: 89 → 0, 40 파일. ViewListGrid 6, FieldRenderer 9, 그 외 list/form hooks, validations/UIProvider 옵셔널 프로퍼티 정리
+
+**에러 타입 분포 (원본 430)**:
+- TS2412 — 옵셔널 타입 불일치 (`x?: T` ← `T | undefined`): 201
+- TS2375 — 객체 리터럴 `x: undefined` 포함: 122
+- TS2379 — 함수 인자 `undefined` 전달: 94
+- TS2532/2769/2345/2322: 13
+
+**수정 패턴**:
+- **TS2412 (대부분)**: public `interface Foo { x?: T }` → `{ x?: T | undefined }` 로 넓힘. 호출자 관점에서 완전히 호환 (JS 런타임 동일, 생략/undefined 전달 모두 가능)
+- **TS2412 (internal)**: 클래스 내부에서 `this.x = undefined` → `delete this.x` (동일 런타임 효과) 또는 `if (val !== undefined) this.x = val` narrow
+- **TS2375 JSX**: `<View prop={x}>` 에서 x 가 undefined 가능 시 조건부 스프레드 `{...(x !== undefined ? { prop: x } : {})}` 패턴
+- **TS2379**: 메소드 시그니처에 `arg?: T | undefined` 명시
+- **TS2375 spread cast**: `{...await getInputRendererParameters(this, params) as React.ComponentProps<typeof X>}` 로 InputRendererProps 의 옵셔널 필드 호환성 확보 (Xref/Address/Color 계열 Views)
+
+**tsconfig 변경**:
+- `"exactOptionalPropertyTypes": true` 추가. tsconfig.build.json 은 extends 로 자동 상속
+- 이로써 strict 옵션 **5 종 전부 true**: strict + noImplicitAny + noImplicitReturns + noFallthroughCasesInSwitch + noUncheckedIndexedAccess + exactOptionalPropertyTypes
+
+**메인 컨텍스트 보호 원칙 실전 검증**:
+- 메인은 큰 파일 (EntityForm.tsx 839 줄, FormField.tsx 809 줄) 을 직접 읽지 않음. 에이전트 3 개가 영역별로 읽고 고정 포맷 리포트 반환
+- 2차 병렬 dispatch 시 3 응답 중 2 개가 internal error 로 회수 불가. 하지만 git diff 로 실제 파일 수정은 반영되어 있음 확인 → **부분 진행 후 재개 가능**. 이 실패 모드 이후 세션 정책: 병렬 실패 시 git status / tsc error count 로 상태 회수, 실패 영역만 직렬 재 dispatch
+
+**public API 변경 영향**:
+- 모든 변경이 `x?: T` → `x?: T | undefined` 형태로 **넓어지는 방향**. 기존 소비자 (gjcu) 는 호환
+- IListConfig, Address, MultipleAssetForm/AssetItem, XrefPrice/Prefer/PriorityMappingValue 등 export interface 옵셔널 필드도 동일
+- 런타임 동작 0 변경. 타입 annotation only
+
+**Why**: `exactOptionalPropertyTypes: false` 상태에서는 `{ x: undefined }` 와 `{}` 이 타입상 동일하게 처리되어 "의도적으로 누락" vs "의도적으로 undefined 대입" 이 구분 안 됨. `true` 승격으로 이 모호성 제거. 향후 옵셔널 필드의 존재 여부 체크 (`'x' in obj` vs `obj.x !== undefined`) 가 실제 의미를 가짐
+
+**배포 판단**: public API 타입이 확장만 되었고 런타임 변경 0. 소비자 (gjcu) 에서 exactOpt 활성화 여부에 따라 이득이 다름 — 활성화 상태면 이 라이브러리 업그레이드로 타입 체크가 더 촘촘해짐, 비활성화 상태면 영향 없음. **alpha.46 배포는 선택적**. Task E 완료 시 함께 배포하는 것도 가능
+
+**v0.3 잔여**: Task E (EntityForm<T> / FieldValue<T> generic refactor). 이후 v0.2.0 major bump 검토
+
+### #68 v0.3 Task C — coverage 8.1% → 16.9% (config/form/fields 테스트 525 개 추가)
+
+`docs/NEXT_SESSION.md` § 2 (Task C) 실행. 3 병렬 에이전트로 영역별 분담:
+
+1. **C-1 (config/)**: 164 tests / 9 파일 (Config 55, OnChangeEntityForm 22, EntityFormMethod 23, EntityTab 15, EntityFieldGroup 13, ListGridViewFieldCache 11, AdvancedSearchOpenCache 10, CommonType 8, RuntimeConfig 7). 순수 모델/로직 .ts 만 대상, .tsx (EntityForm 등) 제외. config 11.7% → **34.22%** statements
+2. **C-2 (form/misc/store/message/menu/router/urlState/)**: 202 tests / 9 파일 (misc 70, SearchForm 69, store 17, form/Type 10, MessageProvider 10, RouterProvider 10, urlState/types 7, menu/PermissionChecker 6, UrlStateProvider 3). 순수 함수 + Provider 의 delegation 만. store/menu/router/urlState 모두 100% 도달
+3. **C-3 (components/fields/abstract/)**: 159 tests + 1 todo / 6 파일 (FormField 68, ListableFormField 28, OptionalField 28, AbstractDateField 12 + 1 todo, AbstractManyToOneField 12, CheckButtonValidationField 11). React render 는 배제, 클래스 메소드 (accessors, builders, clone 등) 입출력 계약만. abstract 1.18% → **60.86%**
+
+**전체 수치 변화**:
+- 테스트: 375 → **900 passing** + 1 todo (525 개 추가, 43 files)
+- Coverage: 8.1% → **16.9%** statements / 6.46% → 14.98% branches / 6.46% → 17.97% functions / 8.19% → 16.81% lines
+- vitest.config.ts thresholds: 8/6/6/8 → **16/14/17/16** (baseline 바로 아래)
+
+**작업 규칙 고수**:
+- React 렌더 테스트 최소화. 순수 로직 우선 (UIProvider / Session 없이 테스트 가능한 경로)
+- 기존 구현 코드 무수정. 버그 의심 지점은 `it.todo` 또는 현행 동작을 lock-in 하는 pin test (AbstractDateField.clone 의 limit/range 참조 버그 추정 지점만 1 todo)
+- 의도된 비직관 동작 2 건 lock-in (misc/index.ts 의 `isEqualsIgnoreCase(null, null) → false`, `getAccessableAssetUrl` 의 URL-encode 후 http(s) 조기 반환 비작동)
+- 메인 context 보호: 에이전트 3 개 병렬, 큰 파일 (FormField 809 줄) 은 grep 으로 시그니처만 추출해서 분석
+
+**Why**: 커버리지는 "회귀 안전망". v0.3 의 Task D (exactOpt 430 errors) / Task E (generic refactor) 가 foundation 파일을 광범위하게 손댈 예정이므로, config/form/fields 층의 단위 테스트가 먼저 있어야 회귀 감지 가능. utils/common 은 이미 93~94% 지만 도메인 코드 (config/form/fields) 는 DECISIONS #67 이전까지 0~15% 였음.
+
+**배포 필요성 판단**: dev-only 변경 (테스트 + vitest 임계치). 런타임 영향 0. alpha.46 배포 불필요.
+
+**v0.3 잔여**: Task D (exactOpt 승격, 430 errors) / Task E (EntityForm<T> generic refactor).
+
+### #67 품질 게이트 완전 강제 — noUncheckedIndexedAccess + prettier + utils 테스트
+
+DECISIONS #66 에 이어 품질 게이트 3 건을 hard-enforced 상태로 마감.
+
+1. **`noUncheckedIndexedAccess: true` 승격** — 118 errors 를 2 병렬 에이전트가 영역별로 분담:
+   - 영역 A (utils/adapters/config/transfer/form/misc): 58 → 0. simpleCrypt 20, EntityForm 7, Type 6 등
+   - 영역 B (components/*): 60 → 0. useContentAsset 7, MultipleAssetField 6, searchFormUrlSync 4 등
+   - Fix 패턴: 루프 / length 가드 뒤 `arr[i]!`, `split` / `Object.keys` 결과 `parts[n]!`, optional data `?.` 또는 `?? fallback`
+   - 43 파일 수정. 런타임 동작/public API 무변경
+
+2. **Prettier 일괄 포맷** — 299 파일 `npm run format` 으로 공백/따옴표/trailing comma 통일. CI 의 `format:check || echo` 제거 → 실패 시 빌드 fail
+
+3. **utils + common 테스트 대량 추가** — 11 파일에 242 tests 작성 (BooleanUtil/StringUtil/CompareUtil/PhoneUtil/jsonUtils/classNames/cn/hash/i18n/simpleCrypt/common-func)
+   - utils 2.3% → 93.04%, common 0% → 94.18%, 전체 4.5% → **8.1%**
+   - simpleCrypt: roundtrip (ASCII/Unicode/empty)
+   - hash.ts: FNV-1a 알려진 벡터로 검증
+   - i18n: dictionary / factory / runtime switch 패턴 커버
+   - vitest.config.ts thresholds 상향: statements 4→8, branches 2→6, functions 3→6, lines 4→8 (baseline 바로 아래)
+
+**세션 누적 품질 게이트 상태** (DECISIONS #64~#67 종합):
+- `npm run type-check`: strict + noImplicit{Any,Returns} + noFallthroughCasesInSwitch + noUncheckedIndexedAccess
+- `npm run lint`: 0 errors 강제 (ESLint v10 flat config)
+- `npm run format:check`: 0 drift 강제 (Prettier)
+- `npm run test:coverage`: thresholds 강제 (8%/6%/6%/8%)
+- CI 는 위 4 개 + build + dist 검증. 하나라도 깨지면 PR fail
+
+**Why**: "품질 게이트가 존재하는 상태" 와 "게이트가 실제로 기능하는 상태" 는 다르다. alpha.44 에서 ESLint / CI 는 설정만 있었고 `|| echo` 로 실패를 숨기고 있었음. #66~#67 로 모든 게이트가 실제로 blocking 하도록 정비. 이제부터 기여자는 type / lint / format / coverage 중 하나라도 깨면 PR 이 통과하지 않음 → **오픈소스 협업 표준 품질** 달성.
+
+**배포 판단**: 모든 변경이 dev-facing + pure assertion. 런타임 동일. alpha.46 배포 불필요.
+
+**v0.3 재확정**: (1) coverage 점진 상향 (8.1% → 20%+, config/form/fields 테스트) (2) `exactOptionalPropertyTypes` 승격 (430 errors — foundation 파일 대거 수정 필요) (3) `EntityForm<T>` / `FieldValue<T>` generic refactor 로 의도된 any 해소 (4) Playwright 스냅샷 regression suite (DECISIONS #63 권고)
+
+### #66 alpha.45 후속 정비 — ESLint v10 flat config + strict 옵션 + coverage 임계치
+
+alpha.45 배포 직후 CI/품질 gate 정비 3 건을 한 세션에 완료.
+
+1. **ESLint v10 flat config 마이그레이션**. `.eslintrc.json` 은 ESLint v9+ 에서 동작하지 않으나 CI 가 `|| echo "lint warnings"` 로 실패를 숨김 → 로컬/CI 모두 lint 실질 미작동 상태였음. 해결:
+   - `eslint.config.mjs` 신규 (flat 포맷). `@eslint/js`, `typescript-eslint`, `globals` 의존성 추가
+   - `react.version: 'detect'` → `'18.2'` 하드코드 (eslint-plugin-react 7.x 가 ESLint v10 의 context API 변경으로 detect 실패)
+   - **React Hooks v7 의 React Compiler 룰 비활성화**. `recommended` preset 에 포함된 `set-state-in-effect`, `preserve-manual-memoization`, `static-components` 등은 React Compiler 사용자용이며 기존 코드에서 45+9 개 cascading-render 에러 유발. Compiler 미사용 프로젝트에는 noise. `rules-of-hooks` + `exhaustive-deps` 만 유지
+   - 30 실제 에러 fix: no-duplicate-case 3 (common/func.ts 의 `case 'dark'` 중복), no-non-null-asserted-optional-chain 7 (`foo?.bar!` → `foo!.bar` 또는 `?? fallback`), no-useless-catch 3, no-useless-assignment 6, no-unused-expressions 2, no-var 1, no-wrapper-object-types 1 (`String` → `string`), rules-of-hooks 6 (4 곳은 useMemo 를 early return 앞으로 hoist, `mustRouter`/`mustUrlState` 2 곳은 eslint-disable + 이유 주석), preserve-caught-error 1 (`throw new Error(msg, { cause: e })`)
+   - CI: `npm run lint || echo` → `npm run lint` (실패 시 빌드 fail)
+
+2. **tsconfig strict 옵션 3 개 승격**. `strict: true` + `noImplicitAny: true` (alpha.45) 에 이어:
+   - `noImplicitReturns: true` — 2 useEffect 의 조건부 return 에 `return undefined` 명시
+   - `noFallthroughCasesInSwitch: true` — **0 errors, 무료 승격**
+   - 측정 후 미승격 (v0.3 backlog): `noUncheckedIndexedAccess` (118 errors, 배열/맵 index 전수 점검 필요), `exactOptionalPropertyTypes` (429 errors, optional prop 대거 보수)
+
+3. **Coverage baseline + CI 임계치**. 지금까지 coverage 측정은 가능했으나 CI 검증 없음 → 회귀 감지 불가. 해결:
+   - `vitest.config.ts` 에 thresholds 지정: statements 4% / branches 2% / functions 3% / lines 4% (baseline 4.52% / 2.42% / 3.91% / 4.65% 바로 아래)
+   - `package.json`: `test:coverage` 스크립트
+   - CI: `npm test` → `npm run test:coverage` 로 교체
+
+**Why**: alpha.45 에서 "v0.2 backlog 소진" 으로 v0.2 의 주요 타입 작업은 끝났으나, 실제 OSS 프로젝트 품질 게이트 3 개가 미작동이었음 (lint 미실행 / strict 옵션 제한 / coverage 임계치 없음). 이번 정비로 **CI 가 회귀를 실제로 감지** 하는 상태 달성. 이후부터는 기여자가 type / lint / coverage 중 어느 하나라도 깨면 PR 이 fail.
+
+**배포 필요성 판단**: 모든 변경이 dev-facing (CI / eslint / tsconfig strict / vitest threshold). 런타임 영향 0 — 소비자 (gjcu) 입장에서는 alpha.45 와 동일한 바이너리. 별도 alpha.46 배포 불필요.
+
+**v0.3 목표 갱신**: (1) coverage 점진 상향 (목표 20%+, Field/Config/Form 우선) (2) `noUncheckedIndexedAccess` 승격 (3) `exactOptionalPropertyTypes` 승격 (4) 잔여 의도된 any 를 generic refactor (EntityForm<T>/FieldValue<T>) 로 해소 (5) Playwright 스냅샷 regression suite (DECISIONS #63 권고).
+
+### #65 alpha.45 — v0.2 backlog 소진 (테스트 포팅 + any 정리 + noImplicitAny)
+
+alpha.44 에서 연기한 v0.2 backlog 2 개를 한 세션에서 해소.
+
+1. **테스트 포팅 5 파일**: jest → vitest 포팅이 불완전했던 파일들. 주요 원인 (에이전트가 해결):
+   - `require('../../ViewListGrid')` CJS → top-level `import` (vi.mock hoisting 이 spy 로 교체하므로 정상 동작)
+   - 폐기된 `vi.requireActual` 호출 (Vitest 에 없음 — `await vi.importActual` 필요) 제거. 그 `misc` mock 은 OSS 추출 후 불필요해짐
+   - `vi.fn().mockImplementation(...)` 에 `new` 호출이 불가 → `class MockListGrid` 로 전환
+   - `vi.Mock` 타입 → `import { type Mock } from 'vitest'`
+   - `.animate-pulse` 기대 셀렉터 → `[class*="rcm-subcollection-skeleton"]` 로 보정 (framework-free 전환 반영)
+   - jsdom fetch 가 `AbortController.signal.addEventListener` 요구 → MockAbortController 대신 prototype spy
+   - 결과: 33 → **133 tests passing, 8 files**, vitest.config.ts exclude 0
+
+2. **`any` 정리 459 → 328 (−131)**: 3 병렬 에이전트가 영역 분담:
+   - B-1 (config/form/misc/message/utils/api/store/common/auth): 208 → 129
+   - B-2 (components/fields+form+helper/extensions/adapters/router/menu/_stubs): 189 → 165
+   - B-3 (components/list + transfer): 246 → 209
+   
+   패턴별 처리:
+   - `catch (e: any)` → `catch (e: unknown)` + type guard
+   - parameter `any` → concrete (`EntityForm` / `RouterApi` / `MouseEvent` / `ReactNode` / `number`)
+   - `as any` 불필요한 assertion 제거
+   - `[key: string]: any` → `[key: string]: unknown` (host extensibility 유지)
+   
+   **의도적 유지 (DECISIONS #21)**: generic entity payload (`FieldValue.current/fetched/default`, `data` payload, `FormField<any>`), UIProvider `ComponentType<any>` wrapper props, `parse()` 반환 타입 (consumer 가 즉시 필드 dereference). 예상 잔여 any 는 대부분 이 의도적 카테고리.
+
+3. **`noImplicitAny: true` 승격**: tsconfig.json `noImplicitAny: false` → `true`. 승격 시 TS7006/TS7031 에러 40 개 발생 (20 파일, 대부분 `components/fields/` 의 callback parameter). 에이전트가 일괄 수정:
+   - TextInput/SelectBox/Tags 콜백 → concrete `string` 또는 도메인 enum
+   - Pagination/MouseEvent 이벤트 핸들러 → concrete
+   - 외부 라이브러리 콜백 (FlatPickr / kakao geocoder / ColorInput / Tree renderNode) → 명시적 `any` 또는 concrete
+   - 결과: `npm run type-check` PASS, `npm test` 133 passing 유지
+
+**Why**: alpha.44 의 "OSS 공개 준비" 가 형식적 블로커 (라이선스 / 테스트 infra / CI / README) 만 해결했다면, alpha.45 는 실제 품질 블로커 (테스트 커버리지 / 타입 엄격성) 를 올림. `noImplicitAny: true` 는 외부 공개 라이브러리의 기본 기대치.
+
+**한계**: `any` 는 200 목표를 넘어 328 으로 멈춤. 잔여 대부분이 generic entity payload (설계상 의도된 any — 임의 entity 스키마 지원 위해 필수). 더 줄이려면 generic refactor (EntityForm<T> / FieldValue<T>) 필요 — v0.3 작업.
+
+**세션 패턴 재확인**: 메인 context 보호 원칙 (DECISIONS #62) 이 이번에도 유효. 큰 파일 (CardManyToOneView 1,000+ lines, Type.ts 24 any) 은 에이전트가 읽고 고정 포맷 리포트 반환 → 메인은 집계 + 빌드 + 커밋 + 배포만. 블록별 commit 분리 (test / refactor-any / feat-types / chore-bump) 로 각 블록 독립 rollback 가능.
+
 ### #64 alpha.44 — OSS 공개 준비 완료 (Apache-2 / 테스트 / CI / README)
 
 alpha.40 에서 framework-free 달성 후, 오픈소스 공개 준비를 위한 4 개 치명적 블로커 해결:

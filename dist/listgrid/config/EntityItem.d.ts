@@ -1,18 +1,18 @@
 import { HelpTextType, HiddenType, LabelType, ReadOnlyType, TooltipType, ViewPreset } from '../config/Config';
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 import { FieldInfoParameters } from '../config/EntityField';
 export interface EntityItem {
     order: number;
     name: string;
-    label?: LabelType;
-    helpText?: HelpTextType;
-    hidden?: HiddenType;
-    readonly?: ReadOnlyType;
-    hideLabel?: boolean;
+    label?: LabelType | undefined;
+    helpText?: HelpTextType | undefined;
+    hidden?: HiddenType | undefined;
+    readonly?: ReadOnlyType | undefined;
+    hideLabel?: boolean | undefined;
     form?: {
         tabId: string;
         fieldGroupId: string;
-    };
+    } | undefined;
     clone(includeValue?: boolean): any;
     getTabId(): string;
     getFieldGroupId(): string;

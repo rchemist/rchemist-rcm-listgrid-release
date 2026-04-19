@@ -6,14 +6,14 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import { isTrue } from '../../utils/BooleanUtil';
 import { useServerSideCache } from './types/ListGridHeader.types';
-import { PriorityButtons } from "./ui/buttons/PriorityButton";
-import { SubCollectionModal } from "./ui/SubCollectionModal";
-import { CacheClearButton } from "./ui/buttons/CacheClearButton";
-import { CreateButton } from "./ui/buttons/CreateButton";
-import { useListGridTheme } from "./context/ListGridThemeContext";
+import { PriorityButtons } from './ui/buttons/PriorityButton';
+import { SubCollectionModal } from './ui/SubCollectionModal';
+import { CacheClearButton } from './ui/buttons/CacheClearButton';
+import { CreateButton } from './ui/buttons/CreateButton';
+import { useListGridTheme } from './context/ListGridThemeContext';
 export const SubCollectionButtons = (props) => {
     const { activeTrashIcon, deleteItems, onRefresh, mappedBy, mappedValue, collectionName, setErrors, setNotifications, createOrUpdate, } = props;
     const [open, setOpen] = useState(false);
@@ -38,6 +38,6 @@ export const SubCollectionButtons = (props) => {
     }, [collectionName, mappedBy, mappedValue, entityForm]);
     if (!viewable)
         return null;
-    return _jsxs("div", { className: themeClasses.subCollectionButtons?.container ?? "rcm-action-bar-end", children: [props.supportPriority && (_jsx(PriorityButtons, { managePriority: managePriority, setManagePriority: setManagePriority, setParentManagePriority: props.setManagePriority, rows: props.rows, entityForm: props.entityForm, setNotifications: setNotifications, setErrors: setErrors })), cacheable && (_jsx(CacheClearButton, { entityForm: props.entityForm, setNotifications: setNotifications, setErrors: setErrors, onRefresh: onRefresh })), _jsx(CreateButton, { ableDelete: ableDelete, activeTrashIcon: activeTrashIcon, deleteItems: deleteItems, buttons: props.buttons, buttonProps: props, ableAdd: ableAdd, setOpen: setOpen, setRenderKey: setRenderKey }), _jsx(SubCollectionModal, { open: open, setOpen: setOpen, renderKey: renderKey, entityForm: entityForm, createOrUpdate: createOrUpdate, onNotifications: setNotifications, onErrors: setErrors, onRefresh: onRefresh, mappedBy: mappedBy })] });
+    return (_jsxs("div", { className: themeClasses.subCollectionButtons?.container ?? 'rcm-action-bar-end', children: [props.supportPriority && (_jsx(PriorityButtons, { managePriority: managePriority, setManagePriority: setManagePriority, setParentManagePriority: props.setManagePriority, ...(props.rows !== undefined ? { rows: props.rows } : {}), entityForm: props.entityForm, setNotifications: setNotifications, setErrors: setErrors })), cacheable && (_jsx(CacheClearButton, { entityForm: props.entityForm, setNotifications: setNotifications, setErrors: setErrors, onRefresh: onRefresh })), _jsx(CreateButton, { ableDelete: ableDelete, activeTrashIcon: activeTrashIcon, deleteItems: deleteItems, ...(props.buttons !== undefined ? { buttons: props.buttons } : {}), buttonProps: props, ableAdd: ableAdd, setOpen: setOpen, setRenderKey: setRenderKey }), _jsx(SubCollectionModal, { open: open, setOpen: setOpen, renderKey: renderKey, entityForm: entityForm, ...(createOrUpdate !== undefined ? { createOrUpdate } : {}), onNotifications: setNotifications, onErrors: setErrors, onRefresh: onRefresh, ...(mappedBy !== undefined ? { mappedBy } : {}) })] }));
 };
 //# sourceMappingURL=SubCollectionButtons.js.map

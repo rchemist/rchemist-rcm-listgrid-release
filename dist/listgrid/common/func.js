@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { AdditionalColorTypes, ColorTypes } from "./type";
+import { AdditionalColorTypes, ColorTypes, } from './type';
 const valign = {
     top: 'items-start',
     center: 'items-center',
@@ -41,93 +41,160 @@ export function getWindowPositionClassName(position) {
     }
 }
 export function isAdditionalColorType(color) {
-    return AdditionalColorTypes.includes(color) || ColorTypes.includes(color);
+    return (AdditionalColorTypes.includes(color) ||
+        ColorTypes.includes(color));
 }
 export function getAdditionalColorClass(color) {
     color = isAdditionalColorType(color) ? color : 'primary';
     switch (color) {
-        case 'dark': return 'bg-dark';
-        case 'gray': return 'bg-gray';
-        case 'red': return 'bg-red';
-        case 'pink': return 'bg-pink';
-        case 'grape': return 'bg-grape';
-        case 'violet': return 'bg-violet';
-        case 'indigo': return 'bg-indigo';
-        case 'blue': return 'bg-blue';
-        case 'cyan': return 'bg-cyan';
-        case 'green': return 'bg-green';
-        case 'lime': return 'bg-lime';
-        case 'yellow': return 'bg-yellow';
-        case 'orange': return 'bg-orange';
-        case 'teal': return 'bg-teal';
-        case 'black': return 'bg-black';
-        case 'white': return 'bg-white border';
-        case 'primary': return 'bg-primary';
-        case 'info': return 'bg-info';
-        case 'success': return 'bg-success';
-        case 'warning': return 'bg-warning';
-        case 'danger': return 'bg-danger';
-        case 'secondary': return 'bg-secondary';
-        case 'dark': return 'bg-dark';
-        default: return 'bg-indigo';
+        case 'dark':
+            return 'bg-dark';
+        case 'gray':
+            return 'bg-gray';
+        case 'red':
+            return 'bg-red';
+        case 'pink':
+            return 'bg-pink';
+        case 'grape':
+            return 'bg-grape';
+        case 'violet':
+            return 'bg-violet';
+        case 'indigo':
+            return 'bg-indigo';
+        case 'blue':
+            return 'bg-blue';
+        case 'cyan':
+            return 'bg-cyan';
+        case 'green':
+            return 'bg-green';
+        case 'lime':
+            return 'bg-lime';
+        case 'yellow':
+            return 'bg-yellow';
+        case 'orange':
+            return 'bg-orange';
+        case 'teal':
+            return 'bg-teal';
+        case 'black':
+            return 'bg-black';
+        case 'white':
+            return 'bg-white border';
+        case 'primary':
+            return 'bg-primary';
+        case 'info':
+            return 'bg-info';
+        case 'success':
+            return 'bg-success';
+        case 'warning':
+            return 'bg-warning';
+        case 'danger':
+            return 'bg-danger';
+        case 'secondary':
+            return 'bg-secondary';
+        default:
+            return 'bg-indigo';
     }
 }
 export function getTextColorClass(color) {
     color = isAdditionalColorType(color) ? color : 'primary';
     switch (color) {
-        case 'dark': return 'text-dark';
-        case 'gray': return 'text-gray';
-        case 'red': return 'text-red';
-        case 'pink': return 'text-pink';
-        case 'grape': return 'text-grape';
-        case 'violet': return 'text-violet';
-        case 'indigo': return 'text-indigo';
-        case 'blue': return 'text-blue';
-        case 'cyan': return 'text-cyan';
-        case 'green': return 'text-green';
-        case 'lime': return 'text-lime';
-        case 'yellow': return 'text-yellow';
-        case 'orange': return 'text-orange';
-        case 'teal': return 'text-teal';
-        case 'black': return 'text-black';
-        case 'white': return 'text-white';
-        case 'primary': return 'text-primary';
-        case 'info': return 'text-info';
-        case 'success': return 'text-success';
-        case 'warning': return 'text-warning';
-        case 'danger': return 'text-danger';
-        case 'secondary': return 'text-secondary';
-        case 'dark': return 'text-dark';
-        default: return 'text-indigo';
+        case 'dark':
+            return 'text-dark';
+        case 'gray':
+            return 'text-gray';
+        case 'red':
+            return 'text-red';
+        case 'pink':
+            return 'text-pink';
+        case 'grape':
+            return 'text-grape';
+        case 'violet':
+            return 'text-violet';
+        case 'indigo':
+            return 'text-indigo';
+        case 'blue':
+            return 'text-blue';
+        case 'cyan':
+            return 'text-cyan';
+        case 'green':
+            return 'text-green';
+        case 'lime':
+            return 'text-lime';
+        case 'yellow':
+            return 'text-yellow';
+        case 'orange':
+            return 'text-orange';
+        case 'teal':
+            return 'text-teal';
+        case 'black':
+            return 'text-black';
+        case 'white':
+            return 'text-white';
+        case 'primary':
+            return 'text-primary';
+        case 'info':
+            return 'text-info';
+        case 'success':
+            return 'text-success';
+        case 'warning':
+            return 'text-warning';
+        case 'danger':
+            return 'text-danger';
+        case 'secondary':
+            return 'text-secondary';
+        default:
+            return 'text-indigo';
     }
 }
 export function getOppositeTextColorClass(color) {
     color = isAdditionalColorType(color) ? color : 'primary';
     switch (color) {
-        case 'dark': return 'text-white';
-        case 'gray': return 'text-white';
-        case 'red': return 'text-white';
-        case 'pink': return 'text-white';
-        case 'grape': return 'text-white';
-        case 'violet': return 'text-white';
-        case 'indigo': return 'text-white';
-        case 'blue': return 'text-white';
-        case 'cyan': return 'text-white';
-        case 'green': return 'text-white';
-        case 'lime': return 'text-white';
-        case 'yellow': return 'text-white';
-        case 'orange': return 'text-white';
-        case 'teal': return 'text-white';
-        case 'black': return 'text-white';
-        case 'white': return 'text-dark';
-        case 'primary': return 'text-white';
-        case 'info': return 'text-white';
-        case 'success': return 'text-white';
-        case 'warning': return 'text-white';
-        case 'danger': return 'text-white';
-        case 'secondary': return 'text-white';
-        case 'dark': return 'text-white';
-        default: return 'text-dark';
+        case 'dark':
+            return 'text-white';
+        case 'gray':
+            return 'text-white';
+        case 'red':
+            return 'text-white';
+        case 'pink':
+            return 'text-white';
+        case 'grape':
+            return 'text-white';
+        case 'violet':
+            return 'text-white';
+        case 'indigo':
+            return 'text-white';
+        case 'blue':
+            return 'text-white';
+        case 'cyan':
+            return 'text-white';
+        case 'green':
+            return 'text-white';
+        case 'lime':
+            return 'text-white';
+        case 'yellow':
+            return 'text-white';
+        case 'orange':
+            return 'text-white';
+        case 'teal':
+            return 'text-white';
+        case 'black':
+            return 'text-white';
+        case 'white':
+            return 'text-dark';
+        case 'primary':
+            return 'text-white';
+        case 'info':
+            return 'text-white';
+        case 'success':
+            return 'text-white';
+        case 'warning':
+            return 'text-white';
+        case 'danger':
+            return 'text-white';
+        case 'secondary':
+            return 'text-white';
+        default:
+            return 'text-dark';
     }
 }
 export function getOrderedColorType(num) {
@@ -135,13 +202,13 @@ export function getOrderedColorType(num) {
     return ColorTypes[num % ColorTypes.length];
 }
 const bgColorClasses = {
-    'primary': 'bg-primary',
-    'info': 'bg-info',
-    'success': 'bg-success',
-    'warning': 'bg-warning',
-    'danger': 'bg-danger',
-    'secondary': 'bg-secondary',
-    'dark': 'bg-dark',
+    primary: 'bg-primary',
+    info: 'bg-info',
+    success: 'bg-success',
+    warning: 'bg-warning',
+    danger: 'bg-danger',
+    secondary: 'bg-secondary',
+    dark: 'bg-dark',
 };
 export function getBgColor(color) {
     if (bgColorClasses[color]) {
@@ -186,7 +253,11 @@ export function getMaxWidthClassName(size) {
 }
 export function getAlignClassName(alignType, flex) {
     if (flex) {
-        return alignType === 'left' ? 'justify-start' : alignType === 'center' ? 'justify-center' : 'justify-end';
+        return alignType === 'left'
+            ? 'justify-start'
+            : alignType === 'center'
+                ? 'justify-center'
+                : 'justify-end';
     }
     return alignType === 'left' ? 'text-left' : alignType === 'center' ? 'text-center' : 'text-right';
 }

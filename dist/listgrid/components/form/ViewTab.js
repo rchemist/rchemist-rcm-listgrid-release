@@ -6,11 +6,11 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { Fragment, useEffect, useState } from "react";
-import { Tab } from "@headlessui/react";
+import { Fragment, useEffect, useState } from 'react';
+import { Tab } from '@headlessui/react';
 import { Tooltip } from '../../ui';
-import { getTranslation } from "../../utils/i18n";
-import { useEntityFormTheme } from "./context/EntityFormThemeContext";
+import { getTranslation } from '../../utils/i18n';
+import { useEntityFormTheme } from './context/EntityFormThemeContext';
 export const ViewTab = ({ id, tabIndex, label, setTabIndex, entityForm, createStepFields, ...props }) => {
     const { classNames, cn } = useEntityFormTheme();
     // 현재 탭에서 표시할 필드 그룹 id 목록
@@ -20,7 +20,10 @@ export const ViewTab = ({ id, tabIndex, label, setTabIndex, entityForm, createSt
         // 탭이 마운트될 때, 표시 가능한 필드 그룹 목록을 비동기로 조회
         // On mount, fetch viewable field groups for this tab asynchronously
         (async () => {
-            const viewableFieldGroups = await entityForm.getViewableFieldGroups({ tabId: id, createStepFields });
+            const viewableFieldGroups = await entityForm.getViewableFieldGroups({
+                tabId: id,
+                createStepFields,
+            });
             setGroups(viewableFieldGroups);
         })();
     }, [id, createStepFields?.join(','), entityForm]); // tabIndex 의존성 제거, createStepFields를 문자열로 변환
@@ -59,14 +62,14 @@ export const ViewTab = ({ id, tabIndex, label, setTabIndex, entityForm, createSt
             buttonClass = cn(buttonClass, classNames.tabs?.tabDisabled);
         }
         const dataState = !hasContent ? 'disabled' : selected ? 'selected' : undefined;
-        return _jsx("div", { style: { display: hasContent ? 'block' : 'none' }, children: _jsx("button", { className: buttonClass, "data-state": dataState, onClick: () => {
+        return (_jsx("div", { style: { display: hasContent ? 'block' : 'none' }, children: _jsx("button", { className: buttonClass, "data-state": dataState, onClick: () => {
                     if (hasContent) {
                         setTabIndex?.(id);
                     }
-                }, disabled: !hasContent, children: label }) });
+                }, disabled: !hasContent, children: label }) }));
     }
     // description이 있으면 Tooltip으로 감싸서 렌더링, 없으면 바로 버튼 렌더링
     // If description exists, wrap with Tooltip; otherwise, render button directly
-    return (_jsx(Tab, { as: Fragment, children: ({ selected }) => description === undefined ? ShowButton(selected) : _jsx(Tooltip, { label: description, children: ShowButton(selected) }) }));
+    return (_jsx(Tab, { as: Fragment, children: ({ selected }) => description === undefined ? (ShowButton(selected)) : (_jsx(Tooltip, { label: description, children: ShowButton(selected) })) }));
 };
 //# sourceMappingURL=ViewTab.js.map

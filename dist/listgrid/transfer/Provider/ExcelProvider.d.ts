@@ -1,15 +1,15 @@
 import * as XLSX from 'xlsx-js-style';
 import { DataField, DataRowSet } from '../Type';
 export interface ExcelDownloadLogOptions {
-    condition?: Record<string, any> | string;
+    condition?: Record<string, any> | string | undefined;
 }
 export interface ExcelDownloadProps {
     data: DataRowSet;
     fileName: string;
-    excludeHeader?: boolean;
-    password?: string;
-    logOptions?: ExcelDownloadLogOptions;
-    fields?: DataField[];
+    excludeHeader?: boolean | undefined;
+    password?: string | undefined;
+    logOptions?: ExcelDownloadLogOptions | undefined;
+    fields?: DataField[] | undefined;
 }
 export declare function logExcelDownload(usePassword: boolean, condition?: Record<string, any> | string): Promise<void>;
 interface OfficeCrypto {

@@ -1,5 +1,5 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-import { FormField } from "./abstract";
+import { FormField } from './abstract';
 export class MessageViewField extends FormField {
     constructor(name, order, message) {
         super(name, order, 'custom');
@@ -22,8 +22,7 @@ export class MessageViewField extends FormField {
         return new MessageViewField(name, order, this.message);
     }
     static create(props) {
-        return new MessageViewField(props.name, props.order, props.message)
-            .copyFields(props, true);
+        return new MessageViewField(props.name, props.order, props.message).copyFields(props, true);
     }
 }
 //# sourceMappingURL=MessageViewField.js.map

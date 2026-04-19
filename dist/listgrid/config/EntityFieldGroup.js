@@ -41,13 +41,21 @@ export class EntityFieldGroup {
         if (!userPermissions || userPermissions.length === 0) {
             return false;
         }
-        return this.requiredPermissions.some(permission => userPermissions.includes(permission));
+        return this.requiredPermissions.some((permission) => userPermissions.includes(permission));
     }
     clone() {
-        const cloned = new EntityFieldGroup({ id: this.id, label: this.label, order: this.order, description: this.description, config: this.config });
+        const cloned = new EntityFieldGroup({
+            id: this.id,
+            label: this.label,
+            order: this.order,
+            description: this.description,
+            config: this.config,
+        });
         cloned.fields = [...this.fields];
         cloned.span = this.span;
-        cloned.requiredPermissions = this.requiredPermissions ? [...this.requiredPermissions] : undefined;
+        cloned.requiredPermissions = this.requiredPermissions
+            ? [...this.requiredPermissions]
+            : undefined;
         return cloned;
     }
 }

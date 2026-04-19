@@ -6,16 +6,16 @@
  */
 'use client';
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { ALWAYS, NO_FILTER_SORT_ON_LIST } from '../../../config/Config';
+import { ALWAYS, NO_FILTER_SORT_ON_LIST, } from '../../../config/Config';
 import { EntityForm } from '../../../config/EntityForm';
-import { useEffect, useState } from "react";
-import { Paper } from "../../../ui";
-import { LoadingOverlay } from "../../../ui";
+import { useEffect, useState } from 'react';
+import { Paper } from '../../../ui';
+import { LoadingOverlay } from '../../../ui';
 import { useModalManagerStore } from '../../../store';
 import { ViewListGrid } from '../../list/ViewListGrid';
 import { ListGrid } from '../../../config/ListGrid';
-import { SearchForm } from "../../../form/SearchForm";
-import { isEmpty } from "../../../utils";
+import { SearchForm } from '../../../form/SearchForm';
+import { isEmpty } from '../../../utils';
 import { ManyToOneField } from '../ManyToOneField';
 import { ViewEntityForm } from '../../form/ViewEntityForm';
 import { isTrue } from '../../../utils/BooleanUtil';
@@ -27,16 +27,18 @@ import { isBlank } from '../../../utils/StringUtil';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 const PriceMappingEntityForm = (label, mapping) => {
-    return new EntityForm(label, '')
-        .addFields({
+    return new EntityForm(label, '').addFields({
         items: [
-            new ManyToOneField(mapping.name, 100, mapping.config).withLabel(mapping.label).withRequired(true),
-            new NumberField('price', 200).withLabel('가격')
+            new ManyToOneField(mapping.name, 100, mapping.config)
+                .withLabel(mapping.label)
+                .withRequired(true),
+            new NumberField('price', 200)
+                .withLabel('가격')
                 .withHelpText(mapping.helpText)
                 .withViewPreset(mapping.priceViewPreset)
                 .withDefaultValue(false)
                 .withListConfig(NO_FILTER_SORT_ON_LIST),
-        ]
+        ],
     });
 };
 export const XrefPriceMappingView = ({ entityForm, parentEntityForm, ...props }) => {
@@ -79,8 +81,7 @@ export const XrefPriceMappingView = ({ entityForm, parentEntityForm, ...props })
     }, [props.filters]);
     useEffect(() => {
         if (value.mapped === undefined || value.mapped.length === 0) {
-            const newViewSearchForm = new SearchForm()
-                .withShouldReturnEmpty(true);
+            const newViewSearchForm = new SearchForm().withShouldReturnEmpty(true);
             setViewSearchForm(newViewSearchForm);
             setListKey(new Date().getTime().toString());
             return;
@@ -92,10 +93,11 @@ export const XrefPriceMappingView = ({ entityForm, parentEntityForm, ...props })
         }
         setIdList([...idList]);
         setListKey(new Date().getTime().toString());
-        const newViewSearchForm = viewSearchForm?.clone()
+        const newViewSearchForm = viewSearchForm
+            ?.clone()
             .removeFilter('id')
             .withShouldReturnEmpty(false)
-            .withFilter('AND', { name: 'id', values: idList, queryConditionType: "IN" });
+            .withFilter('AND', { name: 'id', values: idList, queryConditionType: 'IN' });
         setViewSearchForm(newViewSearchForm);
     }, [value]);
     useEffect(() => {
@@ -119,32 +121,38 @@ export const XrefPriceMappingView = ({ entityForm, parentEntityForm, ...props })
         viewSearchForm?.withFilter('AND', ...filters);
     }
     if (viewSearchForm === undefined) {
-        return _jsx("div", { className: 'relative', children: _jsxs("div", { className: `panel p-4 flex-1 gap-2.5 mt-5 border dark:border-[#17263c] rounded-xl shadow-none space-y-2`, children: [_jsx(LoadingOverlay, { visible: true }), _jsx("div", { className: 'w-full h-[400px]' })] }) });
+        return (_jsx("div", { className: 'relative', children: _jsxs("div", { className: `panel p-4 flex-1 gap-2.5 mt-5 border dark:border-[#17263c] rounded-xl shadow-none space-y-2`, children: [_jsx(LoadingOverlay, { visible: true }), _jsx("div", { className: 'w-full h-[400px]' })] }) }));
     }
     const xrefEntityForm = PriceMappingEntityForm(labelText, {
         config: {
             entityForm: entityForm,
-            filter: isEmpty(idList) ? [(entityForm) => {
-                    const filterItems = [];
-                    if (filters.length > 0) {
-                        filterItems.push(...filters);
-                    }
-                    filterItems.push({ name: 'id', queryConditionType: 'NOT_NULL' });
-                    return Promise.resolve(filterItems);
-                }] : [(entityForm) => {
-                    const filterItems = [];
-                    if (filters.length > 0) {
-                        filterItems.push(...filters);
-                    }
-                    filterItems.push({ name: 'id', queryConditionType: 'NOT_IN', values: idList });
-                    return Promise.resolve(filterItems);
-                }],
+            filter: isEmpty(idList)
+                ? [
+                    (entityForm) => {
+                        const filterItems = [];
+                        if (filters.length > 0) {
+                            filterItems.push(...filters);
+                        }
+                        filterItems.push({ name: 'id', queryConditionType: 'NOT_NULL' });
+                        return Promise.resolve(filterItems);
+                    },
+                ]
+                : [
+                    (entityForm) => {
+                        const filterItems = [];
+                        if (filters.length > 0) {
+                            filterItems.push(...filters);
+                        }
+                        filterItems.push({ name: 'id', queryConditionType: 'NOT_IN', values: idList });
+                        return Promise.resolve(filterItems);
+                    },
+                ],
         },
         name: 'mapping',
         label: labelText,
         helpText: props.priceHelpText ?? '가격을 재설정할 수 있습니다.',
         exceptId: idList,
-        priceViewPreset: priceViewPreset
+        priceViewPreset: priceViewPreset,
     })
         .withOnChanges(async (entityForm, name) => {
         if (name === 'mapping') {
@@ -158,7 +166,10 @@ export const XrefPriceMappingView = ({ entityForm, parentEntityForm, ...props })
         const form = entityForm.clone(true);
         const fieldErrors = await entityForm.validate();
         if (!isEmpty(fieldErrors)) {
-            return { entityForm: form.withErrors(fieldErrors), errors: ['입력 값이 올바르지 않습니다.'] };
+            return {
+                entityForm: form.withErrors(fieldErrors),
+                errors: ['입력 값이 올바르지 않습니다.'],
+            };
         }
         const formData = await form.getSubmitFormData();
         const target = formData.data['mappingId'];
@@ -174,11 +185,14 @@ export const XrefPriceMappingView = ({ entityForm, parentEntityForm, ...props })
             if (duplicated) {
                 // 에러를 내야 한다.
                 return {
-                    entityForm: form.withErrors([{
+                    entityForm: form.withErrors([
+                        {
                             name: 'mapping',
                             label: labelText,
-                            errors: ['이미 등록된 정보입니다.']
-                        }]), errors: ['이미 등록된 정보입니다.']
+                            errors: ['이미 등록된 정보입니다.'],
+                        },
+                    ]),
+                    errors: ['이미 등록된 정보입니다.'],
                 };
             }
         }
@@ -200,7 +214,7 @@ export const XrefPriceMappingView = ({ entityForm, parentEntityForm, ...props })
         props.onChange({ ...mappingValue });
         return Promise.resolve({ entityForm });
     });
-    return _jsxs("div", { className: 'w-full', children: [_jsx(ViewListGrid, { listGrid: new ListGrid(entityForm).withSearchForm(viewSearchForm), options: {
+    return (_jsxs("div", { className: 'w-full', children: [_jsx(ViewListGrid, { listGrid: new ListGrid(entityForm).withSearchForm(viewSearchForm), options: {
                     hideTitle: true,
                     filterable: false,
                     sortable: false,
@@ -220,7 +234,10 @@ export const XrefPriceMappingView = ({ entityForm, parentEntityForm, ...props })
                         return;
                     },
                     fields: [
-                        new BooleanField('price', 10000).withLabel(`${labelText} 최종 가격`).withSortable(false).withFilterable(false)
+                        new BooleanField('price', 10000)
+                            .withLabel(`${labelText} 최종 가격`)
+                            .withSortable(false)
+                            .withFilterable(false),
                     ],
                     onFetched: async (result) => {
                         // 필드의 값을 추가한다.
@@ -241,18 +258,19 @@ export const XrefPriceMappingView = ({ entityForm, parentEntityForm, ...props })
                                 onDelete(checkedItems);
                             }
                             return Promise.resolve({ entityForm: _entityForm });
-                        }
+                        },
                     },
                     subCollection: {
-                        add: false, delete: true,
+                        add: false,
+                        delete: true,
                         modifyOnView: false,
                         buttons: [
-                            () => _jsx("button", { type: "button", className: `btn btn-outline-secondary h-[34px]`, disabled: readonly, onClick: () => {
+                            () => (_jsx("button", { type: "button", className: `btn btn-outline-secondary h-[34px]`, disabled: readonly, onClick: () => {
                                     handleOpenModal();
-                                }, children: "\uBD88\uB7EC\uC624\uAE30" })
-                        ]
-                    }
-                } }, listKey), !isBlank(error) && _jsx(_Fragment, {})] });
+                                }, children: "\uBD88\uB7EC\uC624\uAE30" })),
+                        ],
+                    },
+                } }, listKey), !isBlank(error) && _jsx(_Fragment, {})] }));
     function onDelete(checkedItems) {
         if (mappingValue.mapped === undefined) {
             mappingValue.mapped = [];
@@ -297,7 +315,7 @@ export const XrefPriceMappingView = ({ entityForm, parentEntityForm, ...props })
                             .withOnClick(async (props) => {
                             closeModal(modalId);
                             return props.entityForm;
-                        })
+                        }),
                     ], postSave: async (entityForm) => {
                         closeModal(modalId);
                         return entityForm;

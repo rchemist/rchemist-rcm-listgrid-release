@@ -1,6 +1,6 @@
-import { defaultString, isBlank, isEmpty, isTrue } from "../../utils";
+import { defaultString, isBlank, isEmpty, isTrue } from '../../utils';
 import { FormField, OptionalField } from '../../components/fields/abstract';
-import { MANAGE_ENTITY_ALL } from '../../config/Config';
+import { MANAGE_ENTITY_ALL, } from '../../config/Config';
 import { EntityForm } from '../../config/EntityForm';
 export class EntityFormBase {
     constructor(name, url) {
@@ -21,7 +21,7 @@ export class EntityFormBase {
         this.version = new Date().getTime().toString();
         // 깊은 복사로 할당하여 원본이 변경되지 않도록 함
         this.manageEntityForm = {
-            ...MANAGE_ENTITY_ALL
+            ...MANAGE_ENTITY_ALL,
         };
     }
     async reload() {
@@ -38,7 +38,7 @@ export class EntityFormBase {
     withTitle(title) {
         if (typeof title === 'string') {
             this.title = {
-                title: title
+                title: title,
             };
         }
         else {
@@ -61,8 +61,8 @@ export class EntityFormBase {
         return this.getId() ? 'update' : 'create';
     }
     /**
-         * ID 와 URL 이 모두 존재해야만 FETCH 가 가능하다.
-         */
+     * ID 와 URL 이 모두 존재해야만 FETCH 가 가능하다.
+     */
     isAbleFetch() {
         return !isBlank(this.url) && !isBlank(this.id);
     }
@@ -93,7 +93,7 @@ export class EntityFormBase {
     }
     async getTitle(append, appendPostfix) {
         append = defaultString(append);
-        const postFix = isTrue(appendPostfix) ? ' / ' + await this.getTitlePostfix() : '';
+        const postFix = isTrue(appendPostfix) ? ' / ' + (await this.getTitlePostfix()) : '';
         return isBlank(append) ? `${postFix}` : `${append}${postFix}`;
     }
     async getTitlePostfix() {
@@ -108,7 +108,7 @@ export class EntityFormBase {
                 }
             }
         }
-        return await this.getField('name')?.getCurrentValue(this.getRenderType()) ?? this.id ?? '신규 입력';
+        return ((await this.getField('name')?.getCurrentValue(this.getRenderType())) ?? this.id ?? '신규 입력');
     }
     hasField(name) {
         return this.fields.has(name);
@@ -125,7 +125,7 @@ export class EntityFormBase {
     getFetchedEntity() {
         return this.fetchedEntity;
     }
-    // intentional: values object is a generic entity payload
+    // intentional: values object is a generic entity payload (shape driven by registered fields)
     async getValues() {
         const values = {};
         for (const field of this.fields.values()) {
@@ -142,7 +142,10 @@ export class EntityFormBase {
     async getViewableTabs(includeHide, createStepFields, session) {
         const tabs = [];
         // 권한 체크를 위해 session에서 userPermissions를 가져온다.
-        const userPermissions = session?.roles ?? session?.authentication?.roles ?? this.session?.roles ?? this.session?.authentication?.roles;
+        const userPermissions = session?.roles ??
+            session?.authentication?.roles ??
+            this.session?.roles ??
+            this.session?.authentication?.roles;
         for (const tab of this.tabs.values()) {
             const append = isTrue(includeHide) || !isTrue(tab.hidden);
             if (append) {
@@ -150,7 +153,11 @@ export class EntityFormBase {
                 if (!tab.isPermitted(userPermissions)) {
                     continue;
                 }
-                const fieldGroups = await this.getViewableFieldGroups({ tabId: tab.id, session, createStepFields: createStepFields });
+                const fieldGroups = await this.getViewableFieldGroups({
+                    tabId: tab.id,
+                    session,
+                    createStepFields: createStepFields,
+                });
                 if (fieldGroups.length > 0) {
                     tabs.push(tab);
                 }
@@ -203,7 +210,12 @@ export class EntityFormBase {
         if (tab) {
             const viewableFieldGroups = [];
             for (const fieldGroup of tab.fieldGroups) {
-                if (await this.isViewableFieldGroup({ tabId, fieldGroupId: fieldGroup.id, session, createStepFields })) {
+                if (await this.isViewableFieldGroup({
+                    tabId,
+                    fieldGroupId: fieldGroup.id,
+                    session,
+                    createStepFields,
+                })) {
                     viewableFieldGroups.push(fieldGroup.id);
                 }
             }
@@ -228,7 +240,7 @@ export class EntityFormBase {
                     return Promise.resolve(false);
                 }
                 for (const field of fieldGroup.fields) {
-                    if (!isEmpty(props.createStepFields) && !(props.createStepFields.includes(field.name))) {
+                    if (!isEmpty(props.createStepFields) && !props.createStepFields.includes(field.name)) {
                         continue;
                     }
                     const entityField = this.fields.get(field.name);
@@ -237,7 +249,11 @@ export class EntityFormBase {
                         if (!entityField.isPermitted(userPermissions)) {
                             continue;
                         }
-                        const hidden = await entityField.isHidden({ entityForm: this, renderType: this.getRenderType(), session: session });
+                        const hidden = await entityField.isHidden({
+                            entityForm: this,
+                            renderType: this.getRenderType(),
+                            session: session,
+                        });
                         if (!hidden) {
                             viewable = true;
                             break;
@@ -247,7 +263,11 @@ export class EntityFormBase {
                     if (!viewable && renderType === 'update') {
                         const collection = this.collections.get(field.name);
                         if (collection !== undefined) {
-                            const hidden = await collection.isHidden({ entityForm: this, renderType: this.getRenderType(), session: session });
+                            const hidden = await collection.isHidden({
+                                entityForm: this,
+                                renderType: this.getRenderType(),
+                                session: session,
+                            });
                             if (!hidden) {
                                 viewable = true;
                                 break;
@@ -274,8 +294,13 @@ export class EntityFormBase {
                         if (!field.isPermitted(userPermissions)) {
                             continue;
                         }
-                        const hidden = await field.isHidden({ entityForm: this, renderType: this.getRenderType(), session: session });
-                        if (!hidden && (isEmpty(createStepFields) || createStepFields?.includes(field.getName()))) {
+                        const hidden = await field.isHidden({
+                            entityForm: this,
+                            renderType: this.getRenderType(),
+                            session: session,
+                        });
+                        if (!hidden &&
+                            (isEmpty(createStepFields) || createStepFields?.includes(field.getName()))) {
                             fields.push(field);
                         }
                     }
@@ -295,7 +320,11 @@ export class EntityFormBase {
                 const field = this.getCollection(f.name);
                 if (field) {
                     if (this instanceof EntityForm) {
-                        const hidden = await field.isHidden({ entityForm: this, renderType: this.getRenderType(), session: session });
+                        const hidden = await field.isHidden({
+                            entityForm: this,
+                            renderType: this.getRenderType(),
+                            session: session,
+                        });
                         if (!hidden) {
                             collections.push(field);
                         }
@@ -321,7 +350,7 @@ export class EntityFormBase {
     withFieldGroupConfig(tabId, fieldGroupId, config) {
         const tab = this.getTab(tabId);
         if (tab) {
-            const fieldGroup = tab.fieldGroups.find(group => group.id === fieldGroupId);
+            const fieldGroup = tab.fieldGroups.find((group) => group.id === fieldGroupId);
             if (fieldGroup) {
                 fieldGroup.config = { ...fieldGroup.config, ...config };
             }
@@ -374,9 +403,9 @@ export class EntityFormBase {
         return this;
     }
     /**
-   * 특정 tab 의 하위의 모든 fields 를 하나의 [] 로 리턴, 필드그룹의 표시 순서를 고려해 field 의 order 를 변경하며 clone 을 통해 원래 필드에 영향을 주지 않는다.
-   * @param tabId
-   */
+     * 특정 tab 의 하위의 모든 fields 를 하나의 [] 로 리턴, 필드그룹의 표시 순서를 고려해 field 의 order 를 변경하며 clone 을 통해 원래 필드에 영향을 주지 않는다.
+     * @param tabId
+     */
     getTabFields(tabId) {
         const tab = this.getTab(tabId);
         if (tab) {
@@ -407,23 +436,23 @@ export class EntityFormBase {
         return this.revisionEntityName || this.menuUrl || this.name;
     }
     withButtons(buttons) {
-        this.buttons = [...this.buttons ?? [], buttons];
+        this.buttons = [...(this.buttons ?? []), buttons];
         return this;
     }
     withOnChanges(...onChanges) {
-        this.onChanges = [...this.onChanges ?? [], ...onChanges];
+        this.onChanges = [...(this.onChanges ?? []), ...onChanges];
         return this;
     }
     withOnFetchData(...onLoad) {
-        this.onFetchData = [...this.onFetchData ?? [], ...onLoad];
+        this.onFetchData = [...(this.onFetchData ?? []), ...onLoad];
         return this;
     }
     withOnInitialize(...onInitialize) {
-        this.onInitialize = [...this.onInitialize ?? [], ...onInitialize];
+        this.onInitialize = [...(this.onInitialize ?? []), ...onInitialize];
         return this;
     }
     withOnPostFetchListData(...postFetchListData) {
-        this.onFetchListData = [...this.onFetchListData ?? [], ...postFetchListData];
+        this.onFetchListData = [...(this.onFetchListData ?? []), ...postFetchListData];
         return this;
     }
     withOnSave(onSave) {

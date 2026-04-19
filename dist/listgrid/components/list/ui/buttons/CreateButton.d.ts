@@ -1,5 +1,5 @@
-import React from "react";
-import { SubCollectionBaseButtonProps } from "../../types/SubCollectionButtons.type";
+import React from 'react';
+import { SubCollectionBaseButtonProps } from '../../types/SubCollectionButtons.type';
 export interface CreateButtonProps {
     ableDelete: boolean;
     activeTrashIcon: boolean;

@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { RegexPasswordNormal } from "../misc";
+import { RegexPasswordNormal } from '../misc';
 import { RegexValidation } from '../validations/RegexValidation';
 export class PasswordValidation extends RegexValidation {
     constructor(id, regex, message) {

@@ -7,20 +7,20 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import { FormField } from './abstract';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { Modal } from "../../ui";
-import { Paper } from "../../ui";
-import { Button } from "../../ui";
-import { TextInput } from "../../ui";
+import { Modal } from '../../ui';
+import { Paper } from '../../ui';
+import { Button } from '../../ui';
+import { TextInput } from '../../ui';
 import { defaultString, isBlank } from '../../utils/StringUtil';
-import { IconPhotoPlus, IconTrash } from "@tabler/icons-react";
+import { IconPhotoPlus, IconTrash } from '@tabler/icons-react';
 import { MultipleAssetUpload } from './view/MultipleAssetUpload';
-import { getAccessableAssetUrl } from "../../misc";
-import { RegexLowerEnglishNumber } from "../../misc";
+import { getAccessableAssetUrl } from '../../misc';
+import { RegexLowerEnglishNumber } from '../../misc';
 import { isTrue } from '../../utils/BooleanUtil';
 import { ViewHelpText } from '../form/ui/ViewHelpText';
-import { Tooltip } from "../../ui";
+import { Tooltip } from '../../ui';
 export class MultipleAssetField extends FormField {
     constructor(name, order, tags, fileTypes) {
         super(name, order, 'custom');
@@ -32,7 +32,8 @@ export class MultipleAssetField extends FormField {
      */
     renderInstance(params) {
         return (async () => {
-            return _jsx(MultipleAssetFieldView, { fileTypes: this.fileTypes, tags: this.tags, ...await getInputRendererParameters(this, params) });
+            const inputParams = await getInputRendererParameters(this, params);
+            return (_jsx(MultipleAssetFieldView, { fileTypes: this.fileTypes, tags: this.tags, ...inputParams }));
         })();
     }
     /**
@@ -42,12 +43,13 @@ export class MultipleAssetField extends FormField {
         return new MultipleAssetField(name, order, this.tags, this.fileTypes);
     }
     static create(props) {
-        return new MultipleAssetField(props.name, props.order, props.tags, props.fileTypes)
-            .copyFields(props, true);
+        return new MultipleAssetField(props.name, props.order, props.tags, props.fileTypes).copyFields(props, true);
     }
 }
 function deepCopy(value) {
-    const newValue = { preferred: value?.preferred };
+    const newValue = {
+        ...(value?.preferred !== undefined ? { preferred: value.preferred } : {}),
+    };
     if (value?.assets !== undefined && value.assets.length > 0) {
         const newAssets = [];
         value.assets.forEach((asset) => {
@@ -79,7 +81,7 @@ const MultipleAssetFieldView = (props) => {
         }
         else {
             // new value
-            const newValue = { assets: [], };
+            const newValue = { assets: [] };
             if (props.tags) {
                 props.tags.forEach((tag) => {
                     newValue.assets?.push({ name: tag, url: '' });
@@ -97,7 +99,7 @@ const MultipleAssetFieldView = (props) => {
             setCurrentEdit({ url: '' });
         }
         else {
-            setCurrentEdit(value?.assets?.[currentIndex]);
+            setCurrentEdit(value?.assets?.[currentIndex] ?? { url: '' });
         }
     }
     function closeUpload() {
@@ -106,13 +108,13 @@ const MultipleAssetFieldView = (props) => {
         setOpenAdd(false);
     }
     const readonly = isTrue(props.readonly);
-    return _jsxs(React.Fragment, { children: [_jsx("div", { className: "rcm-asset-outer", children: _jsx("div", { className: "rcm-asset-table-responsive", children: _jsxs("div", { className: "rcm-asset-grid", children: [tags.map((tag, index) => {
+    return (_jsxs(React.Fragment, { children: [_jsx("div", { className: "rcm-asset-outer", children: _jsx("div", { className: "rcm-asset-table-responsive", children: _jsxs("div", { className: "rcm-asset-grid", children: [tags.map((tag, index) => {
                                 const asset = value?.assets?.find((asset) => asset.name === tag);
                                 if (!asset) {
                                     return null;
                                 }
                                 const isPrimary = tag === 'Primary';
-                                return _jsx("div", { children: _jsxs("table", { className: "rcm-asset-table", children: [_jsx("thead", { children: _jsx("tr", { children: _jsx("th", { className: "rcm-asset-th", children: _jsxs("div", { className: "rcm-asset-th-row", children: [_jsx("div", { className: `rcm-asset-th-name${!isPrimary ? ' rcm-asset-th-name-compact' : ''}`, children: _jsx(Tooltip, { label: `${asset.name}`, children: _jsx("div", { className: "rcm-truncate", children: asset.name }) }) }), !isPrimary && _jsx("div", { className: "rcm-asset-th-remove", children: !readonly && _jsx("button", { type: 'button', className: "rcm-asset-th-remove-btn", onClick: () => {
+                                return (_jsx("div", { children: _jsxs("table", { className: "rcm-asset-table", children: [_jsx("thead", { children: _jsx("tr", { children: _jsx("th", { className: "rcm-asset-th", children: _jsxs("div", { className: "rcm-asset-th-row", children: [_jsx("div", { className: `rcm-asset-th-name${!isPrimary ? ' rcm-asset-th-name-compact' : ''}`, children: _jsx(Tooltip, { label: `${asset.name}`, children: _jsx("div", { className: "rcm-truncate", children: asset.name }) }) }), !isPrimary && (_jsx("div", { className: "rcm-asset-th-remove", children: !readonly && (_jsx("button", { type: 'button', className: "rcm-asset-th-remove-btn", onClick: () => {
                                                                             const newValues = { assets: [] };
                                                                             value.assets?.forEach((asset, deleteIndex) => {
                                                                                 if (index !== deleteIndex) {
@@ -124,30 +126,33 @@ const MultipleAssetFieldView = (props) => {
                                                                             }
                                                                             setValue(newValues);
                                                                             props.onChange(newValues, false);
-                                                                        }, children: _jsx(IconTrash, { className: "rcm-icon", "data-color": "error" }) }) })] }) }, `th-${index}`) }) }), _jsx("tbody", { children: _jsx("tr", { children: _jsx("td", { className: "rcm-asset-td", children: _jsx("div", { className: "rcm-asset-td-inner", onClick: () => {
+                                                                        }, children: _jsx(IconTrash, { className: "rcm-icon", "data-color": "error" }) })) }))] }) }, `th-${index}`) }) }), _jsx("tbody", { children: _jsx("tr", { children: _jsx("td", { className: "rcm-asset-td", children: _jsx("div", { className: "rcm-asset-td-inner", onClick: () => {
                                                                 openImageForm(index);
-                                                            }, children: _jsx("button", { className: "rcm-asset-btn-fill", children: function () {
-                                                                    if (isBlank(value?.assets?.[index].url)) {
+                                                            }, children: _jsx("button", { className: "rcm-asset-btn-fill", children: (function () {
+                                                                    if (isBlank(value?.assets?.[index]?.url)) {
                                                                         // 데이터 없음
                                                                         if (readonly) {
                                                                             return null;
                                                                         }
                                                                         else {
-                                                                            return _jsx(IconPhotoPlus, { className: "rcm-icon rcm-asset-placeholder-icon" });
+                                                                            return (_jsx(IconPhotoPlus, { className: "rcm-icon rcm-asset-placeholder-icon" }));
                                                                         }
                                                                     }
                                                                     else {
                                                                         const imgUrl = getAccessableAssetUrl(value.assets[index].url);
-                                                                        return _jsx("img", { className: "rcm-asset-img", alt: `${value?.assets?.[index].description ?? ''}`, onError: (event) => {
+                                                                        return (_jsx("img", { className: "rcm-asset-img", alt: `${value?.assets?.[index]?.description ?? ''}`, onError: (event) => {
                                                                                 event.currentTarget.src = '/assets/images/no-image.png';
-                                                                            }, src: `${imgUrl}` });
+                                                                            }, src: `${imgUrl}` }));
                                                                     }
-                                                                }() }) }) }, `td-${index}`) }) })] }) }, `asset${index}`);
-                            }), !readonly && _jsx("div", { className: "rcm-asset-add-col", children: _jsx("table", { className: "rcm-asset-add-table", children: _jsx("tbody", { children: _jsx("tr", { children: _jsx("td", { className: "rcm-asset-add-td", children: _jsx("button", { type: "button", className: "rcm-asset-add-btn", onClick: () => {
+                                                                })() }) }) }, `td-${index}`) }) })] }) }, `asset${index}`));
+                            }), !readonly && (_jsx("div", { className: "rcm-asset-add-col", children: _jsx("table", { className: "rcm-asset-add-table", children: _jsx("tbody", { children: _jsx("tr", { children: _jsx("td", { className: "rcm-asset-add-td", children: _jsx("button", { type: "button", className: "rcm-asset-add-btn", onClick: () => {
                                                         openImageForm();
-                                                    }, children: "+ \uCD94\uAC00" }) }) }) }) }) })] }) }) }), openAdd && _jsx(Modal, { title: currentIndex === undefined ? '새 이미지 추가' : '이미지 수정', size: '5xl', position: 'center', opened: openAdd, onClose: () => {
+                                                    }, children: "+ \uCD94\uAC00" }) }) }) }) }) }))] }) }) }), openAdd && (_jsx(Modal, { title: currentIndex === undefined ? '새 이미지 추가' : '이미지 수정', size: '5xl', position: 'center', opened: openAdd, onClose: () => {
                     closeUpload();
-                }, children: _jsxs(Paper, { className: "rcm-asset-modal-body", children: [_jsxs("div", { children: [_jsx("div", { className: "rcm-asset-modal-label", children: _jsx("div", { children: "\uC774\uBBF8\uC9C0 \uC720\uD615" }) }), _jsx(TextInput, { placeHolder: '이미지 유형', value: currentIndex === undefined ? '' : defaultString(value?.assets?.[currentIndex].name), readonly: currentIndex !== undefined && tags.includes(defaultString(value?.assets?.[currentIndex ?? 0].name)), onChange: (value) => {
+                }, children: _jsxs(Paper, { className: "rcm-asset-modal-body", children: [_jsxs("div", { children: [_jsx("div", { className: "rcm-asset-modal-label", children: _jsx("div", { children: "\uC774\uBBF8\uC9C0 \uC720\uD615" }) }), _jsx(TextInput, { placeHolder: '이미지 유형', value: currentIndex === undefined
+                                        ? ''
+                                        : defaultString(value?.assets?.[currentIndex]?.name), readonly: currentIndex !== undefined &&
+                                        tags.includes(defaultString(value?.assets?.[currentIndex ?? 0]?.name)), onChange: (value) => {
                                         setError('');
                                         if (isBlank(value)) {
                                             setError('이미지의 이름을 영문/숫자로 입력하세요.');
@@ -166,8 +171,9 @@ const MultipleAssetFieldView = (props) => {
                                                 setCurrentEdit(currentItem);
                                             }
                                         }
-                                    }, name: `item` }), currentIndex === undefined &&
-                                    _jsx(ViewHelpText, { helpText: 'Front 에서 이 이미지를 식별하기 위한 Key입니다. 영문 소문자/숫자만 입력할 수 있습니다.' })] }), _jsxs("div", { children: [_jsx("div", { className: "rcm-asset-modal-label", children: _jsx("div", { children: "Alt Tag" }) }), _jsx(TextInput, { placeHolder: 'Alt tag', tooltip: { label: '이미지가 표시될 때 &lt;img> 태그에 alt 속성값을 정의할 수 있습니다.' }, value: defaultString(value?.assets?.[currentIndex ?? 0].description), onChange: (value) => {
+                                    }, name: `item` }), currentIndex === undefined && (_jsx(ViewHelpText, { helpText: 'Front 에서 이 이미지를 식별하기 위한 Key입니다. 영문 소문자/숫자만 입력할 수 있습니다.' }))] }), _jsxs("div", { children: [_jsx("div", { className: "rcm-asset-modal-label", children: _jsx("div", { children: "Alt Tag" }) }), _jsx(TextInput, { placeHolder: 'Alt tag', tooltip: {
+                                        label: '이미지가 표시될 때 &lt;img> 태그에 alt 속성값을 정의할 수 있습니다.',
+                                    }, value: defaultString(value?.assets?.[currentIndex ?? 0]?.description), onChange: (value) => {
                                         const currentItem = { ...currentEdit };
                                         currentItem.description = value;
                                         setCurrentEdit(currentItem);
@@ -196,6 +202,6 @@ const MultipleAssetFieldView = (props) => {
                                             props.onChange(values, currentEdit.name === 'Primary');
                                             closeUpload();
                                         }
-                                    }, children: currentIndex === undefined ? '이미지 등록' : '이미지 수정' })] })] }, `image-upload${currentIndex}`) })] });
+                                    }, children: currentIndex === undefined ? '이미지 등록' : '이미지 수정' })] })] }, `image-upload${currentIndex}`) }))] }));
 };
 //# sourceMappingURL=MultipleAssetField.js.map

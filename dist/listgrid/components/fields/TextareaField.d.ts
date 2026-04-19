@@ -1,15 +1,15 @@
 import { FormField, FormFieldProps } from './abstract';
-import React from "react";
+import React from 'react';
 import { RenderType } from '../../config/Config';
 import { FieldRenderParameters } from '../../config/EntityField';
-import { MinMaxLimit } from "../../form/Type";
+import { MinMaxLimit } from '../../form/Type';
 interface TextareaFieldProps extends FormFieldProps {
-    rows?: number;
-    limit?: MinMaxLimit;
+    rows?: number | undefined;
+    limit?: MinMaxLimit | undefined;
 }
 export declare class TextareaField extends FormField<TextareaField> {
-    rows?: number;
-    limit?: MinMaxLimit;
+    rows?: number | undefined;
+    limit?: MinMaxLimit | undefined;
     constructor(name: string, order: number, rows?: number, limit?: MinMaxLimit);
     getCurrentValue(renderType?: RenderType): Promise<any>;
     /**

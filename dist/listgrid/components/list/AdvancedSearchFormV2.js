@@ -7,14 +7,14 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * You may obtain a copy of the License under controlled by GJCU
  */
 import { SearchForm } from '../../form/SearchForm';
-import { AbstractManyToOneField, MultipleOptionalField, OptionalField } from '../fields/abstract';
-import React, { Fragment, useCallback, useEffect, useMemo, useReducer, } from 'react';
+import { AbstractManyToOneField, MultipleOptionalField, OptionalField, } from '../fields/abstract';
+import React, { Fragment, useCallback, useEffect, useMemo, useReducer } from 'react';
 import { getTranslation } from '../../utils/i18n';
 import { Transition } from '@headlessui/react';
 import { isBlank } from '../../utils/StringUtil';
 import { MemoizedFilterField } from './ui/MemoizedFilterField';
 import { FieldSelector } from './ui/FieldSelector';
-import { IconLayoutGrid, IconLayoutList, IconRefresh, IconSearch, IconX } from '@tabler/icons-react';
+import { IconLayoutGrid, IconLayoutList, IconRefresh, IconSearch, IconX, } from '@tabler/icons-react';
 // NOT condition check utility
 const isNotCondition = (queryConditionType) => {
     if (!queryConditionType)
@@ -53,13 +53,13 @@ function searchFormReducer(state, action) {
             }
             else if (hasMultipleQuickSearchFields) {
                 // quickSearch 필드가 2개 이상인 경우, AND 필터 존재 여부 확인
-                andFilters.forEach(filter => {
+                andFilters.forEach((filter) => {
                     // 직접 매칭
                     if (quickSearchFieldNames.has(filter.name)) {
                         quickSearchFieldsWithAndFilter.push(filter.name);
                     }
                     // ManyToOne 필드의 경우 .id 접미사 제거하여 확인
-                    [...quickSearchFieldNames].forEach(fieldName => {
+                    [...quickSearchFieldNames].forEach((fieldName) => {
                         if (filter.name === `${fieldName}.id`) {
                             quickSearchFieldsWithAndFilter.push(fieldName);
                         }
@@ -73,7 +73,7 @@ function searchFormReducer(state, action) {
             let newSelectedFields = state.selectedFields;
             if (!useQuickSearchMode && quickSearchFieldsWithAndFilter.length > 0) {
                 newSelectedFields = new Set(state.selectedFields);
-                quickSearchFieldsWithAndFilter.forEach(fieldName => {
+                quickSearchFieldsWithAndFilter.forEach((fieldName) => {
                     newSelectedFields.add(fieldName);
                 });
             }
@@ -153,7 +153,7 @@ export const AdvancedSearchFormV2 = ({ fields, entityForm, listFieldNames, quick
         const names = new Set();
         names.add(quickSearchProperty.name);
         if (quickSearchProperty.orFields) {
-            quickSearchProperty.orFields.forEach(name => names.add(name));
+            quickSearchProperty.orFields.forEach((name) => names.add(name));
         }
         return names;
     }, [quickSearchProperty]);
@@ -168,11 +168,11 @@ export const AdvancedSearchFormV2 = ({ fields, entityForm, listFieldNames, quick
     }, [fields]);
     // QuickSearch가 아닌 일반 필드들
     const regularFields = useMemo(() => {
-        return filterableFields.filter(field => !quickSearchFieldNames.has(field.getName()));
+        return filterableFields.filter((field) => !quickSearchFieldNames.has(field.getName()));
     }, [filterableFields, quickSearchFieldNames]);
     // QuickSearch 필드들
     const quickSearchFields = useMemo(() => {
-        return filterableFields.filter(field => quickSearchFieldNames.has(field.getName()));
+        return filterableFields.filter((field) => quickSearchFieldNames.has(field.getName()));
     }, [filterableFields, quickSearchFieldNames]);
     // Initialize selected fields based on listFieldNames (columns shown in list)
     // Include ALL listFieldNames (including quickSearch fields) for consistent display
@@ -200,7 +200,7 @@ export const AdvancedSearchFormV2 = ({ fields, entityForm, listFieldNames, quick
             initializedRef.current = true;
             dispatch({
                 type: 'INIT_SELECTED_FIELDS',
-                payload: { listFieldNames }
+                payload: { listFieldNames },
             });
         }
     }, [listFieldNames]);
@@ -214,7 +214,7 @@ export const AdvancedSearchFormV2 = ({ fields, entityForm, listFieldNames, quick
                 quickSearchValue,
                 hasMultipleQuickSearchFields,
                 quickSearchFieldNames,
-            }
+            },
         });
     }, [searchForm, hasMultipleQuickSearchFields, quickSearchFieldNames]);
     // Memoized handlers
@@ -266,7 +266,10 @@ export const AdvancedSearchFormV2 = ({ fields, entityForm, listFieldNames, quick
         if (state.tempSearchForm) {
             const newForm = state.tempSearchForm.clone();
             if (quickSearchProperty) {
-                const allQuickSearchFields = [quickSearchProperty.name, ...(quickSearchProperty.orFields ?? [])];
+                const allQuickSearchFields = [
+                    quickSearchProperty.name,
+                    ...(quickSearchProperty.orFields ?? []),
+                ];
                 // 통합검색 모드인 경우 quickSearch 필드들에 OR 조건으로 검색 적용
                 if (state.useQuickSearchMode && !isBlank(state.quickSearchValue)) {
                     newForm.handleQuickSearch(state.quickSearchValue, allQuickSearchFields);
@@ -278,7 +281,13 @@ export const AdvancedSearchFormV2 = ({ fields, entityForm, listFieldNames, quick
             }
             props.onSubmit(newForm);
         }
-    }, [state.tempSearchForm, state.useQuickSearchMode, state.quickSearchValue, quickSearchProperty, props]);
+    }, [
+        state.tempSearchForm,
+        state.useQuickSearchMode,
+        state.quickSearchValue,
+        quickSearchProperty,
+        props,
+    ]);
     const handleToggleView = useCallback(() => {
         dispatch({ type: 'TOGGLE_VIEW' });
     }, []);
@@ -292,9 +301,7 @@ export const AdvancedSearchFormV2 = ({ fields, entityForm, listFieldNames, quick
     const getFieldValue = useCallback((field) => {
         if (!state.tempSearchForm)
             return null;
-        const fieldName = field instanceof AbstractManyToOneField
-            ? field.getName() + '.id'
-            : field.getName();
+        const fieldName = field instanceof AbstractManyToOneField ? field.getName() + '.id' : field.getName();
         // AND 조건에서 필터 조회
         const andFilters = state.tempSearchForm.getFilters().get('AND');
         const filterItem = andFilters?.find((item) => item.name === fieldName);
@@ -303,7 +310,7 @@ export const AdvancedSearchFormV2 = ({ fields, entityForm, listFieldNames, quick
             return null;
         }
         if (filterItem) {
-            return (filterItem.values && filterItem.values.length > 0)
+            return filterItem.values && filterItem.values.length > 0
                 ? filterItem.values
                 : filterItem.value;
         }
@@ -326,7 +333,7 @@ export const AdvancedSearchFormV2 = ({ fields, entityForm, listFieldNames, quick
         }
         // orFieldLabels가 있으면 추가
         if (quickSearchProperty.orFieldLabels) {
-            quickSearchProperty.orFieldLabels.forEach(label => {
+            quickSearchProperty.orFieldLabels.forEach((label) => {
                 if (typeof label === 'string') {
                     labels.push(t(label));
                 }

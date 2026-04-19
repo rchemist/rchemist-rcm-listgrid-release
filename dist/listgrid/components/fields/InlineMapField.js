@@ -6,7 +6,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import { FormField } from './abstract';
-import { InlineMap } from "../../ui";
+import { InlineMap } from '../../ui';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
 export class InlineMapField extends FormField {
     constructor(name, order, config) {
@@ -31,7 +31,7 @@ export class InlineMapField extends FormField {
      */
     renderInstance(params) {
         return (async () => {
-            return _jsx(InlineMap, { config: this.config, pendingRef: this.pendingRef, ...await getInputRendererParameters(this, params) });
+            return (_jsx(InlineMap, { config: this.config, pendingRef: this.pendingRef, ...await getInputRendererParameters(this, params) }));
         })();
     }
     /**
@@ -43,19 +43,35 @@ export class InlineMapField extends FormField {
         return instance;
     }
     withKeys(keys) {
-        this.config = { keys: keys, limit: this.config?.limit, resultType: this.config?.resultType };
+        this.config = {
+            ...(keys !== undefined ? { keys } : {}),
+            ...(this.config?.limit !== undefined ? { limit: this.config.limit } : {}),
+            ...(this.config?.resultType !== undefined ? { resultType: this.config.resultType } : {}),
+        };
         return this;
     }
     useResultMap() {
-        this.config = { keys: this.config?.keys, limit: this.config?.limit, resultType: 'Map' };
+        this.config = {
+            ...(this.config?.keys !== undefined ? { keys: this.config.keys } : {}),
+            ...(this.config?.limit !== undefined ? { limit: this.config.limit } : {}),
+            resultType: 'Map',
+        };
         return this;
     }
     useKeyValue() {
-        this.config = { keys: this.config?.keys, limit: this.config?.limit, resultType: 'KeyValue' };
+        this.config = {
+            ...(this.config?.keys !== undefined ? { keys: this.config.keys } : {}),
+            ...(this.config?.limit !== undefined ? { limit: this.config.limit } : {}),
+            resultType: 'KeyValue',
+        };
         return this;
     }
     withLimit(limit) {
-        this.config = { keys: this.config?.keys, limit: limit, resultType: this.config?.resultType };
+        this.config = {
+            ...(this.config?.keys !== undefined ? { keys: this.config.keys } : {}),
+            ...(limit !== undefined ? { limit } : {}),
+            ...(this.config?.resultType !== undefined ? { resultType: this.config.resultType } : {}),
+        };
         return this;
     }
     withConfig(config) {
@@ -70,8 +86,7 @@ export class InlineMapField extends FormField {
         return super.withDefaultValue(value);
     }
     static create(props) {
-        return new InlineMapField(props.name, props.order, props.config)
-            .copyFields(props, true);
+        return new InlineMapField(props.name, props.order, props.config).copyFields(props, true);
     }
 }
 //# sourceMappingURL=InlineMapField.js.map

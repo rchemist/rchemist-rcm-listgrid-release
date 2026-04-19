@@ -1,5 +1,5 @@
-import React from "react";
-import { CustomFieldRendererProps } from "../../form/types/ViewEntityFormTheme.types";
+import React from 'react';
+import { CustomFieldRendererProps } from '../../form/types/ViewEntityFormTheme.types';
 /**
  * 카드 아이템의 스타일/렌더링 설정
  */

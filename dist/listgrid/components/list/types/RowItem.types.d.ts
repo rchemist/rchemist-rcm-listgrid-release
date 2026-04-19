@@ -1,7 +1,7 @@
 import { EntityForm } from '../../../config/EntityForm';
-import { ReactNode } from "react";
-import { ListableFormField } from "../../fields/abstract";
-import { ItemCheckable, OpenInNewWindowOptions, SelectionOptions, ViewFieldManageable } from "./ViewListGrid.types";
+import { ReactNode } from 'react';
+import { ListableFormField } from '../../fields/abstract';
+import { ItemCheckable, OpenInNewWindowOptions, SelectionOptions, ViewFieldManageable } from './ViewListGrid.types';
 import { Session } from '../../../auth/types';
 /** Inline expansion state for SubCollection */
 export interface InlineExpansionState {

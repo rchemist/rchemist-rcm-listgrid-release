@@ -2,12 +2,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useState, useMemo } from 'react';
 // Field types that should span full width in the card grid
-const FULL_WIDTH_FIELD_TYPES = [
-    'textarea',
-    'html',
-    'markdown',
-    'contentAsset',
-];
+const FULL_WIDTH_FIELD_TYPES = ['textarea', 'html', 'markdown', 'contentAsset'];
 /**
  * Determines if a field type should span the full width of the card
  */
@@ -70,9 +65,7 @@ export const CardFieldRenderer = ({ field, item, itemEntityForm, parentEntityFor
         group/field flex flex-col py-2.5
         ${shouldBeFullWidth ? 'col-span-2' : ''}
       `, children: [_jsx("dt", { className: "\n        text-[11px] font-medium uppercase tracking-wider\n        text-gray-400\n        mb-1\n        transition-colors duration-150\n        group-hover/field:text-gray-500\n        dark:text-gray-500\n        dark:group-hover/field:text-gray-400\n      ", children: label }), _jsx("dd", { className: "\n        text-[13px] font-medium leading-relaxed\n        text-gray-700 dark:text-gray-200\n        min-h-[20px]\n      ", children: isLoading ? (_jsx("span", { className: "\n            inline-block h-5 w-24\n            animate-pulse rounded-md\n            bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100\n            dark:from-gray-800 dark:via-gray-700 dark:to-gray-800\n            bg-[length:200%_100%]\n          " })) : (_jsx("span", { className: `
-            ${shouldBeFullWidth
-                        ? 'whitespace-pre-wrap break-words'
-                        : 'line-clamp-2'}
+            ${shouldBeFullWidth ? 'whitespace-pre-wrap break-words' : 'line-clamp-2'}
           `, children: renderedValue })) })] }));
 };
 export default CardFieldRenderer;

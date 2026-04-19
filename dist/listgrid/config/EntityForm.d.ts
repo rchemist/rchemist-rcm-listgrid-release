@@ -6,12 +6,13 @@ import { Session } from '../auth';
 import { EntityFormExtensions } from './form/EntityFormExtensions';
 import { FieldError, SubmitFormData } from './EntityFormTypes';
 import { ValidateResult } from '../validations/Validation';
-export declare class EntityForm extends EntityFormExtensions {
+export declare class EntityForm<T extends object = any> extends EntityFormExtensions<T> {
     constructor(name: string, url: string);
-    clone(includeValue?: boolean): EntityForm;
-    cloneWithEntityForm(entityForm: EntityForm, includeValue?: boolean): EntityForm;
+    clone(includeValue?: boolean): EntityForm<T>;
+    cloneWithEntityForm(entityForm: EntityForm<T>, includeValue?: boolean): EntityForm<T>;
     executeOnChanges(fieldName: string): Promise<void>;
-    merge(origin: EntityForm): this;
+    merge(origin: EntityForm<T>): this;
+    setFetchedValue<K extends keyof T & string>(fieldName: K, value: T[K]): this;
     setFetchedValue(fieldName: string, value: any): this;
     withAppendAdvancedSearchFields(...fields: ListableFormField<any>[]): this;
     /**
@@ -79,23 +80,23 @@ export declare class EntityForm extends EntityFormExtensions {
     delete(): Promise<EntityFormActionResult>;
     deleteAll(idList: (string | number | bigint | null | undefined)[]): Promise<EntityFormActionResult>;
     getFields(type?: FieldType, orderByView?: boolean): EntityField[];
-    withOverrideSubmitData(fn: (entityForm: EntityForm, data: any) => Promise<{
+    withOverrideSubmitData(fn: (entityForm: EntityForm<T>, data: any) => Promise<{
         data: any;
         modifiedFields?: string[];
         removePrevious?: boolean;
         error?: boolean;
         errors?: FieldError[];
     }>): this;
-    setFetchedValues(entity: any): Promise<EntityForm>;
+    setFetchedValues(entity: Partial<T> | any): Promise<EntityForm<T>>;
     fetchData(fetchUrl?: string): Promise<ResponseData>;
     internalSave(session?: Session, skipValidation?: boolean, forceIncludeExceptOnSave?: boolean): Promise<EntityFormActionResult>;
     save(session?: Session, skipValidation?: boolean, forceIncludeExceptOnSave?: boolean): Promise<EntityFormActionResult>;
     getSubmitFormData(forceIncludeExceptOnSave?: boolean): Promise<SubmitFormData>;
     validate(props?: {
-        fieldNames?: string[];
-        session?: Session;
+        fieldNames?: string[] | undefined;
+        session?: Session | undefined;
     }): Promise<FieldError[]>;
-    withCheckDuplicate(fieldName: string, checkDuplicate: (entityForm: EntityForm, value: string) => Promise<ValidateResult>): this;
+    withCheckDuplicate(fieldName: string, checkDuplicate: (entityForm: EntityForm<T>, value: string) => Promise<ValidateResult>): this;
     withFieldToLayout(layout: 'full' | 'half'): this;
 }
 //# sourceMappingURL=EntityForm.d.ts.map

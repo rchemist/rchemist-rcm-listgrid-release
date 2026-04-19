@@ -6,19 +6,19 @@ import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-run
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import { RuleConditionValue, } from './Type';
-import { isEmpty } from "../../../utils";
-import { IconBox } from "@tabler/icons-react";
-import { SelectBox } from "../../../ui";
+import { isEmpty } from '../../../utils';
+import { IconBox } from '@tabler/icons-react';
+import { SelectBox } from '../../../ui';
 import { isBlank } from '../../../utils/StringUtil';
 import { RuleCondition } from './RuleCondition';
 import { isTrue } from '../../../utils/BooleanUtil';
-import { getQueryConditionValueType, SearchForm } from "../../../form/SearchForm";
-import { getExternalApiDataWithError } from "../../../misc";
-import { ViewHelpText } from "../../form/ui/ViewHelpText";
-import { ViewFieldError } from "../../form/ui/ViewFieldError";
-import { useLoadingStore } from "../../../loading";
+import { getQueryConditionValueType, SearchForm } from '../../../form/SearchForm';
+import { getExternalApiDataWithError } from '../../../misc';
+import { ViewHelpText } from '../../form/ui/ViewHelpText';
+import { ViewFieldError } from '../../form/ui/ViewFieldError';
+import { useLoadingStore } from '../../../loading';
 export const RuleBasedFieldsView = (props) => {
     // 기본적으로 리스트의 필드들은 검색이 가능하다는 뜻이다.
     const [condition, setCondition] = useState('AND');
@@ -34,7 +34,10 @@ export const RuleBasedFieldsView = (props) => {
         }
         else if (typeof props.value === 'object' && props.value !== null) {
             // 객체인 경우 Map으로 변환 시도
-            const newMap = new Map(Object.entries(props.value).map(([key, value]) => [Number(key), value]));
+            const newMap = new Map(Object.entries(props.value).map(([key, value]) => [
+                Number(key),
+                value,
+            ]));
             setRuleConditions(newMap);
         }
         else {
@@ -84,21 +87,24 @@ export const RuleBasedFieldsView = (props) => {
         }
         return props.entityForms[0];
     }
-    return _jsxs(_Fragment, { children: [_jsxs("div", { className: "rcm-rule-wrap", children: [_jsxs("div", { className: `rcm-rule-inner ${isButton ? 'rcm-rule-inner-button' : 'rcm-rule-inner-plain'}`, children: [isButton && _jsxs(_Fragment, { children: [_jsx("div", { className: "rcm-rule-icon-badge", children: _jsx(IconBox, { className: "rcm-rule-icon-badge-icon" }) }), _jsx("h5", { className: "rcm-rule-title", children: props.label }), props.helpText && _jsx(ViewHelpText, { helpText: props.helpText })] }), _jsxs("div", { className: 'flex gap-3 items-center', children: [(props.entityForms.length > 1) && _jsx("div", { className: 'min-w-[200px]', children: _jsx(SelectBox, { options: targetEntityOptions, value: targetRuleFieldEntityForm?.prefix ?? '', required: true, onChange: (prefix) => {
+    return (_jsxs(_Fragment, { children: [_jsxs("div", { className: "rcm-rule-wrap", children: [_jsxs("div", { className: `rcm-rule-inner ${isButton ? 'rcm-rule-inner-button' : 'rcm-rule-inner-plain'}`, children: [isButton && (_jsxs(_Fragment, { children: [_jsx("div", { className: "rcm-rule-icon-badge", children: _jsx(IconBox, { className: "rcm-rule-icon-badge-icon" }) }), _jsx("h5", { className: "rcm-rule-title", children: props.label }), props.helpText && _jsx(ViewHelpText, { helpText: props.helpText })] })), _jsxs("div", { className: 'flex gap-3 items-center', children: [props.entityForms.length > 1 && (_jsx("div", { className: 'min-w-[200px]', children: _jsx(SelectBox, { options: targetEntityOptions, value: targetRuleFieldEntityForm?.prefix ?? '', required: true, onChange: (prefix) => {
                                                 for (const form of props.entityForms) {
                                                     if (form.prefix === prefix) {
                                                         setTargetRuleFieldEntityForm(form);
                                                         break;
                                                     }
                                                 }
-                                            }, name: 'chooseTargetEntityForm' }) }), _jsx("div", { className: 'min-w-[200px]', children: _jsx(SelectBox, { options: [{ label: 'AND', value: 'AND' }, { label: 'OR', value: 'OR' }], value: condition ?? 'AND', required: true, onChange: (condition) => {
+                                            }, name: 'chooseTargetEntityForm' }) })), _jsx("div", { className: 'min-w-[200px]', children: _jsx(SelectBox, { options: [
+                                                { label: 'AND', value: 'AND' },
+                                                { label: 'OR', value: 'OR' },
+                                            ], value: condition ?? 'AND', required: true, onChange: (condition) => {
                                                 setCondition(condition);
-                                            }, name: 'chooseCondition' }) }), _jsx("div", { children: _jsx("button", { className: 'btn btn-secondary h-[36px]', disabled: (condition === undefined || targetRuleFieldEntityForm === undefined), onClick: () => {
+                                            }, name: 'chooseCondition' }) }), _jsx("div", { children: _jsx("button", { className: 'btn btn-secondary h-[36px]', disabled: condition === undefined || targetRuleFieldEntityForm === undefined, onClick: () => {
                                                 addNewRuleCondition();
-                                            }, children: "\uCD94\uAC00" }) })] })] }), !isBlank(submitError) && _jsx("div", { className: 'px-2 mt-5', children: _jsx(ViewFieldError, { errors: [submitError] }) })] }), function () {
+                                            }, children: "\uCD94\uAC00" }) })] })] }), !isBlank(submitError) && (_jsx("div", { className: 'px-2 mt-5', children: _jsx(ViewFieldError, { errors: [submitError] }) }))] }), (function () {
                 if (hasConditions) {
                     const conditionViews = [];
-                    ruleConditions.forEach(c => {
+                    ruleConditions.forEach((c) => {
                         conditionViews.push(_jsx(RuleCondition, { id: c.id, condition: c.condition, targetEntityForm: getTargetEntityForm(c.targetEntityPrefix), clearError: () => {
                                 clearErrorById(c.id);
                             }, fieldErrors: fieldErrors.get(c.id) ?? new Map(), setFieldError: (error) => {
@@ -122,12 +128,11 @@ export const RuleBasedFieldsView = (props) => {
                     return conditionViews;
                 }
                 return null;
-            }(), props.viewType === 'selector' &&
-                _jsxs("div", { className: 'flex gap-3 items-center justify-center mt-5', children: [_jsx("button", { className: 'btn btn-outline-secondary h-[34px]', onClick: () => {
-                                props.onCancel();
-                            }, children: "\uB2EB\uAE30" }), _jsxs("button", { className: 'btn btn-secondary h-[34px]', disabled: !filtered, onClick: () => {
-                                submit();
-                            }, children: ["\uAC80\uC0C9 \uD6C4 ", props.type === 'add' ? '등록' : '제거'] })] })] });
+            })(), props.viewType === 'selector' && (_jsxs("div", { className: 'flex gap-3 items-center justify-center mt-5', children: [_jsx("button", { className: 'btn btn-outline-secondary h-[34px]', onClick: () => {
+                            props.onCancel();
+                        }, children: "\uB2EB\uAE30" }), _jsxs("button", { className: 'btn btn-secondary h-[34px]', disabled: !filtered, onClick: () => {
+                            submit();
+                        }, children: ["\uAC80\uC0C9 \uD6C4 ", props.type === 'add' ? '등록' : '제거'] })] }))] }));
     function clearError() {
         setSubmitError('');
         setFieldErrors(new Map());
@@ -186,14 +191,16 @@ export const RuleBasedFieldsView = (props) => {
                 const currentQueryConditionType = fieldValue.queryConditionType;
                 const currentValueType = getQueryConditionValueType(currentQueryConditionType);
                 if (currentValueType !== 'NONE') {
-                    if (fieldValue.values === undefined || fieldValue.values.length === 0 || isBlank(fieldValue.values[0])) {
+                    if (fieldValue.values === undefined ||
+                        fieldValue.values.length === 0 ||
+                        isBlank(fieldValue.values[0])) {
                         ruleError.set(ruleCondition.id, `${field?.getLabel()} 의 검색어를 입력하세요.`);
                     }
                     if (currentValueType === 'RANGE') {
-                        if (fieldValue.values === undefined
-                            || fieldValue.values.length !== 2
-                            || isBlank(fieldValue.values[0])
-                            || isBlank(fieldValue.values[1])) {
+                        if (fieldValue.values === undefined ||
+                            fieldValue.values.length !== 2 ||
+                            isBlank(fieldValue.values[0]) ||
+                            isBlank(fieldValue.values[1])) {
                             ruleError.set(ruleCondition.id, `${field?.getLabel()} 의 검색 범위를 알맞게 입력하세요.`);
                         }
                     }
@@ -225,14 +232,18 @@ export const RuleBasedFieldsView = (props) => {
                         name: fieldValue.name,
                         queryConditionType: queryConditionType,
                         value: queryConditionType === 'EQUAL' ? fieldValue.values[0] : undefined,
-                        values: queryConditionType !== 'EQUAL' ? fieldValue.values : undefined
+                        values: queryConditionType !== 'EQUAL' ? fieldValue.values : undefined,
                     });
-                    if (!fieldValue.name.endsWith("Id")) {
+                    if (!fieldValue.name.endsWith('Id')) {
                         filterItems.push({
-                            name: fieldValue.name + "Id",
+                            name: fieldValue.name + 'Id',
                             queryConditionType: queryConditionType,
-                            value: getQueryConditionValueType(queryConditionType) === 'SINGLE' ? fieldValue.values[0] : undefined,
-                            values: getQueryConditionValueType(queryConditionType) !== 'SINGLE' ? fieldValue.values : undefined
+                            value: getQueryConditionValueType(queryConditionType) === 'SINGLE'
+                                ? fieldValue.values[0]
+                                : undefined,
+                            values: getQueryConditionValueType(queryConditionType) !== 'SINGLE'
+                                ? fieldValue.values
+                                : undefined,
                         });
                     }
                 }
@@ -241,7 +252,7 @@ export const RuleBasedFieldsView = (props) => {
                         name: fieldValue.name,
                         queryConditionType: queryConditionType,
                         value: queryConditionType === 'EQUAL' ? fieldValue.values[0] : undefined,
-                        values: queryConditionType !== 'EQUAL' ? fieldValue.values : undefined
+                        values: queryConditionType !== 'EQUAL' ? fieldValue.values : undefined,
                     });
                 }
             }
@@ -268,7 +279,7 @@ export const RuleBasedFieldsView = (props) => {
                     const response = await getExternalApiDataWithError({
                         url: props.apiUrl,
                         method: 'POST',
-                        formData: searchForm
+                        formData: searchForm,
                     });
                     if (response.data !== undefined) {
                         // 결과는 RuleMappingResult 의 형태로 넘어 온다.
@@ -279,7 +290,8 @@ export const RuleBasedFieldsView = (props) => {
                         else {
                             if (isTrue(response.data.duplicated)) {
                                 const found = Number(response.data.found);
-                                setSubmitError(found + ' 건의 데이터가 검색되었으나 모두 이미 등록되었습니다. 검색 조건을 다시 설정하거나 닫기를 눌러 주세요.');
+                                setSubmitError(found +
+                                    ' 건의 데이터가 검색되었으나 모두 이미 등록되었습니다. 검색 조건을 다시 설정하거나 닫기를 눌러 주세요.');
                             }
                             else {
                                 setSubmitError('해당 검색 설정으로 검색된 데이터가 없습니다. 검색 조건을 다시 설정해 주세요.');

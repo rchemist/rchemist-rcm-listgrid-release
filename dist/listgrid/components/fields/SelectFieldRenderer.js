@@ -12,13 +12,13 @@ import { useModalManagerStore } from '../../store';
 import { StatusChangeReasonModal } from './StatusChangeReasonModal';
 import { showAlert, showConfirm, showSuccess } from '../../message';
 import { useLoadingStore } from '../../loading';
-import { useRouter } from "../../router";
+import { useRouter } from '../../router';
 import { getExternalApiDataWithError, parse } from '../../utils';
-export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChange, entityForm, reason, validateStatusChange, immediateChangeProps, disabled }) => {
+export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChange, entityForm, reason, validateStatusChange, immediateChangeProps, disabled, }) => {
     const [selectedValue, setSelectedValue] = useState(value);
     const [isChanging, setIsChanging] = useState(false);
-    const openModal = useModalManagerStore(state => state.openModal);
-    const closeModal = useModalManagerStore(state => state.closeModal);
+    const openModal = useModalManagerStore((state) => state.openModal);
+    const closeModal = useModalManagerStore((state) => state.closeModal);
     const { setOpenBaseLoading } = useLoadingStore();
     const router = useRouter();
     // 서버에서 가져온 원본 값 (저장된 값)
@@ -27,7 +27,7 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
     // 서버에 저장된 원본 상태의 옵션 찾기 (readonly 체크 및 targets 필터링용)
     // readonly는 "현재 서버에 저장된 상태"가 readonly일 때만 적용되어야 함
     const originalOption = useMemo(() => {
-        return options.find(opt => opt.value === originalValue);
+        return options.find((opt) => opt.value === originalValue);
     }, [options, originalValue]);
     // readonly 여부 (disabled prop 또는 원본 상태가 readonly인 경우)
     const isReadonly = disabled || originalOption?.readonly;
@@ -36,12 +36,12 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
     const availableOptions = useMemo(() => {
         // readonly면 현재 선택된 값만 보여줌
         if (isReadonly) {
-            return options.filter(opt => opt.value === selectedValue);
+            return options.filter((opt) => opt.value === selectedValue);
         }
         if (!originalOption?.targets) {
             return options;
         }
-        return options.filter(opt => opt.value === originalValue || originalOption.targets?.includes(opt.value));
+        return options.filter((opt) => opt.value === originalValue || originalOption.targets?.includes(opt.value));
     }, [options, originalValue, originalOption, isReadonly, selectedValue]);
     // 변경 버튼 활성화 여부 (원본 값과 비교)
     const isChangeDisabled = useMemo(() => {
@@ -59,11 +59,11 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
         if (!reason || reason.length === 0)
             return null;
         // targets가 명시된 설정 찾기
-        const specificConfig = reason.find(r => r.targets && r.targets.includes(String(targetStatus)));
+        const specificConfig = reason.find((r) => r.targets && r.targets.includes(String(targetStatus)));
         if (specificConfig)
             return specificConfig.config;
         // targets가 없는 기본 설정 찾기
-        const defaultConfig = reason.find(r => !r.targets);
+        const defaultConfig = reason.find((r) => !r.targets);
         return defaultConfig ? defaultConfig.config : null;
     }, [reason]);
     // 상태 변경 처리 - EntityForm을 거치지 않고 직접 API 호출
@@ -75,7 +75,7 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
             showAlert({
                 title: '상태 변경 실패',
                 message: '저장되지 않은 항목의 상태는 변경할 수 없습니다.',
-                topLayer: true
+                topLayer: true,
             });
             return;
         }
@@ -88,8 +88,10 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
                 if (validationResult.error) {
                     showAlert({
                         title: '상태 변경 실패',
-                        message: validateStatusChange.message || String(validationResult.error) || '상태를 변경할 수 없습니다.',
-                        topLayer: true
+                        message: validateStatusChange.message ||
+                            String(validationResult.error) ||
+                            '상태를 변경할 수 없습니다.',
+                        topLayer: true,
                     });
                     if (validateStatusChange.fail) {
                         await validateStatusChange.fail(entityForm);
@@ -106,7 +108,7 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
             const formData = {
                 id: String(entityForm.id),
                 modifiedFields: modifiedFields,
-                [name]: selectedValue
+                [name]: selectedValue,
             };
             // requiredFields: EntityForm 표준 검증 경로로 추가 필드 검증/수집
             if (immediateChangeProps?.requiredFields) {
@@ -121,7 +123,7 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
                 // 1단계: EntityForm.validate()로 표시된 필드 검증 (required, pattern, custom validator 등 모두 적용)
                 if (visibleFields.length > 0) {
                     const fieldErrors = await entityForm.validate({
-                        fieldNames: visibleFields
+                        fieldNames: visibleFields,
                     });
                     if (fieldErrors.length > 0) {
                         const messages = fieldErrors.flatMap((e) => e.errors).filter(Boolean);
@@ -130,7 +132,7 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
                         showAlert({
                             title: '입력 오류',
                             message: messages.join('\n') || '입력 값이 올바르지 않습니다.',
-                            topLayer: true
+                            topLayer: true,
                         });
                         return;
                     }
@@ -156,7 +158,10 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
             }
             // onSubmit 전처리 콜백
             if (immediateChangeProps?.onSubmit) {
-                const result = await immediateChangeProps.onSubmit(entityForm, { targetValue: selectedValue, formData });
+                const result = await immediateChangeProps.onSubmit(entityForm, {
+                    targetValue: selectedValue,
+                    formData,
+                });
                 if (result === false) {
                     setOpenBaseLoading(false);
                     setIsChanging(false);
@@ -176,7 +181,7 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
             const response = await getExternalApiDataWithError({
                 url: targetUrl,
                 method: 'PUT',
-                formData: formData
+                formData: formData,
             });
             setOpenBaseLoading(false);
             if (response.error || !response.data) {
@@ -186,7 +191,8 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
                     let errorObject;
                     // entityError가 있으면 구조화된 정보 사용
                     if (response.entityError) {
-                        if (typeof response.entityError.error === 'object' && response.entityError.error !== null) {
+                        if (typeof response.entityError.error === 'object' &&
+                            response.entityError.error !== null) {
                             errorObject = response.entityError.error;
                         }
                         else if (typeof response.entityError.error === 'string') {
@@ -232,7 +238,9 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
                         }
                     }
                     // entityError에서 메시지 추출 실패 시 response.error 문자열 사용
-                    if (errorMessage === '상태를 변경할 수 없습니다.' && typeof response.error === 'string' && response.error) {
+                    if (errorMessage === '상태를 변경할 수 없습니다.' &&
+                        typeof response.error === 'string' &&
+                        response.error) {
                         errorMessage = response.error;
                     }
                 }
@@ -242,7 +250,7 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
                 showAlert({
                     title: '상태 변경 실패',
                     message: errorMessage,
-                    topLayer: true
+                    topLayer: true,
                 });
                 if (validateStatusChange?.fail) {
                     await validateStatusChange.fail(entityForm);
@@ -253,7 +261,7 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
                 showSuccess({
                     title: '상태 변경 완료',
                     message: '상태가 성공적으로 변경되었습니다.',
-                    topLayer: true
+                    topLayer: true,
                 });
                 // 부모 컴포넌트에 변경 알림
                 onChange(selectedValue);
@@ -270,7 +278,7 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
             setOpenBaseLoading(false);
             showAlert({
                 title: '상태 변경 오류',
-                message: '상태 변경 중 오류가 발생했습니다.'
+                message: '상태 변경 중 오류가 발생했습니다.',
             });
         }
         finally {
@@ -286,11 +294,11 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
         validateStatusChange,
         immediateChangeProps,
         setOpenBaseLoading,
-        router
+        router,
     ]);
     // 상태 라벨 가져오기
     const getStatusLabel = useCallback((statusValue) => {
-        const option = options.find(opt => opt.value === statusValue);
+        const option = options.find((opt) => opt.value === statusValue);
         return option?.label ?? String(statusValue ?? '');
     }, [options]);
     // 변경 버튼 클릭 처리 - 항상 컨펌 모달 표시
@@ -308,7 +316,7 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
                     }, onCancel: () => {
                         closeModal(modalId);
                     } })),
-                size: 'md'
+                size: 'md',
             });
         }
         else {
@@ -324,10 +332,19 @@ export const SelectFieldRenderer = ({ name, value, fetchedValue, options, onChan
                 topLayer: true,
                 onConfirm: () => {
                     handleStatusChange();
-                }
+                },
             });
         }
-    }, [getReasonConfigForStatusChange, getStatusLabel, selectedValue, originalValue, options, handleStatusChange, openModal, closeModal]);
+    }, [
+        getReasonConfigForStatusChange,
+        getStatusLabel,
+        selectedValue,
+        originalValue,
+        options,
+        handleStatusChange,
+        openModal,
+        closeModal,
+    ]);
     // RadioChip 값 변경 처리
     // 상위 EntityForm에 전파하여 isDirty 체크 가능하게 함
     // 변경 버튼은 originalValue와 비교하므로 onChange 호출해도 버튼 활성화 유지됨

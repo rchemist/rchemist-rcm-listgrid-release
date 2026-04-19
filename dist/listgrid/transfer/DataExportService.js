@@ -4,10 +4,10 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { createFieldMap } from '../transfer/Type';
-import { PageResult } from "../form/Type";
-import { getPlainText } from "../ui";
-import { isEmpty } from "../utils";
+import { createFieldMap, } from '../transfer/Type';
+import { PageResult } from '../form/Type';
+import { getPlainText } from '../ui';
+import { isEmpty } from '../utils';
 /**
  * 중첩 객체에서 dot notation 경로로 값을 가져온다.
  * 예: getNestedValue(item, 'semester.year') -> item.semester.year
@@ -39,21 +39,31 @@ export class DataExportService {
         this.fields = fields;
         this.restrictCount = restrictCount ?? 5000;
         this.pagePerCount = pagePerCount ?? 20;
-        this.setExportable = setExportable ?? function (_exportable) {
-            // no-op default
-        };
-        this.setFailedCount = setFailedCount ?? function (_count) {
-            // no-op default
-        };
-        this.setProgress = setProgress ?? function (_progress) {
-            // no-op default
-        };
-        this.setData = setData ?? function (_data) {
-            // no-op default
-        };
-        this.setError = setError ?? function (_errorMessage) {
-            // no-op default
-        };
+        this.setExportable =
+            setExportable ??
+                function (_exportable) {
+                    // no-op default
+                };
+        this.setFailedCount =
+            setFailedCount ??
+                function (_count) {
+                    // no-op default
+                };
+        this.setProgress =
+            setProgress ??
+                function (_progress) {
+                    // no-op default
+                };
+        this.setData =
+            setData ??
+                function (_data) {
+                    // no-op default
+                };
+        this.setError =
+            setError ??
+                function (_errorMessage) {
+                    // no-op default
+                };
         this.data = data ?? [];
         if (data) {
             this.restrictCount = data.length;
@@ -101,7 +111,7 @@ export class DataExportService {
                     return 100;
                 }
                 else {
-                    if ((page + 1) > this.total.totalPage) {
+                    if (page + 1 > this.total.totalPage) {
                         return 100;
                     }
                     this.searchForm.withPage(page); // page 변경

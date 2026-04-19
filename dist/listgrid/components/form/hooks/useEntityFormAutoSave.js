@@ -63,7 +63,7 @@ export function useEntityFormAutoSave({ entityForm, enabled, autoSaveKey, }) {
                 values,
                 savedAt: Date.now(),
                 entityName: entityForm.name,
-                entityId: entityForm.id,
+                ...(entityForm.id !== undefined ? { entityId: entityForm.id } : {}),
             };
             sessionStorage.setItem(storageKey, JSON.stringify(data));
         }

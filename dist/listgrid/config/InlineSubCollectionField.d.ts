@@ -56,9 +56,9 @@ export interface InlineRowActionColumn {
     /** Unique column identifier */
     id: string;
     /** Column header label (default: '작업') */
-    label?: string;
+    label?: string | undefined;
     /** Column order in the list (default: 9999) */
-    order?: number;
+    order?: number | undefined;
     /** Actions to display in this column */
     actions: InlineRowAction[];
 }
@@ -118,42 +118,42 @@ export interface InlineSubCollectionFetchOptions {
  * without detail view - only shows list with optional row actions
  */
 export declare class InlineSubCollectionField extends SubCollectionField {
-    tooltip?: TooltipType;
-    fetchOptions?: InlineSubCollectionFetchOptions;
+    tooltip?: TooltipType | undefined;
+    fetchOptions?: InlineSubCollectionFetchOptions | undefined;
     /** List fields to display - can be field names or detailed config */
-    inlineListFields?: (string | InlineListFieldConfig)[];
+    inlineListFields?: (string | InlineListFieldConfig)[] | undefined;
     /** Row action buttons @deprecated Use rowActionColumns instead */
-    inlineRowActions?: InlineRowAction[];
+    inlineRowActions?: InlineRowAction[] | undefined;
     /** Row actions column configuration @deprecated Use rowActionColumns instead */
-    inlineRowActionsConfig?: InlineRowActionsConfig;
+    inlineRowActionsConfig?: InlineRowActionsConfig | undefined;
     /** Row action columns - supports multiple action columns */
-    inlineRowActionColumns?: InlineRowActionColumn[];
+    inlineRowActionColumns?: InlineRowActionColumn[] | undefined;
     /** Pagination options */
-    inlinePagination?: InlinePaginationOptions;
+    inlinePagination?: InlinePaginationOptions | undefined;
     /** Global ListConfig applied to all fields */
-    inlineGlobalListConfig?: InlineGlobalListConfig;
+    inlineGlobalListConfig?: InlineGlobalListConfig | undefined;
     /** Hide title */
-    hideTitle?: boolean;
+    hideTitle?: boolean | undefined;
     constructor(props: {
         entityForm: EntityForm;
         relation: InlineSubCollectionRelation;
         order: number;
         name: string;
-        label?: LabelType;
-        helpText?: HelpTextType;
-        hidden?: HiddenType;
-        readonly?: ReadOnlyType;
-        listFields?: (string | InlineListFieldConfig)[];
+        label?: LabelType | undefined;
+        helpText?: HelpTextType | undefined;
+        hidden?: HiddenType | undefined;
+        readonly?: ReadOnlyType | undefined;
+        listFields?: (string | InlineListFieldConfig)[] | undefined;
         /** @deprecated Use rowActionColumns instead */
-        rowActions?: InlineRowAction[];
+        rowActions?: InlineRowAction[] | undefined;
         /** @deprecated Use rowActionColumns instead */
-        rowActionsConfig?: InlineRowActionsConfig;
+        rowActionsConfig?: InlineRowActionsConfig | undefined;
         /** Row action columns - supports multiple action columns */
-        rowActionColumns?: InlineRowActionColumn[];
-        pagination?: InlinePaginationOptions;
-        globalListConfig?: InlineGlobalListConfig;
-        fetchOptions?: InlineSubCollectionFetchOptions;
-        hideTitle?: boolean;
+        rowActionColumns?: InlineRowActionColumn[] | undefined;
+        pagination?: InlinePaginationOptions | undefined;
+        globalListConfig?: InlineGlobalListConfig | undefined;
+        fetchOptions?: InlineSubCollectionFetchOptions | undefined;
+        hideTitle?: boolean | undefined;
     });
     /**
      * Override withTooltip to support tooltips

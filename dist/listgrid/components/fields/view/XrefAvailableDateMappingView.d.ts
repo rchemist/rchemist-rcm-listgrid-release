@@ -1,6 +1,6 @@
 import { InputRendererProps } from '../../../config/Config';
 import { EntityForm } from '../../../config/EntityForm';
-import { FilterItem } from "../../../form/SearchForm";
+import { FilterItem } from '../../../form/SearchForm';
 interface XrefAvailableDateMappingViewProps extends InputRendererProps {
     entityForm: EntityForm;
     requiredAvailable?: boolean;

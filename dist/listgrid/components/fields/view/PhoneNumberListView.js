@@ -26,14 +26,14 @@ export const PhoneNumberListView = ({ phoneNumber, formattedValue, enableSms, se
             await navigator.clipboard.writeText(phoneNumber);
             showToast({
                 message: '전화번호가 복사되었습니다.',
-                color: 'success'
+                color: 'success',
             });
         }
         catch (error) {
             console.error('Failed to copy:', error);
             showToast({
                 message: '복사에 실패했습니다.',
-                color: 'danger'
+                color: 'danger',
             });
         }
     };

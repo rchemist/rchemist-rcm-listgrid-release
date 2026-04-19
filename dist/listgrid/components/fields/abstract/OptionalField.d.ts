@@ -1,6 +1,6 @@
-import { ListableFormField, ListableFormFieldProps, ViewListProps } from "./ListableFormField";
+import { ListableFormField, ListableFormFieldProps, ViewListProps } from './ListableFormField';
 import { ComboProps, FieldType, RenderType } from '../../../config/Config';
-import { MinMaxLimit, SelectOption } from "../../../form/Type";
+import { MinMaxLimit, SelectOption } from '../../../form/Type';
 import { ValidateResult } from '../../../validations/Validation';
 import { EntityForm } from '../../../config/EntityForm';
 import { Session } from '../../../auth/types';
@@ -12,14 +12,14 @@ export interface ChipConfig {
     maxOptions?: number;
     maxLabelLength?: number;
 }
-export interface OptionalFieldProps extends ListableFormFieldProps {
+export interface OptionalFieldProps<TValue = any, TForm extends object = any> extends ListableFormFieldProps<TValue, TForm> {
     combo?: ComboProps;
     options?: SelectOption[];
     preservedOptions?: SelectOption[];
     chipConfig?: ChipConfig;
     singleFilter?: boolean;
 }
-export declare abstract class OptionalField<T extends OptionalField<T>> extends ListableFormField<T> {
+export declare abstract class OptionalField<TSelf extends OptionalField<TSelf, TValue, TForm>, TValue = any, TForm extends object = any> extends ListableFormField<TSelf, TValue, TForm> {
     combo?: ComboProps;
     options?: SelectOption[];
     preservedOptions?: SelectOption[];
@@ -51,14 +51,14 @@ export declare abstract class OptionalField<T extends OptionalField<T>> extends 
      * - useChip(false): 강제 Chip 사용 안 함
      */
     shouldRenderAsChip(): boolean;
-    changeOptions(options: SelectOption[], defaultValue?: any): boolean;
+    changeOptions(options: SelectOption[], defaultValue?: TValue): boolean;
     revertOptions(renderType?: RenderType): boolean;
-    protected copyFields(origin: OptionalFieldProps, includeValue?: boolean): this;
+    protected copyFields(origin: OptionalFieldProps<TValue, TForm>, includeValue?: boolean): this;
 }
-export interface MultipleOptionalFieldProps extends OptionalFieldProps {
+export interface MultipleOptionalFieldProps<TValue = any, TForm extends object = any> extends OptionalFieldProps<TValue, TForm> {
     limit?: MinMaxLimit;
 }
-export declare abstract class MultipleOptionalField<T extends MultipleOptionalField<T>> extends OptionalField<T> {
+export declare abstract class MultipleOptionalField<TSelf extends MultipleOptionalField<TSelf, TValue, TForm>, TValue = any, TForm extends object = any> extends OptionalField<TSelf, TValue, TForm> {
     limit?: MinMaxLimit;
     /**
      * 복수 선택할 수 있는 최소, 최대 개수 설정
@@ -79,8 +79,8 @@ export declare abstract class MultipleOptionalField<T extends MultipleOptionalFi
     withMax(max?: number): this;
     protected createCacheKey(renderType?: RenderType): string;
     protected constructor(name: string, order: number, type: FieldType, options?: SelectOption[], limit?: MinMaxLimit);
-    protected copyFields(origin: OptionalFieldProps, includeValue?: boolean): this;
-    validate(entityForm: EntityForm, session?: Session): Promise<ValidateResult | ValidateResult[]>;
+    protected copyFields(origin: OptionalFieldProps<TValue, TForm>, includeValue?: boolean): this;
+    validate(entityForm: EntityForm<TForm>, session?: Session): Promise<ValidateResult | ValidateResult[]>;
     private validateWithLimit;
 }
 export declare function renderListOptionalField(field: OptionalField<any>, props: ViewListProps): Promise<{

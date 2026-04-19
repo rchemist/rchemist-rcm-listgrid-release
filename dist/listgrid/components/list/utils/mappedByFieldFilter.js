@@ -38,9 +38,9 @@ export function filterMappedByFields(fields, options) {
     // 3. Nested pattern (e.g., "student.*" from "studentId" or "enrollment.student.*" from "enrollment.student.id")
     const nestedPattern = `${baseField}.`;
     // 4. Add additional excludePatterns
-    excludePatterns.forEach(pattern => patternsToExclude.add(pattern));
+    excludePatterns.forEach((pattern) => patternsToExclude.add(pattern));
     // Filter fields
-    return fields.filter(field => {
+    return fields.filter((field) => {
         const fieldName = field.name;
         // Check if field is explicitly included
         if (includePatterns.includes(fieldName)) {

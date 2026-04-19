@@ -6,15 +6,15 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { ALWAYS, MODIFY_ONLY, NO_FILTER_SORT_ON_LIST } from '../../../config/Config';
+import { ALWAYS, MODIFY_ONLY, NO_FILTER_SORT_ON_LIST, } from '../../../config/Config';
 import { EntityForm } from '../../../config/EntityForm';
-import { useEffect, useState } from "react";
-import { Paper } from "../../../ui";
+import { useEffect, useState } from 'react';
+import { Paper } from '../../../ui';
 import { useModalManagerStore } from '../../../store';
 import { ViewListGrid } from '../../list/ViewListGrid';
 import { ListGrid } from '../../../config/ListGrid';
-import { SearchForm } from "../../../form/SearchForm";
-import { isEmpty } from "../../../utils";
+import { SearchForm } from '../../../form/SearchForm';
+import { isEmpty } from '../../../utils';
 import { ManyToOneField } from '../ManyToOneField';
 import { ViewEntityForm } from '../../form/ViewEntityForm';
 import { isTrue } from '../../../utils/BooleanUtil';
@@ -23,15 +23,17 @@ import { EntityFormButton } from '../../../config/EntityFormButton';
 import { ShowNotifications } from '../../helper/ShowNotifications';
 import { isBlank } from '../../../utils/StringUtil';
 const PreferredMappingEntityForm = (mapping) => {
-    return new EntityForm(mapping.label, '')
-        .addFields({
+    return new EntityForm(mapping.label, '').addFields({
         items: [
-            new ManyToOneField(mapping.name, 100, mapping.config).withLabel(mapping.label).withRequired(true),
-            new BooleanField('preferred', 200).withLabel(mapping.preferredLabel ?? '기본값')
+            new ManyToOneField(mapping.name, 100, mapping.config)
+                .withLabel(mapping.label)
+                .withRequired(true),
+            new BooleanField('preferred', 200)
+                .withLabel(mapping.preferredLabel ?? '기본값')
                 .withViewPreset(mapping.preferredViewPreset)
                 .withDefaultValue(false)
                 .withListConfig(NO_FILTER_SORT_ON_LIST),
-        ]
+        ],
     });
 };
 export const XrefPreferMappingView = ({ entityForm, ...props }) => {
@@ -92,27 +94,31 @@ export const XrefPreferMappingView = ({ entityForm, ...props }) => {
     if (filters.length > 0) {
         viewSearchForm.withFilter('AND', ...filters);
     }
+    const xrefFilter = isEmpty(idList) && filters.length === 0
+        ? undefined
+        : [
+            (entityForm) => {
+                const filterItems = [];
+                if (!isEmpty(idList)) {
+                    filterItems.push({ name: 'id', queryConditionType: 'NOT_IN', values: idList });
+                }
+                if (filters.length > 0) {
+                    filterItems.push(...filters);
+                }
+                return Promise.resolve(filterItems);
+            },
+        ];
     const xrefEntityForm = PreferredMappingEntityForm({
         value: mappingValue.mapped,
         config: {
             entityForm: entityForm,
-            filter: (isEmpty(idList) && filters.length === 0) ? undefined : [(entityForm) => {
-                    const filterItems = [];
-                    if (!isEmpty(idList)) {
-                        filterItems.push({ name: 'id', queryConditionType: 'NOT_IN', values: idList });
-                    }
-                    if (filters.length > 0) {
-                        filterItems.push(...filters);
-                    }
-                    return Promise.resolve(filterItems);
-                }],
+            ...(xrefFilter !== undefined ? { filter: xrefFilter } : {}),
         },
         name: 'mapping',
         label: labelText,
         exceptId: idList,
-        preferredViewPreset: preferredViewPreset
-    })
-        .withOnSave(async (entityForm) => {
+        preferredViewPreset: preferredViewPreset,
+    }).withOnSave(async (entityForm) => {
         const form = entityForm.clone(true);
         const fieldErrors = await entityForm.validate();
         if (!isEmpty(fieldErrors)) {
@@ -132,11 +138,14 @@ export const XrefPreferMappingView = ({ entityForm, ...props }) => {
             if (duplicated) {
                 // 에러를 내야 한다.
                 return {
-                    entityForm: form.withErrors([{
+                    entityForm: form.withErrors([
+                        {
                             name: 'mapping',
                             label: labelText,
-                            errors: ['이미 등록된 정보입니다.']
-                        }]), errors: ['이미 등록된 정보입니다.']
+                            errors: ['이미 등록된 정보입니다.'],
+                        },
+                    ]),
+                    errors: ['이미 등록된 정보입니다.'],
                 };
             }
         }
@@ -158,7 +167,7 @@ export const XrefPreferMappingView = ({ entityForm, ...props }) => {
         }
         return Promise.resolve({ entityForm });
     });
-    return _jsxs("div", { className: 'w-full', children: [!isBlank(notification) && _jsx(ShowNotifications, { messages: [notification], color: 'info', showClose: true }), _jsx(ViewListGrid, { listGrid: new ListGrid(entityForm).withSearchForm(viewSearchForm), options: {
+    return (_jsxs("div", { className: 'w-full', children: [!isBlank(notification) && (_jsx(ShowNotifications, { messages: [notification], color: 'info', showClose: true })), _jsx(ViewListGrid, { listGrid: new ListGrid(entityForm).withSearchForm(viewSearchForm), options: {
                     hideTitle: true,
                     filterable: false,
                     sortable: false,
@@ -170,7 +179,10 @@ export const XrefPreferMappingView = ({ entityForm, ...props }) => {
                         handleOpenModal(xrefEntityForm);
                     },
                     fields: [
-                        new BooleanField('preferred', 10000).withLabel(`기본 ${labelText}`).withSortable(false).withFilterable(false)
+                        new BooleanField('preferred', 10000)
+                            .withLabel(`기본 ${labelText}`)
+                            .withSortable(false)
+                            .withFilterable(false),
                     ],
                     onFetched: async (result) => {
                         // 필드의 값을 추가한다.
@@ -191,23 +203,24 @@ export const XrefPreferMappingView = ({ entityForm, ...props }) => {
                                 onDelete(checkedItems);
                             }
                             return Promise.resolve({ entityForm: _entityForm });
-                        }
+                        },
                     },
                     subCollection: {
-                        add: false, delete: true,
+                        add: false,
+                        delete: true,
                         modifyOnView: false,
                         buttons: [
-                            () => _jsx("button", { type: "button", className: `btn btn-outline-secondary`, disabled: readonly, onClick: () => {
+                            () => (_jsx("button", { type: "button", className: `btn btn-outline-secondary`, disabled: readonly, onClick: () => {
                                     handleOpenModal();
-                                }, children: "\uBD88\uB7EC\uC624\uAE30" })
-                        ]
-                    }
-                } }, listKey)] });
+                                }, children: "\uBD88\uB7EC\uC624\uAE30" })),
+                        ],
+                    },
+                } }, listKey)] }));
     function onDelete(idList) {
         if (mappingValue.mapped === undefined) {
             mappingValue.mapped = [];
         }
-        mappingValue.mapped = mappingValue.mapped.filter(x => !idList.includes(x.id));
+        mappingValue.mapped = mappingValue.mapped.filter((x) => !idList.includes(x.id));
         if (mappingValue.mapped.length > 0) {
             let found = false;
             for (const item of mappingValue.mapped) {
@@ -239,7 +252,7 @@ export const XrefPreferMappingView = ({ entityForm, ...props }) => {
                             closeModal(modalId);
                             setOnEditEntityForm(undefined);
                             return props.entityForm;
-                        })
+                        }),
                     ], postSave: async (entityForm) => {
                         // onSave에서 이미 mappingValue.mapped에 추가 완료
                         setValueAndReload({ ...mappingValue });
@@ -248,7 +261,7 @@ export const XrefPreferMappingView = ({ entityForm, ...props }) => {
                     } }) }, listKey)),
             onClose: () => {
                 setOnEditEntityForm(undefined);
-            }
+            },
         });
     }
 };

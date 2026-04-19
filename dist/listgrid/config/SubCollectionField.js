@@ -1,9 +1,9 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-import { DEFAULT_FIELD_GROUP_INFO, DEFAULT_TAB_INFO, getConditionalBoolean, getConditionalReactNode } from '../config/Config';
+import { DEFAULT_FIELD_GROUP_INFO, DEFAULT_TAB_INFO, getConditionalBoolean, getConditionalReactNode, } from '../config/Config';
 import { ListGrid } from '../config/ListGrid';
-import { isEmpty } from "../utils";
+import { isEmpty } from '../utils';
 import { AbstractManyToOneField, ListableFormField } from '../components/fields/abstract';
-import { ViewListGrid } from "../components/list/ViewListGrid";
+import { ViewListGrid } from '../components/list/ViewListGrid';
 export class SubCollectionField {
     constructor(props) {
         this.entityForm = props.entityForm;
@@ -140,14 +140,14 @@ export class SubCollectionField {
                         field.useListField();
                     }
                     else {
-                        field.listConfig = undefined;
+                        delete field.listConfig;
                     }
                 }
             });
         }
         return new ListGrid(entityForm);
     }
-    async render({ entityForm, session }) {
+    async render({ entityForm, session, }) {
         const listGrid = this.getListGrid(entityForm);
         const collectionEntityForm = listGrid.getEntityForm();
         if (this.relation?.subCollectionEntityForm?.manyToOneFilter) {
@@ -190,10 +190,12 @@ export class SubCollectionField {
                 return additionalFilters;
             }
             // 기본: mappedBy 필터만 반환
-            return [{
+            return [
+                {
                     condition: 'AND',
-                    items: [mappedByFilter]
-                }];
+                    items: [mappedByFilter],
+                },
+            ];
         };
         if (options.readonly === undefined) {
             options.readonly = readonly;
@@ -202,18 +204,19 @@ export class SubCollectionField {
             ...this.viewListOptions?.subCollection,
             name: this.getName(),
             mappedBy: this.viewListOptions?.subCollection?.mappedBy ?? this.relation.mappedBy,
-            mappedValue: this.viewListOptions?.subCollection?.mappedValue ?? this.getMappedByValue(entityForm)
+            mappedValue: this.viewListOptions?.subCollection?.mappedValue ?? this.getMappedByValue(entityForm),
         };
-        return Promise.resolve(_jsx(ViewListGrid, { listGrid: listGrid, parentId: entityForm.id, options: {
+        return Promise.resolve(_jsx(ViewListGrid, { listGrid: listGrid, ...(entityForm.id !== undefined ? { parentId: entityForm.id } : {}), options: {
                 ...options,
-                subCollection: subCollection
+                subCollection: subCollection,
             } }));
     }
     getMappedByFilter(entityForm) {
         const mappedBy = this.relation.mappedBy;
         // mappedBy 가 entityId 일 때 이걸 entity.id 로 변환해야 한다.
         // 연산자 우선순위: ?? 보다 삼항연산자가 먼저 평가되도록 괄호 추가
-        const filterBy = this.relation.filterBy ?? (mappedBy.endsWith('Id') ? mappedBy.replace('Id', '') + '.id' : mappedBy);
+        const filterBy = this.relation.filterBy ??
+            (mappedBy.endsWith('Id') ? mappedBy.replace('Id', '') + '.id' : mappedBy);
         const mappedValue = { name: filterBy };
         const mappedByValue = this.getMappedByValue(entityForm);
         if (mappedByValue !== undefined) {

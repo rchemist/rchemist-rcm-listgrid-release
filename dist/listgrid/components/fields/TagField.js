@@ -6,8 +6,8 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import { MultipleOptionalField, renderListMultipleOptionalField, } from './abstract';
-import { TagsInput } from "../../ui";
-import { isEmpty } from "../../utils";
+import { TagsInput } from '../../ui';
+import { isEmpty } from '../../utils';
 // CSS module removed in Stage 8 (host app supplies styling)
 const classes = {};
 export class TagField extends MultipleOptionalField {
@@ -38,13 +38,13 @@ export class TagField extends MultipleOptionalField {
             });
         };
         return (async () => {
-            return _jsx(TagsInput, { size: 'md', readOnly: params.readonly, required: params.required, disabled: params.readonly, minTags: this.limit?.min, classNames: {
+            return (_jsx(TagsInput, { size: 'md', readOnly: params.readonly, required: params.required, disabled: params.readonly, minTags: this.limit?.min, classNames: {
                     root: classes.root,
                     input: classes.input,
-                    wrapper: classes.wrapper
+                    wrapper: classes.wrapper,
                 }, maxTags: this.limit?.max, data: tagData, filter: optionsFilter, clearable: true, onChange: (value) => {
                     params.onChange(value);
-                }, onValidateTag: this.tagValidation, value: await this.getDisplayValue(params.entityForm, params.entityForm.getRenderType()) });
+                }, onValidateTag: this.tagValidation, value: await this.getDisplayValue(params.entityForm, params.entityForm.getRenderType()) }));
         })();
     }
     /**
@@ -54,7 +54,7 @@ export class TagField extends MultipleOptionalField {
         return this.renderInstance({
             ...params,
             required: false,
-            onChange: (value) => params.onChange(value)
+            onChange: (value) => params.onChange(value),
         });
     }
     /**
@@ -72,8 +72,7 @@ export class TagField extends MultipleOptionalField {
         return instance;
     }
     static create(props) {
-        const field = new TagField(props.name, props.order, props.options, props.limit)
-            .copyFields(props, true);
+        const field = new TagField(props.name, props.order, props.options, props.limit).copyFields(props, true);
         if (props.tagValidation) {
             field.tagValidation = props.tagValidation;
         }

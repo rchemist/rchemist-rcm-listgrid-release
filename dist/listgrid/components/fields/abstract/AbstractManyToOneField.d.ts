@@ -1,4 +1,4 @@
-import { ListableFormField, ListableFormFieldProps } from "./ListableFormField";
+import { ListableFormField, ListableFormFieldProps } from './ListableFormField';
 import { ManyToOneConfig, RenderType } from '../../../config/Config';
 import type { CardItemConfig } from '../view/CardManyToOneView';
 /**
@@ -49,7 +49,7 @@ export interface SelectBoxViewConfig {
     /** 메뉴 배치 */
     menuPlacement?: 'auto' | 'bottom' | 'top';
 }
-export interface AbstractManyToOneFieldProps extends ListableFormFieldProps {
+export interface AbstractManyToOneFieldProps<TValue = any, TForm extends object = any> extends ListableFormFieldProps<TValue, TForm> {
     config: ManyToOneConfig;
     /** 카드뷰 사용 여부 */
     useCardView?: boolean;
@@ -64,7 +64,7 @@ export interface AbstractManyToOneFieldProps extends ListableFormFieldProps {
  * Abstract base class for ManyToOne relationship fields
  * This class provides common functionality for ManyToOneField and UserField
  */
-export declare abstract class AbstractManyToOneField<T extends AbstractManyToOneField<T>> extends ListableFormField<T> {
+export declare abstract class AbstractManyToOneField<TSelf extends AbstractManyToOneField<TSelf, TValue, TForm>, TValue = any, TForm extends object = any> extends ListableFormField<TSelf, TValue, TForm> {
     config: ManyToOneConfig;
     /** 카드뷰 사용 여부 */
     useCardView?: boolean;
@@ -78,7 +78,7 @@ export declare abstract class AbstractManyToOneField<T extends AbstractManyToOne
     /**
      * Get the EntityForm from the config
      */
-    getEntityForm(): import("../../..").EntityForm;
+    getEntityForm(): import("../../..").EntityForm<any>;
     /**
      * Check if this field has a valid config
      */

@@ -1,5 +1,5 @@
 import { AbstractManyToOneField, AbstractManyToOneFieldProps, CardViewConfig, SelectBoxViewConfig, UserListFieldProps, ViewListProps, ViewListResult, ViewRenderProps, ViewRenderResult } from './abstract';
-import React from "react";
+import React from 'react';
 import { ManyToOneConfig } from '../../config/Config';
 import { FieldRenderParameters, FilterRenderParameters } from '../../config/EntityField';
 export interface ManyToOneFieldProps extends AbstractManyToOneFieldProps {

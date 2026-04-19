@@ -1,7 +1,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-import { FormField } from "./abstract";
+import { FormField } from './abstract';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { UserView } from "../../ui";
+import { UserView } from '../../ui';
 export class ProfileField extends FormField {
     constructor(name, order) {
         super(name, order, 'custom');

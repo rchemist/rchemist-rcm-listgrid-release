@@ -7,10 +7,10 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import React, { useEffect, useState } from "react";
-import { ReactSortable } from "react-sortablejs";
-import { ViewRows } from "./ui/ViewRows";
-import { useListGridTheme } from "./context/ListGridThemeContext";
+import React, { useEffect, useState } from 'react';
+import { ReactSortable } from 'react-sortablejs';
+import { ViewRows } from './ui/ViewRows';
+import { useListGridTheme } from './context/ListGridThemeContext';
 export const RowItem = (props) => {
     const { list, checkedItems, setCheckedItems } = props;
     const [sortableList, setSortableList] = useState([]);
@@ -32,12 +32,12 @@ export const RowItem = (props) => {
         if (props.onSelect) {
             colspan++;
         }
-        return _jsx("tbody", { className: themeClasses.table?.tbody ?? "rcm-listgrid-tbody", children: _jsx("tr", { children: _jsx("td", { colSpan: colspan, children: _jsx("div", { className: themeClasses.empty?.container ?? "rcm-listgrid-empty", children: props.messages?.noData ?? '데이터가 없습니다.' }) }) }) });
+        return (_jsx("tbody", { className: themeClasses.table?.tbody ?? 'rcm-listgrid-tbody', children: _jsx("tr", { children: _jsx("td", { colSpan: colspan, children: _jsx("div", { className: themeClasses.empty?.container ?? 'rcm-listgrid-empty', children: props.messages?.noData ?? '데이터가 없습니다.' }) }) }) }));
     }
     return _jsx(React.Fragment, { children: showList() });
     function onDrag(list) {
         setSortableList(list);
-        props.onDrag?.(list.map(item => item.id));
+        props.onDrag?.(list.map((item) => item.id));
     }
     function sortRowsPriority(list) {
         setSortableList(list);
@@ -46,20 +46,28 @@ export const RowItem = (props) => {
     function showList() {
         const totalCount = sortableList.length - 1;
         if (props.managePriority) {
-            return _jsx(ReactSortable, { tag: 'tbody', list: sortableList, setList: list => sortRowsPriority(list), animation: 200, swap: true, swapThreshold: 1, className: themeClasses.table?.tbody ?? "rcm-listgrid-tbody", children: sortableList.map((item, index) => {
-                    return _createElement(ViewRows, { ...props, key: `view_row_${item.id}_${index}`, sortableList: sortableList, totalCount: totalCount, draggable: draggable, item: item, index: index, onDrag: onDrag, checkItem: checkItem, selectionOptions: props.selectionOptions, showCheckboxInput: props.showCheckboxInput });
-                }) });
+            return (_jsx(ReactSortable, { tag: 'tbody', list: sortableList, setList: (list) => sortRowsPriority(list), animation: 200, swap: true, swapThreshold: 1, className: themeClasses.table?.tbody ?? 'rcm-listgrid-tbody', children: sortableList.map((item, index) => {
+                    return (_createElement(ViewRows, { ...props, key: `view_row_${item.id}_${index}`, sortableList: sortableList, totalCount: totalCount, draggable: draggable, item: item, index: index, onDrag: onDrag, checkItem: checkItem, ...(props.selectionOptions !== undefined
+                            ? { selectionOptions: props.selectionOptions }
+                            : {}), ...(props.showCheckboxInput !== undefined
+                            ? { showCheckboxInput: props.showCheckboxInput }
+                            : {}) }));
+                }) }));
         }
         else {
-            return _jsx("tbody", { className: themeClasses.table?.tbody ?? "rcm-listgrid-tbody", children: sortableList.map((item, index) => {
-                    return _createElement(ViewRows, { ...props, key: `view_row_${item.id}_${index}`, sortableList: sortableList, totalCount: totalCount, draggable: draggable, item: item, index: index, onDrag: onDrag, checkItem: checkItem, selectionOptions: props.selectionOptions, showCheckboxInput: props.showCheckboxInput });
-                }) });
+            return (_jsx("tbody", { className: themeClasses.table?.tbody ?? 'rcm-listgrid-tbody', children: sortableList.map((item, index) => {
+                    return (_createElement(ViewRows, { ...props, key: `view_row_${item.id}_${index}`, sortableList: sortableList, totalCount: totalCount, draggable: draggable, item: item, index: index, onDrag: onDrag, checkItem: checkItem, ...(props.selectionOptions !== undefined
+                            ? { selectionOptions: props.selectionOptions }
+                            : {}), ...(props.showCheckboxInput !== undefined
+                            ? { showCheckboxInput: props.showCheckboxInput }
+                            : {}) }));
+                }) }));
         }
     }
     function checkItem(id) {
         const items = [...checkedItems];
         if (items.includes(id)) {
-            setCheckedItems?.(items.filter(item => item !== id));
+            setCheckedItems?.(items.filter((item) => item !== id));
         }
         else {
             setCheckedItems?.([...items, id]);

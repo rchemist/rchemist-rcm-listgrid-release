@@ -7,14 +7,14 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect, useCallback } from 'react';
-import { ListableFormField } from './abstract';
+import { ListableFormField, } from './abstract';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { readonlyClass } from "../../ui";
+import { readonlyClass } from '../../ui';
 /**
  * 생년월일 입력 내부 컴포넌트
  * 숫자만 입력 가능하며, YYYY-MM-DD 형식으로 자동 포맷팅
  */
-const BirthdayInput = ({ name, value, onChange, readonly = false, hasError = false, placeholder = 'YYYY-MM-DD', includeHyphen = false }) => {
+const BirthdayInput = ({ name, value, onChange, readonly = false, hasError = false, placeholder = 'YYYY-MM-DD', includeHyphen = false, }) => {
     const [displayValue, setDisplayValue] = useState('');
     const [validationError, setValidationError] = useState(null);
     // 외부 value가 변경되면 displayValue 동기화
@@ -149,7 +149,7 @@ const BirthdayInput = ({ name, value, onChange, readonly = false, hasError = fal
         // blur 시 commit 처리
         onChange(getReturnValue(displayValue), true);
     };
-    return (_jsxs("div", { className: "rcm-stack", "data-gap": "xs", children: [_jsx("input", { id: name, name: name, type: "text", inputMode: "numeric", placeholder: placeholder, value: displayValue, onChange: handleChange, onKeyDown: handleKeyDown, onBlur: handleBlur, disabled: readonly, className: readonlyClass(readonly, 'rcm-input'), "data-state": hasError || validationError ? 'error' : undefined, maxLength: 10 }), validationError && (_jsx("p", { className: "rcm-field-error", children: validationError }))] }));
+    return (_jsxs("div", { className: "rcm-stack", "data-gap": "xs", children: [_jsx("input", { id: name, name: name, type: "text", inputMode: "numeric", placeholder: placeholder, value: displayValue, onChange: handleChange, onKeyDown: handleKeyDown, onBlur: handleBlur, disabled: readonly, className: readonlyClass(readonly, 'rcm-input'), "data-state": hasError || validationError ? 'error' : undefined, maxLength: 10 }), validationError && _jsx("p", { className: "rcm-field-error", children: validationError })] }));
 };
 /**
  * 생년월일 입력 필드
@@ -206,8 +206,7 @@ export class BirthdayField extends ListableFormField {
         return this;
     }
     static create(props) {
-        return new BirthdayField(props.name, props.order, props.includeHyphen)
-            .copyFields(props, true);
+        return new BirthdayField(props.name, props.order, props.includeHyphen).copyFields(props, true);
     }
 }
 //# sourceMappingURL=BirthdayField.js.map

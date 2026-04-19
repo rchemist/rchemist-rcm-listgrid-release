@@ -1,4 +1,4 @@
-import { ViewEntityFormProps } from "./types/ViewEntityForm.types";
+import { ViewEntityFormProps } from './types/ViewEntityForm.types';
 /**
  * ViewEntityForm component (render-only structure)
  * - All state/handlers/logic are managed by the useEntityFormLogic hook.

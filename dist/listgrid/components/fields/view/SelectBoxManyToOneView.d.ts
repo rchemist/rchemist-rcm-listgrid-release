@@ -1,5 +1,5 @@
-import React from "react";
-import { CustomFieldRendererProps } from "../../form/types/ViewEntityFormTheme.types";
+import React from 'react';
+import { CustomFieldRendererProps } from '../../form/types/ViewEntityFormTheme.types';
 export declare function invalidateSelectBoxCache(urlPattern?: string): void;
 /**
  * SelectBoxManyToOneView Props

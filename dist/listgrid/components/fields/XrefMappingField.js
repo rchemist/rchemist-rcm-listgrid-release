@@ -10,9 +10,9 @@ import { XrefMappingView } from './view/XrefMappingView';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
 import { isTrue } from '../../utils/BooleanUtil';
 import { XrefPriorityMappingView } from './view/XrefPriorityMappingView';
-import { isEmpty } from "../../utils";
+import { isEmpty } from '../../utils';
 export class XrefMappingField extends FormField {
-    constructor({ name, order, entityForm, supportPriority, excludeId, add, filters }) {
+    constructor({ name, order, entityForm, supportPriority, excludeId, add, filters, }) {
         super(name, order, 'xrefMapping');
         this.entityForm = entityForm;
         this.supportPriority = supportPriority;
@@ -26,10 +26,11 @@ export class XrefMappingField extends FormField {
      */
     renderInstance(params) {
         return (async () => {
+            const inputParams = await getInputRendererParameters(this, { ...params });
             if (isTrue(this.supportPriority)) {
-                return _jsx(XrefPriorityMappingView, { ...await getInputRendererParameters(this, { ...params }), parentEntityForm: params.entityForm, entityForm: this.entityForm, excludeId: this.excludeId, add: this.add, filters: this.filters });
+                return (_jsx(XrefPriorityMappingView, { ...inputParams, parentEntityForm: params.entityForm, entityForm: this.entityForm, excludeId: this.excludeId, add: this.add, filters: this.filters }));
             }
-            return _jsx(XrefMappingView, { ...await getInputRendererParameters(this, { ...params }), parentEntityForm: params.entityForm, entityForm: this.entityForm, excludeId: this.excludeId, add: this.add, filters: this.filters });
+            return (_jsx(XrefMappingView, { ...inputParams, parentEntityForm: params.entityForm, entityForm: this.entityForm, excludeId: this.excludeId, add: this.add, filters: this.filters }));
         })();
     }
     /**
@@ -43,7 +44,7 @@ export class XrefMappingField extends FormField {
             supportPriority: this.supportPriority,
             excludeId: this.excludeId,
             add: this.add,
-            filters: this.filters
+            filters: this.filters,
         });
     }
     // override

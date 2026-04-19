@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 interface AddContentDialogProps {
     onAdd: (title: string, content?: string) => void;
     existingTitles: string[];

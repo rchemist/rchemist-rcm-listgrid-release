@@ -1,5 +1,5 @@
 import { AlertMessage, AlertMessageLink } from '../../../config/EntityFormTypes';
-import { ComponentType, SVGProps } from "react";
+import { ComponentType, SVGProps } from 'react';
 export interface ViewEntityFormAlertsProps {
     alertMessages: AlertMessage[];
     onRemove?: (key: string) => void;

@@ -1,13 +1,13 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-import { OptionalField, renderListOptionalField } from '../../components/fields/abstract';
-import { SelectBox } from "../../ui";
-import { RadioInput } from "../../ui";
+import { OptionalField, renderListOptionalField, } from '../../components/fields/abstract';
+import { SelectBox } from '../../ui';
+import { RadioInput } from '../../ui';
 import { getInputRendererParameters } from '../../components/helper/FieldRendererHelper';
-import { hexHash } from "../../utils/hash";
-import { getExternalApiDataWithError, isEmpty, isEquals } from "../../misc";
-import { CheckBox } from "../../ui";
+import { hexHash } from '../../utils/hash';
+import { getExternalApiDataWithError, isEmpty, isEquals } from '../../misc';
+import { CheckBox } from '../../ui';
 import { isTrue } from '../../utils/BooleanUtil';
-import { MultiSelectBox } from "../../ui";
+import { MultiSelectBox } from '../../ui';
 const customOptionFetchUrl = '/option/by-alias';
 const customOptionBulkFetchUrl = '/option/by-aliases';
 // alias별 options 캐시 (동일 페이지 내에서 공유)
@@ -31,17 +31,17 @@ export class CustomOptionField extends OptionalField {
             const cacheKey = this.createCacheKey();
             if (this.combo !== undefined && this.combo.direction !== undefined) {
                 if (isTrue(this.multiple)) {
-                    return _jsx(CheckBox, { options: this.options, combo: this.combo, ...await getInputRendererParameters(this, params) }, cacheKey);
+                    return (_jsx(CheckBox, { options: this.options, combo: this.combo, ...await getInputRendererParameters(this, params) }, cacheKey));
                 }
                 else {
-                    return _jsx(RadioInput, { options: this.options, combo: this.combo, ...await getInputRendererParameters(this, params) }, cacheKey);
+                    return (_jsx(RadioInput, { options: this.options, combo: this.combo, ...await getInputRendererParameters(this, params) }, cacheKey));
                 }
             }
             if (isTrue(this.multiple)) {
-                return _jsx(MultiSelectBox, { options: this.options, ...await getInputRendererParameters(this, params) }, cacheKey);
+                return (_jsx(MultiSelectBox, { options: this.options, ...await getInputRendererParameters(this, params) }, cacheKey));
             }
             else {
-                return _jsx(SelectBox, { options: this.options, ...await getInputRendererParameters(this, params) }, cacheKey);
+                return (_jsx(SelectBox, { options: this.options, ...await getInputRendererParameters(this, params) }, cacheKey));
             }
         })();
     }
@@ -58,7 +58,7 @@ export class CustomOptionField extends OptionalField {
         return this.renderInstance({
             ...params,
             required: false,
-            onChange: (value) => params.onChange(value)
+            onChange: (value) => params.onChange(value),
         });
     }
     /**
@@ -101,8 +101,12 @@ export class CustomOptionField extends OptionalField {
             const currentValue = this.value.current;
             const defaultValue = this.value.default;
             if (isTrue(this.multiple)) {
-                const isOriginalEmpty = fetchedValue === undefined || fetchedValue === null || (Array.isArray(fetchedValue) && fetchedValue.length === 0);
-                const isCurrentEmpty = currentValue === undefined || currentValue === null || (Array.isArray(currentValue) && currentValue.length === 0);
+                const isOriginalEmpty = fetchedValue === undefined ||
+                    fetchedValue === null ||
+                    (Array.isArray(fetchedValue) && fetchedValue.length === 0);
+                const isCurrentEmpty = currentValue === undefined ||
+                    currentValue === null ||
+                    (Array.isArray(currentValue) && currentValue.length === 0);
                 if (isOriginalEmpty && isCurrentEmpty) {
                     return false;
                 }
@@ -122,10 +126,15 @@ export async function getCustomOptionValues(alias) {
     if (customOptionCache.has(alias)) {
         return customOptionCache.get(alias);
     }
-    const response = await getExternalApiDataWithError({ url: `${customOptionFetchUrl}/${alias}`, method: 'GET' });
+    const response = await getExternalApiDataWithError({
+        url: `${customOptionFetchUrl}/${alias}`,
+        method: 'GET',
+    });
     // 데이터가 정상적으로 들어왔다면 옵션 데이터를 생성해 반환한다. 오류가 발생했다면(alias 가 없거나 하는 경우) 빈 배열을 반환한다.
     if (response.data && !isEmpty(response.data.values)) {
-        const options = [...response.data.values.map((item) => ({ value: item.value, label: item.label }))];
+        const options = [
+            ...response.data.values.map((item) => ({ value: item.value, label: item.label })),
+        ];
         customOptionCache.set(alias, options);
         return options;
     }
@@ -137,22 +146,22 @@ export async function getCustomOptionValues(alias) {
  */
 export async function prefetchCustomOptions(aliases) {
     // 이미 캐시에 있는 alias 제외
-    const uncachedAliases = aliases.filter(alias => !customOptionCache.has(alias));
+    const uncachedAliases = aliases.filter((alias) => !customOptionCache.has(alias));
     if (uncachedAliases.length === 0) {
         return;
     }
     const params = new URLSearchParams();
-    uncachedAliases.forEach(alias => params.append('aliases', alias));
+    uncachedAliases.forEach((alias) => params.append('aliases', alias));
     const response = await getExternalApiDataWithError({
         url: `${customOptionBulkFetchUrl}?${params.toString()}`,
-        method: 'GET'
+        method: 'GET',
     });
     if (response.data && Array.isArray(response.data)) {
         for (const optionData of response.data) {
             if (optionData.alias && !isEmpty(optionData.values)) {
                 const options = optionData.values.map((item) => ({
                     value: item.value,
-                    label: item.label
+                    label: item.label,
                 }));
                 customOptionCache.set(optionData.alias, options);
             }

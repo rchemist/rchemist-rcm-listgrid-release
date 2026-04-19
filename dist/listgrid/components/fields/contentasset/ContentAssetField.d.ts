@@ -1,7 +1,7 @@
 import { FormField, FormFieldProps } from '../abstract';
-import React from "react";
+import React from 'react';
 import { FieldRenderParameters } from '../../../config/EntityField';
-import { ContentAsset } from "./types";
+import { ContentAsset } from './types';
 interface ContentAssetFieldProps extends FormFieldProps {
     /** 최대 업로드 가능한 항목 수 */
     maxItems?: number;

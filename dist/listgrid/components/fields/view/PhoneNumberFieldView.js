@@ -61,14 +61,14 @@ export const PhoneNumberFieldView = ({ name, value, onChange, onError, readonly 
             await navigator.clipboard.writeText(rawNumber);
             showToast({
                 message: '전화번호가 복사되었습니다.',
-                color: 'success'
+                color: 'success',
             });
         }
         catch (error) {
             console.error('Failed to copy:', error);
             showToast({
                 message: '복사에 실패했습니다.',
-                color: 'danger'
+                color: 'danger',
             });
         }
     };
@@ -79,7 +79,7 @@ export const PhoneNumberFieldView = ({ name, value, onChange, onError, readonly 
             modalId,
             title: 'SMS 발송',
             size: 'md',
-            content: (_jsx(SmsModal, { phoneNumber: displayValue, onClose: () => closeModal(modalId) })),
+            content: _jsx(SmsModal, { phoneNumber: displayValue, onClose: () => closeModal(modalId) }),
         });
     };
     // Determine if buttons should be shown

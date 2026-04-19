@@ -1,8 +1,8 @@
-import { SearchForm } from "../../form/SearchForm";
-import { PageResult } from "../../form/Type";
+import { SearchForm } from '../../form/SearchForm';
+import { PageResult } from '../../form/Type';
 import { ExtensionPoint, ClientExtensionFunction, ExtensionOptions, ClientExtensionConfig, ClientExtensionContext } from '../../extensions/EntityFormExtension.types';
 import { EntityFormActions } from '../../config/form/EntityFormActions';
-export declare abstract class EntityFormExtensions extends EntityFormActions {
+export declare abstract class EntityFormExtensions<T extends object = any> extends EntityFormActions<T> {
     constructor(name: string, url: string);
     /**
      * Client Extension 추가 메소드 (내부용)

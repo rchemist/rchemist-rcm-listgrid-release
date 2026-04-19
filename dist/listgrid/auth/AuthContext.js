@@ -4,7 +4,7 @@ import { createContext, useContext } from 'react';
 const NO_PROVIDER = Symbol('rcm-listgrid-no-auth-provider');
 const AuthContext = createContext(NO_PROVIDER);
 export function AuthProvider({ session, children }) {
-    return (_jsx(AuthContext.Provider, { value: { session }, children: children }));
+    return _jsx(AuthContext.Provider, { value: { session }, children: children });
 }
 export function useSession() {
     const ctx = useContext(AuthContext);

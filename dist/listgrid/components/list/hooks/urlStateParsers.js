@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { createParser } from "../../../urlState";
+import { createParser } from '../../../urlState';
 /**
  * URL page parameter parser
  * URL: 1-indexed (user-friendly)
@@ -56,57 +56,57 @@ export const parseAsSort = createParser({
 // Operator mapping from URL shorthand to internal QueryConditionType
 // Covers all QueryConditionType values
 const OPERATOR_MAP = {
-    'eq': 'EQUAL',
-    'ne': 'NOT_EQUAL',
-    'eqi': 'EQUAL_IGNORECASE',
-    'in': 'IN',
-    'nin': 'NOT_IN',
-    'null': 'NULL',
-    'notnull': 'NOT_NULL',
-    'like': 'LIKE',
-    'nlike': 'NOT_LIKE',
-    'start': 'START_WITH',
-    'nstart': 'NOT_START_WITH',
-    'end': 'END_WITH',
-    'nend': 'NOT_END_WITH',
-    'lt': 'LESS_THAN',
-    'lte': 'LESS_THAN_EQUAL',
-    'gt': 'GREATER',
-    'gte': 'GREATER_THAN_EQUAL',
-    'nlt': 'NOT_LESS_THAN',
-    'nlte': 'NOT_LESS_THAN_EQUAL',
-    'ngt': 'NOT_GREATER',
-    'ngte': 'NOT_GREATER_THAN_EQUAL',
-    'between': 'BETWEEN',
-    'nbetween': 'NOT_BETWEEN',
-    'ideq': 'ID_EQUAL',
+    eq: 'EQUAL',
+    ne: 'NOT_EQUAL',
+    eqi: 'EQUAL_IGNORECASE',
+    in: 'IN',
+    nin: 'NOT_IN',
+    null: 'NULL',
+    notnull: 'NOT_NULL',
+    like: 'LIKE',
+    nlike: 'NOT_LIKE',
+    start: 'START_WITH',
+    nstart: 'NOT_START_WITH',
+    end: 'END_WITH',
+    nend: 'NOT_END_WITH',
+    lt: 'LESS_THAN',
+    lte: 'LESS_THAN_EQUAL',
+    gt: 'GREATER',
+    gte: 'GREATER_THAN_EQUAL',
+    nlt: 'NOT_LESS_THAN',
+    nlte: 'NOT_LESS_THAN_EQUAL',
+    ngt: 'NOT_GREATER',
+    ngte: 'NOT_GREATER_THAN_EQUAL',
+    between: 'BETWEEN',
+    nbetween: 'NOT_BETWEEN',
+    ideq: 'ID_EQUAL',
 };
 // Reverse mapping for serialization
 const REVERSE_OPERATOR_MAP = {
-    'EQUAL': 'eq',
-    'NOT_EQUAL': 'ne',
-    'EQUAL_IGNORECASE': 'eqi',
-    'IN': 'in',
-    'NOT_IN': 'nin',
-    'NULL': 'null',
-    'NOT_NULL': 'notnull',
-    'LIKE': 'like',
-    'NOT_LIKE': 'nlike',
-    'START_WITH': 'start',
-    'NOT_START_WITH': 'nstart',
-    'END_WITH': 'end',
-    'NOT_END_WITH': 'nend',
-    'LESS_THAN': 'lt',
-    'LESS_THAN_EQUAL': 'lte',
-    'GREATER': 'gt',
-    'GREATER_THAN_EQUAL': 'gte',
-    'NOT_LESS_THAN': 'nlt',
-    'NOT_LESS_THAN_EQUAL': 'nlte',
-    'NOT_GREATER': 'ngt',
-    'NOT_GREATER_THAN_EQUAL': 'ngte',
-    'BETWEEN': 'between',
-    'NOT_BETWEEN': 'nbetween',
-    'ID_EQUAL': 'ideq',
+    EQUAL: 'eq',
+    NOT_EQUAL: 'ne',
+    EQUAL_IGNORECASE: 'eqi',
+    IN: 'in',
+    NOT_IN: 'nin',
+    NULL: 'null',
+    NOT_NULL: 'notnull',
+    LIKE: 'like',
+    NOT_LIKE: 'nlike',
+    START_WITH: 'start',
+    NOT_START_WITH: 'nstart',
+    END_WITH: 'end',
+    NOT_END_WITH: 'nend',
+    LESS_THAN: 'lt',
+    LESS_THAN_EQUAL: 'lte',
+    GREATER: 'gt',
+    GREATER_THAN_EQUAL: 'gte',
+    NOT_LESS_THAN: 'nlt',
+    NOT_LESS_THAN_EQUAL: 'nlte',
+    NOT_GREATER: 'ngt',
+    NOT_GREATER_THAN_EQUAL: 'ngte',
+    BETWEEN: 'between',
+    NOT_BETWEEN: 'nbetween',
+    ID_EQUAL: 'ideq',
 };
 /**
  * Parse a single filter segment
@@ -129,7 +129,8 @@ function parseFilterSegment(segment) {
             // Join remaining parts in case value contains ':'
             const rawValue = parts.slice(2).join(':');
             // For IN/NOT_IN operators, split by pipe to get array and use 'values' field
-            if ((queryConditionType === 'IN' || queryConditionType === 'NOT_IN') && rawValue.includes('|')) {
+            if ((queryConditionType === 'IN' || queryConditionType === 'NOT_IN') &&
+                rawValue.includes('|')) {
                 return { name, values: rawValue.split('|'), queryConditionType };
             }
             return { name, value: rawValue, queryConditionType };
@@ -173,7 +174,7 @@ export const parseAsFilters = createParser({
             return null;
         try {
             // Split by comma and parse each segment
-            const segments = value.split(',').filter(s => s.trim());
+            const segments = value.split(',').filter((s) => s.trim());
             if (segments.length === 0)
                 return null;
             const filters = [];

@@ -1,15 +1,15 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React from "react";
+import React from 'react';
 import { Tab } from '@headlessui/react';
 import { SafePerfectScrollbar } from '../../../ui';
 import { ViewTab } from '../ViewTab';
 import { ViewTabPanel } from '../ViewTabPanel';
-export const ViewEntityFormFields = React.memo(function ViewEntityFormFields({ tabs, tabIndex, setTabIndex, entityForm, setEntityForm, readonly, subCollectionEntity, session, createStepFields, cacheKey, selectedTabIndex, setSelectedTabIndex }) {
+export const ViewEntityFormFields = React.memo(function ViewEntityFormFields({ tabs, tabIndex, setTabIndex, entityForm, setEntityForm, readonly, subCollectionEntity, session, createStepFields, cacheKey, selectedTabIndex, setSelectedTabIndex, }) {
     // 단순하게 원래 tabs를 그대로 사용하고, 개별 컴포넌트에서 표시 여부 결정
     React.useEffect(() => {
         if (tabs && tabs.length > 0) {
-            const currentTabIndex = tabs.findIndex(tab => tab.id === tabIndex);
+            const currentTabIndex = tabs.findIndex((tab) => tab.id === tabIndex);
             if (currentTabIndex !== -1 && currentTabIndex !== selectedTabIndex) {
                 setSelectedTabIndex(currentTabIndex);
             }

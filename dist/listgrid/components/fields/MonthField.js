@@ -6,7 +6,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import { ListableFormField } from './abstract';
-import { TextInput } from "../../ui";
+import { TextInput } from '../../ui';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
 import { ValidateResult } from '../../validations/Validation';
 import { isBlank } from '../../utils/StringUtil';
@@ -20,7 +20,7 @@ export class MonthField extends ListableFormField {
      */
     renderInstance(params) {
         return (async () => {
-            return _jsx(TextInput, { type: 'month', min: this.limit?.min, max: this.limit?.max, ...await getInputRendererParameters(this, params) });
+            return (_jsx(TextInput, { type: 'month', min: this.limit?.min, max: this.limit?.max, ...await getInputRendererParameters(this, params) }));
         })();
     }
     /**

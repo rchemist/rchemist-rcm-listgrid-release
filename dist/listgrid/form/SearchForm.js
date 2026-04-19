@@ -5,8 +5,8 @@
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import { parse } from '../utils/jsonUtils';
-import { isEmpty } from "../utils";
-import { v1 } from "uuid";
+import { isEmpty } from '../utils';
+import { v1 } from 'uuid';
 import { isTrue } from '../utils/BooleanUtil';
 // Removed BooleanField and StringField imports to fix circular dependency
 import { isBlank } from '../utils/StringUtil';
@@ -151,7 +151,7 @@ export class SearchForm {
             // JSON에서는 Map이 일반 객체로 직렬화됨
             Object.entries(item.subFilters).forEach(([condition, subItems]) => {
                 if (Array.isArray(subItems)) {
-                    const reconstructedSubItems = subItems.map(subItem => SearchForm.reconstructFilterItem(subItem));
+                    const reconstructedSubItems = subItems.map((subItem) => SearchForm.reconstructFilterItem(subItem));
                     reconstructed.subFilters.set(condition, reconstructedSubItems);
                 }
             });
@@ -193,7 +193,7 @@ export class SearchForm {
             Object.entries(data.filters).forEach(([key, value]) => {
                 if (Array.isArray(value)) {
                     // FilterItem의 subFilters를 Map으로 재구성
-                    const reconstructedItems = value.map(item => SearchForm.reconstructFilterItem(item));
+                    const reconstructedItems = value.map((item) => SearchForm.reconstructFilterItem(item));
                     searchForm.withFilter(key, ...reconstructedItems);
                 }
             });
@@ -212,7 +212,7 @@ export class SearchForm {
     static deserialize(data) {
         try {
             if (data) {
-                const obj = (typeof data === 'string') ? parse(data) : data;
+                const obj = typeof data === 'string' ? parse(data) : data;
                 return this.createByObject(obj);
             }
             else {
@@ -293,7 +293,13 @@ export class SearchForm {
             });
             if (!duplicated) {
                 let values = this.filters.get('AND') || [];
-                values.push({ name: fieldName, value: filterValue, values: filterValues, queryConditionType: op, not: not });
+                values.push({
+                    name: fieldName,
+                    value: filterValue,
+                    values: filterValues,
+                    queryConditionType: op,
+                    not: not,
+                });
                 this.filters.set('AND', values);
             }
         }
@@ -309,12 +315,12 @@ export class SearchForm {
                     }
                 }
             }
-            const existingNames = new Set(values.map(value => value.name));
-            filterItems.forEach(item => {
+            const existingNames = new Set(values.map((value) => value.name));
+            filterItems.forEach((item) => {
                 if (!isBlank(item.name)) {
                     if (existingNames.has(item.name)) {
                         // 기존 필터 제거 후 새로운 필터 추가
-                        const index = values.findIndex(value => value.name === item.name);
+                        const index = values.findIndex((value) => value.name === item.name);
                         values.splice(index, 1);
                     }
                     values.push(item);
@@ -346,7 +352,7 @@ export class SearchForm {
         if (this.filters) {
             let newFilters = new Map();
             this.filters.forEach((filterItems, condition) => {
-                newFilters.set(condition, filterItems.filter(filterItem => filterItem.name !== fieldName));
+                newFilters.set(condition, filterItems.filter((filterItem) => filterItem.name !== fieldName));
             });
             this.filters = newFilters;
         }
@@ -391,11 +397,14 @@ export class SearchForm {
                 if (filterItem.values && filterItem.values.length > 0) {
                     filterItems.set(filterItem.name, {
                         value: filterItem.values,
-                        operator: filterItem.queryConditionType ?? 'EQUAL'
+                        operator: filterItem.queryConditionType ?? 'EQUAL',
                     });
                 }
                 else {
-                    filterItems.set(filterItem.name, { value: filterItem.value || '', operator: filterItem.queryConditionType ?? 'EQUAL' });
+                    filterItems.set(filterItem.name, {
+                        value: filterItem.value || '',
+                        operator: filterItem.queryConditionType ?? 'EQUAL',
+                    });
                 }
             });
         });
@@ -411,7 +420,7 @@ export class SearchForm {
         const result = [];
         if (this.hasFilters()) {
             this.getFilters().forEach((filterItems, condition) => {
-                const filters = filterItems.filter(filterItem => filterItem.name === name);
+                const filters = filterItems.filter((filterItem) => filterItem.name === name);
                 if (filters.length > 0) {
                     result.push({ condition: condition, filters: [...filters] });
                 }
@@ -424,13 +433,13 @@ export class SearchForm {
             return false;
         }
         // tenantAlias 에 대한 조건인 경우만 제외하고 필터 여부를 확인한다.
-        if (Array.from(this.getFilters().values()).some(filterItems => filterItems.some(filterItem => fieldNames.includes(filterItem.name) &&
+        if (Array.from(this.getFilters().values()).some((filterItems) => filterItems.some((filterItem) => fieldNames.includes(filterItem.name) &&
             !(filterItem.name === 'tenantAlias' &&
-                (filterItem.value === 'defaultTenant' || (filterItem.values?.includes('defaultTenant'))))))) {
+                (filterItem.value === 'defaultTenant' || filterItem.values?.includes('defaultTenant')))))) {
             return true;
         }
         // 기본 정렬 요소인 createdAt 을 제외한 나머지가 있으면 true 를 반환한다.
-        return Array.from(this.getSorts().keys()).some(name => name !== 'createdAt');
+        return Array.from(this.getSorts().keys()).some((name) => name !== 'createdAt');
     }
     clearFilterAndSort() {
         this.clearFilters();
@@ -444,8 +453,14 @@ export class SearchForm {
         return null;
     }
     getSearchValue(name) {
-        let filterItem = this.getFilters().get('AND')?.find(filterItem => filterItem.name === name);
-        return filterItem ? (filterItem.values && filterItem.values.length > 0) ? filterItem.values : filterItem.value : null;
+        let filterItem = this.getFilters()
+            .get('AND')
+            ?.find((filterItem) => filterItem.name === name);
+        return filterItem
+            ? filterItem.values && filterItem.values.length > 0
+                ? filterItem.values
+                : filterItem.value
+            : null;
     }
     // ============================================================
     // 신규 메서드: OR 조건 확장 및 빠른검색 지원 (SPEC-SEARCH-001)
@@ -470,9 +485,11 @@ export class SearchForm {
             return andValue;
         }
         // OR 조건 검색
-        const orFilterItem = this.filters.get('OR')?.find(item => item.name === name);
+        const orFilterItem = this.filters.get('OR')?.find((item) => item.name === name);
         if (orFilterItem) {
-            return (orFilterItem.values && orFilterItem.values.length > 0) ? orFilterItem.values : orFilterItem.value;
+            return orFilterItem.values && orFilterItem.values.length > 0
+                ? orFilterItem.values
+                : orFilterItem.value;
         }
         return null;
     }
@@ -484,7 +501,7 @@ export class SearchForm {
      */
     buildQuickSearchFilter(value, fields) {
         const subFilters = new Map();
-        const orFilters = fields.map(field => ({
+        const orFilters = fields.map((field) => ({
             name: field,
             value: value,
             queryConditionType: 'LIKE',
@@ -510,23 +527,23 @@ export class SearchForm {
         // 1. 퀵서치 관련 필드들의 Set 생성 (ManyToOne 필드 지원)
         const fieldsToRemove = new Set();
         // 기존 quickSearchFields와 새 fields 모두에서 제거
-        [...this.quickSearchFields, ...fields].forEach(field => {
+        [...this.quickSearchFields, ...fields].forEach((field) => {
             fieldsToRemove.add(field);
             fieldsToRemove.add(`${field}.id`);
         });
         // 2. 기존 AND 필터에서 퀵서치 관련 필드 제거 (subFilters가 있는 필터 포함)
         const existingAndFilters = this.filters.get('AND') ?? [];
-        const remainingAndFilters = existingAndFilters.filter(filter => {
+        const remainingAndFilters = existingAndFilters.filter((filter) => {
             // subFilters가 있는 경우: subFilters 내 필드가 퀵서치 필드인지 확인
             if (filter.subFilters && filter.subFilters.size > 0) {
                 const orSubFilters = filter.subFilters.get('OR') ?? [];
-                return !orSubFilters.some(subFilter => fieldsToRemove.has(subFilter.name));
+                return !orSubFilters.some((subFilter) => fieldsToRemove.has(subFilter.name));
             }
             return !fieldsToRemove.has(filter.name);
         });
         // 3. 기존 OR 필터에서 퀵서치 관련 필드 제거
         const existingOrFilters = this.filters.get('OR') ?? [];
-        const remainingOrFilters = existingOrFilters.filter(filter => !fieldsToRemove.has(filter.name));
+        const remainingOrFilters = existingOrFilters.filter((filter) => !fieldsToRemove.has(filter.name));
         // 4. 필드 목록 업데이트
         this.quickSearchFields = [...fields];
         // 빈 값이면 제거만 하고 종료
@@ -549,7 +566,7 @@ export class SearchForm {
         // 5. subFilters(OR)를 가진 FilterItem 생성
         // 상위 FilterItem의 name은 퀵서치 필드 중 첫 번째 사용 (백엔드 호환성)
         const subFilters = new Map();
-        const orFilters = fields.map(field => ({
+        const orFilters = fields.map((field) => ({
             name: field,
             value: value,
             queryConditionType: 'LIKE',
@@ -582,9 +599,10 @@ export class SearchForm {
         }
         // AND 필터에서 subFilters가 있는 퀵서치 필터 찾기
         const andFilters = this.filters.get('AND') ?? [];
-        const quickSearchFilter = andFilters.find(filter => {
+        const quickSearchFilter = andFilters.find((filter) => {
             // 퀵서치 필드 중 하나가 name이고 subFilters가 있는 필터
-            if (filter.subFilters && filter.subFilters.size > 0 &&
+            if (filter.subFilters &&
+                filter.subFilters.size > 0 &&
                 this.quickSearchFields.includes(filter.name)) {
                 return true;
             }
@@ -616,7 +634,7 @@ export class SearchForm {
         // clone filters (deep clone including subFilters)
         searchForm.filters = new Map();
         this.filters.forEach((filterItems, key) => {
-            const clonedItems = filterItems.map(item => this.cloneFilterItem(item));
+            const clonedItems = filterItems.map((item) => this.cloneFilterItem(item));
             searchForm.filters.set(key, clonedItems);
         });
         searchForm.preservedFilters = [...this.preservedFilters];
@@ -641,7 +659,7 @@ export class SearchForm {
         if (item.subFilters) {
             cloned.subFilters = new Map();
             item.subFilters.forEach((subItems, condition) => {
-                const clonedSubItems = subItems.map(subItem => this.cloneFilterItem(subItem));
+                const clonedSubItems = subItems.map((subItem) => this.cloneFilterItem(subItem));
                 cloned.subFilters.set(condition, clonedSubItems);
             });
         }
@@ -652,7 +670,7 @@ export class SearchForm {
             return undefined;
         }
         const filterItems = this.filters.get('AND') || [];
-        const filterItem = filterItems.find(filterItem => filterItem.name === fieldName);
+        const filterItem = filterItems.find((filterItem) => filterItem.name === fieldName);
         if (filterItem) {
             return filterItem.queryConditionType;
         }

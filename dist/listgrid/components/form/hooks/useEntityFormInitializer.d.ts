@@ -7,7 +7,7 @@ import { EntityButtonLinkProps } from '../../../config/Config';
  * EntityForm 상태 및 탭 초기화를 위한 커스텀 훅
  * @param params - 초기화에 필요한 파라미터 객체
  */
-export declare const useEntityFormInitializer: ({ entityForm: initialEntityForm, isSubCollectionEntity, pathname, session, buttonLinks, onInitialize, setTabs, setTabIndex, setEntityForm, setTitleText, setLoadingError }: {
+export declare const useEntityFormInitializer: ({ entityForm: initialEntityForm, isSubCollectionEntity, pathname, session, buttonLinks, onInitialize, setTabs, setTabIndex, setEntityForm, setTitleText, setLoadingError, }: {
     entityForm: EntityForm;
     isSubCollectionEntity: boolean;
     pathname: string;

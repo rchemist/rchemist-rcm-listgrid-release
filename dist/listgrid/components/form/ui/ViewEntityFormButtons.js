@@ -6,25 +6,24 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import React from "react";
-import { SaveButton } from "./buttons/SaveButton";
-import { ListButton } from "./buttons/ListButton";
-import { DeleteButton } from "./buttons/DeleteButton";
-import { ClosePopupButton } from "./buttons/ClosePopupButton";
-import { EntityFormButton } from '../../../config/EntityFormButton';
+import React from 'react';
+import { SaveButton } from './buttons/SaveButton';
+import { ListButton } from './buttons/ListButton';
+import { DeleteButton } from './buttons/DeleteButton';
+import { ClosePopupButton } from './buttons/ClosePopupButton';
+import { EntityFormButton, } from '../../../config/EntityFormButton';
 import { isTrue } from '../../../utils/BooleanUtil';
-import { Tooltip } from "../../../ui";
-import { useEntityFormTheme } from "../context/EntityFormThemeContext";
+import { Tooltip } from '../../../ui';
+import { useEntityFormTheme } from '../context/EntityFormThemeContext';
 export const ViewEntityFormButtons = React.memo(function ViewEntityFormButtons({ buttons, }) {
     const { classNames } = useEntityFormTheme();
     return (_jsx("div", { className: `rcm-form-buttons-scroll ${classNames.buttons?.container ?? ''}`, style: {
             WebkitOverflowScrolling: 'touch',
-            direction: 'rtl'
+            direction: 'rtl',
         }, children: _jsx("div", { className: `rcm-form-buttons-row ${classNames.buttons?.innerWrapper ?? ''}`, style: { direction: 'ltr' }, children: buttons }) }));
 });
 export function getOverwriteButton(buttons, id) {
-    return (buttons !== undefined &&
-        buttons.find((button) => button.isOverwrite(id)) !== undefined);
+    return buttons !== undefined && buttons.find((button) => button.isOverwrite(id)) !== undefined;
 }
 /**
  * responsive screen 크기에 따라 버튼 사이즈와 위치를 조정하기 위해 별도의 functions 으로 분리한다.
@@ -45,9 +44,11 @@ export async function getEntityFormButtons(props) {
     const processedButtonIds = new Set(); // 중복 방지를 위한 ID 추적
     if (entityForm.buttons && entityForm.buttons.length > 0) {
         // entityForm.buttons는 함수 배열이므로 실행하여 버튼들을 가져옴
-        const buttonsFromFunctions = await Promise.all(entityForm.buttons.map(buttonFunc => buttonFunc(entityForm)));
+        const buttonsFromFunctions = await Promise.all(entityForm.buttons.map((buttonFunc) => buttonFunc(entityForm)));
         // 결과를 flat하고 null/undefined 필터링
-        const flatButtons = buttonsFromFunctions.flat().filter(item => item !== null && item !== undefined);
+        const flatButtons = buttonsFromFunctions
+            .flat()
+            .filter((item) => item !== null && item !== undefined);
         flatButtons.forEach((item) => {
             if (item instanceof EntityFormButton) {
                 // EntityFormButton 인스턴스
@@ -72,7 +73,7 @@ export async function getEntityFormButtons(props) {
     const buttonIds = new Set();
     // props.buttons 먼저 추가
     if (props.buttons) {
-        props.buttons.forEach(button => {
+        props.buttons.forEach((button) => {
             const buttonId = button.getId();
             if (!buttonIds.has(buttonId)) {
                 allButtons.push(button);
@@ -81,13 +82,13 @@ export async function getEntityFormButtons(props) {
         });
     }
     // entityFormButtons 추가 (ID 중복 체크)
-    entityFormButtons.forEach(button => {
+    entityFormButtons.forEach((button) => {
         const buttonId = button.getId();
         // 기존 버튼과 ID가 중복되는지 체크
         const isDuplicate = buttonIds.has(buttonId) ||
             // save, delete, list override 체크
-            allButtons.some(b => {
-                return ['save', 'delete', 'list'].some(id => button.isOverwrite(id) && b.isOverwrite(id));
+            allButtons.some((b) => {
+                return ['save', 'delete', 'list'].some((id) => button.isOverwrite(id) && b.isOverwrite(id));
             });
         if (!isDuplicate) {
             allButtons.push(button);
@@ -100,17 +101,20 @@ export async function getEntityFormButtons(props) {
     const isUpdatable = entityForm.isUpdatable();
     const isDeletable = entityForm.isDeletable();
     if (!isCreatable || !isUpdatable || useCreateStep) {
-        excludeButtons.push("save");
+        excludeButtons.push('save');
     }
     if (!isDeletable) {
-        excludeButtons.push("delete");
+        excludeButtons.push('delete');
     }
     // entityForm에 visible하고 readonly가 아닌 필드가 하나 이상 있는지 확인
     const hasEditableFields = async () => {
         const fields = Array.from(entityForm.fields.values());
         for (const field of fields) {
             const isHidden = await field.isHidden({ entityForm, renderType: entityForm.getRenderType() });
-            const isFieldReadonly = await field.isReadonly({ entityForm, renderType: entityForm.getRenderType() });
+            const isFieldReadonly = await field.isReadonly({
+                entityForm,
+                renderType: entityForm.getRenderType(),
+            });
             if (!isHidden && !isFieldReadonly) {
                 return true;
             }
@@ -120,23 +124,22 @@ export async function getEntityFormButtons(props) {
     const canShowSaveButton = await hasEditableFields();
     if (!readonly &&
         canShowSaveButton &&
-        !excludeButtons.includes("save") &&
-        !getOverwriteButton(buttons, "save")) {
-        result.push(_createElement(SaveButton, { ...props, key: "button_save" }));
+        !excludeButtons.includes('save') &&
+        !getOverwriteButton(buttons, 'save')) {
+        result.push(_createElement(SaveButton, { ...props, key: 'button_save' }));
     }
     // 새창(팝업) 모드에서는 목록 버튼 대신 닫기 버튼 표시
     if (props.popupMode) {
-        result.push(_createElement(ClosePopupButton, { ...props, key: "button_close_popup" }));
+        result.push(_createElement(ClosePopupButton, { ...props, key: 'button_close_popup' }));
     }
-    else if (!excludeButtons.includes("list") &&
-        !getOverwriteButton(buttons, "list")) {
-        result.push(_createElement(ListButton, { ...props, key: "button_list" }));
+    else if (!excludeButtons.includes('list') && !getOverwriteButton(buttons, 'list')) {
+        result.push(_createElement(ListButton, { ...props, key: 'button_list' }));
     }
     if (!readonly &&
-        !excludeButtons.includes("delete") &&
-        !getOverwriteButton(buttons, "delete") &&
-        entityForm.getRenderType() === "update") {
-        result.push(_createElement(DeleteButton, { ...props, key: "button_delete" }));
+        !excludeButtons.includes('delete') &&
+        !getOverwriteButton(buttons, 'delete') &&
+        entityForm.getRenderType() === 'update') {
+        result.push(_createElement(DeleteButton, { ...props, key: 'button_delete' }));
     }
     if (buttons && buttons.length > 0) {
         // 모든 버튼의 비동기 속성을 병렬로 처리
@@ -155,13 +158,13 @@ export async function getEntityFormButtons(props) {
                         currentStep: props.currentStep ?? 0,
                         maxStep: props.maxStep ?? 0,
                         createStepFields: props.createStepFields ?? [],
-                    }
+                    },
                 }),
-                showModal,
-                closeModal,
-                closeTopModal,
-                getModalData,
-                updateModalData,
+                ...(showModal !== undefined ? { showModal } : {}),
+                ...(closeModal !== undefined ? { closeModal } : {}),
+                ...(closeTopModal !== undefined ? { closeTopModal } : {}),
+                ...(getModalData !== undefined ? { getModalData } : {}),
+                ...(updateModalData !== undefined ? { updateModalData } : {}),
             };
             const hidden = button.hidden ? await button.hidden(buttonProps) : false;
             // hidden 이 true 일 때는 버튼을 렌더링하지 않는다.
@@ -176,19 +179,19 @@ export async function getEntityFormButtons(props) {
                         const form = await button.onClick(buttonProps);
                         if (form.errors && form.errors.length > 0) {
                             // 에러가 있으면 에러 메시지를 표시한다.
-                            const errorMessages = form.errors.flatMap(error => error.errors);
+                            const errorMessages = form.errors.flatMap((error) => error.errors);
                             setErrors(errorMessages);
                             return;
                         }
                         else {
-                            if (button.isOverwrite("save")) {
+                            if (button.isOverwrite('save')) {
                                 await postSave?.(form);
                             }
                         }
                     }
                 }, children: [button.icon, button.label] }, `custom_button_${index}`));
             if (tooltip) {
-                return _jsx(Tooltip, { label: tooltip, usePortal: true, children: buttonElement }, `custom_button_${index}`);
+                return (_jsx(Tooltip, { label: tooltip, usePortal: true, children: buttonElement }, `custom_button_${index}`));
             }
             return buttonElement;
         }));

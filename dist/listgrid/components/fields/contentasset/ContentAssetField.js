@@ -13,7 +13,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
  */
 import { FormField } from '../abstract';
 import { getInputRendererParameters } from '../../helper/FieldRendererHelper';
-import { ContentAssetItem } from "./ContentAssetItem";
+import { ContentAssetItem } from './ContentAssetItem';
 /**
  * ContentAssetField
  * 범용적인 파일 업로드 및 관리를 위한 ListGrid 커스텀 필드
@@ -30,7 +30,9 @@ export class ContentAssetField extends FormField {
     renderInstance(params) {
         return (async () => {
             const inputParams = await getInputRendererParameters(this, params);
-            return (_jsx(ContentAssetItem, { ...inputParams, entityForm: params.entityForm, session: params.session, maxItems: this.maxItems, acceptedFileTypes: this.acceptedFileTypes, maxFileSize: this.maxFileSize }));
+            return (_jsx(ContentAssetItem, { ...inputParams, entityForm: params.entityForm, ...(params.session !== undefined ? { session: params.session } : {}), ...(this.maxItems !== undefined ? { maxItems: this.maxItems } : {}), ...(this.acceptedFileTypes !== undefined
+                    ? { acceptedFileTypes: this.acceptedFileTypes }
+                    : {}), ...(this.maxFileSize !== undefined ? { maxFileSize: this.maxFileSize } : {}) }));
         })();
     }
     /**
@@ -75,8 +77,7 @@ export class ContentAssetField extends FormField {
      * @param props ContentAssetFieldProps
      */
     static create(props) {
-        const field = new ContentAssetField(props.name, props.order)
-            .copyFields(props, true);
+        const field = new ContentAssetField(props.name, props.order).copyFields(props, true);
         if (props.maxItems !== undefined) {
             field.withMaxItems(props.maxItems);
         }

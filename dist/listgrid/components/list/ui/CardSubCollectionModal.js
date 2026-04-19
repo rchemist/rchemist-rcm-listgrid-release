@@ -12,12 +12,6 @@ import { ViewEntityForm } from '../../form/ViewEntityForm';
  * - create: Create new item with mappedBy field auto-populated
  */
 export const CardSubCollectionModal = ({ isOpen, entityForm, parentEntityForm, itemId, relation, mode = 'view', onClose, onSave, onDelete, readonly = false, allowDelete = true, }) => {
-    // Don't render if not open
-    if (!isOpen)
-        return null;
-    // For view/edit mode, itemId is required
-    if ((mode === 'view' || mode === 'edit') && !itemId)
-        return null;
     // Get the mappedBy field name (first part of the path)
     const mappedByFieldName = useMemo(() => {
         const mappedBy = relation.mappedBy;
@@ -43,15 +37,10 @@ export const CardSubCollectionModal = ({ isOpen, entityForm, parentEntityForm, i
             return cloned;
         }
         else {
-            // View/Edit mode: clone with the existing item ID
-            return entityForm.clone(true).withId(itemId);
+            // View/Edit mode: clone with the existing item ID (may be null in non-render states; early-returned before render)
+            return entityForm.clone(true).withId(itemId ?? undefined);
         }
     }, [entityForm, itemId, mode, mappedByFieldName, mappedByValue]);
-    // Determine exclude buttons based on mode
-    const excludeButtons = [];
-    if (!allowDelete || mode === 'view' || mode === 'create') {
-        excludeButtons.push('delete');
-    }
     // Modal title based on mode
     const modalTitle = useMemo(() => {
         switch (mode) {
@@ -64,7 +53,18 @@ export const CardSubCollectionModal = ({ isOpen, entityForm, parentEntityForm, i
                 return 'View Item';
         }
     }, [mode]);
-    return (_jsx(Modal, { opened: true, view: { title: false }, size: "5xl", animation: "none", position: "center", closeOnClickOutside: false, closeOnEscape: true, onClose: onClose, children: _jsx(ViewEntityForm, { entityForm: itemEntityForm, subCollection: true, readonly: readonly || mode === 'view', excludeButtons: excludeButtons, hideMappedByFields: mappedByFieldName, buttonLinks: {
+    // Don't render if not open
+    if (!isOpen)
+        return null;
+    // For view/edit mode, itemId is required
+    if ((mode === 'view' || mode === 'edit') && !itemId)
+        return null;
+    // Determine exclude buttons based on mode
+    const excludeButtons = [];
+    if (!allowDelete || mode === 'view' || mode === 'create') {
+        excludeButtons.push('delete');
+    }
+    return (_jsx(Modal, { opened: true, view: { title: false }, size: "5xl", animation: "none", position: "center", closeOnClickOutside: false, closeOnEscape: true, onClose: onClose, children: _jsx(ViewEntityForm, { entityForm: itemEntityForm, subCollection: true, readonly: readonly || mode === 'view', excludeButtons: excludeButtons, ...(mappedByFieldName !== undefined ? { hideMappedByFields: mappedByFieldName } : {}), buttonLinks: {
                 onClickList: async () => {
                     onClose();
                 },

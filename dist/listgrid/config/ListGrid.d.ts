@@ -1,9 +1,9 @@
 import { EntityForm } from '../config/EntityForm';
-import { SearchForm } from "../form/SearchForm";
+import { SearchForm } from '../form/SearchForm';
 import { ListableFormField } from '../components/fields/abstract';
 import { LabelType } from '../config/Config';
-import { PageResult } from "../form/Type";
-import { ReactNode } from "react";
+import { PageResult } from '../form/Type';
+import { ReactNode } from 'react';
 import { SubCollectionBaseButtonProps } from '../components/list/types/SubCollectionButtons.type';
 export declare class ListGrid {
     private readonly entityForm;
@@ -47,11 +47,11 @@ export interface QuickSearchProps {
      * When specified, quick search will search across all fields using OR condition
      * @example ['name', 'email', 'phone'] - searches all three fields
      */
-    orFields?: string[];
+    orFields?: string[] | undefined;
     /**
      * Labels for orFields, used to generate combined placeholder text
      * @example ['이메일', '전화번호'] for orFields ['email', 'phone']
      */
-    orFieldLabels?: LabelType[];
+    orFieldLabels?: LabelType[] | undefined;
 }
 //# sourceMappingURL=ListGrid.d.ts.map

@@ -1,10 +1,10 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 import { ModalOptions } from '../../../store';
 import { EntityForm } from '../../../config/EntityForm';
 import { EntityTab } from '../../../config/EntityTab';
 import { RenderType } from '../../../config/Config';
 import { Session } from '../../../auth/types';
-import { ViewEntityFormProps } from "../types/ViewEntityForm.types";
+import { ViewEntityFormProps } from '../types/ViewEntityForm.types';
 /**
  * useEntityFormLogic 훅
  * - ViewEntityForm의 모든 상태/핸들러/로직을 관리하는 커스텀 훅
@@ -13,8 +13,8 @@ import { ViewEntityFormProps } from "../types/ViewEntityForm.types";
  * @param props ViewEntityFormProps
  */
 export declare function useEntityFormLogic(props: ViewEntityFormProps): {
-    entityForm: EntityForm | undefined;
-    setEntityForm: import("react").Dispatch<import("react").SetStateAction<EntityForm | undefined>>;
+    entityForm: EntityForm<any> | undefined;
+    setEntityForm: import("react").Dispatch<import("react").SetStateAction<EntityForm<any> | undefined>>;
     tabIndex: string | undefined;
     setTabIndex: import("react").Dispatch<import("react").SetStateAction<string | undefined>>;
     cacheKey: string | undefined;

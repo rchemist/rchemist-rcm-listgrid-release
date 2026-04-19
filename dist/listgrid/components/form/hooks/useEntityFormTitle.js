@@ -1,12 +1,12 @@
 import { defaultString, isBlank } from '../../../utils/StringUtil';
-import { getTranslation } from "../../../utils/i18n";
+import { getTranslation } from '../../../utils/i18n';
 /**
  * EntityForm의 타이틀을 동적으로 계산해 반환하는 커스텀 훅
  * @param entityForm - 기준 EntityForm
  * @param customTitle - 커스텀 타이틀(옵션)
  * @returns (form?: EntityForm) => Promise<ReactNode>
  */
-export const useEntityFormTitle = ({ entityForm, customTitle }) => {
+export const useEntityFormTitle = ({ entityForm, customTitle, }) => {
     const { t } = getTranslation();
     return async (form) => {
         const f = form ?? entityForm;

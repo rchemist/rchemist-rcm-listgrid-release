@@ -1,5 +1,5 @@
 import { ListableFormField } from '../fields/abstract';
-import { ViewFieldManageable } from "./types/ViewListGrid.types";
+import { ViewFieldManageable } from './types/ViewListGrid.types';
 interface ViewFieldSelectorProps extends ViewFieldManageable {
     fields: ListableFormField<any>[];
     disabled: boolean;

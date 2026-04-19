@@ -1,21 +1,21 @@
 import { FormField, FormFieldProps } from '../abstract';
 import { FieldRenderParameters } from '../../../config/EntityField';
 interface AddressMapFieldProps extends FormFieldProps {
-    prefix?: string;
-    showMap?: boolean;
+    prefix?: string | undefined;
+    showMap?: boolean | undefined;
 }
 export interface Address {
-    state?: string;
-    city?: string;
+    state?: string | undefined;
+    city?: string | undefined;
     address1: string;
     address2: string;
     postalCode: string;
-    longitude?: number;
-    latitude?: number;
+    longitude?: number | undefined;
+    latitude?: number | undefined;
 }
 export declare class AddressMapField extends FormField<AddressMapField> {
-    showMap?: boolean;
-    prefix?: string;
+    showMap?: boolean | undefined;
+    prefix?: string | undefined;
     constructor(name: string, order: number, showMap?: boolean, prefix?: string);
     static create(props: AddressMapFieldProps): AddressMapField;
     /**

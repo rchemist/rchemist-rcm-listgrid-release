@@ -1,5 +1,5 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-import { FormField, } from './abstract';
+import { FormField } from './abstract';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
 import { RuleFieldView } from './rule/RuleFieldView';
 export class RuleField extends FormField {

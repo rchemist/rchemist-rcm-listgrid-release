@@ -1,15 +1,15 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { hexHash } from "../../utils/hash";
-import { CheckBoxChip } from "../../ui";
-import { MultiSelectBox } from "../../ui";
-import { RadioChip } from "../../ui";
-import { RadioInput } from "../../ui";
-import { SelectBox } from "../../ui";
-import { OptionalField, renderListOptionalField } from './abstract';
+import { hexHash } from '../../utils/hash';
+import { CheckBoxChip } from '../../ui';
+import { MultiSelectBox } from '../../ui';
+import { RadioChip } from '../../ui';
+import { RadioInput } from '../../ui';
+import { SelectBox } from '../../ui';
+import { OptionalField, renderListOptionalField, } from './abstract';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
 import { SelectFieldRenderer } from './SelectFieldRenderer';
-import { Badge } from "../../ui";
-import { DynamicSelectFieldView } from "./view/DynamicSelectFieldView";
+import { Badge } from '../../ui';
+import { DynamicSelectFieldView } from './view/DynamicSelectFieldView';
 // SelectField loadOptions 캐시 (fieldName 기반, 동일 페이지 내에서 공유)
 const selectFieldOptionsCache = new Map();
 // 진행 중인 loadOptions Promise 추적 (중복 호출 방지)
@@ -20,8 +20,10 @@ export class SelectField extends OptionalField {
     constructor(name, order, options, reason, validateStatusChange) {
         super(name, order, 'select');
         this.options = options ?? [];
-        this.reason = reason;
-        this.validateStatusChange = validateStatusChange;
+        if (reason !== undefined)
+            this.reason = reason;
+        if (validateStatusChange !== undefined)
+            this.validateStatusChange = validateStatusChange;
     }
     /**
      * SelectField 핵심 렌더링 로직
@@ -43,7 +45,7 @@ export class SelectField extends OptionalField {
                 else if (this.shouldRenderAsChip()) {
                     renderType = 'chip';
                 }
-                return (_jsx(DynamicSelectFieldView, { name: this.getName(), fieldName: this.getName(), entityForm: params.entityForm, loadOptions: this.loadOptions, staticOptions: this.options, renderType: renderType, combo: this.combo, value: inputParams.value, onChange: inputParams.onChange, readonly: inputParams.readonly, required: inputParams.required, placeHolder: inputParams.placeHolder }));
+                return (_jsx(DynamicSelectFieldView, { name: this.getName(), fieldName: this.getName(), entityForm: params.entityForm, loadOptions: this.loadOptions, staticOptions: this.options, renderType: renderType, combo: this.combo, value: inputParams.value, onChange: inputParams.onChange, readonly: inputParams.readonly ?? false, required: inputParams.required ?? false, placeHolder: inputParams.placeHolder ?? '' }));
             })();
         }
         // 즉시 변경 기능이 활성화된 경우 SelectFieldRenderer 사용
@@ -59,13 +61,13 @@ export class SelectField extends OptionalField {
         return (async () => {
             // combo 설정이 있으면 RadioInput 우선
             if (this.combo !== undefined && this.combo.direction !== undefined) {
-                return _jsx(RadioInput, { options: this.options, combo: this.combo, ...await getInputRendererParameters(this, params) }, cacheKey);
+                return (_jsx(RadioInput, { options: this.options, combo: this.combo, ...await getInputRendererParameters(this, params) }, cacheKey));
             }
             // Chip UI 조건 충족 시 RadioChip 사용
             if (this.shouldRenderAsChip()) {
-                return _jsx(RadioChip, { options: this.options, combo: { direction: 'row' }, ...await getInputRendererParameters(this, params) }, cacheKey);
+                return (_jsx(RadioChip, { options: this.options, combo: { direction: 'row' }, ...await getInputRendererParameters(this, params) }, cacheKey));
             }
-            return _jsx(SelectBox, { options: this.options, ...await getInputRendererParameters(this, params) }, cacheKey);
+            return (_jsx(SelectBox, { options: this.options, ...await getInputRendererParameters(this, params) }, cacheKey));
         })();
     }
     /**
@@ -95,26 +97,26 @@ export class SelectField extends OptionalField {
             const optionsCount = this.options?.length ?? 0;
             // singleFilter가 true이면 RadioChip 사용 (단일 선택만 허용)
             if (this.singleFilter) {
-                return _jsx(RadioChip, { options: this.options, combo: { direction: 'row' }, ...await getInputRendererParameters(this, {
+                return (_jsx(RadioChip, { options: this.options, combo: { direction: 'row' }, ...await getInputRendererParameters(this, {
                         ...params,
                         required: false,
-                        onChange: (value) => params.onChange(value)
-                    }) }, cacheKey);
+                        onChange: (value) => params.onChange(value),
+                    }) }, cacheKey));
             }
             // 옵션이 10개 이상이면 MultiSelectBox 사용
             if (optionsCount >= CHECKBOX_THRESHOLD) {
-                return _jsx(MultiSelectBox, { options: this.options, ...await getInputRendererParameters(this, {
+                return (_jsx(MultiSelectBox, { options: this.options, ...await getInputRendererParameters(this, {
                         ...params,
                         required: false,
-                        onChange: (value) => params.onChange(value)
-                    }) }, cacheKey);
+                        onChange: (value) => params.onChange(value),
+                    }) }, cacheKey));
             }
             // 옵션이 10개 미만이면 Chip 스타일 Checkbox 그룹 사용 (모든 옵션을 한눈에 볼 수 있음)
-            return _jsx(CheckBoxChip, { options: this.options, combo: { direction: 'row' }, ...await getInputRendererParameters(this, {
+            return (_jsx(CheckBoxChip, { options: this.options, combo: { direction: 'row' }, ...await getInputRendererParameters(this, {
                     ...params,
                     required: false,
-                    onChange: (value) => params.onChange(value)
-                }) }, cacheKey);
+                    onChange: (value) => params.onChange(value),
+                }) }, cacheKey));
         })();
     }
     /**
@@ -172,7 +174,7 @@ export class SelectField extends OptionalField {
             return { result: null };
         }
         // options에서 해당 value의 label 찾기
-        const option = this.options?.find(opt => opt.value === value);
+        const option = this.options?.find((opt) => opt.value === value);
         const displayLabel = option?.label ?? String(value);
         // 상태값에 따른 색상 매핑 (ColorType 사용)
         const colorMap = {
@@ -202,11 +204,11 @@ export class SelectField extends OptionalField {
         if (this.cardIcon) {
             const IconComponent = this.cardIcon;
             return {
-                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx(Badge, { color: color, children: displayLabel })] }))
+                result: (_jsxs("span", { className: "rcm-bool-wrap", children: [_jsx("span", { className: "rcm-icon-frame", children: _jsx(IconComponent, { className: "rcm-icon", "data-size": "sm", stroke: 1.75 }) }), _jsx(Badge, { color: color, children: displayLabel })] })),
             };
         }
         return {
-            result: _jsx(Badge, { color: color, children: displayLabel })
+            result: _jsx(Badge, { color: color, children: displayLabel }),
         };
     }
     /**
@@ -214,9 +216,14 @@ export class SelectField extends OptionalField {
      */
     createInstance(name, order) {
         const instance = new SelectField(name, order, this.options ?? [], this.reason, this.validateStatusChange);
-        instance.enableImmediateChange = this.enableImmediateChange;
-        instance.immediateChangeProps = this.immediateChangeProps;
-        instance.loadOptions = this.loadOptions;
+        if (this.enableImmediateChange !== undefined) {
+            instance.enableImmediateChange = this.enableImmediateChange;
+        }
+        if (this.immediateChangeProps !== undefined) {
+            instance.immediateChangeProps = this.immediateChangeProps;
+        }
+        if (this.loadOptions !== undefined)
+            instance.loadOptions = this.loadOptions;
         return instance;
     }
     createCacheKey(renderType) {
@@ -228,9 +235,14 @@ export class SelectField extends OptionalField {
     }
     static create(props) {
         const field = new SelectField(props.name, props.order, props.options ?? [], props.reason, props.validateStatusChange);
-        field.enableImmediateChange = props.enableImmediateChange;
-        field.immediateChangeProps = props.immediateChangeProps;
-        field.loadOptions = props.loadOptions;
+        if (props.enableImmediateChange !== undefined) {
+            field.enableImmediateChange = props.enableImmediateChange;
+        }
+        if (props.immediateChangeProps !== undefined) {
+            field.immediateChangeProps = props.immediateChangeProps;
+        }
+        if (props.loadOptions !== undefined)
+            field.loadOptions = props.loadOptions;
         return field.copyFields(props, true);
     }
     /**
@@ -295,7 +307,10 @@ export class SelectField extends OptionalField {
      * @param reason 사유 입력 설정 배열
      */
     withReason(reason) {
-        this.reason = reason;
+        if (reason !== undefined)
+            this.reason = reason;
+        else
+            delete this.reason;
         return this;
     }
     /**
@@ -304,14 +319,20 @@ export class SelectField extends OptionalField {
      * @param validateStatusChange 검증 로직 설정
      */
     withValidateStatusChange(validateStatusChange) {
-        this.validateStatusChange = validateStatusChange;
+        if (validateStatusChange !== undefined)
+            this.validateStatusChange = validateStatusChange;
+        else
+            delete this.validateStatusChange;
         return this;
     }
     useListField(props) {
         if (typeof props === 'number') {
             props = { order: props };
         }
-        this.listConfig = { ...this.listConfig, support: true, sortable: false, order: props?.order }; // Select 필드는 Sort 를 지원하지 않는다.
+        const base = { ...this.listConfig, support: true, sortable: false };
+        if (props?.order !== undefined)
+            base.order = props.order;
+        this.listConfig = base;
         this.listConfig.filterable = props?.filterable ?? true;
         return this;
     }
@@ -324,7 +345,7 @@ export class SelectField extends OptionalField {
  * @param entityForm 옵션 로드에 사용할 EntityForm
  */
 export async function prefetchSelectFieldOptions(fields, entityForm) {
-    const fieldsToLoad = fields.filter(field => {
+    const fieldsToLoad = fields.filter((field) => {
         if (!field.loadOptions)
             return false;
         const cacheKey = field.getLoadOptionsCacheKey();

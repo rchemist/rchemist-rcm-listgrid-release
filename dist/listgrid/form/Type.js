@@ -5,10 +5,10 @@
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import { SearchForm } from './SearchForm';
-import { callExternalHttpRequest } from "../misc";
+import { callExternalHttpRequest } from '../misc';
 import { isTrue } from '../utils/BooleanUtil';
-import { signOut } from "../auth/SessionProvider";
-import { showConfirm } from "../message";
+import { signOut } from '../auth/SessionProvider';
+import { showConfirm } from '../message';
 export class PageResult {
     constructor(props) {
         this.list = [];
@@ -23,7 +23,7 @@ export class PageResult {
             list: [],
             totalCount: 0,
             totalPage: 0,
-            searchForm: searchForm || new SearchForm()
+            searchForm: searchForm || new SearchForm(),
         });
     }
     withErrors(...errors) {
@@ -40,12 +40,18 @@ export class PageResult {
                 url: url,
                 method: 'POST',
                 formData: searchForm,
-                entityFormName: extensionOptions?.entityFormName,
-                extensionPoint: extensionOptions?.extensionPoint,
-                serverProxy: serverProxy
+                ...(extensionOptions?.entityFormName !== undefined
+                    ? { entityFormName: extensionOptions.entityFormName }
+                    : {}),
+                ...(extensionOptions?.extensionPoint !== undefined
+                    ? { extensionPoint: extensionOptions.extensionPoint }
+                    : {}),
+                serverProxy: serverProxy,
             });
             if (response.isError()) {
-                if (response.error === 'Failed to fetch' && response.status === 500 && typeof window !== 'undefined') {
+                if (response.error === 'Failed to fetch' &&
+                    response.status === 500 &&
+                    typeof window !== 'undefined') {
                     await showConfirm({
                         title: '세션이 만료되었습니다.',
                         message: '서비스를 이용하려면 다시 로그인해야 합니다.',
@@ -53,7 +59,7 @@ export class PageResult {
                         cancelButtonText: '',
                         onConfirm: async () => {
                             await signOut();
-                        }
+                        },
                     });
                 }
                 if (response.entityError) {
@@ -79,7 +85,7 @@ export class PageResult {
             const listData = response.data.list || response.data.content || [];
             const responseList = listData.map((item) => ({
                 ...item,
-                id: String(item.id) // id를 문자열로 강제 변환
+                id: String(item.id), // id를 문자열로 강제 변환
             }));
             return new PageResult({
                 list: responseList,

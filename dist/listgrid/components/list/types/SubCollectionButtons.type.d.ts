@@ -1,6 +1,6 @@
-import { SearchForm } from "../../../form/SearchForm";
+import { SearchForm } from '../../../form/SearchForm';
 import { EntityForm } from '../../../config/EntityForm';
-import { CreateUpdateOptions } from "./ViewListGrid.types";
+import { CreateUpdateOptions } from './ViewListGrid.types';
 export interface SubCollectionBaseButtonProps {
     add?: boolean;
     delete?: boolean;

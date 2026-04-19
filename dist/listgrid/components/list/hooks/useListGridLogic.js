@@ -5,20 +5,20 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useParams, usePathname, useRouter } from "../../../router";
-import { getSessionStorageObject, isEmpty, isEqualCollection, setSessionStorageItem } from "../../../misc";
-import { SearchForm } from "../../../form/SearchForm";
-import { ExtensionPoint } from '../../../extensions/EntityFormExtension.types';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useParams, usePathname, useRouter } from '../../../router';
+import { getSessionStorageObject, isEmpty, isEqualCollection, setSessionStorageItem, } from '../../../misc';
+import { SearchForm } from '../../../form/SearchForm';
+import { ExtensionPoint, } from '../../../extensions/EntityFormExtension.types';
 import { hash } from '../../../utils/simpleCrypt';
 import { useSession } from '../../../auth';
 import { isTrue } from '../../../utils/BooleanUtil';
 import { getListFieldsFromCache } from '../../../config/ListGridViewFieldCache';
-import { getGlobalPageSize } from "./useQuickSearchBar";
+import { getGlobalPageSize } from './useQuickSearchBar';
 import { isBlank } from '../../../utils/StringUtil';
-import { showConfirm } from "../../../message";
-import { useLoadingStore } from "../../../loading";
-import { searchFormHashKey } from "../types/ViewListGrid.types";
+import { showConfirm } from '../../../message';
+import { useLoadingStore } from '../../../loading';
+import { searchFormHashKey } from '../types/ViewListGrid.types';
 import { parse, stringify } from '../../../utils/jsonUtils';
 import { CustomOptionField, prefetchCustomOptions } from '../../fields/CustomOptionField';
 import { prefetchSelectFieldOptions, SelectField } from '../../fields/SelectField';
@@ -36,8 +36,8 @@ export const useListGridLogic = (props) => {
     const objectFieldMap = useMemo(() => {
         const map = new Map();
         for (const field of listFields) {
-            if (field.getName().includes(".")) {
-                const objectNames = field.getName().split(".");
+            if (field.getName().includes('.')) {
+                const objectNames = field.getName().split('.');
                 const objectName = objectNames[0];
                 const objectField = objectNames[1];
                 const objectFields = map.get(objectName) ?? [];
@@ -64,15 +64,19 @@ export const useListGridLogic = (props) => {
     const isMainEntity = manyToOne === undefined && !isSubCollection && !isPopup;
     // URL state synchronization hook
     const urlStateHook = useListGridUrlState({
-        urlSync: props.options?.urlSync,
+        ...(props.options?.urlSync !== undefined ? { urlSync: props.options.urlSync } : {}),
         isMainEntity,
-        quickSearchPropertyName: quickSearchProperty?.name,
-        orFields: quickSearchProperty?.orFields,
+        ...(quickSearchProperty?.name !== undefined
+            ? { quickSearchPropertyName: quickSearchProperty.name }
+            : {}),
+        ...(quickSearchProperty?.orFields !== undefined
+            ? { orFields: quickSearchProperty.orFields }
+            : {}),
     });
     // Track if URL was used for initial load (for proper sync behavior)
     const initializedFromUrlRef = useRef(false);
     const router = useRouter();
-    const path = usePathname() ?? "/";
+    const path = usePathname() ?? '/';
     const params = useParams();
     const [entityForm, setEntityForm] = useState(listGrid.getEntityForm());
     const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
@@ -80,22 +84,24 @@ export const useListGridLogic = (props) => {
     // Next.js 15+ params는 Proxy 객체이므로 일반 객체로 복사하여 사용
     const paramsForHash = params ? { ...params } : {};
     // props.options에서 해시 키 생성에 필요한 primitive 값만 추출 (함수, Proxy 객체 제외)
-    const optionsForHash = props.options ? {
-        hideTitle: props.options.hideTitle,
-        readonly: props.options.readonly,
-        popup: props.options.popup,
-        filterable: props.options.filterable,
-        sortable: props.options.sortable,
-        cacheable: props.options.cacheable,
-        hidePageSize: props.options.hidePageSize,
-        hidePagination: props.options.hidePagination,
-        subCollectionName: props.options.subCollection?.name,
-    } : {};
-    const hashKey = "listgrid_" +
+    const optionsForHash = props.options
+        ? {
+            hideTitle: props.options.hideTitle,
+            readonly: props.options.readonly,
+            popup: props.options.popup,
+            filterable: props.options.filterable,
+            sortable: props.options.sortable,
+            cacheable: props.options.cacheable,
+            hidePageSize: props.options.hidePageSize,
+            hidePagination: props.options.hidePagination,
+            subCollectionName: props.options.subCollection?.name,
+        }
+        : {};
+    const hashKey = 'listgrid_' +
         hash(searchFormHashKey, entityForm.name, entityForm.id, path, paramsForHash, optionsForHash);
     const { setOpenBaseLoading } = useLoadingStore();
     const [initializedSearchForm, setInitializedSearchForm] = useState();
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState('');
     const [totalPage, setTotalPage] = useState(0);
     const [totalCount, setTotalCount] = useState(0);
     const [errors, setErrors] = useState([]);
@@ -104,7 +110,7 @@ export const useListGridLogic = (props) => {
     const [checkedItems, setCheckedItems] = useState([]);
     const [dataTransferConfig, setDataTransferConfig] = useState(undefined);
     const [managedId, setManagedId] = useState();
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState('');
     const [managePriority, setManagePriority] = useState(false);
     const [rows, setRows] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -143,13 +149,12 @@ export const useListGridLogic = (props) => {
             // CustomOptionField의 alias들을 수집하여 일괄 prefetch (N+1 문제 방지)
             const customOptionAliases = listFields
                 .filter((field) => field instanceof CustomOptionField)
-                .map(field => field.alias);
+                .map((field) => field.alias);
             if (customOptionAliases.length > 0) {
                 await prefetchCustomOptions(customOptionAliases);
             }
             // SelectField의 loadOptions를 일괄 prefetch (N+1 문제 방지)
-            const selectFieldsWithLoadOptions = listFields
-                .filter((field) => field instanceof SelectField && field.loadOptions !== undefined);
+            const selectFieldsWithLoadOptions = listFields.filter((field) => field instanceof SelectField && field.loadOptions !== undefined);
             if (selectFieldsWithLoadOptions.length > 0) {
                 await prefetchSelectFieldOptions(selectFieldsWithLoadOptions, entityForm);
             }
@@ -161,9 +166,9 @@ export const useListGridLogic = (props) => {
             // Client Pre Extension 실행
             if (hasClientExtensions) {
                 const context = {
-                    session,
-                    user: session?.getUser(),
-                    entityForm
+                    entityForm,
+                    ...(session ? { session } : {}),
+                    ...(session?.getUser() != null ? { user: session.getUser() } : {}),
                 };
                 finalSearchForm = await entityForm.executeClientExtensions(ExtensionPoint.PRE_FETCH_LIST, listSearchForm, context);
             }
@@ -174,10 +179,12 @@ export const useListGridLogic = (props) => {
                 page: finalSearchForm.getPage(),
                 pageSize: finalSearchForm.getPageSize(),
             });
-            listGrid.fetchData(finalSearchForm, {
+            listGrid
+                .fetchData(finalSearchForm, {
                 entityFormName: entityForm.name,
-                extensionPoint: ExtensionPoint.POST_FETCH_LIST
-            }).then(async (result) => {
+                extensionPoint: ExtensionPoint.POST_FETCH_LIST,
+            })
+                .then(async (result) => {
                 const apiDuration = performance.now() - apiStartTime;
                 if (!isEmpty(result.errors)) {
                     perfLog.apiError(apiDuration, {
@@ -192,9 +199,9 @@ export const useListGridLogic = (props) => {
                     // Client Post Extension 실행
                     if (hasClientExtensions) {
                         const context = {
-                            session,
-                            user: session?.getUser(),
-                            entityForm
+                            entityForm,
+                            ...(session ? { session } : {}),
+                            ...(session?.getUser() != null ? { user: session.getUser() } : {}),
                         };
                         processedResult = await entityForm.executeClientExtensions(ExtensionPoint.POST_FETCH_LIST, processedResult, context);
                     }
@@ -278,20 +285,33 @@ export const useListGridLogic = (props) => {
                 setLoading(false);
             });
         })();
-    }, [searchForm, listGrid, entityForm, props.options, objectFieldMap, isMainEntity, hashKey, showMessages, listFields, urlStateHook, quickSearchProperty?.name, quickSearchProperty?.orFields]);
+    }, [
+        searchForm,
+        listGrid,
+        entityForm,
+        props.options,
+        objectFieldMap,
+        isMainEntity,
+        hashKey,
+        showMessages,
+        listFields,
+        urlStateHook,
+        quickSearchProperty?.name,
+        quickSearchProperty?.orFields,
+    ]);
     const setOptionsFilters = useCallback(async (entityForm, searchForm) => {
         searchForm = searchForm === undefined ? SearchForm.create() : searchForm;
         if (props.options?.filters) {
             const filters = await props.options.filters(entityForm);
             if (filters?.length > 0) {
                 filters.forEach((value) => {
-                    const condition = value.condition ?? "AND";
+                    const condition = value.condition ?? 'AND';
                     const items = value.items;
                     if (items.length > 0) {
                         searchForm.withFilter(condition, ...items);
                         // Legacy mode only: Set search from AND filter when NOT in OR search mode
                         // When orFields exist (OR search mode), AND filters should NOT populate QuickSearch
-                        if (condition === "AND" && !quickSearchProperty?.orFields?.length) {
+                        if (condition === 'AND' && !quickSearchProperty?.orFields?.length) {
                             for (const item of items) {
                                 if (item.name === quickSearchProperty?.name && item.value) {
                                     setSearch(item.value);
@@ -308,7 +328,7 @@ export const useListGridLogic = (props) => {
     const onChangeSearchForm = useCallback(async (entityForm, searchForm, reset, resetPage) => {
         let newSearchForm = searchForm.clone();
         if (isTrue(reset)) {
-            setSearch("");
+            setSearch('');
             // newSearchForm.clearFilterAndSort();
             newSearchForm.withPage(0);
             newSearchForm = await setOptionsFilters(entityForm, newSearchForm);
@@ -365,7 +385,15 @@ export const useListGridLogic = (props) => {
         }
         searchForm = await setOptionsFilters(entityForm, searchForm);
         return searchForm;
-    }, [isMainEntity, hashKey, listGrid, setOptionsFilters, entityForm, urlStateHook, quickSearchProperty?.name]);
+    }, [
+        isMainEntity,
+        hashKey,
+        listGrid,
+        setOptionsFilters,
+        entityForm,
+        urlStateHook,
+        quickSearchProperty?.name,
+    ]);
     const syncViewFieldsFromCache = useCallback(() => {
         const cached = getListFieldsFromCache(entityForm.getUrl(), props.options?.subCollection?.name);
         if (cached !== undefined && !isEmpty(cached)) {
@@ -375,12 +403,12 @@ export const useListGridLogic = (props) => {
         }
     }, [entityForm, props.options?.subCollection?.name, viewFields]);
     const initialize = useCallback(async () => {
-        if (typeof window === "undefined")
+        if (typeof window === 'undefined')
             return;
         if (isMainEntity) {
             entityForm.setRevisionEntityNameIfBlank(path);
         }
-        await entityForm.initialize({ session: session }).then((result) => {
+        await entityForm.initialize(session !== undefined ? { session } : {}).then((result) => {
             setEntityForm(result.entityForm);
         });
         const searchForm = await initializeSearchForm();
@@ -388,19 +416,26 @@ export const useListGridLogic = (props) => {
         syncViewFieldsFromCache();
         setLoading(false);
         setDataTransferConfig(await entityForm.getDataTransferConfig());
-        setTitle(props.title ?? (await entityForm.getTitle("목록", false)));
+        setTitle(props.title ?? (await entityForm.getTitle('목록', false)));
         await onChangeSearchForm(entityForm, searchForm);
-    }, [isMainEntity, entityForm, path, session, initializeSearchForm, syncViewFieldsFromCache, props.title, onChangeSearchForm]);
+    }, [
+        isMainEntity,
+        entityForm,
+        path,
+        session,
+        initializeSearchForm,
+        syncViewFieldsFromCache,
+        props.title,
+        onChangeSearchForm,
+    ]);
     const deleteItems = useCallback(() => {
         const neverDelete = isTrue(entityForm.neverDelete);
-        const message = `선택된 ${checkedItems.length}개의 항목을 ${neverDelete ? "사용 중지" : "삭제"}하시겠습니까?`;
+        const message = `선택된 ${checkedItems.length}개의 항목을 ${neverDelete ? '사용 중지' : '삭제'}하시겠습니까?`;
         const text = neverDelete
             ? `<div className='text-sm'>사용 중지된 항목은 상세 정보에서<br/><u>상태 정보 > 사용 여부</u> 값을 변경해 되돌릴 수 있습니다.</div>`
-            : "이 작업은 되돌릴 수 없습니다.";
-        const confirmButtonText = neverDelete ? "사용 중지" : "삭제";
-        const confirmMessage = neverDelete
-            ? "사용 중지 처리 되었습니다"
-            : "삭제가 완료되었습니다";
+            : '이 작업은 되돌릴 수 없습니다.';
+        const confirmButtonText = neverDelete ? '사용 중지' : '삭제';
+        const confirmMessage = neverDelete ? '사용 중지 처리 되었습니다' : '삭제가 완료되었습니다';
         if (checkedItems.length > 0) {
             (async () => {
                 await showConfirm({
@@ -421,18 +456,26 @@ export const useListGridLogic = (props) => {
                             setLoading(false);
                         }
                         else {
-                            showMessages(false, [
-                                result.messages?.[0] ?? confirmMessage,
-                            ]);
+                            showMessages(false, [result.messages?.[0] ?? confirmMessage]);
                             fetchData();
                             setOpenBaseLoading(false);
                             await props.options?.delete?.postDelete?.(entityForm, rows, [...checkedItems]);
                         }
-                    }
+                    },
                 });
             })();
         }
-    }, [entityForm, checkedItems, router, path, props.options, rows, showMessages, fetchData, setOpenBaseLoading]);
+    }, [
+        entityForm,
+        checkedItems,
+        router,
+        path,
+        props.options,
+        rows,
+        showMessages,
+        fetchData,
+        setOpenBaseLoading,
+    ]);
     useEffect(() => {
         initialize();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -490,7 +533,7 @@ export const useListGridLogic = (props) => {
             }
             else {
                 // Fallback to single field search for backward compatibility
-                newSearchForm.handleAndFilter(fieldName, search, "LIKE");
+                newSearchForm.handleAndFilter(fieldName, search, 'LIKE');
             }
         }
         else {

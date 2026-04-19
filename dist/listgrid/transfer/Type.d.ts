@@ -1,21 +1,21 @@
 import { FieldType } from '../config/Config';
-import { ReactNode } from "react";
-import { SelectOption } from "../form/Type";
+import { ReactNode } from 'react';
+import { SelectOption } from '../form/Type';
 export interface IDataTransferProperty {
     name: string;
     propertyName: string;
-    helpText?: string;
-    order?: number;
-    tabId?: string;
-    fieldGroupId?: string;
+    helpText?: string | undefined;
+    order?: number | undefined;
+    tabId?: string | undefined;
+    fieldGroupId?: string | undefined;
 }
 export declare class DataTransferProperty implements IDataTransferProperty {
     name: string;
     propertyName: string;
-    helpText?: string;
-    order?: number;
-    tabId?: string;
-    fieldGroupId?: string;
+    helpText?: string | undefined;
+    order?: number | undefined;
+    tabId?: string | undefined;
+    fieldGroupId?: string | undefined;
     constructor(data: IDataTransferProperty);
     static fromJson(data: IDataTransferProperty): DataTransferProperty;
     static fromJsonArray(data: IDataTransferProperty[]): DataTransferProperty[];
@@ -32,10 +32,10 @@ export interface DataManageType {
 }
 export interface IDataTransferConfig {
     type: DataManageType;
-    export?: TransferConfig;
-    import?: ImportTransferConfig;
-    refreshView?: boolean;
-    exportFileName?: string;
+    export?: TransferConfig | undefined;
+    import?: ImportTransferConfig | undefined;
+    refreshView?: boolean | undefined;
+    exportFileName?: string | undefined;
 }
 export declare const DataTransferAll: DataManageType;
 export declare const DataTransferNotSupport: DataManageType;
@@ -52,32 +52,32 @@ export type SampleDataItem = {
     value: any;
 };
 export interface ImportTransferConfig extends TransferConfig {
-    sampleData?: SampleDataItem[][];
-    overrideParseResult?: (formData: DataRowSet, response: unknown) => {
+    sampleData?: SampleDataItem[][] | undefined;
+    overrideParseResult?: ((formData: DataRowSet, response: unknown) => {
         success: boolean;
         result: DataTransferResult;
         error?: string;
         errorView?: ReactNode;
-    };
+    }) | undefined;
     mode?: {
         create?: boolean;
         update?: boolean;
-    };
+    } | undefined;
 }
 export interface ExportTransferConfig extends TransferConfig {
 }
 export interface TransferConfig {
-    fields?: DataField[];
-    url?: string;
-    description?: ReactNode;
-    addedFields?: (row: DataRow) => Promise<DataRow>;
-    overrideFormData?: (formData: DataRowSet) => Promise<DataRowSet>;
+    fields?: DataField[] | undefined;
+    url?: string | undefined;
+    description?: ReactNode | undefined;
+    addedFields?: ((row: DataRow) => Promise<DataRow>) | undefined;
+    overrideFormData?: ((formData: DataRowSet) => Promise<DataRowSet>) | undefined;
 }
 export declare class DataTransferConfig implements IDataTransferConfig {
     type: DataManageType;
-    export?: ExportTransferConfig;
-    import?: ImportTransferConfig;
-    exportFileName?: string;
+    export?: ExportTransferConfig | undefined;
+    import?: ImportTransferConfig | undefined;
+    exportFileName?: string | undefined;
     constructor(data: IDataTransferConfig, url: string);
     isSupportExport(): boolean;
     isSupportImport(): boolean;
@@ -126,10 +126,10 @@ export interface DataFieldProps {
     name: string;
     label: string;
     type: FieldType;
-    description?: string;
-    required?: boolean;
-    options?: SelectOption[];
-    dataTransferRule?: DataTransferRule;
+    description?: string | undefined;
+    required?: boolean | undefined;
+    options?: SelectOption[] | undefined;
+    dataTransferRule?: DataTransferRule | undefined;
 }
 export declare class DataField {
     private readonly name;
@@ -139,7 +139,7 @@ export declare class DataField {
     private required?;
     private options?;
     private dataTransferRule?;
-    constructor({ name, label, type, description, options, dataTransferRule, required }: DataFieldProps);
+    constructor({ name, label, type, description, options, dataTransferRule, required, }: DataFieldProps);
     static create(props: DataFieldProps): DataField;
     equals(other: DataField): boolean;
     getName(): string;

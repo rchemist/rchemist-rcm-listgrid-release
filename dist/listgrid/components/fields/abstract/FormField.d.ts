@@ -1,7 +1,7 @@
 import { FieldType, FieldValue, HelpTextType, HiddenType, LabelType, PlaceHolderType, ReadOnlyType, RenderType, RequiredType, TooltipType, ViewPreset } from '../../../config/Config';
 import { ValidateResult, Validation } from '../../../validations/Validation';
 import { EntityForm } from '../../../config/EntityForm';
-import React, { ReactNode } from "react";
+import React, { ReactNode } from 'react';
 import { EntityField, FieldInfoParameters, FieldRenderParameters } from '../../../config/EntityField';
 import { Session } from '../../../auth/types';
 /**
@@ -46,8 +46,8 @@ export type FieldLayoutType = 'auto' | 'full' | 'half';
  * 이 타입들은 UI 크기가 커서 2열 레이아웃에서 한 줄 전체를 차지하는 것이 적합함
  */
 export declare const FULL_WIDTH_FIELD_TYPES: FieldType[];
-export interface FormFieldProps {
-    value?: FieldValue;
+export interface FormFieldProps<TValue = any, TForm extends object = any> {
+    value?: FieldValue<TValue>;
     placeHolder?: PlaceHolderType;
     required?: RequiredType;
     validations?: Validation[];
@@ -56,7 +56,7 @@ export interface FormFieldProps {
      * @param field
      * @param renderType
      */
-    displayFunc?: (entityForm: EntityForm, field: EntityField, renderType?: RenderType) => Promise<any>;
+    displayFunc?: (entityForm: EntityForm<TForm>, field: EntityField, renderType?: RenderType) => Promise<TValue>;
     overrideRender?: (params: FieldRenderParameters) => Promise<ReactNode | null | undefined>;
     order: number;
     name: string;
@@ -76,17 +76,17 @@ export interface FormFieldProps {
         tabId: string;
         fieldGroupId: string;
     };
-    saveValue?: (entityForm: EntityForm, field: EntityField, renderType?: RenderType) => Promise<any>;
-    maskedValueFunc?: (entityForm: EntityForm, value: any) => Promise<string>;
+    saveValue?: (entityForm: EntityForm<TForm>, field: EntityField, renderType?: RenderType) => Promise<TValue>;
+    maskedValueFunc?: (entityForm: EntityForm<TForm>, value: TValue) => Promise<string>;
     exceptOnSave?: boolean;
 }
-export declare abstract class FormField<T extends FormField<T>> implements EntityField {
+export declare abstract class FormField<TSelf extends FormField<TSelf, TValue, TForm>, TValue = any, TForm extends object = any> implements EntityField {
     order: number;
     name: string;
     type: FieldType;
     exceptOnSave?: boolean;
     constructor(name: string, order: number, type: FieldType);
-    value?: FieldValue;
+    value?: FieldValue<TValue>;
     tooltip?: TooltipType;
     helpText?: HelpTextType;
     placeHolder?: PlaceHolderType;
@@ -106,14 +106,14 @@ export declare abstract class FormField<T extends FormField<T>> implements Entit
     };
     validations?: Validation[];
     overrideRender?: (params: FieldRenderParameters) => Promise<React.ReactNode | null | undefined>;
-    saveValue?: (entityForm: EntityForm, field: EntityField, renderType?: RenderType) => Promise<any>;
-    displayFunc?: (entityForm: EntityForm, field: EntityField, renderType?: RenderType) => Promise<any>;
-    maskedValueFunc?: (entityForm: EntityForm, value: any) => Promise<string>;
+    saveValue?: (entityForm: EntityForm<TForm>, field: EntityField, renderType?: RenderType) => Promise<TValue>;
+    displayFunc?: (entityForm: EntityForm<TForm>, field: EntityField, renderType?: RenderType) => Promise<TValue>;
+    maskedValueFunc?: (entityForm: EntityForm<TForm>, value: TValue) => Promise<string>;
     /**
      * 새로운 필드 인스턴스를 생성하는 추상 메소드
      * 각 구체 클래스에서 자신의 타입으로 구현해야 함
      */
-    protected abstract createInstance(name: string, order: number): T;
+    protected abstract createInstance(name: string, order: number): TSelf;
     /**
      * 각 필드의 핵심 렌더링 로직을 구현하는 추상 메소드
      * 기존 render() 메소드의 핵심 부분만 구현
@@ -148,20 +148,20 @@ export declare abstract class FormField<T extends FormField<T>> implements Entit
      * 공통 clone 로직 - 모든 필드에서 사용
      * StateTracker 로직 포함
      */
-    clone(includeValue?: boolean): T;
-    protected copyFields(origin: FormFieldProps, includeValue?: boolean): this;
+    clone(includeValue?: boolean): TSelf;
+    protected copyFields(origin: FormFieldProps<TValue, TForm>, includeValue?: boolean): this;
     getTabId(): string;
     getFieldGroupId(): string;
     withTabId(tabId: string): this;
     withFieldGroupId(fieldGroupId: string): this;
-    getDisplayValue(entityForm: EntityForm, renderType?: RenderType): Promise<any>;
-    withDisplayFunc(fn: (entityForm: EntityForm, field: EntityField, renderType?: RenderType) => Promise<any>): this;
+    getDisplayValue(entityForm: EntityForm<TForm>, renderType?: RenderType): Promise<any>;
+    withDisplayFunc(fn: (entityForm: EntityForm<TForm>, field: EntityField, renderType?: RenderType) => Promise<TValue>): this;
     /**
      * Set a masking function for readonly display.
      * When the field is readonly and has a value, the maskedValueFunc is called
      * to produce a masked display string. The original value is never modified.
      */
-    withMaskedValue(fn: (entityForm: EntityForm, value: any) => Promise<string>): this;
+    withMaskedValue(fn: (entityForm: EntityForm<TForm>, value: TValue) => Promise<string>): this;
     withAddOnly(): this;
     withModifyOnly(): this;
     withViewHidden(): this;
@@ -210,7 +210,7 @@ export declare abstract class FormField<T extends FormField<T>> implements Entit
     withLabel(label?: LabelType): this;
     withReadOnly(readOnly?: ReadOnlyType): this;
     withRequired(required?: RequiredType): this;
-    withValue(value: any): this;
+    withValue(value: TValue | FieldValue<TValue> | any): this;
     getOrder(): number;
     getName(): string;
     getLabel(): LabelType;
@@ -222,17 +222,17 @@ export declare abstract class FormField<T extends FormField<T>> implements Entit
     isRequired(props: FieldInfoParameters): Promise<boolean>;
     isHidden(props: FieldInfoParameters): Promise<boolean>;
     isReadonly(props: FieldInfoParameters): Promise<boolean>;
-    getCurrentValue(renderType?: RenderType): Promise<any>;
-    getSaveValue(entityForm: EntityForm, renderType?: RenderType): Promise<any>;
-    getFetchedValue(): Promise<any>;
+    getCurrentValue(renderType?: RenderType): Promise<TValue | undefined>;
+    getSaveValue(entityForm: EntityForm<TForm>, renderType?: RenderType): Promise<TValue | undefined>;
+    getFetchedValue(): Promise<TValue | undefined>;
     resetValue(renderType?: RenderType): void;
     withForm(form: {
         tabId: string;
         fieldGroupId: string;
     }): this;
     withValidations(...validation: (Validation | undefined)[]): this;
-    validate(entityForm: EntityForm, session?: Session): Promise<ValidateResult | ValidateResult[]>;
-    withDefaultValue(value: any): this;
+    validate(entityForm: EntityForm<TForm>, session?: Session): Promise<ValidateResult | ValidateResult[]>;
+    withDefaultValue(value: TValue | any): this;
     /**
      * 이 필드를 보기 위해 필요한 권한을 설정합니다.
      * 사용자가 지정된 권한 중 하나라도 가지고 있으면 필드가 표시됩니다.

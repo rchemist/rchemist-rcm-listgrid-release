@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { InputRendererProps } from '../../../config/Config';
 import { EntityForm } from '../../../config/EntityForm';
 import { Session } from '../../../auth/types';

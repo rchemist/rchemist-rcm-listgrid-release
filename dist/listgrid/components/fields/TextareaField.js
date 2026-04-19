@@ -6,7 +6,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import { FormField } from './abstract';
-import { Textarea } from "../../ui";
+import { Textarea } from '../../ui';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
 export class TextareaField extends FormField {
     constructor(name, order, rows, limit) {
@@ -17,8 +17,11 @@ export class TextareaField extends FormField {
     async getCurrentValue(renderType) {
         const renderTypeValue = renderType ?? 'create';
         if (this.value !== undefined) {
-            return this.value?.current !== undefined ? this.value?.current :
-                renderTypeValue === 'create' ? this.value?.default : this.value?.fetched;
+            return this.value?.current !== undefined
+                ? this.value?.current
+                : renderTypeValue === 'create'
+                    ? this.value?.default
+                    : this.value?.fetched;
         }
         return undefined;
     }
@@ -27,7 +30,7 @@ export class TextareaField extends FormField {
      */
     renderInstance(params) {
         return (async () => {
-            return _jsx(Textarea, { rows: this.rows, ...await getInputRendererParameters(this, params) });
+            return (_jsx(Textarea, { rows: this.rows, ...await getInputRendererParameters(this, params) }));
         })();
     }
     /**
@@ -45,8 +48,7 @@ export class TextareaField extends FormField {
         return this;
     }
     static create(props) {
-        return new TextareaField(props.name, props.order, props.rows, props.limit)
-            .copyFields(props, true);
+        return new TextareaField(props.name, props.order, props.rows, props.limit).copyFields(props, true);
     }
 }
 //# sourceMappingURL=TextareaField.js.map

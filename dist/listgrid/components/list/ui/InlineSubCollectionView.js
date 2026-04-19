@@ -9,7 +9,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useCallback, useMemo, useState } from 'react';
 import { ListGrid } from '../../../config/ListGrid';
 import { ViewListGrid } from '../ViewListGrid';
-import { ListableFormField } from '../../fields/abstract/ListableFormField';
+import { ListableFormField, } from '../../fields/abstract/ListableFormField';
 import { Tooltip } from '../../../ui';
 import { useLoadingStore } from '../../../loading';
 import { showAlert } from '../../../message';
@@ -50,11 +50,11 @@ class InlineRowActionField extends ListableFormField {
         if (!this.rowActions || this.rowActions.length === 0) {
             return { result: null, linkOnCell: false };
         }
-        const visibleActions = this.rowActions.filter(action => !action.hidden?.(item));
+        const visibleActions = this.rowActions.filter((action) => !action.hidden?.(item));
         if (visibleActions.length === 0) {
             return { result: null, linkOnCell: false };
         }
-        const buttons = (_jsx("div", { className: "rcm-inline-action-row", children: visibleActions.map(action => {
+        const buttons = (_jsx("div", { className: "rcm-inline-action-row", children: visibleActions.map((action) => {
                 const label = typeof action.label === 'function' ? action.label(item) : action.label;
                 const isDisabled = action.disabled?.(item) ?? false;
                 return (_jsx(Tooltip, { label: label, children: _jsxs("button", { type: "button", className: `rcm-button ${action.className ?? ''} ${isDisabled ? 'rcm-is-disabled' : ''}`, "data-variant": action.className ? undefined : 'outline', "data-size": "sm", disabled: isDisabled, onClick: (e) => {
@@ -76,7 +76,7 @@ export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm
     const { setOpenBaseLoading } = useLoadingStore();
     // Refresh function for row actions
     const refresh = useCallback(() => {
-        setRefreshKey(prev => prev + 1);
+        setRefreshKey((prev) => prev + 1);
     }, []);
     // Handle row action click
     const handleRowAction = useCallback(async (action, item) => {
@@ -113,9 +113,9 @@ export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm
         const cloned = entityForm.clone(true).withParentId(parentId);
         // Apply list field overrides
         if (listFields && listFields.length > 0) {
-            const fieldNames = listFields.map(f => typeof f === 'string' ? f : f.name);
+            const fieldNames = listFields.map((f) => (typeof f === 'string' ? f : f.name));
             const fieldConfigs = new Map();
-            listFields.forEach(f => {
+            listFields.forEach((f) => {
                 if (typeof f !== 'string' && f.listConfig) {
                     fieldConfigs.set(f.name, f.listConfig);
                 }
@@ -138,18 +138,21 @@ export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm
                         // Apply global config
                         if (globalListConfig) {
                             const currentConfig = field.getListConfig() ?? {};
+                            const mergedFilterable = globalListConfig.filterable ?? currentConfig.filterable;
+                            const mergedSortable = globalListConfig.sortable ?? currentConfig.sortable;
+                            const mergedQuickSearch = globalListConfig.quickSearch ?? currentConfig.quickSearch;
                             field.withListConfig({
                                 ...currentConfig,
-                                filterable: globalListConfig.filterable ?? currentConfig.filterable,
-                                sortable: globalListConfig.sortable ?? currentConfig.sortable,
-                                quickSearch: globalListConfig.quickSearch ?? currentConfig.quickSearch,
+                                ...(mergedFilterable !== undefined ? { filterable: mergedFilterable } : {}),
+                                ...(mergedSortable !== undefined ? { sortable: mergedSortable } : {}),
+                                ...(mergedQuickSearch !== undefined ? { quickSearch: mergedQuickSearch } : {}),
                                 support: true,
                             });
                         }
                     }
                     else {
                         // Disable this field for list display
-                        field.listConfig = undefined;
+                        delete field.listConfig;
                     }
                 }
             });
@@ -159,11 +162,14 @@ export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm
             cloned.fields.forEach((field) => {
                 if (field instanceof ListableFormField && field.isSupportList()) {
                     const currentConfig = field.getListConfig() ?? {};
+                    const mergedFilterable = globalListConfig.filterable ?? currentConfig.filterable;
+                    const mergedSortable = globalListConfig.sortable ?? currentConfig.sortable;
+                    const mergedQuickSearch = globalListConfig.quickSearch ?? currentConfig.quickSearch;
                     field.withListConfig({
                         ...currentConfig,
-                        filterable: globalListConfig.filterable ?? currentConfig.filterable,
-                        sortable: globalListConfig.sortable ?? currentConfig.sortable,
-                        quickSearch: globalListConfig.quickSearch ?? currentConfig.quickSearch,
+                        ...(mergedFilterable !== undefined ? { filterable: mergedFilterable } : {}),
+                        ...(mergedSortable !== undefined ? { sortable: mergedSortable } : {}),
+                        ...(mergedQuickSearch !== undefined ? { quickSearch: mergedQuickSearch } : {}),
                         support: true,
                     });
                 }
@@ -173,7 +179,7 @@ export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm
         // rowActionColumns is the new format, rowActions is deprecated but still supported for backward compatibility
         if (rowActionColumns && rowActionColumns.length > 0) {
             // Use new rowActionColumns format - each column becomes a separate field
-            rowActionColumns.forEach(column => {
+            rowActionColumns.forEach((column) => {
                 if (column.actions && column.actions.length > 0) {
                     const actionField = new InlineRowActionField(column.id, column.actions, handleRowAction, column.label, column.order);
                     cloned.fields.set(`_rowActions_${column.id}`, actionField);
@@ -186,7 +192,17 @@ export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm
             cloned.fields.set('_rowActions__default', actionField);
         }
         return cloned;
-    }, [entityForm, parentId, listFields, globalListConfig, rowActions, rowActionsConfig, rowActionColumns, readonly, handleRowAction]);
+    }, [
+        entityForm,
+        parentId,
+        listFields,
+        globalListConfig,
+        rowActions,
+        rowActionsConfig,
+        rowActionColumns,
+        readonly,
+        handleRowAction,
+    ]);
     // Create ListGrid
     const listGrid = useMemo(() => {
         return new ListGrid(configuredEntityForm);
@@ -195,7 +211,8 @@ export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm
     const buildFilters = useCallback(async (ef) => {
         // Get mappedBy filter
         const mappedBy = relation.mappedBy;
-        const filterBy = relation.filterBy ?? (mappedBy.endsWith('Id') ? mappedBy.replace('Id', '') + '.id' : mappedBy);
+        const filterBy = relation.filterBy ??
+            (mappedBy.endsWith('Id') ? mappedBy.replace('Id', '') + '.id' : mappedBy);
         const valueProperty = relation.valueProperty ?? 'id';
         let mappedByValue;
         if (valueProperty === 'id') {
@@ -209,7 +226,7 @@ export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm
         }
         const mappedByFilter = {
             name: filterBy,
-            value: mappedByValue !== undefined ? String(mappedByValue) : undefined,
+            ...(mappedByValue !== undefined ? { value: String(mappedByValue) } : {}),
         };
         // Apply user-defined filters if any
         if (fetchOptions?.filters) {
@@ -223,10 +240,12 @@ export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm
             }
         }
         // Return default filter
-        return [{
+        return [
+            {
                 condition: 'AND',
                 items: [mappedByFilter],
-            }];
+            },
+        ];
     }, [relation, parentId, parentEntityForm, fetchOptions]);
     // Build ViewListGrid options
     const options = useMemo(() => {
@@ -248,10 +267,10 @@ export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm
                 modal: false,
             },
             // Hide pagination controls if client-side pagination with all data
-            hidePagination: pagination?.clientSide,
+            ...(pagination?.clientSide !== undefined ? { hidePagination: pagination.clientSide } : {}),
         };
         return baseOptions;
     }, [viewListOptions, hideTitle, readonly, relation, parentId, buildFilters, pagination]);
-    return (_jsxs("div", { className: "inline-subcollection-view", children: [tooltip && (_jsx("div", { className: "rcm-inline-subcollection-tooltip", children: tooltip })), _jsx(ViewListGrid, { listGrid: listGrid, parentId: parentId, options: options, viewMode: "popup", session: session })] }, `inline-sub-${refreshKey}`));
+    return (_jsxs("div", { className: "inline-subcollection-view", children: [tooltip && _jsx("div", { className: "rcm-inline-subcollection-tooltip", children: tooltip }), _jsx(ViewListGrid, { listGrid: listGrid, parentId: parentId, options: options, viewMode: "popup", ...(session !== undefined ? { session } : {}) })] }, `inline-sub-${refreshKey}`));
 };
 //# sourceMappingURL=InlineSubCollectionView.js.map

@@ -41,7 +41,7 @@ export const SmsModal = ({ phoneNumber, onClose }) => {
             try {
                 const response = await RequestUtil.getExternalApiDataWithError({
                     url: '/api/v1/sms-sender/list',
-                    method: 'GET'
+                    method: 'GET',
                 });
                 const senderCache = response.data;
                 if (senderCache && senderCache.permittedPhoneNumbers) {
@@ -57,7 +57,7 @@ export const SmsModal = ({ phoneNumber, onClose }) => {
                 showAlert({
                     message: '발신번호 목록을 불러올 수 없습니다.',
                     title: '오류',
-                    icon: 'error'
+                    icon: 'error',
                 });
             }
             finally {
@@ -71,7 +71,7 @@ export const SmsModal = ({ phoneNumber, onClose }) => {
             showAlert({
                 message: '발신번호를 선택해주세요.',
                 title: '알림',
-                icon: 'error'
+                icon: 'error',
             });
             return;
         }
@@ -79,7 +79,7 @@ export const SmsModal = ({ phoneNumber, onClose }) => {
             showAlert({
                 message: '메시지 내용을 입력해주세요.',
                 title: '알림',
-                icon: 'error'
+                icon: 'error',
             });
             return;
         }
@@ -89,16 +89,16 @@ export const SmsModal = ({ phoneNumber, onClose }) => {
                 senderAddress: senderAddress,
                 notificationType: 'SMS',
                 content: content,
-                toList: [{ address: phoneNumber }]
+                toList: [{ address: phoneNumber }],
             };
             const response = await RequestUtil.getExternalApiDataWithError({
                 url: '/notification/send',
                 method: 'POST',
-                formData: notificationQueue
+                formData: notificationQueue,
             });
             if (response.data) {
                 showSuccess({
-                    message: 'SMS가 성공적으로 전송되었습니다.'
+                    message: 'SMS가 성공적으로 전송되었습니다.',
                 });
                 onClose();
             }
@@ -106,7 +106,7 @@ export const SmsModal = ({ phoneNumber, onClose }) => {
                 showAlert({
                     message: response.error || 'SMS 전송에 실패했습니다.',
                     title: '오류',
-                    icon: 'error'
+                    icon: 'error',
                 });
             }
         }
@@ -115,7 +115,7 @@ export const SmsModal = ({ phoneNumber, onClose }) => {
             showAlert({
                 message: 'SMS 전송 중 오류가 발생했습니다.',
                 title: '오류',
-                icon: 'error'
+                icon: 'error',
             });
         }
         finally {

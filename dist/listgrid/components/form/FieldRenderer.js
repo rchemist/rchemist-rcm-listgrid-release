@@ -5,21 +5,21 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-"use client";
+'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { AbstractManyToOneField } from '../fields/abstract';
-import React, { useCallback, useEffect, useId, useState } from "react";
+import React, { useCallback, useEffect, useId, useState } from 'react';
 import { ViewFieldError } from './ui/ViewFieldError';
 import { ViewHelpText } from './ui/ViewHelpText';
-import { Icon } from "@iconify/react";
+import { Icon } from '@iconify/react';
 import { isTrue } from '../../utils/BooleanUtil';
 import { isBlank } from '../../utils/StringUtil';
-import { IconHelp } from "@tabler/icons-react";
-import { Tooltip } from "../../ui";
-import { useLoadingStore } from "../../loading";
-import { getTranslation } from "../../utils/i18n";
-import { getManyToOneLink } from "../helper/FieldRendererHelper";
-import { useEntityFormTheme } from "./context/EntityFormThemeContext";
+import { IconHelp } from '@tabler/icons-react';
+import { Tooltip } from '../../ui';
+import { useLoadingStore } from '../../loading';
+import { getTranslation } from '../../utils/i18n';
+import { getManyToOneLink } from '../helper/FieldRendererHelper';
+import { useEntityFormTheme } from './context/EntityFormThemeContext';
 export const FieldRenderer = (props) => {
     const { t } = getTranslation();
     const { classNames, cn, getFieldRenderer } = useEntityFormTheme();
@@ -37,9 +37,9 @@ export const FieldRenderer = (props) => {
     const [errors, setErrors] = useState([]);
     const [required, setRequired] = useState(false);
     const [_readonly, setReadonly] = useState();
-    const [tooltip, setTooltip] = useState("");
-    const [helpText, setHelpText] = useState("");
-    const [_placeHolder, setPlaceHolder] = useState("");
+    const [tooltip, setTooltip] = useState('');
+    const [helpText, setHelpText] = useState('');
+    const [_placeHolder, setPlaceHolder] = useState('');
     const [manyToOneLink, setManyToOneLink] = useState(null);
     const [dirty, setDirty] = useState(false);
     // 커스텀 렌더러용 현재 필드 값
@@ -61,7 +61,7 @@ export const FieldRenderer = (props) => {
             setDirty(updatedField?.isDirty() ?? false);
             const validationErrors = await cloned.validate({
                 fieldNames: [fieldName],
-                session: props.session,
+                ...(props.session !== undefined ? { session: props.session } : {}),
             });
             cloned.mergeError(fieldName, validationErrors);
             let changed = false;
@@ -94,7 +94,7 @@ export const FieldRenderer = (props) => {
                     setOpenBaseLoading(true);
                     window.scrollTo({
                         top: currentScroll,
-                        behavior: "instant",
+                        behavior: 'instant',
                     });
                     setTimeout(() => {
                         setOpenBaseLoading(false);
@@ -148,43 +148,34 @@ export const FieldRenderer = (props) => {
                     });
                 }
                 setErrors([...messages]);
-                const required = await field.isRequired({
+                const fieldInfoParams = {
                     entityForm,
-                    session: props.session,
-                });
-                const readonly = await field.isReadonly({
-                    entityForm,
-                    session: props.session,
-                });
+                    ...(props.session !== undefined ? { session: props.session } : {}),
+                };
+                const required = await field.isRequired(fieldInfoParams);
+                const readonly = await field.isReadonly(fieldInfoParams);
                 setRequired(required);
                 setReadonly(readonly);
-                const tooltip = await field.getTooltip({
-                    entityForm,
-                    session: props.session,
-                });
+                const tooltip = await field.getTooltip(fieldInfoParams);
                 setTooltip(tooltip);
-                const helpText = await field.getHelpText({
-                    entityForm,
-                    session: props.session,
-                });
+                const helpText = await field.getHelpText(fieldInfoParams);
                 setHelpText(helpText);
-                const placeHolder = await field.getPlaceHolder({
-                    entityForm,
-                    session: props.session,
-                });
+                const placeHolder = await field.getPlaceHolder(fieldInfoParams);
                 setPlaceHolder(placeHolder);
                 // 필드 렌더링 파라미터 구성 및 view 생성
                 // Build field render parameters and generate view
                 const viewParams = {
                     entityForm: entityForm,
-                    session: props.session,
+                    ...(props.session !== undefined ? { session: props.session } : {}),
                     subCollectionEntity: subCollectionEntity,
                     updateEntityForm: async (updater) => {
                         // EntityForm을 업데이트하고 상태를 반영
                         const updatedEntityForm = await updater(entityForm.clone(true));
                         setEntityForm?.(updatedEntityForm);
                     },
-                    resetEntityForm: props.resetEntityForm,
+                    ...(props.resetEntityForm !== undefined
+                        ? { resetEntityForm: props.resetEntityForm }
+                        : {}),
                     onChange: (value, propagation) => {
                         (async () => {
                             // 값 변경 시 에러 초기화, 값 반영, 검증, onChanges 콜백, manyToOneLink 갱신 등 처리
@@ -204,7 +195,7 @@ export const FieldRenderer = (props) => {
                             // Validate only the current value
                             const errors = await cloned.validate({
                                 fieldNames: [name],
-                                session: props.session,
+                                ...(props.session !== undefined ? { session: props.session } : {}),
                             });
                             cloned.mergeError(name, errors);
                             let changed = false;
@@ -239,7 +230,7 @@ export const FieldRenderer = (props) => {
                                     setOpenBaseLoading(true);
                                     window.scrollTo({
                                         top: currentScroll,
-                                        behavior: "instant",
+                                        behavior: 'instant',
                                     });
                                     setTimeout(() => {
                                         setOpenBaseLoading(false);
@@ -266,9 +257,7 @@ export const FieldRenderer = (props) => {
                             label: field.label,
                             errors: newErrors,
                         });
-                        const cloned = entityForm
-                            .clone(true)
-                            .withErrors(errors);
+                        const cloned = entityForm.clone(true).withErrors(errors);
                         setEntityForm?.(cloned);
                     },
                     clearError: () => {
@@ -292,14 +281,16 @@ export const FieldRenderer = (props) => {
             setManyToOneLink(await getManyToOneLink(entityForm.getRenderType(), field));
         })();
     }, []);
-    return (_jsxs("div", { id: `field-${instanceId}-${name}`, "data-field-name": name, className: classNames.field?.container, children: [_jsxs("div", { id: `field-${instanceId}-${name}-${version}`, className: cn(`rcm-field-label-wrapper ${showTooltip ? 'rcm-field-label-wrapper-with-tooltip' : ''}`, classNames.field?.labelWrapper), children: [_jsxs("div", { className: "rcm-field-label-row", children: [!hideLabel && (_jsx("label", { className: cn('rcm-field-label', classNames.field?.label), children: viewLabel(label) })), manyToOneLink, required && (_jsx(Tooltip, { label: "필수값", color: "red", withArrow: true, children: _jsx("div", { className: "rcm-field-icon-wrap", children: _jsx(Icon, { icon: "healthicons:star-small", className: cn('rcm-field-icon rcm-field-icon-required', classNames.field?.requiredIcon) }) }) })), dirty && (_jsx(Tooltip, { label: "수정됨", color: "yellow", withArrow: true, children: _jsx("div", { className: "rcm-field-icon-wrap", children: _jsx(Icon, { icon: "healthicons:star-small-outline", className: cn('rcm-field-icon rcm-field-icon-dirty', classNames.field?.dirtyIcon) }) }) }, `tooltip-${name}-${version}-dirty`))] }), showTooltip && (_jsx("div", { className: "rcm-row", children: _jsx(Tooltip, { label: tooltip, color: "gray", withArrow: true, position: "top-end", children: _jsx("div", { className: cn('rcm-field-tooltip-icon', classNames.field?.tooltipIcon), children: _jsx(IconHelp, { className: "rcm-field-icon" }) }) }) }))] }), _jsx("div", { className: cn('rcm-field-value', classNames.field?.valueContainer), children: CustomFieldRenderer ? (_jsx(CustomFieldRenderer, { field: field, entityForm: entityForm, setEntityForm: setEntityForm, value: currentValue, onChange: handleFieldChange, onError: handleFieldError, clearError: handleClearError, required: required, readonly: _readonly ?? false, session: props.session, helpText: helpText, placeholder: _placeHolder, subCollectionEntity: subCollectionEntity, resetEntityForm: props.resetEntityForm })) : (view) }), _jsx(ViewFieldError, { errors: errors }), _jsx(ViewHelpText, { helpText: helpText })] }));
+    return (_jsxs("div", { id: `field-${instanceId}-${name}`, "data-field-name": name, className: classNames.field?.container, children: [_jsxs("div", { id: `field-${instanceId}-${name}-${version}`, className: cn(`rcm-field-label-wrapper ${showTooltip ? 'rcm-field-label-wrapper-with-tooltip' : ''}`, classNames.field?.labelWrapper), children: [_jsxs("div", { className: "rcm-field-label-row", children: [!hideLabel && (_jsx("label", { className: cn('rcm-field-label', classNames.field?.label), children: viewLabel(label) })), manyToOneLink, required && (_jsx(Tooltip, { label: '필수값', color: 'red', withArrow: true, children: _jsx("div", { className: "rcm-field-icon-wrap", children: _jsx(Icon, { icon: "healthicons:star-small", className: cn('rcm-field-icon rcm-field-icon-required', classNames.field?.requiredIcon) }) }) })), dirty && (_jsx(Tooltip, { label: '수정됨', color: 'yellow', withArrow: true, children: _jsx("div", { className: "rcm-field-icon-wrap", children: _jsx(Icon, { icon: "healthicons:star-small-outline", className: cn('rcm-field-icon rcm-field-icon-dirty', classNames.field?.dirtyIcon) }) }) }, `tooltip-${name}-${version}-dirty`))] }), showTooltip && (_jsx("div", { className: "rcm-row", children: _jsx(Tooltip, { label: tooltip, color: 'gray', withArrow: true, position: 'top-end', children: _jsx("div", { className: cn('rcm-field-tooltip-icon', classNames.field?.tooltipIcon), children: _jsx(IconHelp, { className: "rcm-field-icon" }) }) }) }))] }), _jsx("div", { className: cn('rcm-field-value', classNames.field?.valueContainer), children: CustomFieldRenderer ? (_jsx(CustomFieldRenderer, { field: field, entityForm: entityForm, ...(setEntityForm !== undefined ? { setEntityForm } : {}), value: currentValue, onChange: handleFieldChange, onError: handleFieldError, clearError: handleClearError, required: required, readonly: _readonly ?? false, ...(props.session !== undefined ? { session: props.session } : {}), helpText: helpText, placeholder: _placeHolder, subCollectionEntity: subCollectionEntity, ...(props.resetEntityForm !== undefined
+                        ? { resetEntityForm: props.resetEntityForm }
+                        : {}) })) : (view) }), _jsx(ViewFieldError, { errors: errors }), _jsx(ViewHelpText, { helpText: helpText })] }));
     /**
      * viewLabel
      * - 라벨이 string이면 번역, 아니면 그대로 반환
      * - If label is string, translate; otherwise, return as is
      */
     function viewLabel(label) {
-        if (typeof label === "string") {
+        if (typeof label === 'string') {
             return t(label);
         }
         return label;

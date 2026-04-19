@@ -1,5 +1,5 @@
 import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
-import { getTranslation } from "../../../utils/i18n";
+import { getTranslation } from '../../../utils/i18n';
 export const ViewFieldError = (props) => {
     const { t } = getTranslation();
     if (!props.errors || props.errors.length === 0)

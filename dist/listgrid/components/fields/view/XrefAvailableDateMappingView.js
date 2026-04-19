@@ -1,24 +1,26 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { EntityForm } from '../../../config/EntityForm';
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import { LoadingOverlay } from '../../../ui';
 import { useModalManagerStore } from '../../../store';
 import { ViewListGrid } from '../../list/ViewListGrid';
 import { ListGrid } from '../../../config/ListGrid';
-import { SearchForm } from "../../../form/SearchForm";
-import { isEmpty } from "../../../utils";
+import { SearchForm } from '../../../form/SearchForm';
+import { isEmpty } from '../../../utils';
 import { ManyToOneField } from '../ManyToOneField';
 import { DatetimeField } from '../DatetimeField';
 import { ViewEntityForm } from '../../form/ViewEntityForm';
 import { StringField } from '../StringField';
 import { EntityFormButton } from '../../../config/EntityFormButton';
-import { fDate, fDateTime } from "../../../misc";
+import { fDate, fDateTime } from '../../../misc';
 import { isTrue } from '../../../utils/BooleanUtil';
-import { Tooltip } from "../../../ui";
-import { Paper } from "../../../ui";
+import { Tooltip } from '../../../ui';
+import { Paper } from '../../../ui';
 const AvailableMappingEntityForm = (mapping) => {
-    const mappingField = new ManyToOneField(mapping.name, 100, mapping.config).withLabel(mapping.label).withRequired(true);
+    const mappingField = new ManyToOneField(mapping.name, 100, mapping.config)
+        .withLabel(mapping.label)
+        .withRequired(true);
     if (mapping.value !== undefined) {
         const exceptIds = [];
         mapping.value.forEach((value) => {
@@ -46,14 +48,13 @@ const AvailableMappingEntityForm = (mapping) => {
             });
         }
     }
-    return new EntityForm('유효기간', '')
-        .addFields({
+    return new EntityForm('유효기간', '').addFields({
         items: [
             mappingField,
             new DatetimeField('available', 200, undefined, true)
                 .withLabel('유효기간')
-                .withRequired(mapping.requiredAvailable)
-        ]
+                .withRequired(mapping.requiredAvailable),
+        ],
     });
 };
 function getDatetimeFromMappingValue(value) {
@@ -128,7 +129,7 @@ export const XrefAvailableDateMappingView = ({ entityForm, ...props }) => {
     const xrefEntityForm = AvailableMappingEntityForm({
         value: mappingValue.mapped,
         config: {
-            entityForm: entityForm
+            entityForm: entityForm,
         },
         name: 'mapping',
         label: labelText,
@@ -153,31 +154,40 @@ export const XrefAvailableDateMappingView = ({ entityForm, ...props }) => {
             if (duplicated) {
                 // 에러를 내야 한다.
                 return {
-                    entityForm: form.withErrors([{
+                    entityForm: form.withErrors([
+                        {
                             name: 'mapping',
                             label: labelText,
-                            errors: ['이미 등록된 정보입니다.']
-                        }]), errors: ['이미 등록된 정보입니다.']
+                            errors: ['이미 등록된 정보입니다.'],
+                        },
+                    ]),
+                    errors: ['이미 등록된 정보입니다.'],
                 };
             }
         }
         const availableValue = await entityForm.getValue('available');
-        if (requiredAvailable && (availableValue === undefined || !Array.isArray(availableValue) || availableValue.length !== 2)) {
+        if (requiredAvailable &&
+            (availableValue === undefined ||
+                !Array.isArray(availableValue) ||
+                availableValue.length !== 2)) {
             // 값이 잘못 들어왔다.
             return {
-                entityForm: form.withErrors([{
+                entityForm: form.withErrors([
+                    {
                         name: 'available',
                         label: labelText,
-                        errors: ['시작일과 종료일을 정확히 선택하세요.']
-                    }]), errors: ['유효기간을 잘못 입력했습니다.']
+                        errors: ['시작일과 종료일을 정확히 선택하세요.'],
+                    },
+                ]),
+                errors: ['유효기간을 잘못 입력했습니다.'],
             };
         }
         return Promise.resolve({ entityForm });
     });
     if (viewSearchForm === undefined) {
-        return _jsx("div", { className: 'relative', children: _jsxs("div", { className: `panel p-4 flex-1 gap-2.5 mt-5 border dark:border-[#17263c] rounded-xl shadow-none space-y-2`, children: [_jsx(LoadingOverlay, { visible: true }), _jsx("div", { className: 'w-full h-[400px]' })] }) });
+        return (_jsx("div", { className: 'relative', children: _jsxs("div", { className: `panel p-4 flex-1 gap-2.5 mt-5 border dark:border-[#17263c] rounded-xl shadow-none space-y-2`, children: [_jsx(LoadingOverlay, { visible: true }), _jsx("div", { className: 'w-full h-[400px]' })] }) }));
     }
-    return _jsx("div", { className: 'w-full', children: _jsx(ViewListGrid, { listGrid: new ListGrid(entityForm).withSearchForm(viewSearchForm), options: {
+    return (_jsx("div", { className: 'w-full', children: _jsx(ViewListGrid, { listGrid: new ListGrid(entityForm).withSearchForm(viewSearchForm), options: {
                 hideTitle: true,
                 filterable: false,
                 sortable: false,
@@ -190,14 +200,19 @@ export const XrefAvailableDateMappingView = ({ entityForm, ...props }) => {
                     handleOpenModal(xrefEntityForm);
                 },
                 fields: [
-                    new StringField('mapping-available', 10000).withLabel('유효기간')
-                        .withListConfig({ support: true, filterable: false, sortable: false, align: 'center' })
+                    new StringField('mapping-available', 10000)
+                        .withLabel('유효기간')
+                        .withListConfig({
+                        support: true,
+                        filterable: false,
+                        sortable: false,
+                        align: 'center',
+                    })
                         .withOverrideRenderListItem(async (props) => {
                         return {
-                            result: _jsx("div", { className: 'w-full flex items-center justify-center', children: props.item['mapping-available'] === undefined ? '항상' :
-                                    _jsx(Tooltip, { label: `${props.item['mapping-available']}`, children: _jsx("div", { children: getCroppedDate(props.item['mapping-available']) }) }) })
+                            result: (_jsx("div", { className: 'w-full flex items-center justify-center', children: props.item['mapping-available'] === undefined ? ('항상') : (_jsx(Tooltip, { label: `${props.item['mapping-available']}`, children: _jsx("div", { children: getCroppedDate(props.item['mapping-available']) }) })) })),
                         };
-                    })
+                    }),
                 ],
                 onFetched: async (result) => {
                     // 필드의 값을 추가한다.
@@ -206,7 +221,8 @@ export const XrefAvailableDateMappingView = ({ entityForm, ...props }) => {
                             for (const mapped of mappingValue.mapped) {
                                 if (item['id'] === mapped.id) {
                                     if (mapped.availableAt !== undefined && mapped.availableUntil !== undefined) {
-                                        item['mapping-available'] = `${fDateTime(mapped.availableAt)} ~ ${fDateTime(mapped.availableUntil)}`;
+                                        item['mapping-available'] =
+                                            `${fDateTime(mapped.availableAt)} ~ ${fDateTime(mapped.availableUntil)}`;
                                     }
                                 }
                             }
@@ -220,23 +236,24 @@ export const XrefAvailableDateMappingView = ({ entityForm, ...props }) => {
                             onDelete(checkedItems);
                         }
                         return Promise.resolve({ entityForm: _entityForm });
-                    }
+                    },
                 },
                 subCollection: {
-                    add: false, delete: true,
+                    add: false,
+                    delete: true,
                     modifyOnView: false,
                     buttons: [
-                        () => _jsx("button", { type: "button", className: `btn btn-outline-secondary h-[34px]`, disabled: readonly, onClick: () => {
+                        () => (_jsx("button", { type: "button", className: `btn btn-outline-secondary h-[34px]`, disabled: readonly, onClick: () => {
                                 handleOpenModal();
-                            }, children: "\uB4F1\uB85D" })
-                    ]
-                }
-            } }, listKey) });
+                            }, children: "\uB4F1\uB85D" })),
+                    ],
+                },
+            } }, listKey) }));
     function onDelete(idList) {
         if (mappingValue.mapped === undefined) {
             mappingValue.mapped = [];
         }
-        mappingValue.mapped = mappingValue.mapped.filter(x => !idList.includes(x.id));
+        mappingValue.mapped = mappingValue.mapped.filter((x) => !idList.includes(x.id));
         setValue({ ...mappingValue });
         setOnEditEntityForm(undefined);
         setListKey(new Date().getTime().toString());
@@ -257,14 +274,20 @@ export const XrefAvailableDateMappingView = ({ entityForm, ...props }) => {
                             closeModal(modalId);
                             setOnEditEntityForm(undefined);
                             return props.entityForm;
-                        })
+                        }),
                     ], postSave: async (entityForm) => {
                         const mappedValue = await entityForm.getValue('mapping');
                         const availableValue = await entityForm.getValue('available');
                         mappingValue.mapped = mappingValue.mapped ?? [];
                         if (mappedValue.id) {
-                            if ((availableValue !== undefined && Array.isArray(availableValue) && availableValue.length === 2)) {
-                                mappingValue.mapped.push({ id: mappedValue.id, availableAt: availableValue[0], availableUntil: availableValue[1] });
+                            if (availableValue !== undefined &&
+                                Array.isArray(availableValue) &&
+                                availableValue.length === 2) {
+                                mappingValue.mapped.push({
+                                    id: mappedValue.id,
+                                    availableAt: availableValue[0],
+                                    availableUntil: availableValue[1],
+                                });
                             }
                             else {
                                 mappingValue.mapped.push({ id: mappedValue.id });
@@ -276,7 +299,7 @@ export const XrefAvailableDateMappingView = ({ entityForm, ...props }) => {
                     } }) }, listKey)),
             onClose: () => {
                 setOnEditEntityForm(undefined);
-            }
+            },
         });
     }
 };

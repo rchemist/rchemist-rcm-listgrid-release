@@ -4,12 +4,12 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-"use client";
+'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { SelectBox } from "../../../ui";
-import { RadioChip } from "../../../ui";
-import { RadioInput } from "../../../ui";
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { SelectBox } from '../../../ui';
+import { RadioChip } from '../../../ui';
+import { RadioInput } from '../../../ui';
 const CACHE_TTL = 5 * 60 * 1000; // 5분
 const optionsCache = new Map();
 export function getCachedOptions(cacheKey) {
@@ -114,12 +114,12 @@ export const DynamicSelectFieldView = ({ fieldName, entityForm, loadOptions, sta
     };
     switch (renderType) {
         case 'chip':
-            return (_jsx(RadioChip, { options: options, combo: combo ?? { direction: 'row' }, ...commonProps }));
+            return _jsx(RadioChip, { options: options, combo: combo ?? { direction: 'row' }, ...commonProps });
         case 'radio':
-            return (_jsx(RadioInput, { options: options, combo: combo, ...commonProps }));
+            return _jsx(RadioInput, { options: options, combo: combo, ...commonProps });
         case 'select':
         default:
-            return (_jsx(SelectBox, { options: options, ...commonProps }));
+            return _jsx(SelectBox, { options: options, ...commonProps });
     }
 };
 export default DynamicSelectFieldView;

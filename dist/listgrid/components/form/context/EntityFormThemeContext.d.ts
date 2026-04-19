@@ -1,5 +1,5 @@
-import React from "react";
-import { EntityFormThemeContextValue, EntityFormThemeProviderProps } from "../types/ViewEntityFormTheme.types";
+import React from 'react';
+import { EntityFormThemeContextValue, EntityFormThemeProviderProps } from '../types/ViewEntityFormTheme.types';
 /**
  * EntityForm 테마 컨텍스트
  * ViewEntityForm과 하위 컴포넌트에서 스타일을 커스터마이징하는데 사용

@@ -1,8 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { Tooltip } from "../../../../ui";
-import { showConfirm } from "../../../../message";
-import { getExternalApiData } from "../../../../misc";
-export const PriorityButtons = ({ managePriority, setManagePriority, setParentManagePriority, rows, entityForm, setNotifications, setErrors }) => {
+import { Tooltip } from '../../../../ui';
+import { showConfirm } from '../../../../message';
+import { getExternalApiData } from '../../../../misc';
+export const PriorityButtons = ({ managePriority, setManagePriority, setParentManagePriority, rows, entityForm, setNotifications, setErrors, }) => {
     const handlePriorityToggle = () => {
         if (managePriority) {
             showConfirm({
@@ -19,8 +19,8 @@ export const PriorityButtons = ({ managePriority, setManagePriority, setParentMa
                         url: `${entityForm.getUrl()}/priority`,
                         method: 'PUT',
                         formData: {
-                            priorities: Object.fromEntries(priorities)
-                        }
+                            priorities: Object.fromEntries(priorities),
+                        },
                     });
                     if (response) {
                         setNotifications(['우선순위 변경이 완료되었습니다.']);
@@ -31,7 +31,7 @@ export const PriorityButtons = ({ managePriority, setManagePriority, setParentMa
                         setNotifications([]);
                         setErrors(['우선순위 변경 중 오류가 발생했습니다.']);
                     }
-                }
+                },
             });
         }
         else {
@@ -43,6 +43,8 @@ export const PriorityButtons = ({ managePriority, setManagePriority, setParentMa
         setParentManagePriority();
         setManagePriority(false);
     };
-    return (_jsxs("div", { className: "rcm-row", children: [_jsx(Tooltip, { label: managePriority ? '리스트에서 우선순위를 변경한 후 버튼을 누르면 변경된 우선순위가 저장되어 목록에 반영됩니다.' : '리스트 각 행의 맨 좌측 열을 드래그해 우선순위를 변경할 수 있습니다', children: _jsx("button", { type: 'button', className: "rcm-button", "data-variant": managePriority ? 'primary' : 'outline', onClick: handlePriorityToggle, children: managePriority ? '우선순위 변경 완료' : '우선순위 변경' }) }), managePriority && _jsx("button", { type: 'button', className: 'btn btn-outline-danger', onClick: handleCancelPriorityChange, children: "\uC6B0\uC120\uC21C\uC704 \uBCC0\uACBD \uCDE8\uC18C" })] }));
+    return (_jsxs("div", { className: "rcm-row", children: [_jsx(Tooltip, { label: managePriority
+                    ? '리스트에서 우선순위를 변경한 후 버튼을 누르면 변경된 우선순위가 저장되어 목록에 반영됩니다.'
+                    : '리스트 각 행의 맨 좌측 열을 드래그해 우선순위를 변경할 수 있습니다', children: _jsx("button", { type: 'button', className: "rcm-button", "data-variant": managePriority ? 'primary' : 'outline', onClick: handlePriorityToggle, children: managePriority ? '우선순위 변경 완료' : '우선순위 변경' }) }), managePriority && (_jsx("button", { type: 'button', className: 'btn btn-outline-danger', onClick: handleCancelPriorityChange, children: "\uC6B0\uC120\uC21C\uC704 \uBCC0\uACBD \uCDE8\uC18C" }))] }));
 };
 //# sourceMappingURL=PriorityButton.js.map

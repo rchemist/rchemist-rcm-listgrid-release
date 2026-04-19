@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 import { OptionalField, OptionalFieldProps, ViewListProps, ViewListResult, ViewRenderProps, ViewRenderResult } from './abstract';
 import { FieldInfoParameters, FieldRenderParameters, FilterRenderParameters } from '../../config/EntityField';
 import { RenderType } from '../../config/Config';
 interface BooleanFieldProps extends OptionalFieldProps {
-    emptyLabel?: string;
+    emptyLabel?: string | undefined;
 }
 export declare class BooleanField extends OptionalField<BooleanField> {
-    emptyLabel?: string;
+    emptyLabel?: string | undefined;
     constructor(name: string, order: number, emptyLabel?: string);
     /**
      * BooleanField 핵심 렌더링 로직

@@ -6,9 +6,9 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import { MultipleOptionalField, renderListMultipleOptionalField, } from './abstract';
-import { CheckBoxChip } from "../../ui";
+import { CheckBoxChip } from '../../ui';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { MultiSelectBox } from "../../ui";
+import { MultiSelectBox } from '../../ui';
 export class MultiSelectField extends MultipleOptionalField {
     constructor(name, order, options, limit, reason, validateStatusChange) {
         super(name, order, 'multiselect', options, limit);
@@ -26,9 +26,9 @@ export class MultiSelectField extends MultipleOptionalField {
             }
             // Chip UI 조건 충족 시 CheckBoxChip 사용
             if (this.shouldRenderAsChip()) {
-                return _jsx(CheckBoxChip, { options: this.options, limit: this.limit, combo: { direction: 'row' }, ...await getInputRendererParameters(this, params) }, cacheKey);
+                return (_jsx(CheckBoxChip, { options: this.options, limit: this.limit, combo: { direction: 'row' }, ...await getInputRendererParameters(this, params) }, cacheKey));
             }
-            return _jsx(MultiSelectBox, { limit: this.limit, options: this.options, ...await getInputRendererParameters(this, params) }, cacheKey);
+            return (_jsx(MultiSelectBox, { limit: this.limit, options: this.options, ...await getInputRendererParameters(this, params) }, cacheKey));
         })();
     }
     /**

@@ -7,7 +7,9 @@ export function entityErrorToString(entityError) {
                 const entries = entityError.error.fieldError instanceof Map
                     ? Array.from(entityError.error.fieldError.entries())
                     : Object.entries(entityError.error.fieldError);
-                return entries.map(([key, value]) => `${key}: ${value.join(', ')}`).join(', ');
+                return entries
+                    .map(([key, value]) => `${key}: ${value.join(', ')}`)
+                    .join(', ');
             }
             if (entityError.error.message) {
                 return entityError.error.message;
@@ -121,7 +123,7 @@ export function processApiError(response, form) {
     }
     // 에러 메시지 결정
     let errorMessage;
-    let hasError = false;
+    let hasError;
     if (fieldErrors.length > 0) {
         // 필드 에러가 있으면 일반 에러 메시지는 표시하지 않지만, 에러 상태임은 표시
         errorMessage = undefined;
@@ -129,16 +131,23 @@ export function processApiError(response, form) {
     }
     else {
         // 필드 에러가 없을 때만 일반 에러 메시지 표시
-        errorMessage = (!jsonError ? (typeof response.error === 'string' ? response.error : undefined) : globalError ? globalError : undefined) ?? '저장 중 오류가 발생했습니다.';
+        errorMessage =
+            (!jsonError
+                ? typeof response.error === 'string'
+                    ? response.error
+                    : undefined
+                : globalError
+                    ? globalError
+                    : undefined) ?? '저장 중 오류가 발생했습니다.';
         hasError = true;
     }
     return {
         fieldErrors,
         globalError: errorMessage,
-        hasError
+        hasError,
     };
 }
 export function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 //# sourceMappingURL=EntityFormMethod.js.map

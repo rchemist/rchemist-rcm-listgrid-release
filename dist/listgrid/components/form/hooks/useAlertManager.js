@@ -17,7 +17,7 @@ export const useAlertManager = (alertMessages, onRemove, onTabChange, onFieldFoc
         setClosedAlerts(new Set());
     }, [alertMessages.length]);
     // 닫히지 않은 알림들
-    const visibleAlerts = alertMessages.filter(alert => !closedAlerts.has(alert.key));
+    const visibleAlerts = alertMessages.filter((alert) => !closedAlerts.has(alert.key));
     const handleLinkClick = useCallback((link) => {
         const linkType = link.type || 'tab';
         switch (linkType) {
@@ -44,17 +44,17 @@ export const useAlertManager = (alertMessages, onRemove, onTabChange, onFieldFoc
         }
     }, [onTabChange, onFieldFocus, openModal]);
     const handleCloseAlert = useCallback((key) => {
-        setClosedAlerts(prev => new Set(prev).add(key));
+        setClosedAlerts((prev) => new Set(prev).add(key));
         if (onRemove) {
             onRemove(key);
         }
     }, [onRemove]);
     const toggleCollapse = useCallback(() => {
-        setIsCollapsed(prev => !prev);
+        setIsCollapsed((prev) => !prev);
     }, []);
     // 주요 알림 색상 결정 (우선순위 기반)
     const getDominantColor = useCallback(() => {
-        const hasColor = (color) => visibleAlerts.some(alert => alert.color === color);
+        const hasColor = (color) => visibleAlerts.some((alert) => alert.color === color);
         // 우선순위: danger > warning > success > info
         if (hasColor('danger'))
             return 'danger';
@@ -70,7 +70,7 @@ export const useAlertManager = (alertMessages, onRemove, onTabChange, onFieldFoc
         handleLinkClick,
         handleCloseAlert,
         toggleCollapse,
-        getDominantColor
+        getDominantColor,
     };
 };
 // 알림 스타일 가져오기 — rcm-notice 기본 + data-tone 반환
@@ -90,7 +90,7 @@ export const getAlertStyles = (color) => {
         case 'secondary':
         case 'primary':
         case 'dark':
-            return { ...base, dataTone: undefined, icon: IconInfoCircle };
+            return { ...base, icon: IconInfoCircle };
         default:
             return { ...base, dataTone: 'info', icon: IconInfoCircle };
     }

@@ -6,12 +6,12 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import { isBlank } from '../../../utils/StringUtil';
-import { getTranslation } from "../../../utils/i18n";
-import { useEntityFormTheme } from "../context/EntityFormThemeContext";
+import { getTranslation } from '../../../utils/i18n';
+import { useEntityFormTheme } from '../context/EntityFormThemeContext';
 export const ViewHelpText = (props) => {
     const { t } = getTranslation();
     const { classNames, cn } = useEntityFormTheme();
-    const helpText = typeof props.helpText === "string" ? t(props.helpText) : props.helpText;
-    return isBlank(props.helpText) ? null : _jsx("div", { className: cn('rcm-field-help', classNames.helpText?.text), children: helpText });
+    const helpText = typeof props.helpText === 'string' ? t(props.helpText) : props.helpText;
+    return isBlank(props.helpText) ? null : (_jsx("div", { className: cn('rcm-field-help', classNames.helpText?.text), children: helpText }));
 };
 //# sourceMappingURL=ViewHelpText.js.map

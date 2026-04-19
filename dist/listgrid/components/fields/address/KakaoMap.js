@@ -7,7 +7,7 @@ import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
-import { useState } from "react";
+import { useState } from 'react';
 import { isBlank } from '../../../utils/StringUtil';
 export const KakaoMap = (props) => {
     const [latitude, setLatitude] = useState(props.latitude);
@@ -20,7 +20,6 @@ export const KakaoMap = (props) => {
   
     });
   */
-    'use client';
     if (latitude === undefined || longitude === undefined) {
         if (isBlank(props.address1)) {
             return null;
@@ -28,7 +27,7 @@ export const KakaoMap = (props) => {
         else {
             if (props.address1) {
                 try {
-                    var geocoder = new kakao.maps.services.Geocoder();
+                    const geocoder = new kakao.maps.services.Geocoder();
                     geocoder.addressSearch(props.address1, (result, status) => {
                         if (status === 'OK' && result) {
                             const latitude = parseFloat(result[0].y);
@@ -48,11 +47,11 @@ export const KakaoMap = (props) => {
     if (latitude === undefined || longitude === undefined) {
         return null;
     }
-    return _jsx(_Fragment, { children: _jsx(Map, { id: 'address-map', level: 3, center: { lat: latitude, lng: longitude }, style: { width: '100%', height: '300px', marginTop: `1rem` }, children: _jsx(MapMarker // 마커를 생성합니다
+    return (_jsx(_Fragment, { children: _jsx(Map, { id: 'address-map', level: 3, center: { lat: latitude, lng: longitude }, style: { width: '100%', height: '300px', marginTop: `1rem` }, children: _jsx(MapMarker // 마커를 생성합니다
             , { position: {
                     // 마커가 표시될 위치입니다
                     lat: latitude,
                     lng: longitude,
-                }, title: props.address1 ? `${props.address1} ${props.address2}` : '' }) }) });
+                }, title: props.address1 ? `${props.address1} ${props.address2}` : '' }) }) }));
 };
 //# sourceMappingURL=KakaoMap.js.map

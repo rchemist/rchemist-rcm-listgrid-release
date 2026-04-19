@@ -1,10 +1,10 @@
-import React from "react";
-import { FormField, FormFieldProps, ViewRenderProps, ViewRenderResult } from "./FormField";
+import React from 'react';
+import { FormField, FormFieldProps, ViewRenderProps, ViewRenderResult } from './FormField';
 import { EntityField, FilterRenderParameters } from '../../../config/EntityField';
 import { EntityForm } from '../../../config/EntityForm';
 import { LabelType, RenderType } from '../../../config/Config';
-import { TextAlignType } from "../../../common/type";
-import { QueryConditionType } from "../../../form/SearchForm";
+import { TextAlignType } from '../../../common/type';
+import { QueryConditionType } from '../../../form/SearchForm';
 /**
  * 중첩 객체에서 dot notation 경로로 값을 가져온다.
  * 예: getNestedValue(item, 'score.student.name') -> item.score.student.name
@@ -24,16 +24,16 @@ export interface ViewListResult {
     linkOnCell?: boolean;
 }
 export interface IListConfig {
-    support?: boolean;
-    quickSearch?: boolean;
-    filterable?: boolean;
-    sortable?: boolean;
-    order?: number;
-    label?: LabelType;
-    align?: TextAlignType;
-    viewRaw?: boolean;
-    op?: QueryConditionType;
-    multiFilter?: boolean;
+    support?: boolean | undefined;
+    quickSearch?: boolean | undefined;
+    filterable?: boolean | undefined;
+    sortable?: boolean | undefined;
+    order?: number | undefined;
+    label?: LabelType | undefined;
+    align?: TextAlignType | undefined;
+    viewRaw?: boolean | undefined;
+    op?: QueryConditionType | undefined;
+    multiFilter?: boolean | undefined;
 }
 export interface UserListFieldProps {
     order?: number;
@@ -42,13 +42,13 @@ export interface UserListFieldProps {
     filterable?: boolean;
     multiFilter?: boolean;
 }
-export interface ListableFormFieldProps extends FormFieldProps {
+export interface ListableFormFieldProps<TValue = any, TForm extends object = any> extends FormFieldProps<TValue, TForm> {
     listConfig?: IListConfig;
     showList?: boolean;
     overrideRenderListItem?: (props: ViewListProps) => Promise<ViewListResult>;
     overrideRenderListFilter?(params: FilterRenderParameters): Promise<React.ReactNode | null>;
 }
-export declare abstract class ListableFormField<T extends ListableFormField<T>> extends FormField<T> {
+export declare abstract class ListableFormField<TSelf extends ListableFormField<TSelf, TValue, TForm>, TValue = any, TForm extends object = any> extends FormField<TSelf, TValue, TForm> {
     listConfig?: IListConfig;
     overrideRenderListItem?: (props: ViewListProps) => Promise<ViewListResult>;
     overrideRenderListFilter?(params: FilterRenderParameters): Promise<React.ReactNode | null>;
@@ -126,7 +126,7 @@ export declare abstract class ListableFormField<T extends ListableFormField<T>> 
      * EntityForm 이 저장될 때 서버로 전송할 값을 override 하는 메소드
      * @param saveValue
      */
-    withSaveValue(saveValue: (entityForm: EntityForm, field: EntityField, renderType?: RenderType) => Promise<any>): this;
+    withSaveValue(saveValue: (entityForm: EntityForm<TForm>, field: EntityField, renderType?: RenderType) => Promise<TValue>): this;
     /**
      * 목록 정렬 사용 여부 설정
      * 설정이 없는 한 정렬 사용은 true 이다.
@@ -136,6 +136,6 @@ export declare abstract class ListableFormField<T extends ListableFormField<T>> 
     withSortable(sortable?: boolean): this;
     isFilterable(): boolean;
     isSortable(): boolean;
-    protected copyFields(origin: ListableFormFieldProps, includeValue?: boolean): this;
+    protected copyFields(origin: ListableFormFieldProps<TValue, TForm>, includeValue?: boolean): this;
 }
 //# sourceMappingURL=ListableFormField.d.ts.map

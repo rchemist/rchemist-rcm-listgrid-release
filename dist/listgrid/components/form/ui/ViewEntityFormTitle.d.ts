@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode } from 'react';
 /**
  * ViewEntityFormTitle 컴포넌트
  * - EntityForm의 제목 영역만 렌더링합니다.

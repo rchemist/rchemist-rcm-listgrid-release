@@ -1,4 +1,4 @@
-import { ExtensionPoint } from '../../extensions/EntityFormExtension.types';
+import { ExtensionPoint, } from '../../extensions/EntityFormExtension.types';
 import { EntityFormActions } from '../../config/form/EntityFormActions';
 export class EntityFormExtensions extends EntityFormActions {
     constructor(name, url) {
@@ -14,13 +14,13 @@ export class EntityFormExtensions extends EntityFormActions {
                 enabled: true,
                 continueOnError: true,
                 priority: 0,
-                ...options
-            }
+                ...options,
+            },
         };
         const configs = this.clientExtensions.get(point) || [];
         configs.push(config);
         // priority로 정렬
-        configs.sort((a, b) => ((a.options?.priority || 0) - (b.options?.priority || 0)));
+        configs.sort((a, b) => (a.options?.priority || 0) - (b.options?.priority || 0));
         this.clientExtensions.set(point, configs);
         return this;
     }
@@ -85,7 +85,7 @@ export class EntityFormExtensions extends EntityFormActions {
      * Client Extensions 존재 여부 확인
      */
     hasClientExtensions(...points) {
-        return points.some(point => {
+        return points.some((point) => {
             const clientConfigs = this.clientExtensions.get(point) || [];
             return clientConfigs.length > 0;
         });

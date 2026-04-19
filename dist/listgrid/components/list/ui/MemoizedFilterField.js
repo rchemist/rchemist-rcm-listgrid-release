@@ -53,7 +53,7 @@ const MemoizedFilterFieldInner = ({ entityForm, field, fieldName, value, onChang
         };
     }, [field, entityForm, handleChange, value]);
     if (isLoading) {
-        return (_jsx("div", { className: `animate-pulse ${isCompact ? 'h-8' : 'h-10'} bg-gray-100 rounded` }));
+        return _jsx("div", { className: `animate-pulse ${isCompact ? 'h-8' : 'h-10'} bg-gray-100 rounded` });
     }
     if (!filterView) {
         return null;

@@ -1,13 +1,13 @@
 'use client';
 import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
-import { getAlignClassName } from "../../../common/func";
+import { getAlignClassName } from '../../../common/func';
 import { isTrue } from '../../../utils/BooleanUtil';
-import { useEffect, useState } from "react";
-import { useListGridTheme } from "../context/ListGridThemeContext";
+import { useEffect, useState } from 'react';
+import { useListGridTheme } from '../context/ListGridThemeContext';
 export const ViewColumn = ({ fields, item, index, router, path, entityForm, viewFields, viewMode, onSelect, clickAccordion, }) => {
     const [views, setViews] = useState();
     const { classNames: themeClasses } = useListGridTheme();
-    const viewUrl = path + "/" + item.id;
+    const viewUrl = path + '/' + item.id;
     // 테마에서 데이터 셀 클래스 가져오기
     const dataCellClass = themeClasses.cell?.dataCell ?? '';
     const baseCellClass = themeClasses.cell?.cell ?? '';
@@ -25,7 +25,7 @@ export const ViewColumn = ({ fields, item, index, router, path, entityForm, view
                     const linkOnCell = isTrue(viewListResult.linkOnCell, true);
                     const tdIndex = fields.indexOf(field);
                     const alignClassName = getAlignClassName(field.getListFieldAlignType());
-                    views.push(_jsx("td", { className: `${baseCellClass} ${dataCellClass} ${alignClassName} whitespace-nowrap ${linkOnCell ? "cursor-pointer" : ""}`, onClick: () => {
+                    views.push(_jsx("td", { className: `${baseCellClass} ${dataCellClass} ${alignClassName} whitespace-nowrap ${linkOnCell ? 'cursor-pointer' : ''}`, onClick: () => {
                             if (linkOnCell) {
                                 if (clickAccordion !== undefined) {
                                     clickAccordion();
@@ -35,7 +35,7 @@ export const ViewColumn = ({ fields, item, index, router, path, entityForm, view
                                         onSelect(item);
                                     }
                                     else {
-                                        if (viewMode === "page") {
+                                        if (viewMode === 'page') {
                                             router.push(viewUrl);
                                         }
                                         else {

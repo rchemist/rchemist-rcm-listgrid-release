@@ -1,8 +1,8 @@
-import { Address } from "./AddressMapField";
+import { Address } from './AddressMapField';
 interface PostCodeSelectorProps {
-    address?: Address;
+    address?: Address | undefined;
     onSubmit: (address: Address) => void;
-    onRemove?: () => void;
+    onRemove?: (() => void) | undefined;
     required: boolean;
 }
 export declare const PostCodeSelector: (props: PostCodeSelectorProps) => import("react/jsx-runtime").JSX.Element;

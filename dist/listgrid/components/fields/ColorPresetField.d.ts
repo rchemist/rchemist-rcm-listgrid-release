@@ -1,8 +1,8 @@
-import { ReactNode } from "react";
-import { FieldRenderParameters } from "../../config/EntityField";
-import { ListableFormField, ViewListProps, ViewListResult } from "./abstract";
+import { ReactNode } from 'react';
+import { FieldRenderParameters } from '../../config/EntityField';
+import { ListableFormField, ViewListProps, ViewListResult } from './abstract';
 export declare class ColorPresetField extends ListableFormField<ColorPresetField> {
-    presets?: string[];
+    presets?: string[] | undefined;
     constructor(name: string, order: number, presets?: string[]);
     /**
      * ColorPresetField 핵심 렌더링 로직 (원본 render 로직 보존)

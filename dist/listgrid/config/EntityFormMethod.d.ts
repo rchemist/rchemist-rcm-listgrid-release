@@ -1,6 +1,6 @@
 import { IEntityError } from '../api';
-import { FieldError } from "./EntityFormTypes";
-import { EntityForm } from "./EntityForm";
+import { FieldError } from './EntityFormTypes';
+import { EntityForm } from './EntityForm';
 export declare function entityErrorToString(entityError: IEntityError): string;
 export declare function mergeFieldErrors(origin: FieldError[], errors: FieldError[]): FieldError[];
 interface ApiErrorResponse {
@@ -25,7 +25,7 @@ interface ApiErrorResponse {
  */
 export declare function processApiError(response: ApiErrorResponse, form?: EntityForm): {
     fieldErrors: FieldError[];
-    globalError?: string;
+    globalError?: string | undefined;
     hasError: boolean;
 };
 export declare function delay(ms: number): Promise<void>;

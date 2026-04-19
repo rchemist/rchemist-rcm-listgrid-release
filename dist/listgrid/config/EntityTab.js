@@ -40,7 +40,7 @@ export class EntityTab {
         if (!userPermissions || userPermissions.length === 0) {
             return false;
         }
-        return this.requiredPermissions.some(permission => userPermissions.includes(permission));
+        return this.requiredPermissions.some((permission) => userPermissions.includes(permission));
     }
     clone() {
         const cloned = new EntityTab();
@@ -49,7 +49,9 @@ export class EntityTab {
         cloned.order = this.order;
         cloned.hidden = this.hidden;
         cloned.description = this.description;
-        cloned.requiredPermissions = this.requiredPermissions ? [...this.requiredPermissions] : undefined;
+        cloned.requiredPermissions = this.requiredPermissions
+            ? [...this.requiredPermissions]
+            : undefined;
         const fieldGroups = [];
         this.fieldGroups.forEach((fieldGroup) => {
             fieldGroups.push(fieldGroup.clone());
@@ -65,7 +67,7 @@ export class EntityTab {
             this.fieldGroups.sort((a, b) => a.order - b.order);
         }
         // 이미 존재하는지 확인 후 없으면 추가
-        if (!entityFieldGroup.fields.some(fld => fld.name === field.name)) {
+        if (!entityFieldGroup.fields.some((fld) => fld.name === field.name)) {
             entityFieldGroup.fields.push({ name: field.getName(), order: field.getOrder() });
         }
     }

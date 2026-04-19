@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { isEqualsIgnoreCase } from "../misc";
+import { isEqualsIgnoreCase } from '../misc';
 export class EntityFormButton {
     constructor(id) {
         this.id = id;

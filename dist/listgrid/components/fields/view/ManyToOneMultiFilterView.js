@@ -1,11 +1,11 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useEffect, useState } from "react";
-import { IconPlus, IconX } from "@tabler/icons-react";
+import { useEffect, useState } from 'react';
+import { IconPlus, IconX } from '@tabler/icons-react';
 import { ViewListGrid } from '../../list/ViewListGrid';
 import { ListGrid } from '../../../config/ListGrid';
 import { TreeSelectView } from './TreeSelectView';
-import { SearchForm } from "../../../form/SearchForm";
+import { SearchForm } from '../../../form/SearchForm';
 import { useModalManagerStore } from '../../../store';
 export const ManyToOneMultiFilterView = ({ name, label, config, parentEntityForm, value, onChange, }) => {
     const { openModal, closeModal } = useModalManagerStore();
@@ -29,7 +29,7 @@ export const ManyToOneMultiFilterView = ({ name, label, config, parentEntityForm
                             items.push({
                                 id: id,
                                 name: displayName,
-                                data: data
+                                data: data,
                             });
                         }
                     }
@@ -38,7 +38,7 @@ export const ManyToOneMultiFilterView = ({ name, label, config, parentEntityForm
                         items.push({
                             id: id,
                             name: id,
-                            data: { id }
+                            data: { id },
                         });
                     }
                 }
@@ -53,11 +53,11 @@ export const ManyToOneMultiFilterView = ({ name, label, config, parentEntityForm
             if (filter.length > 0) {
                 for (const filterItem of filter) {
                     if (filterItem) {
-                        newSearchForm.withFilter("AND", ...(await filterItem(parentEntityForm)));
+                        newSearchForm.withFilter('AND', ...(await filterItem(parentEntityForm)));
                     }
                 }
                 if (entityForm.neverDelete) {
-                    newSearchForm.handleAndFilter("active", "true");
+                    newSearchForm.handleAndFilter('active', 'true');
                 }
             }
             setSearchForm(newSearchForm);
@@ -80,24 +80,27 @@ export const ManyToOneMultiFilterView = ({ name, label, config, parentEntityForm
         const idField = config.field?.id ?? 'id';
         const itemId = item[idField];
         // Check if already selected
-        if (selectedItems.some(selected => selected.id === itemId)) {
+        if (selectedItems.some((selected) => selected.id === itemId)) {
             return;
         }
         (async () => {
             const displayName = await getDisplayName(item);
-            const newItems = [...selectedItems, {
+            const newItems = [
+                ...selectedItems,
+                {
                     id: itemId,
                     name: displayName,
-                    data: item
-                }];
+                    data: item,
+                },
+            ];
             setSelectedItems(newItems);
-            onChange(newItems.map(i => i.id));
+            onChange(newItems.map((i) => i.id));
         })();
     };
     const handleRemoveItem = (itemId) => {
-        const newItems = selectedItems.filter(item => item.id !== itemId);
+        const newItems = selectedItems.filter((item) => item.id !== itemId);
         setSelectedItems(newItems);
-        onChange(newItems.map(i => i.id));
+        onChange(newItems.map((i) => i.id));
     };
     const handleSelectModal = () => {
         const modalId = `manytoone-multi-select-${name}`;
@@ -106,7 +109,7 @@ export const ManyToOneMultiFilterView = ({ name, label, config, parentEntityForm
         const idField = config.field?.id ?? 'id';
         // Add NOT_IN filter to exclude already selected items
         if (selectedItems.length > 0) {
-            const selectedIds = selectedItems.map(item => item.id);
+            const selectedIds = selectedItems.map((item) => item.id);
             modalSearchForm.handleAndFilter(idField, selectedIds, 'NOT_IN');
         }
         openModal({
@@ -118,7 +121,7 @@ export const ManyToOneMultiFilterView = ({ name, label, config, parentEntityForm
                         closeModal(modalId);
                     } })) : (_jsx(ViewListGrid, { listGrid: new ListGrid(entityForm).withSearchForm(modalSearchForm), options: {
                         popup: true,
-                        filterable: config.filterable,
+                        ...(config.filterable !== undefined ? { filterable: config.filterable } : {}),
                         readonly: true,
                         selection: {
                             enabled: false,
@@ -129,7 +132,7 @@ export const ManyToOneMultiFilterView = ({ name, label, config, parentEntityForm
                                 closeModal(modalId);
                             },
                         },
-                    } })) }))
+                    } })) })),
         });
     };
     if (!mount) {

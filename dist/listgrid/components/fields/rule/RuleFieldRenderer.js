@@ -6,7 +6,7 @@
  */
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import { EntityForm } from '../../../config/EntityForm';
 import { useSession } from '../../../auth';
 export const RuleFieldRenderer = (props) => {
@@ -18,11 +18,11 @@ export const RuleFieldRenderer = (props) => {
             const viewParams = {
                 entityForm: new EntityForm('temp', ''),
                 onChange: props.onChange,
-                required: await field.isRequired({ session })
+                required: await field.isRequired({ session }),
             };
             setView(await field.render(viewParams));
         })();
     }, []);
-    return _jsx("div", { children: _jsx("div", { className: 'flex items-center', children: view }) });
+    return (_jsx("div", { children: _jsx("div", { className: 'flex items-center', children: view }) }));
 };
 //# sourceMappingURL=RuleFieldRenderer.js.map

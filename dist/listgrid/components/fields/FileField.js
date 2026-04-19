@@ -5,14 +5,14 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { ListableFormField } from './abstract';
-import { FileFieldValue } from "../../ui";
-import { LazyFileUploadInput as FileUploadInput } from "../../ui";
+import { ListableFormField, } from './abstract';
+import { FileFieldValue } from '../../ui';
+import { LazyFileUploadInput as FileUploadInput } from '../../ui';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { isEmpty } from "../../utils";
-import { getAccessableAssetUrl } from "../../misc";
-import { IconDeviceFloppy } from "@tabler/icons-react";
-import { TextInput } from "../../ui";
+import { isEmpty } from '../../utils';
+import { getAccessableAssetUrl } from '../../misc';
+import { IconDeviceFloppy } from '@tabler/icons-react';
+import { TextInput } from '../../ui';
 import { isBlank as isBlankString } from '../../utils/StringUtil';
 export class FileField extends ListableFormField {
     constructor(name, order, config) {
@@ -64,7 +64,7 @@ export class FileField extends ListableFormField {
      */
     renderInstance(params) {
         return (async () => {
-            return _jsx(FileUploadInput, { config: this.config, ...await getInputRendererParameters(this, params) });
+            return (_jsx(FileUploadInput, { config: this.config, ...await getInputRendererParameters(this, params) }));
         })();
     }
     /**
@@ -78,7 +78,7 @@ export class FileField extends ListableFormField {
      */
     renderListFilterInstance(params) {
         return (async () => {
-            return _jsx(TextInput, { name: `${this.name}_${params.entityForm.id}`, onChange: (value) => params.onChange(value, 'LIKE'), value: params.value });
+            return (_jsx(TextInput, { name: `${this.name}_${params.entityForm.id}`, onChange: (value) => params.onChange(value, 'LIKE'), value: params.value }));
         })();
     }
     /**
@@ -92,19 +92,18 @@ export class FileField extends ListableFormField {
                 if (!isEmpty(file.existFiles) && !isBlankString(file.existFiles[0]?.url)) {
                     const fileDownloadUrl = getAccessableAssetUrl(file.existFiles[0].url);
                     return {
-                        result: _jsx("div", { className: "rcm-file-field-cell", children: _jsx("div", { className: "rcm-file-field-inner", children: _jsxs("a", { href: fileDownloadUrl, target: "_blank", rel: "noreferrer", className: "rcm-file-field-link", children: [_jsx(IconDeviceFloppy, { className: "rcm-file-field-icon" }), _jsx("span", { className: "rcm-file-field-name", children: file.existFiles[0].url })] }) }) }),
-                        linkOnCell: false
+                        result: (_jsx("div", { className: "rcm-file-field-cell", children: _jsx("div", { className: "rcm-file-field-inner", children: _jsxs("a", { href: fileDownloadUrl, target: "_blank", rel: "noreferrer", className: "rcm-file-field-link", children: [_jsx(IconDeviceFloppy, { className: "rcm-file-field-icon" }), _jsx("span", { className: "rcm-file-field-name", children: file.existFiles[0].url })] }) }) })),
+                        linkOnCell: false,
                     };
                 }
             }
             return {
-                result: null
+                result: null,
             };
         })();
     }
     static create(props) {
-        return new FileField(props.name, props.order, props.config)
-            .copyFields(props, true);
+        return new FileField(props.name, props.order, props.config).copyFields(props, true);
     }
     async isBlank(renderType = 'create') {
         const value = await this.getCurrentValue(renderType);

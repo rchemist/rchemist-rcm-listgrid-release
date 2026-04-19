@@ -1,4 +1,4 @@
-import { QueryConditionType } from "../../../form/SearchForm";
+import { QueryConditionType } from '../../../form/SearchForm';
 interface NumberFilterProps {
     onRemove: () => void;
     onChange: (queryConditionType: QueryConditionType, value: number | number[]) => void;

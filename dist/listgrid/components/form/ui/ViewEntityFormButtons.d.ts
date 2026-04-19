@@ -1,6 +1,6 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode } from 'react';
 import { EntityFormButton } from '../../../config/EntityFormButton';
-import { ViewEntityFormButtonsProps } from "../types/ViewEntityFormButtons.types";
+import { ViewEntityFormButtonsProps } from '../types/ViewEntityFormButtons.types';
 /**
  * ViewEntityFormButtons 컴포넌트
  * - EntityForm의 버튼 영역만 렌더링합니다.

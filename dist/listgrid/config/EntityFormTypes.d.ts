@@ -1,11 +1,11 @@
 import { ModalOptions } from '../store';
-import { ReactNode } from "react";
-import { CommonFieldProps } from "../components/fields/Preset";
-import { IDataTransferConfig } from "../transfer/Type";
-import { FieldGroupInfo, HelpTextType, HiddenType, ReadOnlyType, RequiredType, TabInfo } from "./Config";
-import { EntityForm } from "./EntityForm";
-import { EntityItem } from "./EntityItem";
-import { ColorType } from "../common/type";
+import { ReactNode } from 'react';
+import { CommonFieldProps } from '../components/fields/Preset';
+import { IDataTransferConfig } from '../transfer/Type';
+import { FieldGroupInfo, HelpTextType, HiddenType, ReadOnlyType, RequiredType, TabInfo } from './Config';
+import { EntityForm } from './EntityForm';
+import { EntityItem } from './EntityItem';
+import { ColorType } from '../common/type';
 export type CopyEntityFormExplicitFieldType = string | CopyEntityFormOverrideFieldProps;
 export interface CopyEntityFormToInnerFieldsProps {
     prefix: string;
@@ -41,8 +41,8 @@ export interface FieldError {
     name: string;
     label: string | ReactNode | false;
     errors: string[];
-    tabId?: string;
-    errorId?: string;
+    tabId?: string | undefined;
+    errorId?: string | undefined;
 }
 export interface AlertMessageLink {
     type?: 'tab' | 'field' | 'external' | 'modal';
@@ -58,6 +58,6 @@ export interface AlertMessage {
     link?: AlertMessageLink;
 }
 export interface DataTransferConfigProps extends IDataTransferConfig {
-    fieldNames?: string[];
+    fieldNames?: string[] | undefined;
 }
 //# sourceMappingURL=EntityFormTypes.d.ts.map

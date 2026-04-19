@@ -1,12 +1,12 @@
 import { FieldType, FieldValue, PlaceHolderType, RenderType, RequiredType } from '../config/Config';
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 import { EntityForm } from '../config/EntityForm';
 import { ValidateResult, Validation } from '../validations/Validation';
-import { QueryConditionType } from "../form/SearchForm";
+import { QueryConditionType } from '../form/SearchForm';
 import { EntityItem } from '../config/EntityItem';
 import { Session } from '../auth/types';
 export interface EntityField extends EntityItem {
-    value?: FieldValue;
+    value?: FieldValue | undefined;
     type: FieldType;
     placeHolder?: PlaceHolderType;
     required?: RequiredType;
@@ -54,7 +54,7 @@ export interface EntityField extends EntityItem {
     withPlaceHolder(placeHolder?: PlaceHolderType): this;
     withRequired(required?: RequiredType): this;
     withValue(value: any): this;
-    getDisplayValue(entityForm: EntityForm, renderType?: RenderType): Promise<string>;
+    getDisplayValue(entityForm: EntityForm, renderType?: RenderType): Promise<any>;
     getPlaceHolder(props: FieldInfoParameters): Promise<string>;
     getSaveValue(entityForm: EntityForm, renderType?: RenderType): Promise<any>;
     getCurrentValue(renderType?: RenderType): Promise<any>;
@@ -130,8 +130,8 @@ export interface FilterRenderParameters {
     value?: Promise<any>;
 }
 export interface FieldInfoParameters {
-    entityForm?: EntityForm;
-    session?: Session;
-    renderType?: RenderType;
+    entityForm?: EntityForm | undefined;
+    session?: Session | undefined;
+    renderType?: RenderType | undefined;
 }
 //# sourceMappingURL=EntityField.d.ts.map

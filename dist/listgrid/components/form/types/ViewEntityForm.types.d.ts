@@ -2,8 +2,8 @@ import { EntityForm } from '../../../config/EntityForm';
 import { EntityFormButton } from '../../../config/EntityFormButton';
 import { EntityButtonLinkProps } from '../../../config/Config';
 import { Session } from '../../../auth/types';
-import { Dispatch, ReactNode, SetStateAction } from "react";
-import { ApiSpecification } from "../../api/Type";
+import { Dispatch, ReactNode, SetStateAction } from 'react';
+import { ApiSpecification } from '../../api/Type';
 /**
  * Props for ViewEntityForm component.
  * ViewEntityForm 컴포넌트에 전달되는 모든 속성 정의

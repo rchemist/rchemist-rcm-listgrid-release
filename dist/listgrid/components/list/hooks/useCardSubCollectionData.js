@@ -91,7 +91,7 @@ export function useCardSubCollectionData(fetchUrl, config) {
         setError(null);
         try {
             const url = getUrl(fetchUrl);
-            const response = await fetch(url, { signal });
+            const response = await fetch(url, signal !== undefined ? { signal } : {});
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
@@ -146,7 +146,15 @@ export function useCardSubCollectionData(fetchUrl, config) {
                 abortControllerRef.current.abort();
             }
         };
-    }, [fetchUrl, config.mappedBy, config.filterBy, config.useSearchForm, config.searchForm, fetchDataWithSearchForm, fetchDataSimple]);
+    }, [
+        fetchUrl,
+        config.mappedBy,
+        config.filterBy,
+        config.useSearchForm,
+        config.searchForm,
+        fetchDataWithSearchForm,
+        fetchDataSimple,
+    ]);
     /**
      * Refresh function to manually refetch data
      */

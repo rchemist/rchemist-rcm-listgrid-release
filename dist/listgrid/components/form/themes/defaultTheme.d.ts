@@ -1,4 +1,4 @@
-import { ViewEntityFormClassNames } from "../types/ViewEntityFormTheme.types";
+import { ViewEntityFormClassNames } from '../types/ViewEntityFormTheme.types';
 /**
  * ViewEntityForm 기본 테마 — 중립(neutral) 버전.
  *

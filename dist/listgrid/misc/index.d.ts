@@ -57,7 +57,7 @@ export declare function removeAssetServerPrefix(url: string | null | undefined):
 export declare function validatedAssetFileName(fileName: string): string;
 export type DefinedDateType = 'TODAY' | 'WEEK' | 'MONTH' | 'MONTH3' | 'MONTH6' | 'YEAR';
 export declare function getDefinedDates(type: DefinedDateType): Date[];
-export { callExternalHttpRequest, getExternalApiData, getExternalApiDataWithError, } from '../api';
+export { callExternalHttpRequest, getExternalApiData, getExternalApiDataWithError } from '../api';
 export declare const RequestUtil: any;
 export type EntityError = any;
 export declare const EntityError: any;

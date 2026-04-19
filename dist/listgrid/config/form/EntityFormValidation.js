@@ -1,5 +1,5 @@
 import { EntityFormBase } from '../../config/form/EntityFormBase';
-import { isEmpty } from "../../utils";
+import { isEmpty } from '../../utils';
 import { mergeFieldErrors } from '../../config/EntityFormMethod';
 export class EntityFormValidation extends EntityFormBase {
     constructor(name, url) {

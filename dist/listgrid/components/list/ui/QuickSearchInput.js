@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { isBlank } from '../../../utils/StringUtil';
-import { IconCircleX, IconSearch } from "@tabler/icons-react";
-export const QuickSearchInput = ({ search, setSearch, onQuickSearch, quickSearchEnabled, quickSearchLabel, loading }) => {
+import { IconCircleX, IconSearch } from '@tabler/icons-react';
+export const QuickSearchInput = ({ search, setSearch, onQuickSearch, quickSearchEnabled, quickSearchLabel, loading, }) => {
     if (!quickSearchEnabled)
         return _jsx("div", { children: "\u00A0" });
     return (_jsxs("div", { className: "rcm-quick-search-wrap", children: [_jsx("input", { type: "text", id: "quick-search", className: "rcm-input rcm-quick-search-input", placeholder: `Search ${quickSearchLabel}`, value: search, readOnly: !quickSearchEnabled, disabled: loading || !quickSearchEnabled, onChange: (e) => setSearch(e.target.value), onKeyUp: (e) => {

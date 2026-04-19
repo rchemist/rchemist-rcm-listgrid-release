@@ -2,10 +2,10 @@ import { ManyToOneConfig } from '../../../config/Config';
 import { EntityForm } from '../../../config/EntityForm';
 interface ManyToOneMultiFilterViewProps {
     name: string;
-    label?: string;
+    label?: string | undefined;
     config: ManyToOneConfig;
     parentEntityForm: EntityForm;
-    value?: string[];
+    value?: string[] | undefined;
     onChange: (value: string[]) => void;
 }
 export declare const ManyToOneMultiFilterView: ({ name, label, config, parentEntityForm, value, onChange, }: ManyToOneMultiFilterViewProps) => import("react/jsx-runtime").JSX.Element | null;

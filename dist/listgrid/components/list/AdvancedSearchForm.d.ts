@@ -1,4 +1,4 @@
-import { SearchForm } from "../../form/SearchForm";
+import { SearchForm } from '../../form/SearchForm';
 import { ListableFormField } from '../fields/abstract';
 import { EntityForm } from '../../config/EntityForm';
 import { QuickSearchProps } from '../../config/ListGrid';

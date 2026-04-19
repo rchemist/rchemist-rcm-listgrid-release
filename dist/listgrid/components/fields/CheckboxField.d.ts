@@ -1,6 +1,6 @@
 import { MultipleOptionalField, MultipleOptionalFieldProps, ViewListProps, ViewListResult } from './abstract';
-import React from "react";
-import { MinMaxLimit, SelectOption } from "../../form/Type";
+import React from 'react';
+import { MinMaxLimit, SelectOption } from '../../form/Type';
 import { FieldRenderParameters } from '../../config/EntityField';
 interface CheckboxFieldProps extends MultipleOptionalFieldProps {
 }

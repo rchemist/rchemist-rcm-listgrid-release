@@ -1,21 +1,21 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { Tooltip } from "../../../ui";
-import { useLoadingStore } from "../../../loading";
-import { Icon } from "@iconify/react";
-import { IconBaselineDensityMedium, IconChevronUp, IconExternalLink, IconEye } from "@tabler/icons-react";
-import React, { useEffect, useState } from "react";
-import { ViewColumn } from "./ViewColumn";
-import { usePathname, useRouter } from "../../../router";
-import { showAlert } from "../../../message";
-import { isTrue } from "../../../utils/BooleanUtil";
-import { useModalManagerStore } from "../../../store";
-import { ViewEntityForm } from "../../form/ViewEntityForm";
-import { useListGridTheme } from "../context/ListGridThemeContext";
-import { SubCollectionInlineView } from "./SubCollectionInlineView";
+import { Tooltip } from '../../../ui';
+import { useLoadingStore } from '../../../loading';
+import { Icon } from '@iconify/react';
+import { IconBaselineDensityMedium, IconChevronUp, IconExternalLink, IconEye, } from '@tabler/icons-react';
+import React, { useEffect, useState } from 'react';
+import { ViewColumn } from './ViewColumn';
+import { usePathname, useRouter } from '../../../router';
+import { showAlert } from '../../../message';
+import { isTrue } from '../../../utils/BooleanUtil';
+import { useModalManagerStore } from '../../../store';
+import { ViewEntityForm } from '../../form/ViewEntityForm';
+import { useListGridTheme } from '../context/ListGridThemeContext';
+import { SubCollectionInlineView } from './SubCollectionInlineView';
 export const ViewRows = (props) => {
     const managePriority = props.managePriority;
-    const { enableCheckItem, sortableList, checkedItems, onDrag, item, index, checkItem, totalCount, draggable, startNumber, selectionOptions, showCheckboxInput, openInNewWindow, isAdmin, onSelect, entityForm, inlineExpansion, isSubCollection, mappedBy, inlineViewReadonly } = props;
+    const { enableCheckItem, sortableList, checkedItems, onDrag, item, index, checkItem, totalCount, draggable, startNumber, selectionOptions, showCheckboxInput, openInNewWindow, isAdmin, onSelect, entityForm, inlineExpansion, isSubCollection, mappedBy, inlineViewReadonly, } = props;
     // Check if this item is expanded inline
     const isInlineExpanded = inlineExpansion?.isExpanded(item.id) ?? false;
     const [accordionView, setAccordionView] = useState();
@@ -113,20 +113,15 @@ export const ViewRows = (props) => {
         if (!item.id || !entityForm)
             return;
         const modalId = `search-view-entity-${item.id}`;
-        const viewEntityForm = entityForm
-            .clone(true)
-            .withId(item.id)
-            .withTitle("상세 정보");
-        const titleStr = typeof entityForm.title === 'string'
-            ? entityForm.title
-            : (entityForm.title?.title || '정보');
+        const viewEntityForm = entityForm.clone(true).withId(item.id).withTitle('상세 정보');
+        const titleStr = typeof entityForm.title === 'string' ? entityForm.title : entityForm.title?.title || '정보';
         openModal({
             modalId,
             title: `${titleStr} 조회`,
             size: '5xl',
             content: (_jsx(ViewEntityForm, { entityForm: viewEntityForm, buttonLinks: {
-                    onClickList: async () => closeModal(modalId)
-                }, subCollection: true, readonly: true }))
+                    onClickList: async () => closeModal(modalId),
+                }, subCollection: true, readonly: true })),
         });
     };
     async function toggleAccordion() {
@@ -161,31 +156,30 @@ export const ViewRows = (props) => {
         // 모바일: 모달로 표시
         if (isMobile) {
             const modalId = `inline-view-entity-${item.id}`;
-            const viewEntityForm = entityForm
-                .clone(true)
-                .withId(item.id)
-                .withTitle("상세 정보");
-            const mobileTitleStr = typeof entityForm.title === 'string'
-                ? entityForm.title
-                : (entityForm.title?.title || '정보');
+            const viewEntityForm = entityForm.clone(true).withId(item.id).withTitle('상세 정보');
+            const mobileTitleStr = typeof entityForm.title === 'string' ? entityForm.title : entityForm.title?.title || '정보';
             openModal({
                 modalId,
                 title: `${mobileTitleStr} 조회`,
                 size: '5xl',
                 content: (_jsx(ViewEntityForm, { entityForm: viewEntityForm, buttonLinks: {
                         onClickList: async () => closeModal(modalId),
-                        onSave: props.onRefresh ? {
-                            success: () => {
-                                props.onRefresh();
+                        ...(props.onRefresh
+                            ? {
+                                onSave: {
+                                    success: () => {
+                                        props.onRefresh();
+                                    },
+                                },
+                                onDelete: {
+                                    success: () => {
+                                        props.onRefresh();
+                                        closeModal(modalId);
+                                    },
+                                },
                             }
-                        } : undefined,
-                        onDelete: props.onRefresh ? {
-                            success: () => {
-                                props.onRefresh();
-                                closeModal(modalId);
-                            }
-                        } : undefined,
-                    }, subCollection: true, readonly: props.viewMode === 'popup' || inlineViewReadonly, hideMappedByFields: mappedBy }))
+                            : {}),
+                    }, subCollection: true, readonly: props.viewMode === 'popup' || inlineViewReadonly === true, ...(mappedBy !== undefined ? { hideMappedByFields: mappedBy } : {}) })),
             });
             return;
         }
@@ -195,15 +189,13 @@ export const ViewRows = (props) => {
     // 테마에서 행 및 셀 클래스 가져오기
     const baseRowClass = `${themeClasses.row?.row ?? ''} ${themeClasses.row?.hover ?? 'hover:bg-gray-50 dark:hover:bg-dark/30'} ${themeClasses.row?.clickable ?? 'cursor-pointer'}`;
     // 확장된 행 스타일 - 배경색으로 연결감 표현 (데스크톱 전용)
-    const expandedRowClass = isInlineExpanded && !isMobile
-        ? 'bg-gray-200 !hover:bg-gray-200'
-        : '';
+    const expandedRowClass = isInlineExpanded && !isMobile ? 'bg-gray-200 !hover:bg-gray-200' : '';
     const rowClass = `${baseRowClass} ${expandedRowClass} transition-all duration-200`;
     const cellClass = themeClasses.cell?.cell ?? '';
     const checkboxCellClass = themeClasses.cell?.checkboxCell ?? 'w-[50px]';
     const dragHandleCellClass = themeClasses.cell?.dragHandleCell ?? 'w-[30px] cursor-grab';
     const openNewWindowCellClass = themeClasses.cell?.openNewWindowCell ?? 'hidden md:table-cell';
-    return _jsxs(React.Fragment, { children: [_jsxs("tr", { className: rowClass, children: [managePriority && _jsx("td", { className: dragHandleCellClass, children: _jsx(IconBaselineDensityMedium, { className: 'w-4 h-4' }) }), enableCheckItem && _jsx("td", { className: `${checkboxCellClass} whitespace-nowrap space-x-1`, children: (() => {
+    return (_jsxs(React.Fragment, { children: [_jsxs("tr", { className: rowClass, children: [managePriority && (_jsx("td", { className: dragHandleCellClass, children: _jsx(IconBaselineDensityMedium, { className: 'w-4 h-4' }) })), enableCheckItem && (_jsx("td", { className: `${checkboxCellClass} whitespace-nowrap space-x-1`, children: (() => {
                             // showCheckboxInput이 false면 번호만 표시
                             if (!showCheckboxInput) {
                                 return _jsx("span", { className: 'font-normal', children: startNumber - index });
@@ -224,7 +216,7 @@ export const ViewRows = (props) => {
                                             // 선택 검증
                                             if (selectionOptions?.validateSelection) {
                                                 const newCheckedItems = checkedItems.includes(item.id)
-                                                    ? checkedItems.filter(id => id !== item.id)
+                                                    ? checkedItems.filter((id) => id !== item.id)
                                                     : [...checkedItems, item.id];
                                                 const validation = selectionOptions.validateSelection(newCheckedItems);
                                                 if (!validation.valid) {
@@ -239,22 +231,23 @@ export const ViewRows = (props) => {
                                             // 선택 변경 콜백
                                             if (selectionOptions?.onSelectionChange) {
                                                 const newCheckedItems = checkedItems.includes(item.id)
-                                                    ? checkedItems.filter(id => id !== item.id)
+                                                    ? checkedItems.filter((id) => id !== item.id)
                                                     : [...checkedItems, item.id];
                                                 selectionOptions.onSelectionChange(newCheckedItems, props.list);
                                             }
                                         } }), startNumber - index] }));
-                        })() }), showOpenInNewWindowButton && _jsx("td", { className: `${openNewWindowCellClass} whitespace-nowrap`, children: _jsx(Tooltip, { label: openInNewWindow?.tooltip || '새창에서 열기', children: _jsx("button", { className: 'btn btn-outline-secondary btn-sm p-1 min-w-[32px] min-h-[32px] flex items-center justify-center', onClick: handleOpenInNewWindow, children: _jsx(IconExternalLink, { className: 'w-4 h-4' }) }) }) }), inlineExpansion && _jsx("td", { className: `${themeClasses.cell?.selectCell ?? ''} whitespace-nowrap`, children: _jsx(Tooltip, { label: isInlineExpanded ? '접기' : '펼치기', children: _jsx("button", { className: `btn btn-sm p-1 min-w-[32px] min-h-[32px] flex items-center justify-center ${isInlineExpanded
-                                    ? 'btn-secondary'
-                                    : 'btn-outline-info'}`, onClick: (e) => {
+                        })() })), showOpenInNewWindowButton && (_jsx("td", { className: `${openNewWindowCellClass} whitespace-nowrap`, children: _jsx(Tooltip, { label: openInNewWindow?.tooltip || '새창에서 열기', children: _jsx("button", { className: 'btn btn-outline-secondary btn-sm p-1 min-w-[32px] min-h-[32px] flex items-center justify-center', onClick: handleOpenInNewWindow, children: _jsx(IconExternalLink, { className: 'w-4 h-4' }) }) }) })), inlineExpansion && (_jsx("td", { className: `${themeClasses.cell?.selectCell ?? ''} whitespace-nowrap`, children: _jsx(Tooltip, { label: isInlineExpanded ? '접기' : '펼치기', children: _jsx("button", { className: `btn btn-sm p-1 min-w-[32px] min-h-[32px] flex items-center justify-center ${isInlineExpanded ? 'btn-secondary' : 'btn-outline-info'}`, onClick: (e) => {
                                     e.stopPropagation();
                                     toggleInlineExpansion();
-                                }, children: isInlineExpanded
-                                    ? _jsx(IconChevronUp, { className: 'w-4 h-4' })
-                                    : _jsx(IconEye, { className: 'w-4 h-4' }) }) }) }), showViewButton && !inlineExpansion && _jsx("td", { className: `${themeClasses.cell?.selectCell ?? ''} whitespace-nowrap`, children: _jsx(Tooltip, { label: '상세 보기', children: _jsx("button", { className: 'btn btn-outline-info btn-sm p-1 min-w-[32px] min-h-[32px] flex items-center justify-center', onClick: handleViewEntity, children: _jsx(IconEye, { className: 'w-4 h-4' }) }) }) }), openInNewWindowEnabled && isAdmin && !showOpenInNewWindowButton && !isSearchMode && _jsx("td", { className: `${openNewWindowCellClass} whitespace-nowrap` }), _jsx(ViewColumn, { ...props, clickAccordion: 
-                        // Priority: inline expansion > accordion > undefined
-                        inlineExpansion ? toggleInlineExpansion :
-                            accordionMode ? toggleAccordion : undefined, viewMode: props.viewMode }), draggable && _jsx("td", { className: 'whitespace-nowrap space-x-1', children: function () {
+                                }, children: isInlineExpanded ? (_jsx(IconChevronUp, { className: 'w-4 h-4' })) : (_jsx(IconEye, { className: 'w-4 h-4' })) }) }) })), showViewButton && !inlineExpansion && (_jsx("td", { className: `${themeClasses.cell?.selectCell ?? ''} whitespace-nowrap`, children: _jsx(Tooltip, { label: '상세 보기', children: _jsx("button", { className: 'btn btn-outline-info btn-sm p-1 min-w-[32px] min-h-[32px] flex items-center justify-center', onClick: handleViewEntity, children: _jsx(IconEye, { className: 'w-4 h-4' }) }) }) })), openInNewWindowEnabled && isAdmin && !showOpenInNewWindowButton && !isSearchMode && (_jsx("td", { className: `${openNewWindowCellClass} whitespace-nowrap` })), _jsx(ViewColumn, { ...props, ...(() => {
+                            // Priority: inline expansion > accordion > undefined
+                            const clickAccordion = inlineExpansion
+                                ? toggleInlineExpansion
+                                : accordionMode
+                                    ? toggleAccordion
+                                    : undefined;
+                            return clickAccordion !== undefined ? { clickAccordion } : {};
+                        })(), viewMode: props.viewMode }), draggable && (_jsx("td", { className: 'whitespace-nowrap space-x-1', children: (function () {
                             const sortButtons = [];
                             if (totalCount < 1) {
                                 return sortButtons;
@@ -280,6 +273,12 @@ export const ViewRows = (props) => {
                                         }, children: _jsx(Icon, { icon: "mingcute:arrow-up-circle-fill", className: `h-[24px] w-[24px]` }) }) }, `btn_up_${index}`));
                             }
                             return sortButtons;
-                        }() })] }, `tr_${index}_${key}`), showAccordion && _jsx("tr", { children: _jsx("td", { colSpan: props.fields.length + 2, className: `${accordionView && 'p-2'}`, children: _jsx("div", { className: 'w-full', children: accordionView }) }) }, `row_accordion_${index}`), isInlineExpanded && inlineExpansion && !isMobile && (_jsx("tr", { children: _jsx("td", { colSpan: props.fields.length + (enableCheckItem ? 1 : 0) + (showOpenInNewWindowButton ? 1 : 0) + (inlineExpansion ? 1 : 0) + (showViewButton && !inlineExpansion ? 1 : 0) + (managePriority ? 1 : 0) + (draggable ? 1 : 0), className: "rcm-row-expansion-cell", style: { maxWidth: '1px' }, children: _jsx(SubCollectionInlineView, { entityForm: entityForm.clone(true).withId(item.id), itemId: item.id, isExpanded: true, onCollapse: () => inlineExpansion.collapseItem(item.id), readonly: props.viewMode === 'popup' || inlineViewReadonly, onSave: props.onRefresh, onDelete: props.onRefresh, mappedBy: mappedBy }) }) }, `row_inline_${index}`))] });
+                        })() }))] }, `tr_${index}_${key}`), showAccordion && (_jsx("tr", { children: _jsx("td", { colSpan: props.fields.length + 2, className: `${accordionView && 'p-2'}`, children: _jsx("div", { className: 'w-full', children: accordionView }) }) }, `row_accordion_${index}`)), isInlineExpanded && inlineExpansion && !isMobile && (_jsx("tr", { children: _jsx("td", { colSpan: props.fields.length +
+                        (enableCheckItem ? 1 : 0) +
+                        (showOpenInNewWindowButton ? 1 : 0) +
+                        (inlineExpansion ? 1 : 0) +
+                        (showViewButton && !inlineExpansion ? 1 : 0) +
+                        (managePriority ? 1 : 0) +
+                        (draggable ? 1 : 0), className: "rcm-row-expansion-cell", style: { maxWidth: '1px' }, children: _jsx(SubCollectionInlineView, { entityForm: entityForm.clone(true).withId(item.id), itemId: item.id, isExpanded: true, onCollapse: () => inlineExpansion.collapseItem(item.id), readonly: props.viewMode === 'popup' || inlineViewReadonly === true, ...(props.onRefresh !== undefined ? { onSave: props.onRefresh } : {}), ...(props.onRefresh !== undefined ? { onDelete: props.onRefresh } : {}), ...(mappedBy !== undefined ? { mappedBy } : {}) }) }) }, `row_inline_${index}`))] }));
 };
 //# sourceMappingURL=ViewRows.js.map

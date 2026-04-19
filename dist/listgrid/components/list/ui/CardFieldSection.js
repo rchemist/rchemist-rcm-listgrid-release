@@ -39,7 +39,9 @@ const CardFieldRow = ({ field, item, entityForm, session }) => {
             }
         };
         loadFieldProperties();
-        return () => { isMounted = false; };
+        return () => {
+            isMounted = false;
+        };
     }, [field, entityForm, session]);
     // Render field value
     useEffect(() => {
@@ -50,7 +52,10 @@ const CardFieldRow = ({ field, item, entityForm, session }) => {
                 const result = await field.viewValue({ item, entityForm, compact: true });
                 if (isMounted) {
                     // Keep the result as-is; show placeholder for empty values
-                    if (result.result === null || result.result === '—' || result.result === '-' || result.result === '') {
+                    if (result.result === null ||
+                        result.result === '—' ||
+                        result.result === '-' ||
+                        result.result === '') {
                         setRenderedValue('—'); // Show placeholder for empty values
                     }
                     else {
@@ -67,11 +72,13 @@ const CardFieldRow = ({ field, item, entityForm, session }) => {
             }
         };
         renderValue();
-        return () => { isMounted = false; };
+        return () => {
+            isMounted = false;
+        };
     }, [field, item, entityForm]);
     const showTooltip = !isBlank(tooltip);
     const showHelpText = !isBlank(helpText);
-    return (_jsxs("div", { className: "rcm-card-field-row", children: [_jsxs("dt", { className: "rcm-card-field-label", children: [_jsx("span", { children: label }), required && (_jsx(Tooltip, { label: "\uD544\uC218\uAC12", color: "red", withArrow: true, children: _jsx(Icon, { icon: "healthicons:star-small", className: "rcm-field-icon rcm-field-icon-required" }) })), showTooltip && (_jsx(Tooltip, { label: tooltip, color: "gray", withArrow: true, position: "top-end", children: _jsx(IconHelp, { className: "rcm-card-field-help-icon" }) }))] }), _jsx("dd", { className: "rcm-card-field-value", children: isLoading ? (_jsx("span", { className: "rcm-card-field-loading" })) : (_jsxs("div", { className: "rcm-card-field-value-inner", children: [_jsx("div", { children: renderedValue }), showHelpText && (_jsx("div", { className: "rcm-card-field-help-text", children: helpText }))] })) })] }));
+    return (_jsxs("div", { className: "rcm-card-field-row", children: [_jsxs("dt", { className: "rcm-card-field-label", children: [_jsx("span", { children: label }), required && (_jsx(Tooltip, { label: "\uD544\uC218\uAC12", color: "red", withArrow: true, children: _jsx(Icon, { icon: "healthicons:star-small", className: "rcm-field-icon rcm-field-icon-required" }) })), showTooltip && (_jsx(Tooltip, { label: tooltip, color: "gray", withArrow: true, position: "top-end", children: _jsx(IconHelp, { className: "rcm-card-field-help-icon" }) }))] }), _jsx("dd", { className: "rcm-card-field-value", children: isLoading ? (_jsx("span", { className: "rcm-card-field-loading" })) : (_jsxs("div", { className: "rcm-card-field-value-inner", children: [_jsx("div", { children: renderedValue }), showHelpText && _jsx("div", { className: "rcm-card-field-help-text", children: helpText })] })) })] }));
 };
 export const CardFieldSection = ({ fieldGroup, fields, item, entityForm, session, }) => {
     // Collapsable state (following ViewFieldGroup pattern)
@@ -96,7 +103,7 @@ export const CardFieldSection = ({ fieldGroup, fields, item, entityForm, session
         e.stopPropagation();
         setIsOpen(!isOpen);
     };
-    return (_jsxs("div", { className: "rcm-card-section", children: [hasLabel && (_jsx("div", { className: "rcm-card-section-header", onClick: handleToggle, children: _jsxs("div", { className: "rcm-card-section-header-row", children: [_jsx("h4", { className: "rcm-card-section-title", children: fieldGroup.label }), _jsxs("div", { className: "rcm-card-section-header-actions", children: [hasDescription && (_jsx(Tooltip, { label: fieldGroup.description, color: "gray", withArrow: true, position: "top-end", children: _jsx(IconInfoCircle, { className: "rcm-card-section-help-icon" }) })), _jsx("button", { type: "button", className: "rcm-card-section-toggle", "aria-label": isOpen ? 'Collapse' : 'Expand', children: _jsx(IconChevronUp, { className: `rcm-card-section-chevron ${isOpen ? '' : 'rcm-rotate-180'}` }) })] })] }) })), isOpen && (_jsx("dl", { className: "rcm-card-section-body", children: visibleFields.map((field) => (_jsx(CardFieldRow, { field: field, item: item, entityForm: entityForm, session: session }, field.getName()))) }))] }));
+    return (_jsxs("div", { className: "rcm-card-section", children: [hasLabel && (_jsx("div", { className: "rcm-card-section-header", onClick: handleToggle, children: _jsxs("div", { className: "rcm-card-section-header-row", children: [_jsx("h4", { className: "rcm-card-section-title", children: fieldGroup.label }), _jsxs("div", { className: "rcm-card-section-header-actions", children: [hasDescription && (_jsx(Tooltip, { label: fieldGroup.description, color: "gray", withArrow: true, position: "top-end", children: _jsx(IconInfoCircle, { className: "rcm-card-section-help-icon" }) })), _jsx("button", { type: "button", className: "rcm-card-section-toggle", "aria-label": isOpen ? 'Collapse' : 'Expand', children: _jsx(IconChevronUp, { className: `rcm-card-section-chevron ${isOpen ? '' : 'rcm-rotate-180'}` }) })] })] }) })), isOpen && (_jsx("dl", { className: "rcm-card-section-body", children: visibleFields.map((field) => (_jsx(CardFieldRow, { field: field, item: item, entityForm: entityForm, ...(session !== undefined ? { session } : {}) }, field.getName()))) }))] }));
 };
 export default CardFieldSection;
 //# sourceMappingURL=CardFieldSection.js.map

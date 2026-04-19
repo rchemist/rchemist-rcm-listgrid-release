@@ -18,6 +18,6 @@ interface SubCollectionRendererProps {
     entityForm: EntityForm;
     session?: Session;
 }
-export declare const SubCollectionRenderer: ({ collection, entityForm, session }: SubCollectionRendererProps) => import("react/jsx-runtime").JSX.Element;
+export declare const SubCollectionRenderer: ({ collection, entityForm, session, }: SubCollectionRendererProps) => import("react/jsx-runtime").JSX.Element;
 export {};
 //# sourceMappingURL=SubCollectionRenderer.d.ts.map

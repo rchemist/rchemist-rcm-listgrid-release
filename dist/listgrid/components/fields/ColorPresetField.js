@@ -1,10 +1,10 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useEffect, useState } from "react";
-import { ListableFormField } from "./abstract";
-import { AllColorTypes } from "../../common/type";
-import { getAdditionalColorClass, getOppositeTextColorClass } from "../../common/func";
-import { Popover } from "../../ui";
+import { useEffect, useState } from 'react';
+import { ListableFormField } from './abstract';
+import { AllColorTypes } from '../../common/type';
+import { getAdditionalColorClass, getOppositeTextColorClass } from '../../common/func';
+import { Popover } from '../../ui';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
 export class ColorPresetField extends ListableFormField {
     constructor(name, order, presets) {
@@ -16,8 +16,8 @@ export class ColorPresetField extends ListableFormField {
      */
     renderInstance(params) {
         return (async () => {
-            const inputParam = { ...await getInputRendererParameters(this, params) };
-            return _jsx(ColorPresetFieldView, { presets: this.presets, ...inputParam });
+            const inputParam = { ...(await getInputRendererParameters(this, params)) };
+            return (_jsx(ColorPresetFieldView, { presets: this.presets, ...inputParam }));
         })();
     }
     /**
@@ -35,7 +35,9 @@ export class ColorPresetField extends ListableFormField {
 }
 async function renderColorListField(field, props) {
     const value = props.item[field.name] ?? 'indigo';
-    return { result: _jsx("div", { children: _jsx("div", { className: `w-5 h-5 ${getAdditionalColorClass(value)} rounded-full` }) }) };
+    return {
+        result: (_jsx("div", { children: _jsx("div", { className: `w-5 h-5 ${getAdditionalColorClass(value)} rounded-full` }) })),
+    };
 }
 // 색상을 선택하는 버튼을 렌더링한다.
 const ColorPresetFieldView = ({ name, label, required = false, readonly = false, presets = [], ...props }) => {

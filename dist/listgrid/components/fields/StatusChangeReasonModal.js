@@ -8,12 +8,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState } from 'react';
 import { Textarea } from '../../ui';
-export const StatusChangeReasonModal = ({ currentStatus, newStatus, options, reason, onConfirm, onCancel }) => {
+export const StatusChangeReasonModal = ({ currentStatus, newStatus, options, reason, onConfirm, onCancel, }) => {
     const [changeReason, setChangeReason] = useState('');
     const [error, setError] = useState(null);
     // 현재 상태와 새 상태의 라벨 찾기
-    const currentLabel = options.find(opt => opt.value === currentStatus)?.label || String(currentStatus);
-    const newLabel = options.find(opt => opt.value === newStatus)?.label || String(newStatus);
+    const currentLabel = options.find((opt) => opt.value === currentStatus)?.label || String(currentStatus);
+    const newLabel = options.find((opt) => opt.value === newStatus)?.label || String(newStatus);
     const handleConfirm = () => {
         if (reason.required && !changeReason.trim()) {
             setError('변경 사유를 입력해주세요.');

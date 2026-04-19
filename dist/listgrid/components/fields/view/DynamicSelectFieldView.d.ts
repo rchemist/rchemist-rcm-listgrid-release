@@ -1,8 +1,8 @@
-import React from "react";
-import { SelectOption } from "../../../form/Type";
-import { EntityForm } from "../../../config/EntityForm";
-import { InputRendererProps } from "../../../config/Config";
-import { OptionsLoader } from "../SelectField";
+import React from 'react';
+import { SelectOption } from '../../../form/Type';
+import { EntityForm } from '../../../config/EntityForm';
+import { InputRendererProps } from '../../../config/Config';
+import { OptionsLoader } from '../SelectField';
 export declare function getCachedOptions(cacheKey: string): SelectOption[] | null;
 export declare function setCachedOptions(cacheKey: string, data: SelectOption[]): void;
 export declare function invalidateDynamicSelectCache(keyPattern?: string): void;
@@ -14,15 +14,15 @@ export interface DynamicSelectFieldViewProps extends InputRendererProps {
     /** 옵션 로드 함수 */
     loadOptions: OptionsLoader;
     /** 정적 옵션 (loadOptions가 없을 때 사용) */
-    staticOptions?: SelectOption[];
+    staticOptions?: SelectOption[] | undefined;
     /** 렌더링 타입: 'select' | 'chip' | 'radio' */
-    renderType?: 'select' | 'chip' | 'radio';
+    renderType?: 'select' | 'chip' | 'radio' | undefined;
     /** RadioInput용 combo 설정 */
     combo?: {
         direction?: 'row' | 'column';
-    };
+    } | undefined;
     /** 캐시 키 (동일한 loadOptions를 여러 필드에서 공유할 때) */
-    cacheKey?: string;
+    cacheKey?: string | undefined;
 }
 export declare const DynamicSelectFieldView: React.FC<DynamicSelectFieldViewProps>;
 export default DynamicSelectFieldView;

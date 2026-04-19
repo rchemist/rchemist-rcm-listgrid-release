@@ -7,8 +7,8 @@ import { jsx as _jsx } from "react/jsx-runtime";
  */
 import { AbstractDateField } from './abstract';
 import { isTrue } from '../../utils/BooleanUtil';
-import { getFormattedTime } from "../../misc";
-import { FlatPickrDateField } from "../../ui";
+import { getFormattedTime } from '../../misc';
+import { FlatPickrDateField } from '../../ui';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
 export class TimeField extends AbstractDateField {
     constructor(name, order, limit, range) {
@@ -20,10 +20,7 @@ export class TimeField extends AbstractDateField {
             if (isTrue(this.range)) {
                 const now = getFormattedTime();
                 const after = getFormattedTime(new Date(), 12);
-                return [
-                    now,
-                    after
-                ];
+                return [now, after];
             }
             return getFormattedTime();
         }
@@ -34,7 +31,7 @@ export class TimeField extends AbstractDateField {
      */
     renderInstance(params) {
         return (async () => {
-            return _jsx(FlatPickrDateField, { type: 'time', limit: this.limit, range: this.range, ...await getInputRendererParameters(this, params) });
+            return (_jsx(FlatPickrDateField, { type: 'time', limit: this.limit, range: this.range, ...await getInputRendererParameters(this, params) }));
         })();
     }
     /**
@@ -44,8 +41,7 @@ export class TimeField extends AbstractDateField {
         return new TimeField(name, order, this.limit, this.range);
     }
     static create(props) {
-        return new TimeField(props.name, props.order, props.limit, props.range)
-            .copyFields(props, true);
+        return new TimeField(props.name, props.order, props.limit, props.range).copyFields(props, true);
     }
 }
 //# sourceMappingURL=TimeField.js.map

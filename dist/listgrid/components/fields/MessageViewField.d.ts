@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
-import { FieldRenderParameters } from "../../config/EntityField";
-import { FormField, FormFieldProps } from "./abstract";
+import { ReactNode } from 'react';
+import { FieldRenderParameters } from '../../config/EntityField';
+import { FormField, FormFieldProps } from './abstract';
 interface MessageViewFieldProps extends FormFieldProps {
     message: ReactNode;
 }

@@ -4,11 +4,11 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { fDate, fDateTime } from "../misc";
+import { fDate, fDateTime } from '../misc';
 import { isTrue } from '../utils/BooleanUtil';
-import { getPlainText } from "../ui";
-import { defaultString, isBlank, subStringAfterLast, subStringBeforeLast } from '../utils/StringUtil';
-import { isEmpty } from "../utils";
+import { getPlainText } from '../ui';
+import { defaultString, isBlank, subStringAfterLast, subStringBeforeLast, } from '../utils/StringUtil';
+import { isEmpty } from '../utils';
 export class DataTransferProperty {
     constructor(data) {
         this.name = data.name;
@@ -22,7 +22,7 @@ export class DataTransferProperty {
         return new DataTransferProperty(data);
     }
     static fromJsonArray(data) {
-        return data.map(item => DataTransferProperty.fromJson(item));
+        return data.map((item) => DataTransferProperty.fromJson(item));
     }
     withHelpText(helpText) {
         this.helpText = helpText;
@@ -41,11 +41,11 @@ export class DataTransferProperty {
         return this;
     }
     isConfigured(...configuredForms) {
-        const tabId = (this.tabId) ? this.tabId : "";
-        const fieldGroupId = (this.fieldGroupId) ? this.fieldGroupId : "";
+        const tabId = this.tabId ? this.tabId : '';
+        const fieldGroupId = this.fieldGroupId ? this.fieldGroupId : '';
         const form = DataTransferProperty.getForm(tabId, fieldGroupId);
         try {
-            configuredForms.forEach(configuredForm => {
+            configuredForms.forEach((configuredForm) => {
                 if (configuredForm === form) {
                     throw new Error('configured');
                 }
@@ -58,32 +58,32 @@ export class DataTransferProperty {
         return false;
     }
     static getForm(tabId, fieldGroupId) {
-        return tabId + "_" + fieldGroupId;
+        return tabId + '_' + fieldGroupId;
     }
 }
 export const DataTransferAll = {
     exportable: true,
-    importable: true
+    importable: true,
 };
 export const DataTransferNotSupport = {
     exportable: false,
-    importable: false
+    importable: false,
 };
 export const DataTransferExportOnly = {
     exportable: true,
-    importable: false
+    importable: false,
 };
 export const DataTransferImportOnly = {
     exportable: false,
-    importable: true
+    importable: true,
 };
 export class DataTransferConfig {
     constructor(data, url) {
         this.export = { fields: [] };
         this.import = { fields: [] };
-        this.type = (data.type) ? data.type : { exportable: true, importable: true };
-        this.export = (data.export) ? data.export : { fields: [] };
-        this.import = (data.import) ? data.import : { fields: [] };
+        this.type = data.type ? data.type : { exportable: true, importable: true };
+        this.export = data.export ? data.export : { fields: [] };
+        this.import = data.import ? data.import : { fields: [] };
         this.exportFileName = data.exportFileName;
         const defaultImportMode = { create: true, update: true };
         const importMode = data.import?.mode ?? defaultImportMode;
@@ -286,7 +286,7 @@ export class DataTransferConfig {
     }
 }
 export class DataField {
-    constructor({ name, label, type, description, options, dataTransferRule, required }) {
+    constructor({ name, label, type, description, options, dataTransferRule, required, }) {
         this.name = name;
         this.label = label;
         this.description = description;
@@ -325,7 +325,7 @@ export class DataField {
         }
         if (this.type === 'select') {
             if (this.options) {
-                const option = this.options?.find(option => option.value === value);
+                const option = this.options?.find((option) => option.value === value);
                 return option ? option.label : value;
             }
         }
@@ -338,14 +338,16 @@ export class DataField {
                 // multi select value
                 if (val.includes('|||')) {
                     const values = val.split('|||');
-                    return values.map(value => {
-                        const option = this.options?.find(option => option.value === value);
-                        return option ? option.label ?? option.value : value;
-                    }).join(',');
+                    return values
+                        .map((value) => {
+                        const option = this.options?.find((option) => option.value === value);
+                        return option ? (option.label ?? option.value) : value;
+                    })
+                        .join(',');
                 }
                 else {
-                    const option = this.options?.find(option => option.value === value);
-                    return option ? option.label ?? option.value : value;
+                    const option = this.options?.find((option) => option.value === value);
+                    return option ? (option.label ?? option.value) : value;
                 }
             }
         }
@@ -372,7 +374,7 @@ export class DataField {
             return await this.dataTransferRule?.changeValueOnImport(value);
         }
         if (this.type === 'select') {
-            const option = this.options?.find(option => option.label === value);
+            const option = this.options?.find((option) => option.label === value);
             return option ? option.value : value;
         }
         else if (this.type === 'multiselect') {
@@ -383,13 +385,15 @@ export class DataField {
             // multi select value
             if (val.includes(',')) {
                 const values = val.split('|||');
-                return values.map(value => {
-                    const option = this.options?.find(option => option.label === value);
+                return values
+                    .map((value) => {
+                    const option = this.options?.find((option) => option.label === value);
                     return option ? option.value : value;
-                }).join('|||');
+                })
+                    .join('|||');
             }
             else {
-                const option = this.options?.find(option => option.label === value);
+                const option = this.options?.find((option) => option.label === value);
                 return option ? option.value : value;
             }
         }
@@ -479,7 +483,10 @@ export function getExportFileName(exportFileName, translation) {
 }
 // 타입 가드 함수들
 export function isDataColumn(value) {
-    return !!value && typeof value === 'object' && typeof value.name === 'string' && 'value' in value;
+    return (!!value &&
+        typeof value === 'object' &&
+        typeof value.name === 'string' &&
+        'value' in value);
 }
 export function isDataRow(value) {
     return Array.isArray(value) && value.every(isDataColumn);
@@ -488,7 +495,10 @@ export function isDataRowSet(value) {
     return Array.isArray(value) && value.every(isDataRow);
 }
 export function isSampleDataItem(value) {
-    return !!value && typeof value === 'object' && typeof value.name === 'string' && 'value' in value;
+    return (!!value &&
+        typeof value === 'object' &&
+        typeof value.name === 'string' &&
+        'value' in value);
 }
 export async function getRangeDateValue(value) {
     // value 가 배열이면 배열의 첫번째 요소를 반환

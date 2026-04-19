@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { EntityForm } from '../../../config/EntityForm';
 import { Session } from '../../../auth/types';
 /**

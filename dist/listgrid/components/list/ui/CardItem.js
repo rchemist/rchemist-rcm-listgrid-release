@@ -7,20 +7,72 @@ import { FormField } from '../../fields/abstract';
 import { CardFieldSection } from './CardFieldSection';
 // Status badge color mapping
 const STATUS_COLORS = {
-    ACTIVE: { bg: 'bg-emerald-50 dark:bg-emerald-950/50', text: 'text-emerald-700 dark:text-emerald-400', ring: 'ring-emerald-600/20' },
-    COMPLETED: { bg: 'bg-blue-50 dark:bg-blue-950/50', text: 'text-blue-700 dark:text-blue-400', ring: 'ring-blue-600/20' },
-    CANCELLED: { bg: 'bg-red-50 dark:bg-red-950/50', text: 'text-red-700 dark:text-red-400', ring: 'ring-red-600/20' },
-    PENDING: { bg: 'bg-amber-50 dark:bg-amber-950/50', text: 'text-amber-700 dark:text-amber-400', ring: 'ring-amber-600/20' },
-    ENROLLED: { bg: 'bg-emerald-50 dark:bg-emerald-950/50', text: 'text-emerald-700 dark:text-emerald-400', ring: 'ring-emerald-600/20' },
-    GRADUATED: { bg: 'bg-blue-50 dark:bg-blue-950/50', text: 'text-blue-700 dark:text-blue-400', ring: 'ring-blue-600/20' },
-    ON_LEAVE: { bg: 'bg-amber-50 dark:bg-amber-950/50', text: 'text-amber-700 dark:text-amber-400', ring: 'ring-amber-600/20' },
-    GIVE_UP: { bg: 'bg-orange-50 dark:bg-orange-950/50', text: 'text-orange-700 dark:text-orange-400', ring: 'ring-orange-600/20' },
-    EXPELLED: { bg: 'bg-red-50 dark:bg-red-950/50', text: 'text-red-700 dark:text-red-400', ring: 'ring-red-600/20' },
-    PAID: { bg: 'bg-emerald-50 dark:bg-emerald-950/50', text: 'text-emerald-700 dark:text-emerald-400', ring: 'ring-emerald-600/20' },
-    UNPAID: { bg: 'bg-rose-50 dark:bg-rose-950/50', text: 'text-rose-700 dark:text-rose-400', ring: 'ring-rose-600/20' },
-    PARTIAL: { bg: 'bg-amber-50 dark:bg-amber-950/50', text: 'text-amber-700 dark:text-amber-400', ring: 'ring-amber-600/20' },
+    ACTIVE: {
+        bg: 'bg-emerald-50 dark:bg-emerald-950/50',
+        text: 'text-emerald-700 dark:text-emerald-400',
+        ring: 'ring-emerald-600/20',
+    },
+    COMPLETED: {
+        bg: 'bg-blue-50 dark:bg-blue-950/50',
+        text: 'text-blue-700 dark:text-blue-400',
+        ring: 'ring-blue-600/20',
+    },
+    CANCELLED: {
+        bg: 'bg-red-50 dark:bg-red-950/50',
+        text: 'text-red-700 dark:text-red-400',
+        ring: 'ring-red-600/20',
+    },
+    PENDING: {
+        bg: 'bg-amber-50 dark:bg-amber-950/50',
+        text: 'text-amber-700 dark:text-amber-400',
+        ring: 'ring-amber-600/20',
+    },
+    ENROLLED: {
+        bg: 'bg-emerald-50 dark:bg-emerald-950/50',
+        text: 'text-emerald-700 dark:text-emerald-400',
+        ring: 'ring-emerald-600/20',
+    },
+    GRADUATED: {
+        bg: 'bg-blue-50 dark:bg-blue-950/50',
+        text: 'text-blue-700 dark:text-blue-400',
+        ring: 'ring-blue-600/20',
+    },
+    ON_LEAVE: {
+        bg: 'bg-amber-50 dark:bg-amber-950/50',
+        text: 'text-amber-700 dark:text-amber-400',
+        ring: 'ring-amber-600/20',
+    },
+    GIVE_UP: {
+        bg: 'bg-orange-50 dark:bg-orange-950/50',
+        text: 'text-orange-700 dark:text-orange-400',
+        ring: 'ring-orange-600/20',
+    },
+    EXPELLED: {
+        bg: 'bg-red-50 dark:bg-red-950/50',
+        text: 'text-red-700 dark:text-red-400',
+        ring: 'ring-red-600/20',
+    },
+    PAID: {
+        bg: 'bg-emerald-50 dark:bg-emerald-950/50',
+        text: 'text-emerald-700 dark:text-emerald-400',
+        ring: 'ring-emerald-600/20',
+    },
+    UNPAID: {
+        bg: 'bg-rose-50 dark:bg-rose-950/50',
+        text: 'text-rose-700 dark:text-rose-400',
+        ring: 'ring-rose-600/20',
+    },
+    PARTIAL: {
+        bg: 'bg-amber-50 dark:bg-amber-950/50',
+        text: 'text-amber-700 dark:text-amber-400',
+        ring: 'ring-amber-600/20',
+    },
 };
-const DEFAULT_STATUS_COLOR = { bg: 'bg-gray-50 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', ring: 'ring-gray-600/20' };
+const DEFAULT_STATUS_COLOR = {
+    bg: 'bg-gray-50 dark:bg-gray-800',
+    text: 'text-gray-700 dark:text-gray-300',
+    ring: 'ring-gray-600/20',
+};
 /**
  * StatusBadge - Tremor-style status indicator
  */
@@ -85,7 +137,9 @@ parentId: _parentId, cardConfig, relation, readonly = false, session, onClick, o
             }
         };
         initializeEntityForm();
-        return () => { isMounted = false; };
+        return () => {
+            isMounted = false;
+        };
     }, [entityForm, item]);
     // Get title
     const title = useMemo(() => {
@@ -172,7 +226,7 @@ parentId: _parentId, cardConfig, relation, readonly = false, session, onClick, o
         const loadTabs = async () => {
             try {
                 // Use itemEntityForm (with id set) for proper visibility calculation
-                const viewableTabs = await itemEntityForm.getViewableTabs(false, undefined, session) ?? [];
+                const viewableTabs = (await itemEntityForm.getViewableTabs(false, undefined, session)) ?? [];
                 if (isMounted && viewableTabs.length > 0) {
                     setTabs(viewableTabs);
                     setSelectedTabId(viewableTabs[0].id);
@@ -189,7 +243,9 @@ parentId: _parentId, cardConfig, relation, readonly = false, session, onClick, o
             }
         };
         loadTabs();
-        return () => { isMounted = false; };
+        return () => {
+            isMounted = false;
+        };
     }, [itemEntityForm, session]);
     // Load FieldGroups and SubCollections when tab changes (following ViewTabPanel/ViewFieldGroup logic)
     const loadFieldGroupsForTab = useCallback(async (tabId) => {
@@ -210,8 +266,8 @@ parentId: _parentId, cardConfig, relation, readonly = false, session, onClick, o
             // If displayFields is specified, create a single "virtual" group
             if (cardConfig?.displayFields) {
                 const fields = cardConfig.displayFields
-                    .filter(name => itemEntityForm.fields.has(name) && !shouldExcludeField(name))
-                    .map(name => itemEntityForm.fields.get(name))
+                    .filter((name) => itemEntityForm.fields.has(name) && !shouldExcludeField(name))
+                    .map((name) => itemEntityForm.fields.get(name))
                     .filter(Boolean);
                 if (fields.length > 0) {
                     allFieldGroups.push({
@@ -226,7 +282,7 @@ parentId: _parentId, cardConfig, relation, readonly = false, session, onClick, o
                     // Load fields
                     const fieldInfo = await itemEntityForm.getVisibleFields(tabId, groupId, session);
                     if (fieldInfo?.fieldGroup && fieldInfo?.fields && fieldInfo.fields.length > 0) {
-                        const visibleFields = fieldInfo.fields.filter(field => {
+                        const visibleFields = fieldInfo.fields.filter((field) => {
                             if (!(field instanceof FormField))
                                 return false;
                             const fieldName = field.getName();
@@ -256,7 +312,10 @@ parentId: _parentId, cardConfig, relation, readonly = false, session, onClick, o
                 const views = new Map();
                 for (const collection of allSubCollections) {
                     try {
-                        const view = await collection.render({ entityForm: itemEntityForm, session });
+                        const view = await collection.render({
+                            entityForm: itemEntityForm,
+                            ...(session !== undefined ? { session } : {}),
+                        });
                         views.set(collection.getName(), view);
                     }
                     catch (error) {
@@ -302,8 +361,12 @@ parentId: _parentId, cardConfig, relation, readonly = false, session, onClick, o
         rcm-card-item ${cardConfig?.containerClassName ?? ''}
       `, children: _jsx("div", { className: "rcm-card-item-body", children: _jsxs("div", { className: "rcm-card-item-skel-stack", children: [_jsx("div", { className: "rcm-skeleton rcm-card-item-skel-line rcm-card-item-skel-line-title", "data-shape": "line" }), _jsx("div", { className: "rcm-skeleton rcm-card-item-skel-line rcm-card-item-skel-line-subtitle", "data-shape": "line" })] }) }) }));
     }
-    return (_jsxs("article", { className: `rcm-card-item rcm-card-item-hover ${onClick ? 'rcm-card-item-clickable' : ''} ${cardConfig?.containerClassName ?? ''}`, onClick: onClick, role: onClick ? 'button' : undefined, tabIndex: onClick ? 0 : undefined, onKeyDown: onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ')
-            onClick(); } : undefined, children: [_jsx("div", { className: "rcm-card-item-header", children: _jsxs("div", { className: "rcm-card-item-header-row", children: [_jsx("div", { className: "rcm-card-item-header-left", children: _jsxs("div", { className: "rcm-card-item-title-row", children: [_jsx("h3", { className: `rcm-text rcm-card-item-title ${cardConfig?.titleClassName ?? ''}`, "data-weight": "semibold", children: title }), statusInfo && (_jsx(StatusBadge, { status: statusInfo.value, label: statusInfo.label }))] }) }), _jsxs("div", { className: "rcm-card-item-actions", children: [!readonly && onEdit && (_jsx("button", { onClick: handleEditClick, className: "rcm-icon-btn", "data-size": "sm", "aria-label": "Edit", children: _jsx(IconPencil, { className: "rcm-icon", "data-size": "sm", stroke: 1.5 }) })), !readonly && onDelete && (_jsx("button", { onClick: handleDeleteClick, className: "rcm-icon-btn", "data-size": "sm", "data-color": "error", "aria-label": "Delete", children: _jsx(IconTrash, { className: "rcm-icon", "data-size": "sm", stroke: 1.5 }) })), onClick && (_jsx("div", { className: "rcm-card-item-chevron-wrap", children: _jsx(IconChevronRight, { className: "rcm-icon", "data-size": "md", "data-tone": "disabled", stroke: 2 }) }))] })] }) }), tabs.length > 1 && (_jsx("div", { className: "rcm-card-item-tabbar", children: _jsx("nav", { className: "rcm-card-item-tabnav", "aria-label": "Tabs", children: tabs.map((tab) => (_jsx("button", { onClick: (e) => handleTabClick(e, tab.id), className: `rcm-card-item-tab ${selectedTabId === tab.id ? 'rcm-card-item-tab-active' : ''}`, children: tab.label }, tab.id))) }) })), _jsx("div", { className: "rcm-card-item-body", children: isLoading ? (_jsx("div", { className: "rcm-card-item-skel-stack", children: [1, 2].map((i) => (_jsxs("div", { className: "rcm-card-item-skel-group", children: [_jsx("div", { className: "rcm-skeleton rcm-card-item-skel-line rcm-card-item-skel-line-title", "data-shape": "line" }), _jsx("div", { className: "rcm-card-item-skel-rows", children: [1, 2, 3].map((j) => (_jsxs("div", { className: "rcm-card-item-skel-row", children: [_jsx("div", { className: "rcm-skeleton rcm-card-item-skel-line rcm-card-item-skel-line-label", "data-shape": "line" }), _jsx("div", { className: "rcm-skeleton rcm-card-item-skel-line rcm-card-item-skel-line-value", "data-shape": "line" })] }, j))) })] }, i))) })) : fieldGroups.length === 0 && subCollections.length === 0 ? (_jsx("p", { className: "rcm-text rcm-card-item-empty", "data-tone": "disabled", children: "\uD45C\uC2DC\uD560 \uD544\uB4DC\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4" })) : (_jsxs("div", { className: "rcm-card-item-sections", children: [fieldGroups.map((group) => (_jsx(CardFieldSection, { fieldGroup: group.fieldGroup, fields: group.fields, item: item, entityForm: itemEntityForm, session: session }, group.fieldGroup.id))), subCollections.length > 0 && (_jsx("div", { className: "rcm-card-item-subcollections", children: subCollections.map((collection) => {
+    return (_jsxs("article", { className: `rcm-card-item rcm-card-item-hover ${onClick ? 'rcm-card-item-clickable' : ''} ${cardConfig?.containerClassName ?? ''}`, onClick: onClick, role: onClick ? 'button' : undefined, tabIndex: onClick ? 0 : undefined, onKeyDown: onClick
+            ? (e) => {
+                if (e.key === 'Enter' || e.key === ' ')
+                    onClick();
+            }
+            : undefined, children: [_jsx("div", { className: "rcm-card-item-header", children: _jsxs("div", { className: "rcm-card-item-header-row", children: [_jsx("div", { className: "rcm-card-item-header-left", children: _jsxs("div", { className: "rcm-card-item-title-row", children: [_jsx("h3", { className: `rcm-text rcm-card-item-title ${cardConfig?.titleClassName ?? ''}`, "data-weight": "semibold", children: title }), statusInfo && _jsx(StatusBadge, { status: statusInfo.value, label: statusInfo.label })] }) }), _jsxs("div", { className: "rcm-card-item-actions", children: [!readonly && onEdit && (_jsx("button", { onClick: handleEditClick, className: "rcm-icon-btn", "data-size": "sm", "aria-label": "Edit", children: _jsx(IconPencil, { className: "rcm-icon", "data-size": "sm", stroke: 1.5 }) })), !readonly && onDelete && (_jsx("button", { onClick: handleDeleteClick, className: "rcm-icon-btn", "data-size": "sm", "data-color": "error", "aria-label": "Delete", children: _jsx(IconTrash, { className: "rcm-icon", "data-size": "sm", stroke: 1.5 }) })), onClick && (_jsx("div", { className: "rcm-card-item-chevron-wrap", children: _jsx(IconChevronRight, { className: "rcm-icon", "data-size": "md", "data-tone": "disabled", stroke: 2 }) }))] })] }) }), tabs.length > 1 && (_jsx("div", { className: "rcm-card-item-tabbar", children: _jsx("nav", { className: "rcm-card-item-tabnav", "aria-label": "Tabs", children: tabs.map((tab) => (_jsx("button", { onClick: (e) => handleTabClick(e, tab.id), className: `rcm-card-item-tab ${selectedTabId === tab.id ? 'rcm-card-item-tab-active' : ''}`, children: tab.label }, tab.id))) }) })), _jsx("div", { className: "rcm-card-item-body", children: isLoading ? (_jsx("div", { className: "rcm-card-item-skel-stack", children: [1, 2].map((i) => (_jsxs("div", { className: "rcm-card-item-skel-group", children: [_jsx("div", { className: "rcm-skeleton rcm-card-item-skel-line rcm-card-item-skel-line-title", "data-shape": "line" }), _jsx("div", { className: "rcm-card-item-skel-rows", children: [1, 2, 3].map((j) => (_jsxs("div", { className: "rcm-card-item-skel-row", children: [_jsx("div", { className: "rcm-skeleton rcm-card-item-skel-line rcm-card-item-skel-line-label", "data-shape": "line" }), _jsx("div", { className: "rcm-skeleton rcm-card-item-skel-line rcm-card-item-skel-line-value", "data-shape": "line" })] }, j))) })] }, i))) })) : fieldGroups.length === 0 && subCollections.length === 0 ? (_jsx("p", { className: "rcm-text rcm-card-item-empty", "data-tone": "disabled", children: "\uD45C\uC2DC\uD560 \uD544\uB4DC\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4" })) : (_jsxs("div", { className: "rcm-card-item-sections", children: [fieldGroups.map((group) => (_jsx(CardFieldSection, { fieldGroup: group.fieldGroup, fields: group.fields, item: item, entityForm: itemEntityForm, ...(session !== undefined ? { session } : {}) }, group.fieldGroup.id))), subCollections.length > 0 && (_jsx("div", { className: "rcm-card-item-subcollections", children: subCollections.map((collection) => {
                                 const view = subCollectionViews.get(collection.getName());
                                 const label = collection.getLabel();
                                 const hideLabel = collection.hideLabel;

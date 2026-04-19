@@ -11,13 +11,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { useCallback, useEffect, useState } from "react";
-import { validateContentAssets } from "../types";
+import { useCallback, useEffect, useState } from 'react';
+import { validateContentAssets } from '../types';
 /**
  * ContentAsset 상태 관리 훅
  * 범용적인 파일 업로드 및 관리를 위한 상태 관리
  */
-export const useContentAsset = ({ value: initialValue, onChange, onError, clearError, entityForm, maxItems, readonly = false }) => {
+export const useContentAsset = ({ value: initialValue, onChange, onError, clearError, entityForm, maxItems, readonly = false, }) => {
     // 초기값 설정 - 빈 배열로 시작
     const [assets, setAssets] = useState(() => {
         return initialValue || [];
@@ -43,7 +43,7 @@ export const useContentAsset = ({ value: initialValue, onChange, onError, clearE
         const newAsset = {
             title: '',
             content: '',
-            assetUrl: ''
+            assetUrl: '',
         };
         const newAssets = [...assets, newAsset];
         setAssets(newAssets);
@@ -59,13 +59,16 @@ export const useContentAsset = ({ value: initialValue, onChange, onError, clearE
         onChange(newAssets);
         // titleErrors 재정렬
         const newTitleErrors = {};
-        Object.keys(titleErrors).forEach(key => {
+        Object.keys(titleErrors).forEach((key) => {
             const oldIndex = parseInt(key);
+            const err = titleErrors[oldIndex];
+            if (err === undefined)
+                return;
             if (oldIndex < index) {
-                newTitleErrors[oldIndex] = titleErrors[oldIndex];
+                newTitleErrors[oldIndex] = err;
             }
             else if (oldIndex > index) {
-                newTitleErrors[oldIndex - 1] = titleErrors[oldIndex];
+                newTitleErrors[oldIndex - 1] = err;
             }
         });
         setTitleErrors(newTitleErrors);
@@ -81,7 +84,7 @@ export const useContentAsset = ({ value: initialValue, onChange, onError, clearE
         const newAssets = [...assets];
         newAssets[index] = {
             ...newAssets[index],
-            [field]: value
+            [field]: value,
         };
         setAssets(newAssets);
         onChange(newAssets);
@@ -104,28 +107,26 @@ export const useContentAsset = ({ value: initialValue, onChange, onError, clearE
         const trimmedValue = value.trim();
         // 빈 값 체크
         if (!trimmedValue) {
-            setTitleErrors(prev => ({
+            setTitleErrors((prev) => ({
                 ...prev,
-                [index]: "제목을 입력해주세요."
+                [index]: '제목을 입력해주세요.',
             }));
             return;
         }
         // 중복 체크 - 자기 자신을 제외한 다른 모든 제목과 비교
-        const otherTitles = assets
-            .filter((_, i) => i !== index)
-            .map(asset => asset.title.trim());
+        const otherTitles = assets.filter((_, i) => i !== index).map((asset) => asset.title.trim());
         // 대소문자 구분 없이 비교
         const titleLower = trimmedValue.toLowerCase();
-        const isDuplicate = otherTitles.some(title => title.toLowerCase() === titleLower);
+        const isDuplicate = otherTitles.some((title) => title.toLowerCase() === titleLower);
         if (isDuplicate) {
-            setTitleErrors(prev => ({
+            setTitleErrors((prev) => ({
                 ...prev,
-                [index]: "동일한 제목이 이미 존재합니다."
+                [index]: '동일한 제목이 이미 존재합니다.',
             }));
         }
         else {
             // 검증 통과 - 에러 제거
-            setTitleErrors(prev => {
+            setTitleErrors((prev) => {
                 const newErrors = { ...prev };
                 delete newErrors[index];
                 return newErrors;
@@ -142,7 +143,7 @@ export const useContentAsset = ({ value: initialValue, onChange, onError, clearE
             // 진행률 시뮬레이션 (실제 구현시 제거)
             if (onUploadProgress) {
                 for (let i = 0; i <= 100; i += 10) {
-                    await new Promise(resolve => setTimeout(resolve, 100));
+                    await new Promise((resolve) => setTimeout(resolve, 100));
                     onUploadProgress(i);
                 }
             }
@@ -194,7 +195,7 @@ export const useContentAsset = ({ value: initialValue, onChange, onError, clearE
         validateAll,
         canAddMore: !maxItems || assets.length < maxItems,
         isEmpty: assets.length === 0,
-        isReadonly: readonly
+        isReadonly: readonly,
     };
 };
 //# sourceMappingURL=useContentAsset.js.map

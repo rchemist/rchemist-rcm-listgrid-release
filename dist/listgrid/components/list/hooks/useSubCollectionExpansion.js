@@ -12,17 +12,17 @@ import { useState, useCallback } from 'react';
  * @returns Expansion state and control functions
  */
 export function useSubCollectionExpansion(options = {}) {
-    const { maxExpandedItems = 3, expansionMode = 'multiple', onExpand, onCollapse, } = options;
+    const { maxExpandedItems = 3, expansionMode = 'multiple', onExpand, onCollapse } = options;
     const [expandedItems, setExpandedItems] = useState([]);
     const isExpanded = useCallback((id) => expandedItems.includes(id), [expandedItems]);
     const canExpand = expandedItems.length < maxExpandedItems;
     const toggleExpansion = useCallback((id) => {
-        setExpandedItems(prev => {
+        setExpandedItems((prev) => {
             const isCurrentlyExpanded = prev.includes(id);
             if (isCurrentlyExpanded) {
                 // Collapse
                 onCollapse?.(id);
-                return prev.filter(item => item !== id);
+                return prev.filter((item) => item !== id);
             }
             else {
                 // Expand
@@ -46,10 +46,10 @@ export function useSubCollectionExpansion(options = {}) {
         });
     }, [expansionMode, maxExpandedItems, onExpand, onCollapse]);
     const collapseItem = useCallback((id) => {
-        setExpandedItems(prev => {
+        setExpandedItems((prev) => {
             if (prev.includes(id)) {
                 onCollapse?.(id);
-                return prev.filter(item => item !== id);
+                return prev.filter((item) => item !== id);
             }
             return prev;
         });

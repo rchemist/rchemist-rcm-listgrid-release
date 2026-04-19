@@ -1,5 +1,5 @@
-import React from "react";
-import { EntityForm } from "../../../config/EntityForm";
+import React from 'react';
+import { EntityForm } from '../../../config/EntityForm';
 import { Session } from '../../../auth/types';
 /**
  * CreateStepButtons 컴포넌트

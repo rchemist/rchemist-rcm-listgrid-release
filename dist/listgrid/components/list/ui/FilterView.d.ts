@@ -1,6 +1,6 @@
-import { QueryConditionType } from "../../../form/SearchForm";
+import { QueryConditionType } from '../../../form/SearchForm';
 import { EntityForm } from '../../../config/EntityForm';
-import { ListableFormField } from "../../fields/abstract";
+import { ListableFormField } from '../../fields/abstract';
 interface FilterViewProps {
     entityForm: EntityForm;
     field: ListableFormField<any>;

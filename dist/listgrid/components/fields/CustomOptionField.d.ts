@@ -1,14 +1,14 @@
 import { OptionalField, OptionalFieldProps, ViewListProps, ViewListResult } from '../../components/fields/abstract';
-import React from "react";
+import React from 'react';
 import { FieldRenderParameters, FilterRenderParameters } from '../../config/EntityField';
-import { SelectOption } from "../../form/Type";
+import { SelectOption } from '../../form/Type';
 interface CustomOptionFieldProps extends OptionalFieldProps {
     alias: string;
-    multiple?: boolean;
+    multiple?: boolean | undefined;
 }
 export declare class CustomOptionField extends OptionalField<CustomOptionField> {
     alias: string;
-    multiple?: boolean;
+    multiple?: boolean | undefined;
     constructor(name: string, order: number, alias: string, multiple?: boolean);
     /**
      * CustomOptionField 핵심 렌더링 로직

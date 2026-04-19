@@ -10,12 +10,20 @@ import { isTrue } from '../../utils/BooleanUtil';
 import { StringField } from './StringField';
 import { RequiredValidation } from '../../validations/RequiredValidation';
 import { isBlank } from '../../utils/StringUtil';
-const AddressFieldTypes = ['state', 'city', 'address1', 'address2', 'postalCode', 'longitude', 'latitude'];
+const AddressFieldTypes = [
+    'state',
+    'city',
+    'address1',
+    'address2',
+    'postalCode',
+    'longitude',
+    'latitude',
+];
 function getListConfig() {
     return {
         support: true,
         filterable: true,
-        sortable: true
+        sortable: true,
     };
 }
 export const applyFullAddressFields = (entityForm, props) => {
@@ -33,7 +41,9 @@ export const applyFullAddressFields = (entityForm, props) => {
     const AddressField = (fieldProps) => {
         const type = fieldProps.type ?? 'string';
         const order = props?.order?.[fieldProps.name] ?? fieldProps.order;
-        const name = fieldProps.prefix ? `${appendLastDot(fieldProps.prefix)}${fieldProps.name}` : fieldProps.name;
+        const name = fieldProps.prefix
+            ? `${appendLastDot(fieldProps.prefix)}${fieldProps.name}`
+            : fieldProps.name;
         const label = props?.label?.[fieldProps.name] ?? fieldProps.label;
         const helpText = props?.helpText?.[fieldProps.name];
         const supportList = isTrue(props?.list?.[fieldProps.name]);
@@ -63,23 +73,67 @@ export const applyFullAddressFields = (entityForm, props) => {
         }
     };
     entityForm.addFields({
-        tab: props?.tab,
-        fieldGroup: props?.fieldGroup,
+        ...(props?.tab !== undefined ? { tab: props.tab } : {}),
+        ...(props?.fieldGroup !== undefined ? { fieldGroup: props.fieldGroup } : {}),
         items: [
             new AddressMapField(`${addressMapFieldName}`, props?.order?.address ?? 1000, props?.showMap, props?.prefix)
                 .withLabel(props?.label?.address ?? '주소')
                 .withHelpText(props?.helpText?.address)
                 .withRequired(required),
-            ...(showLongitudeLatitude ? [
-                AddressField({ name: 'longitude', order: 1010, type: 'number', label: '경도', prefix: props?.prefix }),
-                AddressField({ name: 'latitude', order: 1010, type: 'number', label: '위도', prefix: props?.prefix }),
-            ] : []),
-            AddressField({ name: 'state', order: 1010, type: 'string', label: '시/도', prefix: props?.prefix }),
-            AddressField({ name: 'city', order: 1010, type: 'string', label: '시/군/구', prefix: props?.prefix }),
-            AddressField({ name: 'address1', order: 1010, type: 'string', label: '주소1', prefix: props?.prefix }),
-            AddressField({ name: 'address2', order: 1010, type: 'string', label: '상세 주소', prefix: props?.prefix }),
-            AddressField({ name: 'postalCode', order: 1010, type: 'string', label: '우편번호', prefix: props?.prefix }),
-        ]
+            ...(showLongitudeLatitude
+                ? [
+                    AddressField({
+                        name: 'longitude',
+                        order: 1010,
+                        type: 'number',
+                        label: '경도',
+                        prefix: props?.prefix,
+                    }),
+                    AddressField({
+                        name: 'latitude',
+                        order: 1010,
+                        type: 'number',
+                        label: '위도',
+                        prefix: props?.prefix,
+                    }),
+                ]
+                : []),
+            AddressField({
+                name: 'state',
+                order: 1010,
+                type: 'string',
+                label: '시/도',
+                prefix: props?.prefix,
+            }),
+            AddressField({
+                name: 'city',
+                order: 1010,
+                type: 'string',
+                label: '시/군/구',
+                prefix: props?.prefix,
+            }),
+            AddressField({
+                name: 'address1',
+                order: 1010,
+                type: 'string',
+                label: '주소1',
+                prefix: props?.prefix,
+            }),
+            AddressField({
+                name: 'address2',
+                order: 1010,
+                type: 'string',
+                label: '상세 주소',
+                prefix: props?.prefix,
+            }),
+            AddressField({
+                name: 'postalCode',
+                order: 1010,
+                type: 'string',
+                label: '우편번호',
+                prefix: props?.prefix,
+            }),
+        ],
     });
     entityForm.withOnChanges(async (entityForm, name) => {
         const prefix = appendLastDot(props?.prefix);
@@ -108,7 +162,7 @@ export const applyFullAddressFields = (entityForm, props) => {
             city: response[`${prefix}city`],
             address1: response[`${prefix}address1`],
             address2: response[`${prefix}address2`],
-            postalCode: response[`${prefix}postalCode`]
+            postalCode: response[`${prefix}postalCode`],
         };
         entityForm.setFetchedValue(addressMapFieldName, addressValue);
         // IMPORTANT:
@@ -116,9 +170,11 @@ export const applyFullAddressFields = (entityForm, props) => {
         // - Some forms/pages can initialize current as empty, which makes required validation fail
         //   even though fetched data exists.
         // Here we force current address map value when fetched address fields exist.
-        const currentAddress = await entityForm.getValue(addressMapFieldName);
-        const shouldForceCurrent = (!currentAddress || typeof currentAddress !== 'object')
-            || (!isBlank(String(addressValue.address1 ?? '')) && isBlank(String(currentAddress.address1 ?? '')));
+        const currentAddress = (await entityForm.getValue(addressMapFieldName));
+        const shouldForceCurrent = !currentAddress ||
+            typeof currentAddress !== 'object' ||
+            (!isBlank(String(addressValue.address1 ?? '')) &&
+                isBlank(String(currentAddress.address1 ?? '')));
         if (shouldForceCurrent) {
             entityForm.setValue(addressMapFieldName, addressValue);
         }

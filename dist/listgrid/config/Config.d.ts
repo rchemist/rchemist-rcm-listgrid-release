@@ -1,12 +1,12 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode } from 'react';
 import { EntityForm } from '../config/EntityForm';
-import { FilterItem, SearchValue } from "../form/SearchForm";
+import { FilterItem, SearchValue } from '../form/SearchForm';
 import { IListConfig } from '../components/fields/abstract';
-import { MinMaxLimit, SelectOption } from "../form/Type";
-import { TreeNodeData } from "../ui";
+import { MinMaxLimit, SelectOption } from '../form/Type';
+import { TreeNodeData } from '../ui';
 import { Session } from '../auth/types';
-import { ValidateResult } from "../validations/Validation";
-export type FieldType = 'text' | 'number' | 'date' | 'datetime' | 'boolean' | 'select' | 'manyToOne' | 'email' | 'phone' | 'time' | 'month' | "tag" | 'file' | 'year' | 'checkbox' | 'multiselect' | 'textarea' | 'password' | 'image' | 'html' | 'markdown' | "inlineMap" | 'hidden' | "custom" | "xrefMapping" | "xrefPriorityMapping" | "xrefAvailableMapping" | "revision" | "contentAsset";
+import { ValidateResult } from '../validations/Validation';
+export type FieldType = 'text' | 'number' | 'date' | 'datetime' | 'boolean' | 'select' | 'manyToOne' | 'email' | 'phone' | 'time' | 'month' | 'tag' | 'file' | 'year' | 'checkbox' | 'multiselect' | 'textarea' | 'password' | 'image' | 'html' | 'markdown' | 'inlineMap' | 'hidden' | 'custom' | 'xrefMapping' | 'xrefPriorityMapping' | 'xrefAvailableMapping' | 'revision' | 'contentAsset';
 /**
  * LabelType 에 따라 라벨 표시 방법이 달라진다.
  * string 은 i18n 으로 라벨 처리
@@ -29,18 +29,18 @@ export type HiddenType = ConditionalBooleanValue;
 export type ReadOnlyType = ConditionalBooleanValue;
 export type RequiredType = ConditionalBooleanValue;
 export interface ConditionalValue {
-    entityForm?: EntityForm;
-    renderType?: RenderType;
-    value?: FieldValue;
-    session?: Session;
+    entityForm?: EntityForm | undefined;
+    renderType?: RenderType | undefined;
+    value?: FieldValue | undefined;
+    session?: Session | undefined;
 }
 export type ValuedString = (props: ConditionalValue) => Promise<string>;
 export type ValuedBoolean = (props: ConditionalValue) => Promise<boolean>;
 export type ValuedReactNode = (props: ConditionalValue) => Promise<ReactNode>;
-export interface FieldValue {
-    current?: any;
-    fetched?: any;
-    default?: any;
+export interface FieldValue<TValue = any> {
+    current?: TValue;
+    fetched?: TValue;
+    default?: TValue;
 }
 export interface OptionalBoolean {
     onCreate?: boolean;
@@ -123,15 +123,15 @@ export interface ParentSearchWith {
     clear?: string[];
 }
 export interface IAssetConfig {
-    maxSize?: number;
-    maxCount?: number;
-    extensions?: string[];
-    fileTypes?: string[];
+    maxSize?: number | undefined;
+    maxCount?: number | undefined;
+    extensions?: string[] | undefined;
+    fileTypes?: string[] | undefined;
 }
 export declare class AssetConfig implements IAssetConfig {
-    maxSize?: number;
-    maxCount?: number;
-    extensions?: string[];
+    maxSize?: number | undefined;
+    maxCount?: number | undefined;
+    extensions?: string[] | undefined;
     static create(maxSize?: number, maxCount?: number, ...extensions: string[]): AssetConfig;
     withMaxSize(maxSize?: number): AssetConfig;
     withMaxCount(maxCount?: number): AssetConfig;
@@ -155,16 +155,16 @@ export type InlineMapConfig = {
         value?: string;
     };
 };
-export type ModifyEntityFormFunc = (entityForm: EntityForm, name?: string) => Promise<EntityForm>;
-export type ModifyFetchedEntityFormFunc = (entityForm: EntityForm, response?: any) => Promise<EntityForm>;
-export type OnInitializeFunc = (entityForm: EntityForm, session?: Session) => Promise<EntityForm>;
+export type ModifyEntityFormFunc<T extends object = any> = (entityForm: EntityForm<T>, name?: string) => Promise<EntityForm<T>>;
+export type ModifyFetchedEntityFormFunc<T extends object = any> = (entityForm: EntityForm<T>, response?: any) => Promise<EntityForm<T>>;
+export type OnInitializeFunc<T extends object = any> = (entityForm: EntityForm<T>, session?: Session) => Promise<EntityForm<T>>;
 export type TabInfo = {
     id: string;
     label: string;
     order: number;
-    hidden?: boolean;
-    description?: string | React.ReactNode;
-    requiredPermissions?: string[];
+    hidden?: boolean | undefined;
+    description?: string | React.ReactNode | undefined;
+    requiredPermissions?: string[] | undefined;
 };
 export type FieldGroupConfig = {
     open?: boolean;
@@ -173,9 +173,9 @@ export type FieldGroupInfo = {
     id: string;
     label: string;
     order: number;
-    description?: string;
-    config?: FieldGroupConfig;
-    requiredPermissions?: string[];
+    description?: string | undefined;
+    config?: FieldGroupConfig | undefined;
+    requiredPermissions?: string[] | undefined;
 };
 export declare const DEFAULT_TAB_INFO: TabInfo;
 export declare const DEFAULT_FIELD_GROUP_INFO: FieldGroupInfo;
@@ -237,7 +237,7 @@ export declare const MANAGE_ENTITY_ALL: ManageEntityForm;
 export declare const MANAGE_ENTITY_CREATE: ManageEntityForm;
 export declare const MANAGE_ENTITY_UPDATE: ManageEntityForm;
 export declare const MANAGE_ENTITY_NOT_DELETE: ManageEntityForm;
-export declare function onChangeNameToSlug(entityForm: EntityForm, fieldName: string, targetFieldName: string): Promise<EntityForm>;
+export declare function onChangeNameToSlug(entityForm: EntityForm, fieldName: string, targetFieldName: string): Promise<EntityForm<any>>;
 export interface CheckButtonValidationFieldProps {
     url: string;
     fieldName: string;

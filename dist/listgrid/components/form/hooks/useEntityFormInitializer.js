@@ -11,18 +11,18 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { useCallback } from "react";
-import { useRouter } from "../../../router";
-import { isEmpty } from "../../../utils";
+import { useCallback } from 'react';
+import { useRouter } from '../../../router';
+import { isEmpty } from '../../../utils';
 import { removeTrailingSeparator } from '../../../utils/StringUtil';
-import { showAlert } from "../../../message";
+import { showAlert } from '../../../message';
 import { isTrue } from '../../../utils/BooleanUtil';
 /**
  * Custom hook for initializing EntityForm state and tabs.
  * EntityForm 상태 및 탭 초기화를 위한 커스텀 훅
  * @param params - 초기화에 필요한 파라미터 객체
  */
-export const useEntityFormInitializer = ({ entityForm: initialEntityForm, isSubCollectionEntity, pathname, session, buttonLinks, onInitialize, setTabs, setTabIndex, setEntityForm, setTitleText, setLoadingError }) => {
+export const useEntityFormInitializer = ({ entityForm: initialEntityForm, isSubCollectionEntity, pathname, session, buttonLinks, onInitialize, setTabs, setTabIndex, setEntityForm, setTitleText, setLoadingError, }) => {
     const router = useRouter();
     /**
      * EntityForm을 초기화하고 탭/타이틀/상태를 세팅합니다.
@@ -31,7 +31,7 @@ export const useEntityFormInitializer = ({ entityForm: initialEntityForm, isSubC
      */
     const initializeEntityForm = useCallback(async (options) => {
         try {
-            const actionResult = await initialEntityForm.initialize({ session });
+            const actionResult = await initialEntityForm.initialize(session !== undefined ? { session } : {});
             let entityForm = actionResult.entityForm;
             if (actionResult.errors && !isEmpty(actionResult.errors)) {
                 const listUrl = removeTrailingSeparator(pathname ?? '', '/') || '/';
@@ -103,7 +103,20 @@ export const useEntityFormInitializer = ({ entityForm: initialEntityForm, isSubC
             // eslint-disable-next-line no-console
             console.error('Error in initializeEntityForm:', error);
         }
-    }, [initialEntityForm, isSubCollectionEntity, pathname, session, buttonLinks, onInitialize, setTabs, setTabIndex, setEntityForm, setTitleText, setLoadingError, router]);
+    }, [
+        initialEntityForm,
+        isSubCollectionEntity,
+        pathname,
+        session,
+        buttonLinks,
+        onInitialize,
+        setTabs,
+        setTabIndex,
+        setEntityForm,
+        setTitleText,
+        setLoadingError,
+        router,
+    ]);
     return initializeEntityForm;
 };
 //# sourceMappingURL=useEntityFormInitializer.js.map

@@ -1,7 +1,7 @@
 interface ProductAssetUploadProps {
-    url?: string;
+    url?: string | undefined;
     onChange: (url: string) => void;
-    fileTypes?: string[];
+    fileTypes?: string[] | undefined;
 }
 export declare const MultipleAssetUpload: (props: ProductAssetUploadProps) => import("react/jsx-runtime").JSX.Element;
 export {};

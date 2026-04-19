@@ -1,5 +1,5 @@
 import { CheckButtonValidationField, CheckButtonValidationFieldProps } from './abstract';
-import React from "react";
+import React from 'react';
 import { Validation } from '../../validations/Validation';
 import { FieldRenderParameters, FilterRenderParameters } from '../../config/EntityField';
 interface EmailFieldProps extends CheckButtonValidationFieldProps {

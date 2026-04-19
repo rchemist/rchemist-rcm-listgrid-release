@@ -1,4 +1,4 @@
-import { SearchForm } from "../../../form/SearchForm";
+import { SearchForm } from '../../../form/SearchForm';
 import { EntityForm } from '../../../config/EntityForm';
 import { ListableFormField } from '../../fields/abstract';
 interface HeaderFieldFilterProps {

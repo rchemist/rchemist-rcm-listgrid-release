@@ -5,18 +5,18 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-"use client";
+'use client';
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { useEffect, useRef, useState } from "react";
-import { Tooltip } from "../../../ui";
-import { IconCircleX, IconPlus, IconSearch, IconSettings2 } from "@tabler/icons-react";
-import { Dropdown } from "../../../ui";
+import { useEffect, useRef, useState } from 'react';
+import { Tooltip } from '../../../ui';
+import { IconCircleX, IconPlus, IconSearch, IconSettings2 } from '@tabler/icons-react';
+import { Dropdown } from '../../../ui';
 import { isTrue } from '../../../utils/BooleanUtil';
 import { isBlank } from '../../../utils/StringUtil';
 import { ViewListGrid } from '../../list/ViewListGrid';
 import { ListGrid } from '../../../config/ListGrid';
 import { TreeSelectView } from './TreeSelectView';
-import { SearchForm } from "../../../form/SearchForm";
+import { SearchForm } from '../../../form/SearchForm';
 import { getManyToOneEntityValue } from '../ManyToOneField';
 import { ViewEntityForm } from '../../form/ViewEntityForm';
 import { useModalManagerStore } from '../../../store';
@@ -38,7 +38,7 @@ export const ManyToOneView = ({ config, required, parentEntityForm, ...props }) 
     const entityForm = config.entityForm;
     const menuUrl = config.entityForm.menuUrl; // 선택된 item 이 있는 경우 해당 item 으로 링크 처리
     const subCollectionEntity = isTrue(props.subCollectionEntity, false);
-    const [name, setName] = useState("");
+    const [name, setName] = useState('');
     const [value, setValue] = useState();
     const [defaultValue, setDefaultValue] = useState();
     const [mount, setMount] = useState(false);
@@ -56,7 +56,7 @@ export const ManyToOneView = ({ config, required, parentEntityForm, ...props }) 
             if (!userRoles) {
                 return false;
             }
-            return config.modifiable.roles.some(role => userRoles.includes(role));
+            return config.modifiable.roles.some((role) => userRoles.includes(role));
         }
         return false;
     };
@@ -92,7 +92,7 @@ export const ManyToOneView = ({ config, required, parentEntityForm, ...props }) 
                 // Case 2: value가 객체이고 id만 있는 경우 (name 등 display 정보가 없는 경우)
                 else if (value && typeof value === 'object' && value.id) {
                     const hasDisplayInfo = config.displayFunc ||
-                        (config.field?.name instanceof Function) ||
+                        config.field?.name instanceof Function ||
                         (config.field?.name && value[config.field.name]) ||
                         value.name;
                     if (!hasDisplayInfo) {
@@ -114,8 +114,8 @@ export const ManyToOneView = ({ config, required, parentEntityForm, ...props }) 
             }
             else {
                 // 값이 없을 때 name과 value 모두 초기화
-                setName("");
-                setValue("");
+                setName('');
+                setValue('');
                 localValueIdRef.current = undefined;
             }
             const filter = [];
@@ -129,10 +129,10 @@ export const ManyToOneView = ({ config, required, parentEntityForm, ...props }) 
             const searchForm = SearchForm.create();
             if (filter !== undefined && filter.length > 0) {
                 for (const filterItem of filter) {
-                    searchForm.withFilter("AND", ...(await filterItem(parentEntityForm)));
+                    searchForm.withFilter('AND', ...(await filterItem(parentEntityForm)));
                 }
                 if (entityForm.neverDelete) {
-                    searchForm.handleAndFilter("active", "true");
+                    searchForm.handleAndFilter('active', 'true');
                 }
             }
             setSearchForm(searchForm);
@@ -147,20 +147,23 @@ export const ManyToOneView = ({ config, required, parentEntityForm, ...props }) 
     const handleSelectModal = () => {
         const modalId = `manytoone-select-${props.name}`;
         const isTree = !!config.tree;
+        const maxHeightValue = isTree ? undefined : '90vh';
         openModal({
             modalId,
             title: `${props.label} 검색`,
             size: isTree ? 'lg' : '5xl',
             fullHeight: isTree ? false : true,
-            maxHeight: isTree ? undefined : '90vh',
+            ...(maxHeightValue !== undefined ? { maxHeight: maxHeightValue } : {}),
             content: (_jsx("div", { className: `modal-content flex flex-col overflow-hidden ${isTree ? '' : 'max-h-[85vh]'}`, children: isTree ? (_jsx(TreeSelectView, { entityForm: entityForm, tree: config.tree, onSelect: (item) => {
                         setManyToOneValue(item);
                         closeModal(modalId);
                     } })) : (_jsx(ViewListGrid, { listGrid: new ListGrid(entityForm).withSearchForm(searchForm), options: {
                         popup: true,
-                        filterable: config.filterable,
+                        ...(config.filterable !== undefined ? { filterable: config.filterable } : {}),
                         readonly: true,
-                        hideAdvancedSearch: config.hideAdvancedSearch,
+                        ...(config.hideAdvancedSearch !== undefined
+                            ? { hideAdvancedSearch: config.hideAdvancedSearch }
+                            : {}),
                         selection: {
                             enabled: false,
                         },
@@ -170,7 +173,7 @@ export const ManyToOneView = ({ config, required, parentEntityForm, ...props }) 
                                 closeModal(modalId);
                             },
                         },
-                    } })) }))
+                    } })) })),
         });
     };
     // 생성 모달 핸들러
@@ -187,8 +190,8 @@ export const ManyToOneView = ({ config, required, parentEntityForm, ...props }) 
                     closeModal(modalId);
                     return savedForm;
                 }, buttonLinks: {
-                    onClickList: async () => closeModal(modalId)
-                }, subCollection: true, readonly: false }))
+                    onClickList: async () => closeModal(modalId),
+                }, subCollection: true, readonly: false })),
         });
     };
     // 수정 모달 핸들러
@@ -204,8 +207,8 @@ export const ManyToOneView = ({ config, required, parentEntityForm, ...props }) 
                     closeModal(modalId);
                     return updatedForm;
                 }, buttonLinks: {
-                    onClickList: async () => closeModal(modalId)
-                }, subCollection: true, readonly: false }))
+                    onClickList: async () => closeModal(modalId),
+                }, subCollection: true, readonly: false })),
         });
     };
     // 보기 모달 핸들러
@@ -214,16 +217,18 @@ export const ManyToOneView = ({ config, required, parentEntityForm, ...props }) 
         const viewEntityForm = entityForm
             .clone(true)
             .withId(value.id)
-            .withTitle(value.id === undefined ? undefined : {
-            view: async () => name ? `정보 조회 > ${name}` : '정보 조회'
-        });
+            .withTitle(value.id === undefined
+            ? undefined
+            : {
+                view: async () => (name ? `정보 조회 > ${name}` : '정보 조회'),
+            });
         openModal({
             modalId,
             title: `${props.label} 조회`,
             size: '5xl',
             content: (_jsx(ViewEntityForm, { entityForm: viewEntityForm, buttonLinks: {
-                    onClickList: async () => closeModal(modalId)
-                }, subCollection: true, readonly: true }))
+                    onClickList: async () => closeModal(modalId),
+                }, subCollection: true, readonly: true })),
         });
     };
     return (_jsx("div", { className: "rcm-input-group-full", children: _jsxs("div", { className: "rcm-input-group-full-center", children: [_jsx("div", { className: "rcm-input-group-full-relative", children: _jsx("div", { className: "rcm-m2o-input-wrap", children: _jsx("input", { type: "text", className: "rcm-input rcm-m2o-input", placeholder: !readonly ? `찾기 버튼을 눌러 ${props.label} 을(를) 선택해 주세요` : '', value: name, disabled: readonly, readOnly: true, onClick: () => {
@@ -253,18 +258,17 @@ export const ManyToOneView = ({ config, required, parentEntityForm, ...props }) 
                                     }
                                 }
                                 else {
-                                    window.open(menuUrl + "/" + value.id, "_blank");
+                                    window.open(menuUrl + '/' + value.id, '_blank');
                                 }
                             }, children: _jsx(IconSearch, { className: "rcm-m2o-addon-icon" }) }) }) })), !readonly && !isBlank(value) && (_jsx("div", { className: "rcm-m2o-addon", children: _jsx(Tooltip, { label: `선택 해제`, children: _jsx("button", { type: "button", className: "rcm-m2o-addon-btn", onClick: () => {
-                                setManyToOneValue("");
+                                setManyToOneValue('');
                             }, children: _jsx(IconCircleX, { className: "rcm-m2o-addon-icon" }) }) }) })), isModifiable && !readonly ? (_jsx(Dropdown, { placement: "bottom-end", btnClassName: "rcm-m2o-action-btn", button: _jsxs(_Fragment, { children: [_jsx(IconSettings2, { className: "rcm-m2o-action-icon" }), _jsx("span", { children: "\uAD00\uB9AC" })] }), children: _jsxs("ul", { className: "rcm-m2o-dropdown-list", children: [_jsx("li", { children: _jsxs("button", { type: "button", className: "rcm-m2o-dropdown-item", onClick: handleSelectModal, children: [_jsx(IconSearch, { className: "rcm-m2o-action-icon" }), _jsx("span", { children: "\uCC3E\uAE30" })] }) }), _jsx("li", { children: _jsxs("button", { type: "button", className: "rcm-m2o-dropdown-item", onClick: handleCreateModal, children: [_jsx(IconPlus, { className: "rcm-m2o-action-icon" }), _jsx("span", { children: "\uB4F1\uB85D" })] }) })] }) })) : (_jsxs("button", { type: "button", disabled: readonly, className: "rcm-m2o-action-btn", onClick: handleSelectModal, children: [_jsx(IconSearch, { className: "rcm-m2o-action-icon" }), _jsx("span", { children: "\uCC3E\uAE30" })] }))] }) }));
     function setManyToOneValue(value, initialize) {
         (async () => {
-            let finalValue = value;
+            let finalValue;
             // 빈 문자열 처리 - 명시적으로 clear하는 경우
-            if (value === "") {
+            if (value === '') {
                 value = undefined;
-                finalValue = undefined;
             }
             if (value === undefined) {
                 // Initialize 시에만 defaultValue 사용, 사용자가 명시적으로 clear한 경우는 제외
@@ -278,7 +282,7 @@ export const ManyToOneView = ({ config, required, parentEntityForm, ...props }) 
                 }
                 else {
                     // 명시적 clear이거나 초기화가 아닌 경우 무조건 clear
-                    setName("");
+                    setName('');
                     setValue(undefined);
                     finalValue = undefined;
                     // localValueIdRef 초기화
@@ -318,7 +322,7 @@ export const ManyToOneView = ({ config, required, parentEntityForm, ...props }) 
         }
         else {
             // 설정된 정보가 없으면 name 필드를 우선 사용한다.
-            return value["name"] ?? "";
+            return value['name'] ?? '';
         }
     }
 };

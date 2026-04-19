@@ -1,19 +1,19 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { Suspense, useEffect, useMemo, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useSession } from '../auth';
-import { usePathname } from "../router";
-import { Breadcrumb } from "../ui";
-import { LoadingOverlay } from "../ui";
-import { Skeleton } from "../ui";
-import { dynamic } from "../utils/lazy";
+import { usePathname } from '../router';
+import { Breadcrumb } from '../ui';
+import { LoadingOverlay } from '../ui';
+import { Skeleton } from '../ui';
+import { dynamic } from '../utils/lazy';
 import { checkAdminMenuPermission, DEFAULT_MENU_ALIAS } from '../menu/MenuPermissionChecker';
 // Dynamic import with better optimization
-const ViewListGrid = dynamic(() => import("../components/list/ViewListGrid").then(mod => ({
-    default: mod.ViewListGrid
+const ViewListGrid = dynamic(() => import('../components/list/ViewListGrid').then((mod) => ({
+    default: mod.ViewListGrid,
 })), {
     ssr: false,
-    loading: () => (_jsxs("div", { className: 'relative', children: [_jsx(LoadingOverlay, { visible: true }), _jsx("div", { className: 'w-full h-[400px]' })] }))
+    loading: () => (_jsxs("div", { className: 'relative', children: [_jsx(LoadingOverlay, { visible: true }), _jsx("div", { className: 'w-full h-[400px]' })] })),
 });
 export const ViewListGridWrapper = React.memo(({ props, breadcrumbs, anonymous }) => {
     const [mounted, setMounted] = useState(false);
@@ -61,7 +61,7 @@ export const ViewListGridWrapper = React.memo(({ props, breadcrumbs, anonymous }
             try {
                 const permissionType = await checkAdminMenuPermission({
                     url: pathname,
-                    alias: DEFAULT_MENU_ALIAS
+                    alias: DEFAULT_MENU_ALIAS,
                 });
                 if (isMounted) {
                     setPermissionType(permissionType);
@@ -84,7 +84,7 @@ export const ViewListGridWrapper = React.memo(({ props, breadcrumbs, anonymous }
         };
     }, [session, pathname, anonymous]);
     // Memoize breadcrumb component
-    const breadcrumbComponent = useMemo(() => (_jsx(Breadcrumb, { type: 'basic', items: breadcrumbs })), [breadcrumbs]);
+    const breadcrumbComponent = useMemo(() => _jsx(Breadcrumb, { type: 'basic', items: breadcrumbs }), [breadcrumbs]);
     if (!mounted) {
         return (_jsxs("div", { children: [breadcrumbComponent, _jsx("div", { children: _jsx(Skeleton, { visible: true, children: _jsx("div", { className: 'h-100 w-full' }) }) })] }));
     }

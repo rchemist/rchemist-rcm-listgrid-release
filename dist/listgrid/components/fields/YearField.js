@@ -7,9 +7,9 @@ import { jsx as _jsx } from "react/jsx-runtime";
  */
 import { ListableFormField } from './abstract';
 import { getInputRendererParameters } from '../helper/FieldRendererHelper';
-import { NumberInput } from "../../ui";
-import { SelectBox } from "../../ui";
-import { MultiSelectBox } from "../../ui";
+import { NumberInput } from '../../ui';
+import { SelectBox } from '../../ui';
+import { MultiSelectBox } from '../../ui';
 export class YearField extends ListableFormField {
     constructor(name, order, limit) {
         super(name, order, 'year');
@@ -18,7 +18,7 @@ export class YearField extends ListableFormField {
         const defaultMax = new Date().getFullYear();
         this.limit = {
             min: limit?.min ?? defaultMin,
-            max: limit?.max ?? defaultMax
+            max: limit?.max ?? defaultMax,
         };
     }
     /**
@@ -36,9 +36,9 @@ export class YearField extends ListableFormField {
                 }
                 // sort by value desc
                 options.sort((a, b) => b.value - a.value);
-                return _jsx(SelectBox, { options: options, ...await getInputRendererParameters(this, params) });
+                return (_jsx(SelectBox, { options: options, ...await getInputRendererParameters(this, params) }));
             }
-            return _jsx(NumberInput, { limit: this.limit, ...await getInputRendererParameters(this, params) });
+            return (_jsx(NumberInput, { limit: this.limit, ...await getInputRendererParameters(this, params) }));
         })();
     }
     /**
@@ -56,11 +56,11 @@ export class YearField extends ListableFormField {
                 }
                 // sort by value desc (최신 년도가 위로)
                 options.sort((a, b) => Number(b.value) - Number(a.value));
-                return _jsx(MultiSelectBox, { options: options, ...await getInputRendererParameters(this, {
+                return (_jsx(MultiSelectBox, { options: options, ...await getInputRendererParameters(this, {
                         ...params,
                         required: false,
-                        onChange: (value) => params.onChange(value, 'IN')
-                    }) });
+                        onChange: (value) => params.onChange(value, 'IN'),
+                    }) }));
             }
             return null;
         })();
@@ -86,7 +86,7 @@ export class YearField extends ListableFormField {
             multiFilter: true,
             op: 'IN',
             sortable: props?.sortable,
-            filterable: props?.filterable
+            filterable: props?.filterable,
         };
         return this;
     }
@@ -95,13 +95,12 @@ export class YearField extends ListableFormField {
         const defaultMax = new Date().getFullYear();
         this.limit = {
             min: limit?.min ?? defaultMin,
-            max: limit?.max ?? defaultMax
+            max: limit?.max ?? defaultMax,
         };
         return this;
     }
     static create(props) {
-        return new YearField(props.name, props.order, props.limit)
-            .copyFields(props, true);
+        return new YearField(props.name, props.order, props.limit).copyFields(props, true);
     }
 }
 //# sourceMappingURL=YearField.js.map

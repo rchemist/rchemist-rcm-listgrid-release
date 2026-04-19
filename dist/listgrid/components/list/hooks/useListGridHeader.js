@@ -1,6 +1,6 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import { showConfirm } from '../../../message';
 import { useLoadingStore } from '../../../loading';
 export const useListGridHeader = (props) => {
@@ -13,7 +13,8 @@ export const useListGridHeader = (props) => {
             if (buttons) {
                 const newButtons = [];
                 for (const [index, buttonFunc] of buttons.entries()) {
-                    newButtons.push(_jsx(React.Fragment, { children: await buttonFunc({ ...props, session }) }, index));
+                    const buttonProps = { ...props, ...(session !== undefined ? { session } : {}) };
+                    newButtons.push(_jsx(React.Fragment, { children: await buttonFunc(buttonProps) }, index));
                 }
                 setHeaderButtons(newButtons);
             }
@@ -26,11 +27,14 @@ export const useListGridHeader = (props) => {
             if (selectionOptions?.actions && checkedItems && checkedItems.length > 0) {
                 for (const [index, action] of selectionOptions.actions.entries()) {
                     // show 조건 확인
-                    const shouldShow = action.show === undefined ? true :
-                        typeof action.show === 'function' ? action.show(checkedItems) : action.show;
+                    const shouldShow = action.show === undefined
+                        ? true
+                        : typeof action.show === 'function'
+                            ? action.show(checkedItems)
+                            : action.show;
                     if (!shouldShow)
                         continue;
-                    const color = action.color ?? "primary";
+                    const color = action.color ?? 'primary';
                     const outline = action.outline ?? false;
                     const className = action.className ?? (outline ? `btn btn-outline-${color}` : `btn btn-${color}`);
                     const label = typeof action.label === 'function' ? action.label(checkedItems) : action.label;

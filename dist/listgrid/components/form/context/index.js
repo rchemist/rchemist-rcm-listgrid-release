@@ -4,5 +4,5 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-export { EntityFormThemeProvider, useEntityFormTheme, EntityFormThemeContext, } from "./EntityFormThemeContext";
+export { EntityFormThemeProvider, useEntityFormTheme, EntityFormThemeContext, } from './EntityFormThemeContext';
 //# sourceMappingURL=index.js.map

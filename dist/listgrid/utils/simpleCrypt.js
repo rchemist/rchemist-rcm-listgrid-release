@@ -5,8 +5,8 @@
  * You may obtain a copy of the License under controlled by Rchemist
  */
 import * as CryptoJS from 'crypto-js';
-import { isTrue } from "./BooleanUtil";
-import { stringify } from "./jsonUtils";
+import { isTrue } from './BooleanUtil';
+import { stringify } from './jsonUtils';
 import { getRuntimeConfig } from '../config/RuntimeConfig';
 // Lazy-resolved: call getRuntimeConfig() at use time so host-side
 // configureRuntime({ cryptKey: ... }) can run after module import.
@@ -62,13 +62,25 @@ export // Generate a UUID v4
     for (let i = 0; i < 256; ++i) {
         byteToHex[i] = (i + 0x100).toString(16).substring(1);
     }
-    return (byteToHex[byteArray[0]] + byteToHex[byteArray[1]] +
-        byteToHex[byteArray[2]] + byteToHex[byteArray[3]] + '-' +
-        byteToHex[byteArray[4]] + byteToHex[byteArray[5]] + '-' +
-        byteToHex[byteArray[6]] + byteToHex[byteArray[7]] + '-' +
-        byteToHex[byteArray[8]] + byteToHex[byteArray[9]] + '-' +
-        byteToHex[byteArray[10]] + byteToHex[byteArray[11]] +
-        byteToHex[byteArray[12]] + byteToHex[byteArray[13]] +
-        byteToHex[byteArray[14]] + byteToHex[byteArray[15]]);
+    return (byteToHex[byteArray[0]] +
+        byteToHex[byteArray[1]] +
+        byteToHex[byteArray[2]] +
+        byteToHex[byteArray[3]] +
+        '-' +
+        byteToHex[byteArray[4]] +
+        byteToHex[byteArray[5]] +
+        '-' +
+        byteToHex[byteArray[6]] +
+        byteToHex[byteArray[7]] +
+        '-' +
+        byteToHex[byteArray[8]] +
+        byteToHex[byteArray[9]] +
+        '-' +
+        byteToHex[byteArray[10]] +
+        byteToHex[byteArray[11]] +
+        byteToHex[byteArray[12]] +
+        byteToHex[byteArray[13]] +
+        byteToHex[byteArray[14]] +
+        byteToHex[byteArray[15]]);
 }
 //# sourceMappingURL=simpleCrypt.js.map

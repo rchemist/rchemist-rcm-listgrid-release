@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { isTrue } from "./BooleanUtil";
+import { isTrue } from './BooleanUtil';
 export function isNulls(value, other) {
     if (value === undefined && other === undefined) {
         return true;
@@ -38,16 +38,19 @@ export function isEquals(value, other) {
         return true;
     }
     // plain object deep comparison
-    if (typeof value === 'object' && typeof other === 'object' &&
-        value !== null && other !== null &&
-        !Array.isArray(value) && !Array.isArray(other)) {
+    if (typeof value === 'object' &&
+        typeof other === 'object' &&
+        value !== null &&
+        other !== null &&
+        !Array.isArray(value) &&
+        !Array.isArray(other)) {
         const a = value;
         const b = other;
         const keysA = Object.keys(a);
         const keysB = Object.keys(b);
         if (keysA.length !== keysB.length)
             return false;
-        return keysA.every(key => keysB.includes(key) && isEquals(a[key], b[key]));
+        return keysA.every((key) => keysB.includes(key) && isEquals(a[key], b[key]));
     }
     return false;
 }

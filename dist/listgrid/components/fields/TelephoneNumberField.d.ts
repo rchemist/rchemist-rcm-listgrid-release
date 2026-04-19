@@ -1,6 +1,6 @@
 import { ListableFormField, ListableFormFieldProps, ViewListProps, ViewListResult } from './abstract';
 import { FieldRenderParameters } from '../../config/EntityField';
-import React from "react";
+import React from 'react';
 import { Validation } from '../../validations/Validation';
 import { RenderType } from '../../config/Config';
 import { EntityForm } from '../../config/EntityForm';

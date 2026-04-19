@@ -6,14 +6,14 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License under controlled by Rchemist
  */
-import { useEffect, useRef, useState } from "react";
-import { FilterButton } from "./FilterButton";
-import { FilterDropdown } from "./FilterDropdown";
-import { FilterView } from "./FilterView";
-import { SearchForm } from "../../../form/SearchForm";
+import { useEffect, useRef, useState } from 'react';
+import { FilterButton } from './FilterButton';
+import { FilterDropdown } from './FilterDropdown';
+import { FilterView } from './FilterView';
+import { SearchForm } from '../../../form/SearchForm';
 import { AbstractManyToOneField, OptionalField } from '../../fields/abstract';
 import { isBlank } from '../../../utils/StringUtil';
-import { useHeaderFilterStore } from "./headerFilterStore";
+import { useHeaderFilterStore } from './headerFilterStore';
 import { isTrue } from '../../../utils/BooleanUtil';
 export const HeaderFieldFilter = ({ field, gridId, searchForm, entityForm, onChangeSearchForm, disabled = false, }) => {
     const fieldName = field.getName();
@@ -36,7 +36,7 @@ export const HeaderFieldFilter = ({ field, gridId, searchForm, entityForm, onCha
         // 배열인 경우 length로 체크
         const hasValue = Array.isArray(filterValue)
             ? filterValue.length > 0
-            : (filterValue !== null && filterValue !== undefined && filterValue !== '');
+            : filterValue !== null && filterValue !== undefined && filterValue !== '';
         setHasFilter(hasValue);
     }, [searchForm, field]);
     // 필터 위치 결정 (화면 중앙 기준)
@@ -60,7 +60,7 @@ export const HeaderFieldFilter = ({ field, gridId, searchForm, entityForm, onCha
         }
     }, [isOpen, searchForm]);
     const handleFilterChange = (name, value, op = 'EQUAL') => {
-        setTempSearchForm(prevForm => {
+        setTempSearchForm((prevForm) => {
             const newSearchForm = prevForm?.clone() ?? SearchForm.create();
             const targetField = entityForm.getField(name);
             // ManyToOneField 처리
@@ -99,7 +99,7 @@ export const HeaderFieldFilter = ({ field, gridId, searchForm, entityForm, onCha
             }
             // 필터 추가/수정/삭제
             const isEmpty = Array.isArray(value) ? value.length === 0 : isBlank(value);
-            if (isEmpty && (op !== 'NULL' && op !== 'NOT_NULL')) {
+            if (isEmpty && op !== 'NULL' && op !== 'NOT_NULL') {
                 newSearchForm.removeFilter(name);
             }
             else {
@@ -145,7 +145,9 @@ export const HeaderFieldFilter = ({ field, gridId, searchForm, entityForm, onCha
             return 'lg';
         }
         // 중간 크기: ManyToOne, Select, Number 등
-        if (fieldType === 'manyToOne' || field instanceof AbstractManyToOneField || fieldType === 'number') {
+        if (fieldType === 'manyToOne' ||
+            field instanceof AbstractManyToOneField ||
+            fieldType === 'number') {
             return 'md';
         }
         // 작은 크기: String, Email, Boolean 등 기본
@@ -158,14 +160,14 @@ export const HeaderFieldFilter = ({ field, gridId, searchForm, entityForm, onCha
                     else {
                         openFilter(filterId);
                     }
-                } }), isOpen && tempSearchForm && (() => {
-                // ManyToOneField인 경우 .id로 값을 가져옴 (AdvancedSearchForm과 동일)
-                const searchFieldName = field instanceof AbstractManyToOneField
-                    ? field.getName() + '.id'
-                    : field.getName();
-                const fieldValue = tempSearchForm.getSearchValue(searchFieldName);
-                const filterField = field.clone(false).withValue(fieldValue);
-                return (_jsx(FilterDropdown, { isOpen: isOpen, onClose: closeFilter, onClear: handleClear, onApply: handleApply, size: getDropdownSize(), placement: placement, anchorRef: buttonRef, children: _jsx(FilterView, { entityForm: entityForm, field: filterField, value: fieldValue, onChange: handleFilterChange }) }));
-            })()] }));
+                } }), isOpen &&
+                tempSearchForm &&
+                (() => {
+                    // ManyToOneField인 경우 .id로 값을 가져옴 (AdvancedSearchForm과 동일)
+                    const searchFieldName = field instanceof AbstractManyToOneField ? field.getName() + '.id' : field.getName();
+                    const fieldValue = tempSearchForm.getSearchValue(searchFieldName);
+                    const filterField = field.clone(false).withValue(fieldValue);
+                    return (_jsx(FilterDropdown, { isOpen: isOpen, onClose: closeFilter, onClear: handleClear, onApply: handleApply, size: getDropdownSize(), placement: placement, anchorRef: buttonRef, children: _jsx(FilterView, { entityForm: entityForm, field: filterField, value: fieldValue, onChange: handleFilterChange }) }));
+                })()] }));
 };
 //# sourceMappingURL=HeaderFieldFilter.js.map

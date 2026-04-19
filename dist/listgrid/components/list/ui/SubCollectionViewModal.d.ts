@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 import { EntityForm } from '../../../config/EntityForm';
-import { ViewListGridProps } from "../types/ViewListGrid.types";
-import { SearchForm } from "../../../form/SearchForm";
-export declare const SubCollectionViewModal: ({ entityForm, managedId, props, setManagedId, fetchData, setOpenBaseLoading, mappedBy }: {
+import { ViewListGridProps } from '../types/ViewListGrid.types';
+import { SearchForm } from '../../../form/SearchForm';
+export declare const SubCollectionViewModal: ({ entityForm, managedId, props, setManagedId, fetchData, setOpenBaseLoading, mappedBy, }: {
     entityForm: EntityForm;
     managedId: string | undefined;
     props: ViewListGridProps;

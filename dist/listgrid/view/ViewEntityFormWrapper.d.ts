@@ -1,5 +1,5 @@
-import React from "react";
-import { BreadcrumbItem } from "../ui";
+import React from 'react';
+import { BreadcrumbItem } from '../ui';
 import { ViewEntityFormProps } from '../components/form/types/ViewEntityForm.types';
 interface ViewEntityFormWrapperProps {
     props: ViewEntityFormProps;

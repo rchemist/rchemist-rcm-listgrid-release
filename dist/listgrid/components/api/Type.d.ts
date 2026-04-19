@@ -1,4 +1,4 @@
-import { SelectOption } from "../../form/Type";
+import { SelectOption } from '../../form/Type';
 export interface ApiSpecification {
     url: string;
     authorized?: boolean;

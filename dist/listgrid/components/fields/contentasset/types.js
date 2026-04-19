@@ -22,7 +22,7 @@ export const validateContentAssets = (assets) => {
             errors.push({
                 index,
                 field: 'title',
-                message: '제목은 필수 입력 항목입니다.'
+                message: '제목은 필수 입력 항목입니다.',
             });
         }
         // 제목 중복 검사
@@ -30,7 +30,7 @@ export const validateContentAssets = (assets) => {
             errors.push({
                 index,
                 field: 'title',
-                message: '동일한 제목이 이미 존재합니다.'
+                message: '동일한 제목이 이미 존재합니다.',
             });
         }
         else if (asset.title) {
@@ -41,13 +41,13 @@ export const validateContentAssets = (assets) => {
             errors.push({
                 index,
                 field: 'assetUrl',
-                message: '파일을 업로드해주세요.'
+                message: '파일을 업로드해주세요.',
             });
         }
     });
     return {
         isValid: errors.length === 0,
-        errors
+        errors,
     };
 };
 /**
@@ -56,6 +56,6 @@ export const validateContentAssets = (assets) => {
 export const createEmptyContentAsset = () => ({
     title: '',
     content: '',
-    assetUrl: ''
+    assetUrl: '',
 });
 //# sourceMappingURL=types.js.map

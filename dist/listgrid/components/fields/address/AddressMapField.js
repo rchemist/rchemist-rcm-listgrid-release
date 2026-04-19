@@ -8,7 +8,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { FormField } from '../abstract';
 import { getInputRendererParameters } from '../../helper/FieldRendererHelper';
-import { AddressFieldView } from "./AddressFieldView";
+import { AddressFieldView } from './AddressFieldView';
 export class AddressMapField extends FormField {
     constructor(name, order, showMap, prefix) {
         super(name, order, 'custom');
@@ -23,7 +23,8 @@ export class AddressMapField extends FormField {
      */
     renderInstance(params) {
         return (async () => {
-            return _jsx(AddressFieldView, { ...await getInputRendererParameters(this, { ...params }), showMap: this.showMap, prefix: this.prefix });
+            const inputParams = await getInputRendererParameters(this, { ...params });
+            return (_jsx(AddressFieldView, { ...inputParams, showMap: this.showMap, prefix: this.prefix }));
         })();
     }
     /**

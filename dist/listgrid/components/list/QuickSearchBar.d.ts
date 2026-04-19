@@ -1,7 +1,7 @@
 import { QuickSearchProps } from '../../config/ListGrid';
-import { ViewFieldManageable } from "./types/ViewListGrid.types";
+import { ViewFieldManageable } from './types/ViewListGrid.types';
 import { ListableFormField } from '../fields/abstract';
-import { SearchForm } from "../../form/SearchForm";
+import { SearchForm } from '../../form/SearchForm';
 export interface QuickSearchBarProps extends ViewFieldManageable {
     quickSearchProperty?: QuickSearchProps;
     quickSearchValue?: string;

@@ -110,7 +110,7 @@ export class CardSubCollectionField extends SubCollectionField {
                     additionalFilters[0].items.unshift(mappedByFilter);
                 }
                 // Apply all filters
-                additionalFilters.forEach(filterGroup => {
+                additionalFilters.forEach((filterGroup) => {
                     searchForm.withFilter(filterGroup.condition, ...filterGroup.items);
                 });
             }
@@ -126,7 +126,9 @@ export class CardSubCollectionField extends SubCollectionField {
      */
     async render({ entityForm, session, }) {
         // Lazy load the CardSubCollectionView component
-        const CardSubCollectionView = React.lazy(() => import('../components/list/ui/CardSubCollectionView').then(m => ({ default: m.CardSubCollectionView })));
+        const CardSubCollectionView = React.lazy(() => import('../components/list/ui/CardSubCollectionView').then((m) => ({
+            default: m.CardSubCollectionView,
+        })));
         // Get the fetch URL
         let fetchUrl;
         if (this.fetchUrlFunction) {
@@ -144,7 +146,20 @@ export class CardSubCollectionField extends SubCollectionField {
         if (this.fetchOptions?.useSearchForm) {
             initialSearchForm = await this.buildSearchForm(entityForm);
         }
-        return (_jsx(React.Suspense, { fallback: _jsx("div", { className: "rcm-loading-overlay", children: _jsx("div", { className: "rcm-spinner" }) }), children: _jsx(CardSubCollectionView, { parentEntityForm: entityForm, parentId: entityForm.id, entityForm: this.entityForm, fetchUrl: fetchUrl, cardConfig: this.cardConfig, relation: this.relation, readonly: readonly, session: session, fetchOptions: this.fetchOptions, initialSearchForm: initialSearchForm, tooltip: tooltip }) }));
+        const viewProps = {
+            parentEntityForm: entityForm,
+            parentId: entityForm.id,
+            entityForm: this.entityForm,
+            fetchUrl,
+            ...(this.cardConfig !== undefined ? { cardConfig: this.cardConfig } : {}),
+            relation: this.relation,
+            readonly,
+            ...(session !== undefined ? { session } : {}),
+            ...(this.fetchOptions !== undefined ? { fetchOptions: this.fetchOptions } : {}),
+            ...(initialSearchForm !== undefined ? { initialSearchForm } : {}),
+            tooltip,
+        };
+        return (_jsx(React.Suspense, { fallback: _jsx("div", { className: "rcm-loading-overlay", children: _jsx("div", { className: "rcm-spinner" }) }), children: _jsx(CardSubCollectionView, { ...viewProps }) }));
     }
 }
 //# sourceMappingURL=CardSubCollectionField.js.map
