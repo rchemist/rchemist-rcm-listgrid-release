@@ -10,7 +10,7 @@ export interface Session {
         roles?: string[];
         [key: string]: unknown;
     };
-    getUser: () => SessionUser | null | undefined;
+    getUser?: () => SessionUser | null | undefined;
     [key: string]: unknown;
 }
 //# sourceMappingURL=types.d.ts.map

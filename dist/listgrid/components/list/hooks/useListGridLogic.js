@@ -168,7 +168,7 @@ export const useListGridLogic = (props) => {
                 const context = {
                     entityForm,
                     ...(session ? { session } : {}),
-                    ...(session?.getUser() != null ? { user: session.getUser() } : {}),
+                    ...(session?.getUser?.() != null ? { user: session.getUser() } : {}),
                 };
                 finalSearchForm = await entityForm.executeClientExtensions(ExtensionPoint.PRE_FETCH_LIST, listSearchForm, context);
             }
@@ -201,7 +201,7 @@ export const useListGridLogic = (props) => {
                         const context = {
                             entityForm,
                             ...(session ? { session } : {}),
-                            ...(session?.getUser() != null ? { user: session.getUser() } : {}),
+                            ...(session?.getUser?.() != null ? { user: session.getUser() } : {}),
                         };
                         processedResult = await entityForm.executeClientExtensions(ExtensionPoint.POST_FETCH_LIST, processedResult, context);
                     }

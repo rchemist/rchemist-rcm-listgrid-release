@@ -26,7 +26,7 @@ export const useEntityFormSave = ({ entityForm, isSubCollectionEntity, renderTyp
             const context = {
                 entityForm: entityForm,
                 ...(session ? { session } : {}),
-                ...(session?.getUser() != null ? { user: session.getUser() } : {}),
+                ...(session?.getUser?.() != null ? { user: session.getUser() } : {}),
             };
             // Pre Extension 실행 (Create/Update 구분)
             const extensionPoint = renderType === 'update' ? ExtensionPoint.PRE_UPDATE : ExtensionPoint.PRE_CREATE;
@@ -41,7 +41,7 @@ export const useEntityFormSave = ({ entityForm, isSubCollectionEntity, renderTyp
                 const context = {
                     entityForm: finalEntityForm,
                     ...(session ? { session } : {}),
-                    ...(session?.getUser() != null ? { user: session.getUser() } : {}),
+                    ...(session?.getUser?.() != null ? { user: session.getUser() } : {}),
                 };
                 const extensionPoint = renderType === 'update' ? ExtensionPoint.POST_UPDATE : ExtensionPoint.POST_CREATE;
                 await finalEntityForm.executeClientExtensions(extensionPoint, finalEntityForm.fetchedEntity ?? {}, context);

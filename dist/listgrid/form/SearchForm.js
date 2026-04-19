@@ -278,7 +278,9 @@ export class SearchForm {
         else {
             let duplicated = false;
             const filterValue = Array.isArray(value) ? undefined : String(value);
-            const filterValues = Array.isArray(value) ? value : undefined;
+            const filterValues = Array.isArray(value)
+                ? value.map((v) => String(v))
+                : undefined;
             this.filters.forEach((filterItems) => {
                 filterItems.forEach((filterItem) => {
                     if (filterItem.name === fieldName) {

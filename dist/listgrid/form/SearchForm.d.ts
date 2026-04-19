@@ -57,7 +57,7 @@ export declare class SearchForm {
     withPreservedFilters(...filters: SearchValueConfig[]): this;
     withPageSize(pageSize: number): this;
     withSort(fieldName: string, direction?: Direction): this;
-    handleAndFilter(fieldName: string, value: string | number | boolean | string[] | null | undefined, op?: QueryConditionType, not?: boolean): this;
+    handleAndFilter(fieldName: string, value: string | number | boolean | readonly (string | number | boolean)[] | null | undefined, op?: QueryConditionType, not?: boolean): this;
     withFilter(condition: 'AND' | 'OR', ...filterItems: FilterItem[]): this;
     withFilterIgnoreDuplicate(condition: 'AND' | 'OR', ...filterItems: FilterItem[]): this;
     isShouldReturnEmpty(): boolean;
