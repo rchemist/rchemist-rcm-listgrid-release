@@ -39,7 +39,7 @@ export declare function isNegative(value?: number): boolean;
 export declare function normalizeUrl(url: string): string;
 export declare function removeTrailingSeparator(input: string, separator: string): string;
 export declare function stringify(obj: unknown, beautify?: boolean): string;
-export declare function parse(str: string): any;
+export declare function parse<T = unknown>(str: string): T;
 export declare function removeLocalStorageItem(key: string): void;
 export declare function setLocalStorageItem(key: string, value: string, expirySeconds?: number): void;
 export declare function getLocalStorageItem(key: string): string | undefined;

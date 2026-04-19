@@ -3,7 +3,7 @@ import { EntityForm } from '../../../config/EntityForm';
 import { Session } from '../../../auth/types';
 import { SearchForm } from '../../../form/SearchForm';
 import { ViewListGridOptionProps } from '../types/ViewListGrid.types';
-import { InlineGlobalListConfig, InlineListFieldConfig, InlinePaginationOptions, InlineRowAction, InlineRowActionColumn, InlineRowActionsConfig, InlineSubCollectionFetchOptions, InlineSubCollectionRelation } from '../../../config/InlineSubCollectionField';
+import { InlineGlobalListConfig, InlineListFieldConfig, InlinePaginationOptions, InlineRowActionColumn, InlineSubCollectionFetchOptions, InlineSubCollectionRelation } from '../../../config/InlineSubCollectionField';
 export interface InlineSubCollectionViewProps {
     parentEntityForm: EntityForm;
     parentId: string;
@@ -12,10 +12,6 @@ export interface InlineSubCollectionViewProps {
     readonly?: boolean;
     session?: Session;
     listFields?: (string | InlineListFieldConfig)[];
-    /** @deprecated Use rowActionColumns instead */
-    rowActions?: InlineRowAction[];
-    /** @deprecated Use rowActionColumns instead */
-    rowActionsConfig?: InlineRowActionsConfig;
     /** Row action columns - supports multiple action columns */
     rowActionColumns?: InlineRowActionColumn[];
     pagination?: InlinePaginationOptions;

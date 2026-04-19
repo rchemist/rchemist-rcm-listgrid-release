@@ -125,8 +125,9 @@ export const useListGridLogic = (props) => {
                     }
                     if (json.error.fieldError) {
                         for (const field in json.error.fieldError) {
-                            if (json.error.fieldError[field]) {
-                                refinedMessages.push(json.error.fieldError[field]);
+                            const fieldErr = json.error.fieldError[field];
+                            if (fieldErr) {
+                                refinedMessages.push(fieldErr);
                             }
                         }
                     }

@@ -199,7 +199,7 @@ export interface AbstractInputProps {
     required?: boolean;
     readonly?: boolean;
     placeHolder?: string;
-    attributes?: Map<string, any>;
+    attributes?: Map<string, unknown>;
     subCollectionEntity?: boolean;
 }
 export interface EntityFormActionResult {

@@ -15,12 +15,15 @@ export type CardIconType = React.ComponentType<{
 /**
  * View 모드 렌더링을 위한 파라미터
  * CardSubCollectionField 등에서 필드 값을 View 모드로 표시할 때 사용
+ *
+ * TForm 은 item 타입 (entity row) 으로, FormField<TSelf, TValue, TForm>
+ * 의 TForm 과 동일 의미. default `any` 로 소비자 무수정 호환 (Task G).
  */
-export interface ViewRenderProps {
+export interface ViewRenderProps<TForm extends object = any> {
     /** 아이템 데이터 (필드 값을 포함한 객체) */
-    item: any;
+    item: TForm;
     /** 엔티티 폼 인스턴스 (옵션) */
-    entityForm?: EntityForm;
+    entityForm?: EntityForm<TForm>;
     /**
      * Compact 모드 - 아이콘 없이 깔끔한 텍스트만 표시
      * CardSubCollectionField 등에서 여러 필드를 나열할 때 사용
@@ -57,7 +60,7 @@ export interface FormFieldProps<TValue = any, TForm extends object = any> {
      * @param renderType
      */
     displayFunc?: (entityForm: EntityForm<TForm>, field: EntityField, renderType?: RenderType) => Promise<TValue>;
-    overrideRender?: (params: FieldRenderParameters) => Promise<ReactNode | null | undefined>;
+    overrideRender?: (params: FieldRenderParameters<TForm, TValue>) => Promise<ReactNode | null | undefined>;
     order: number;
     name: string;
     label?: LabelType;
@@ -65,7 +68,7 @@ export interface FormFieldProps<TValue = any, TForm extends object = any> {
     helpText?: HelpTextType;
     hidden?: HiddenType;
     readonly?: ReadOnlyType;
-    attributes?: Map<string, any>;
+    attributes?: Map<string, unknown>;
     hideLabel?: boolean;
     requiredPermissions?: string[];
     layout?: FieldLayoutType;
@@ -95,7 +98,7 @@ export declare abstract class FormField<TSelf extends FormField<TSelf, TValue, T
     readonly?: ReadOnlyType;
     required?: RequiredType;
     hideLabel?: boolean;
-    attributes?: Map<string, any>;
+    attributes?: Map<string, unknown>;
     requiredPermissions?: string[];
     cardIcon?: CardIconType;
     layout?: FieldLayoutType;
@@ -105,7 +108,7 @@ export declare abstract class FormField<TSelf extends FormField<TSelf, TValue, T
         fieldGroupId: string;
     };
     validations?: Validation[];
-    overrideRender?: (params: FieldRenderParameters) => Promise<React.ReactNode | null | undefined>;
+    overrideRender?: (params: FieldRenderParameters<TForm, TValue>) => Promise<React.ReactNode | null | undefined>;
     saveValue?: (entityForm: EntityForm<TForm>, field: EntityField, renderType?: RenderType) => Promise<TValue>;
     displayFunc?: (entityForm: EntityForm<TForm>, field: EntityField, renderType?: RenderType) => Promise<TValue>;
     maskedValueFunc?: (entityForm: EntityForm<TForm>, value: TValue) => Promise<string>;
@@ -118,7 +121,7 @@ export declare abstract class FormField<TSelf extends FormField<TSelf, TValue, T
      * 각 필드의 핵심 렌더링 로직을 구현하는 추상 메소드
      * 기존 render() 메소드의 핵심 부분만 구현
      */
-    protected abstract renderInstance(params: FieldRenderParameters): Promise<React.ReactNode | null>;
+    protected abstract renderInstance(params: FieldRenderParameters<TForm, TValue>): Promise<React.ReactNode | null>;
     /**
      * View 모드에서 필드 값을 렌더링하는 메소드
      * 기본 구현은 단순 문자열 변환. 각 필드에서 오버라이드하여 적절한 포맷 적용.
@@ -127,7 +130,7 @@ export declare abstract class FormField<TSelf extends FormField<TSelf, TValue, T
      * @param props View 렌더링에 필요한 파라미터
      * @returns 렌더링 결과
      */
-    protected renderViewInstance(props: ViewRenderProps): Promise<ViewRenderResult>;
+    protected renderViewInstance(props: ViewRenderProps<TForm>): Promise<ViewRenderResult>;
     /**
      * cardIcon이 설정된 경우 값을 아이콘과 함께 감싸서 반환
      * compact 모드이거나 아이콘이 없으면 텍스트만 반환
@@ -143,7 +146,7 @@ export declare abstract class FormField<TSelf extends FormField<TSelf, TValue, T
      * @param props View 렌더링에 필요한 파라미터
      * @returns 렌더링 결과
      */
-    viewValue(props: ViewRenderProps): Promise<ViewRenderResult>;
+    viewValue(props: ViewRenderProps<TForm>): Promise<ViewRenderResult>;
     /**
      * 공통 clone 로직 - 모든 필드에서 사용
      * StateTracker 로직 포함
@@ -184,17 +187,17 @@ export declare abstract class FormField<TSelf extends FormField<TSelf, TValue, T
     withCardIcon(icon?: CardIconType): this;
     withLayout(layout: FieldLayoutType): this;
     withLineBreak(lineBreak?: boolean): this;
-    view(params: FieldRenderParameters): Promise<React.ReactNode | null | undefined>;
+    view(params: FieldRenderParameters<TForm, TValue>): Promise<React.ReactNode | null | undefined>;
     /**
      * 공통 render 로직 - 모든 필드에서 사용
      * StateTracker, Performance tracking, Error handling 포함
      */
-    render(params: FieldRenderParameters): Promise<React.ReactNode | null | undefined>;
+    render(params: FieldRenderParameters<TForm, TValue>): Promise<React.ReactNode | null | undefined>;
     /**
      * 이 필드를 View 화면에서 렌더링하는 로직을 override 할 수 있습니다.
      * @param fn
      */
-    withOverrideRender(fn: (params: FieldRenderParameters) => Promise<React.ReactNode | null | undefined>): this;
+    withOverrideRender(fn: (params: FieldRenderParameters<TForm, TValue>) => Promise<React.ReactNode | null | undefined>): this;
     withOrder(order: number): this;
     isBlank(renderType?: RenderType): Promise<boolean>;
     isDirty(): boolean;
@@ -214,14 +217,14 @@ export declare abstract class FormField<TSelf extends FormField<TSelf, TValue, T
     getOrder(): number;
     getName(): string;
     getLabel(): LabelType;
-    withAttributes(attributes: Map<string, any>): this;
+    withAttributes(attributes: Map<string, unknown>): this;
     viewLabel(t: any): ReactNode;
-    getTooltip(props: FieldInfoParameters): Promise<ReactNode>;
-    getHelpText(props: FieldInfoParameters): Promise<ReactNode>;
-    getPlaceHolder(props: FieldInfoParameters): Promise<string>;
-    isRequired(props: FieldInfoParameters): Promise<boolean>;
-    isHidden(props: FieldInfoParameters): Promise<boolean>;
-    isReadonly(props: FieldInfoParameters): Promise<boolean>;
+    getTooltip(props: FieldInfoParameters<TForm>): Promise<ReactNode>;
+    getHelpText(props: FieldInfoParameters<TForm>): Promise<ReactNode>;
+    getPlaceHolder(props: FieldInfoParameters<TForm>): Promise<string>;
+    isRequired(props: FieldInfoParameters<TForm>): Promise<boolean>;
+    isHidden(props: FieldInfoParameters<TForm>): Promise<boolean>;
+    isReadonly(props: FieldInfoParameters<TForm>): Promise<boolean>;
     getCurrentValue(renderType?: RenderType): Promise<TValue | undefined>;
     getSaveValue(entityForm: EntityForm<TForm>, renderType?: RenderType): Promise<TValue | undefined>;
     getFetchedValue(): Promise<TValue | undefined>;

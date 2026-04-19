@@ -280,7 +280,10 @@ export function stringify(obj, beautify) {
         return '{}';
     }
 }
-// intentional: JSON.parse returns arbitrary data and consumers dereference fields directly
+// Generic JSON parser with Map reviver support.
+// Default type parameter is `unknown` — callers should narrow explicitly via
+// `parse<T>(str)` or `parse(str) as T`. This is stricter than prior `any`
+// contract and nudges consumers toward explicit schema knowledge.
 export function parse(str) {
     return JSON.parse(str, reviver);
 }
@@ -327,7 +330,9 @@ export function getLocalStorageItem(key) {
     if (!itemJson)
         return undefined;
     try {
-        const item = CachedStorageItem.create({ ...parse(itemJson) });
+        const item = CachedStorageItem.create({
+            ...parse(itemJson),
+        });
         if (item.isAvailable())
             return item.getData();
         localStorage.removeItem(key);

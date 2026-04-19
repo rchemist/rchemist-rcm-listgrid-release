@@ -88,8 +88,8 @@ export const defaultEntityFormTheme = {
         tabDisabled: '',
     },
     tabPanel: {
-        container: '',
-        emptyMessage: 'rcm-text-muted',
+        panel: '',
+        empty: 'rcm-text-muted',
         content: '',
     },
     panel: {
@@ -100,10 +100,10 @@ export const defaultEntityFormTheme = {
     },
     fieldGroup: {
         container: '',
-        headerWrapper: '',
+        header: '',
         title: '',
-        icons: 'rcm-row',
-        collapseIcon: 'rcm-cursor-pointer rcm-text-muted',
+        actions: 'rcm-row',
+        collapseToggle: 'rcm-cursor-pointer rcm-text-muted',
         content: '',
     },
     field: {

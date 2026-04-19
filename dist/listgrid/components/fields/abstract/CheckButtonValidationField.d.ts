@@ -17,7 +17,7 @@ export declare abstract class CheckButtonValidationField<TSelf extends CheckButt
     withCheckButtonValidation(checkButtonValidation?: (entityForm: EntityForm<TForm>, value: string) => Promise<ValidateResult>): this;
     withCheckButtonLabel(checkButtonLabel?: string): this;
     protected copyFields(origin: CheckButtonValidationFieldProps<TValue, TForm>, includeValue?: boolean): this;
-    protected renderCheckButtonValidationField(params: FieldRenderParameters): Promise<ReactNode | null>;
-    isRequired(props: FieldInfoParameters): Promise<boolean>;
+    protected renderCheckButtonValidationField(params: FieldRenderParameters<TForm, TValue>): Promise<ReactNode | null>;
+    isRequired(props: FieldInfoParameters<TForm>): Promise<boolean>;
 }
 //# sourceMappingURL=CheckButtonValidationField.d.ts.map

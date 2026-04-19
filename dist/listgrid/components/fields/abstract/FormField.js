@@ -74,12 +74,13 @@ export class FormField {
         }
         // 객체 처리 (name, title, label 순서로 표시)
         if (typeof value === 'object' && !Array.isArray(value)) {
-            if (value.name)
-                return this.wrapWithCardIcon(String(value.name), compact);
-            if (value.title)
-                return this.wrapWithCardIcon(String(value.title), compact);
-            if (value.label)
-                return this.wrapWithCardIcon(String(value.label), compact);
+            const obj = value;
+            if (obj.name)
+                return this.wrapWithCardIcon(String(obj.name), compact);
+            if (obj.title)
+                return this.wrapWithCardIcon(String(obj.title), compact);
+            if (obj.label)
+                return this.wrapWithCardIcon(String(obj.label), compact);
             return { result: JSON.stringify(value) };
         }
         // 배열 처리

@@ -10,5 +10,4 @@ export declare const useAlertManager: (alertMessages: AlertMessage[], onRemove?:
 };
 export declare const getAlertStyles: (color: AlertMessage["color"]) => AlertStyles;
 export declare const getIndicatorTone: (color: string) => "info" | "success" | "warning" | "error";
-export declare const getColorIndicator: (color: string) => string;
 //# sourceMappingURL=useAlertManager.d.ts.map

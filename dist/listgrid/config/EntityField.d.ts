@@ -18,7 +18,7 @@ export interface EntityField extends EntityItem {
      * 필드를 커스텀으로 표시하게 하는데 필요한 여러 정보를 자유롭게 사용할 수 있다.
      * 이 정보는 저장 용도로는 사용되지 않는다.
      */
-    attributes?: Map<string, any>;
+    attributes?: Map<string, unknown>;
     /**
      * CheckButtonValidation의 검증 상태를 저장
      * 탭 전환 시에도 상태를 유지하기 위함
@@ -62,7 +62,7 @@ export interface EntityField extends EntityItem {
     withValidations(...validation: Validation[]): this;
     validate(entityForm: EntityForm, session?: Session): Promise<ValidateResult | ValidateResult[]>;
     withDefaultValue(value: any): this;
-    withAttributes(attributes: Map<string, any>): this;
+    withAttributes(attributes: Map<string, unknown>): this;
     getFetchedValue(): Promise<any>;
     /**
      * 이 필드를 보기 위해 필요한 권한을 설정합니다.
@@ -84,25 +84,37 @@ export interface EntityField extends EntityItem {
      */
     viewValue(props: ViewValueProps): Promise<ViewValueResult>;
 }
-export interface ViewValueProps {
+/**
+ * EntityField.viewValue 의 props 타입.
+ * FormField.viewValue 가 사용하는 ViewRenderProps 와 구조적으로 동일 —
+ * TForm 제네릭화 (default `any`) + `compact?: boolean` 선행 버그 fix
+ * (CardFieldSection/CardFieldRenderer 호출부가 이미 compact: true 를
+ * 넘기고 있었음. Task G 에서 타입 계약 정합성 확보. DECISIONS #74).
+ */
+export interface ViewValueProps<TForm extends object = any> {
     /** 아이템 데이터 (필드 값을 포함한 객체) */
-    item: any;
+    item: TForm;
     /** 엔티티 폼 인스턴스 (옵션) */
-    entityForm?: EntityForm;
+    entityForm?: EntityForm<TForm>;
+    /**
+     * Compact 모드 - 아이콘 없이 깔끔한 텍스트만 표시.
+     * CardSubCollectionField 등에서 여러 필드를 나열할 때 사용.
+     */
+    compact?: boolean;
 }
 export interface ViewValueResult {
     /** 렌더링된 React 노드 */
     result: ReactNode | null;
 }
-export interface FieldRenderParameters {
-    entityForm: EntityForm;
+export interface FieldRenderParameters<T extends object = any, TValue = any> {
+    entityForm: EntityForm<T>;
     session?: Session;
     /**
      * 필드 값이 변경될 때마다 호출된다.
      * @param value
      * @param propagation 상위로 onChange 를 전파할 지 여부, 기본은 true, textarea 나 HTML 에디터 필드와 같은 경우 글자가 변경될 때 마다 상위 전파를 하면 안 되기 때문에 이 값을 선택적으로 설정하게 한다.
      */
-    onChange: (value: any, propagation?: boolean) => void;
+    onChange: (value: TValue, propagation?: boolean) => void;
     onError?: (message: string) => void;
     clearError?: () => void;
     required?: boolean;
@@ -114,7 +126,7 @@ export interface FieldRenderParameters {
      * EntityForm을 업데이트하고 리렌더링을 트리거하는 메서드
      * @param updater EntityForm을 업데이트하는 함수
      */
-    updateEntityForm?: (updater: (entityForm: EntityForm) => Promise<EntityForm>) => Promise<void>;
+    updateEntityForm?: (updater: (entityForm: EntityForm<T>) => Promise<EntityForm<T>>) => Promise<void>;
     /**
      * EntityForm을 리셋하고 초기화 상태로 되돌리는 메서드
      * @param delay 리로드 전 지연 시간 (밀리초)
@@ -122,15 +134,15 @@ export interface FieldRenderParameters {
      */
     resetEntityForm?: (delay?: number, preserveState?: boolean) => Promise<void>;
 }
-export interface FilterRenderParameters {
-    entityForm: EntityForm;
-    onChange: (value: any, op?: QueryConditionType) => void;
+export interface FilterRenderParameters<T extends object = any, TValue = any> {
+    entityForm: EntityForm<T>;
+    onChange: (value: TValue, op?: QueryConditionType) => void;
     placeHolder?: string;
     helpText?: string;
-    value?: Promise<any>;
+    value?: Promise<TValue>;
 }
-export interface FieldInfoParameters {
-    entityForm?: EntityForm | undefined;
+export interface FieldInfoParameters<T extends object = any> {
+    entityForm?: EntityForm<T> | undefined;
     session?: Session | undefined;
     renderType?: RenderType | undefined;
 }

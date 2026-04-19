@@ -71,7 +71,7 @@ class InlineRowActionField extends ListableFormField {
  * Renders a simple list table without detail view
  * Supports row actions and field overrides
  */
-export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm, relation, readonly = false, session, listFields, rowActions, rowActionsConfig, rowActionColumns, pagination, globalListConfig, fetchOptions, initialSearchForm, tooltip, hideTitle = false, viewListOptions, }) => {
+export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm, relation, readonly = false, session, listFields, rowActionColumns, pagination, globalListConfig, fetchOptions, initialSearchForm, tooltip, hideTitle = false, viewListOptions, }) => {
     const [refreshKey, setRefreshKey] = useState(0);
     const { setOpenBaseLoading } = useLoadingStore();
     // Refresh function for row actions
@@ -176,9 +176,7 @@ export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm
             });
         }
         // Add row action columns if defined
-        // rowActionColumns is the new format, rowActions is deprecated but still supported for backward compatibility
         if (rowActionColumns && rowActionColumns.length > 0) {
-            // Use new rowActionColumns format - each column becomes a separate field
             rowActionColumns.forEach((column) => {
                 if (column.actions && column.actions.length > 0) {
                     const actionField = new InlineRowActionField(column.id, column.actions, handleRowAction, column.label, column.order);
@@ -186,19 +184,12 @@ export const InlineSubCollectionView = ({ parentEntityForm, parentId, entityForm
                 }
             });
         }
-        else if (rowActions && rowActions.length > 0) {
-            // Backward compatibility: convert old rowActions to single column
-            const actionField = new InlineRowActionField('_default', rowActions, handleRowAction, rowActionsConfig?.label, rowActionsConfig?.order);
-            cloned.fields.set('_rowActions__default', actionField);
-        }
         return cloned;
     }, [
         entityForm,
         parentId,
         listFields,
         globalListConfig,
-        rowActions,
-        rowActionsConfig,
         rowActionColumns,
         readonly,
         handleRowAction,

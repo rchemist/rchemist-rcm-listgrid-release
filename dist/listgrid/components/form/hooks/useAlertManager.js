@@ -74,10 +74,9 @@ export const useAlertManager = (alertMessages, onRemove, onTabChange, onFieldFoc
     };
 };
 // 알림 스타일 가져오기 — rcm-notice 기본 + data-tone 반환
-// Phase 6: className/dataTone 을 분리하여 consumer 에서 data 속성으로 전달하도록 변경.
-// `bg` 는 deprecated — 'rcm-notice' 만 반환되며 기존 호출자도 동작은 유지됩니다.
+// className / dataTone 을 분리해 consumer 에서 data 속성으로 전달합니다.
 export const getAlertStyles = (color) => {
-    const base = { bg: 'rcm-notice', className: 'rcm-notice', hoverBg: '', text: '' };
+    const base = { className: 'rcm-notice' };
     switch (color) {
         case 'success':
             return { ...base, dataTone: 'success', icon: IconCheck };
@@ -106,20 +105,6 @@ export const getIndicatorTone = (color) => {
             return 'success';
         default:
             return 'info';
-    }
-};
-// Deprecated: legacy class-name mapping, kept for backward-compat of public API.
-// JSX now prefers `getIndicatorTone` + `data-tone`.
-export const getColorIndicator = (color) => {
-    switch (color) {
-        case 'danger':
-            return 'rcm-alerts-indicator-error';
-        case 'warning':
-            return 'rcm-alerts-indicator-warning';
-        case 'success':
-            return 'rcm-alerts-indicator-success';
-        default:
-            return 'rcm-alerts-indicator-info';
     }
 };
 //# sourceMappingURL=useAlertManager.js.map

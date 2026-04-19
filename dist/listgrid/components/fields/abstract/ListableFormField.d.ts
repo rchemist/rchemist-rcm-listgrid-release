@@ -46,17 +46,17 @@ export interface ListableFormFieldProps<TValue = any, TForm extends object = any
     listConfig?: IListConfig;
     showList?: boolean;
     overrideRenderListItem?: (props: ViewListProps) => Promise<ViewListResult>;
-    overrideRenderListFilter?(params: FilterRenderParameters): Promise<React.ReactNode | null>;
+    overrideRenderListFilter?(params: FilterRenderParameters<TForm, TValue>): Promise<React.ReactNode | null>;
 }
 export declare abstract class ListableFormField<TSelf extends ListableFormField<TSelf, TValue, TForm>, TValue = any, TForm extends object = any> extends FormField<TSelf, TValue, TForm> {
     listConfig?: IListConfig;
     overrideRenderListItem?: (props: ViewListProps) => Promise<ViewListResult>;
-    overrideRenderListFilter?(params: FilterRenderParameters): Promise<React.ReactNode | null>;
+    overrideRenderListFilter?(params: FilterRenderParameters<TForm, TValue>): Promise<React.ReactNode | null>;
     /**
      * 각 필드의 핵심 리스트 필터 렌더링 로직을 구현하는 추상 메소드
      * null을 반환하면 기본 필터 로직(원본 renderListFilter)을 적용
      */
-    protected renderListFilterInstance(params: FilterRenderParameters): Promise<React.ReactNode | null>;
+    protected renderListFilterInstance(params: FilterRenderParameters<TForm, TValue>): Promise<React.ReactNode | null>;
     /**
      * 각 필드의 핵심 리스트 아이템 렌더링 로직을 구현하는 추상 메소드
      * null을 반환하면 기본 리스트 아이템 로직(원본 renderListItem)을 적용
@@ -74,11 +74,11 @@ export declare abstract class ListableFormField<TSelf extends ListableFormField<
      * 설정된 오버라이드가 없으면 #renderListFilter 를 실행한다.
      * @param params
      */
-    viewListFilter(params: FilterRenderParameters): Promise<React.ReactNode | null>;
+    viewListFilter(params: FilterRenderParameters<TForm, TValue>): Promise<React.ReactNode | null>;
     /**
      * 리스트 필터 렌더링 - renderListFilterInstance가 null이면 원본 기본 로직 사용
      */
-    protected renderListFilter(params: FilterRenderParameters): Promise<React.ReactNode | null>;
+    protected renderListFilter(params: FilterRenderParameters<TForm, TValue>): Promise<React.ReactNode | null>;
     /**
      * 각 필드 별로 목록에 필터 처리가 될 때 어떻게 표시해야 하는지에 대한 기본 설정.
      * ListableFormField 를 구현한 필드들에서 기본적인 렌더링 외에 필요한 처리가 있다면 이 메소드를 오버라이드 한다.
@@ -87,7 +87,7 @@ export declare abstract class ListableFormField<TSelf extends ListableFormField<
      * @param params
      * @protected
      */
-    protected renderListFilterOriginal({ onChange, ...params }: FilterRenderParameters): Promise<React.ReactNode | null>;
+    protected renderListFilterOriginal({ onChange, ...params }: FilterRenderParameters<TForm, TValue>): Promise<React.ReactNode | null>;
     /**
      * 리스트 아이템 렌더링 - renderListItemInstance가 null이면 원본 기본 로직 사용
      */
@@ -111,7 +111,7 @@ export declare abstract class ListableFormField<TSelf extends ListableFormField<
     useListField(props?: number | UserListFieldProps): this;
     withListConfig(list?: IListConfig): this;
     withOverrideRenderListItem(overrideRenderList?: (props: ViewListProps) => Promise<ViewListResult>): this;
-    withOverrideRenderListFilter(overrideRenderFilter?: (params: FilterRenderParameters) => Promise<React.ReactNode | null>): this;
+    withOverrideRenderListFilter(overrideRenderFilter?: (params: FilterRenderParameters<TForm, TValue>) => Promise<React.ReactNode | null>): this;
     isSupportList(): boolean;
     getListConfig(): IListConfig | undefined;
     getListFieldAlignType(): TextAlignType;

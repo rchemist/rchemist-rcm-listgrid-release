@@ -88,7 +88,7 @@ export declare abstract class EntityFormBase<T extends object = any> {
      * 엔티티폼을 커스텀으로 표시하게 하는데 필요한 여러 정보를 자유롭게 사용할 수 있다.
      * 이 정보는 저장 용도로는 사용되지 않는다.
      */
-    attributes?: Map<string, any> | undefined;
+    attributes?: Map<string, unknown> | undefined;
     /**
      * ViewEntityForm에서 헤더 버튼과 Alert 영역 사이에 표시될 커스텀 영역
      * sticky 포지셔닝으로 스크롤 시 상단에 고정됨
@@ -190,15 +190,15 @@ export declare abstract class EntityFormBase<T extends object = any> {
     withOnInitialize(...onInitialize: OnInitializeFunc<T>[]): this;
     withOnPostFetchListData(...postFetchListData: PostFetchListData[]): this;
     withOnSave(onSave?: (entityForm: EntityForm<T>) => Promise<EntityFormActionResult>): this;
-    withAttributes(attributes?: Map<string, any>): this;
+    withAttributes(attributes?: Map<string, unknown>): this;
     withHeaderArea(headerArea: (entityForm: EntityForm<T>) => Promise<ReactNode>): this;
-    getAttributes(): Map<string, any>;
-    putAttribute(key: string, value: any): this;
+    getAttributes(): Map<string, unknown>;
+    putAttribute(key: string, value: unknown): this;
     removeAttribute(key: string): this;
     hasAttribute(key: string): boolean;
-    addAttributeToField(fieldName: string, key: string, value: any): void;
+    addAttributeToField(fieldName: string, key: string, value: unknown): void;
     removeAttributeToField(fieldName: string, key: string): void;
-    getFieldAttributes(fieldName: string): Map<string, any> | undefined;
+    getFieldAttributes(fieldName: string): Map<string, unknown> | undefined;
     setReadOnly(readonly?: boolean): void;
     setRevisionEntityNameIfBlank(path: string): void;
 }

@@ -39,16 +39,6 @@ export interface InlineRowAction {
     confirm?: string | ((item: any) => string);
 }
 /**
- * Row actions column configuration
- * @deprecated Use InlineRowActionColumn instead
- */
-export interface InlineRowActionsConfig {
-    /** Column order (default: 9999 - last column) */
-    order?: number;
-    /** Column header label (default: '작업') */
-    label?: string;
-}
-/**
  * Row action column configuration
  * Allows multiple action columns with different positions and labels
  */
@@ -122,10 +112,6 @@ export declare class InlineSubCollectionField extends SubCollectionField {
     fetchOptions?: InlineSubCollectionFetchOptions | undefined;
     /** List fields to display - can be field names or detailed config */
     inlineListFields?: (string | InlineListFieldConfig)[] | undefined;
-    /** Row action buttons @deprecated Use rowActionColumns instead */
-    inlineRowActions?: InlineRowAction[] | undefined;
-    /** Row actions column configuration @deprecated Use rowActionColumns instead */
-    inlineRowActionsConfig?: InlineRowActionsConfig | undefined;
     /** Row action columns - supports multiple action columns */
     inlineRowActionColumns?: InlineRowActionColumn[] | undefined;
     /** Pagination options */
@@ -144,10 +130,6 @@ export declare class InlineSubCollectionField extends SubCollectionField {
         hidden?: HiddenType | undefined;
         readonly?: ReadOnlyType | undefined;
         listFields?: (string | InlineListFieldConfig)[] | undefined;
-        /** @deprecated Use rowActionColumns instead */
-        rowActions?: InlineRowAction[] | undefined;
-        /** @deprecated Use rowActionColumns instead */
-        rowActionsConfig?: InlineRowActionsConfig | undefined;
         /** Row action columns - supports multiple action columns */
         rowActionColumns?: InlineRowActionColumn[] | undefined;
         pagination?: InlinePaginationOptions | undefined;
@@ -164,16 +146,6 @@ export declare class InlineSubCollectionField extends SubCollectionField {
      * Set list fields to display
      */
     withListFields(...fields: (string | InlineListFieldConfig)[]): this;
-    /**
-     * Set row actions
-     * @deprecated Use withRowActionColumns instead
-     */
-    withRowActions(...actions: InlineRowAction[]): this;
-    /**
-     * Set row actions column configuration
-     * @deprecated Use withRowActionColumns instead
-     */
-    withRowActionsConfig(config: InlineRowActionsConfig): this;
     /**
      * Set row action columns - supports multiple action columns
      */
